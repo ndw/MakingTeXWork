@@ -1,0 +1,277 @@
+\immediate\write10{        }
+\immediate\write10{>>> heb_macros version 1.3  for PC PUBTeX               <<<}
+\immediate\write10{>>> Available guides: hebtex.tex  heb_cs_g              <<<}
+\immediate\write10{        }
+%% Written by Rama Porrat of the Computation Center, 
+%% Hebrew University of Jerusalem,
+%% based upon Knuth's wisdom and Prof. Azriel levy's contributions.
+%% 
+\newif\ifheb
+\catcode`€=11\catcode`=11\catcode`‚=11\catcode`ƒ=11
+\catcode`„=11\catcode`…=11\catcode`†=11\catcode`‡=11
+\catcode`ˆ=11\catcode`‰=11\catcode`‹=11\catcode`Œ=11
+\catcode`Ž=11\catcode`=11\catcode`‘=11\catcode`’=11
+\catcode`”=11\catcode`–=11\catcode`—=11\catcode`˜=11
+\catcode`™=11\catcode`š=11\catcode`Š=11\catcode`=11
+\catcode`=11\catcode`“=11\catcode`•=11
+
+\lccode`€=``\lccode`=`a\lccode`‚=`b\lccode`ƒ=`c
+\lccode`„=`d\lccode`…=`e\lccode`†=`f\lccode`‡=`g
+\lccode`ˆ=`h\lccode`‰=`i\lccode`‹=`k\lccode`Œ=`l
+\lccode`Ž=`n\lccode`=`p\lccode`‘=`q\lccode`’=`r
+\lccode`”=`t\lccode`–=`v\lccode`—=`w\lccode`˜=`x
+\lccode`™=`y\lccode`š=`z\lccode`Š=`j\lccode`=`m
+\lccode`=`o\lccode`“=`s\lccode`•=`u
+
+\def\undertext#1{$\underline{\hbox{#1}}$}
+\def\ifundefined#1{\expandafter\ifx\csname#1\endcsname\relax}
+%
+% this if is used to distinguish between a tex input and
+% a latex input.
+%
+\font\Jer=Jer_pc
+\ifundefined{LaTeX}
+      \def\footnoterule{\kern-3pt\hrule width \hsize \kern 2.6pt}
+\else \renewcommand\footnoterule{\kern-3pt\hrule width\hsize\kern 2.6pt}
+\fi
+\ifundefined{LaTeX}{} \newcount\hebcheck
+		      % This counter used for local text being Hebrew.
+\fi
+\ifundefined{LaTeX}{} \newcount\hebtext 
+		      % This counter used for overall text being Hebrew.
+\fi
+%
+% Each control sequence defined here has his Hebrew equivalent.
+
+% \L = ngxefzlerfiz
+% \R = ngxefzraxiz
+
+% \font\hrm=redis10_newcode   
+% \font\hsl=rediss10_newcode
+
+\ifundefined{LaTeX}
+\hebcheck=1\hebtrue
+\hebtext =1
+\def\hebR#1{\ifodd\hebcheck\beginR#1\fi}
+\baselineskip=14pt 
+\font\hebrew=jer_pc 
+\hebrew
+\fi
+
+\let\next=\ 
+
+\def\L{\afterassignment\moreL \let\next= }
+\def\moreL{\bracetext \aftergroup\endL \beginL \rm}
+\def\R{\afterassignment\moreR \let\next= }
+\def\moreR{\bracetext \aftergroup\endR \beginR \hebrew}
+\def\bracetext{\ifcat\next{\else\ifcat\next}\fi
+ \errmessage{Missing left brace has been substituted}\fi \bgroup}
+
+
+% \hebrew is activated. Now the default is Jerusalem,
+% and the \R control sequence refers to \hebrew.
+% Thanx to the sequence 'ifundefined', it is possible
+% to distinguish between latex and tex.
+% Hence, for latex, hebrew is activated by
+% hebrewtext, hebrewlines etc.
+% For tex, instead of \hebrew it says \the\font, thus enabling
+% any font (e.g. one called aaa) to be used and
+% have the right indentation.
+% The problem in latex lies in that
+% \the\font in latex usually means \rm.
+% Note that, still, the sequence \R still refers only to the font
+% called \hebrew.
+
+\font\Jerfootnote=JER_PC scaled 750 
+\let\katan=\Jerfootnote
+\let\—ˆ  =\Jerfootnote  
+%\let\who=\Jerfootnote
+
+%\font\Jerhalf=JER_PC scaled \magstephalf  
+%\font\Jerone=JER_PC scaled \magstep1
+%\font\Jertwo=JER_PC scaled \magstep2 
+%\font\Jerthree=JER_PC scaled \magstep3 
+%\font\Jerfour=JER_PC scaled \magstep4  
+%\font\Jerfive=JER_PC scaled \magstep5  
+
+\font\Telfootnote=Tel_pc scaled 750  
+
+%\font\Telhalf=Tel_pc scaled \magstephalf  
+%\font\Telone=Tel_pc scaled \magstep1  
+%\font\Teltwo=Tel_pc scaled \magstep2 
+\font\Telthree=Tel_pc scaled \magstep3  
+%\font\Telfour=Tel_pc scaled \magstep4  
+\font\Telfive=Tel_pc scaled \magstep5  
+
+\font\Deadfootnote=Dead_pc scaled 750  
+
+%\font\Deadhalf=Dead_pc scaled \magstephalf  
+%\font\Deadone=Dead_pc scaled \magstep1  
+%\font\Deadtwo=Dead_pc scaled \magstep2  
+\font\Deadthree=Dead_pc scaled \magstep3  
+%\font\Deadfour=Dead_pc scaled \magstep4  
+\font\Deadfive=Dead_pc scaled \magstep5  
+
+\font\Jaffafootnote=Old_pc scaled 750  
+
+%\font\Jaffahalf=Old_pc scaled \magstephalf  
+%\font\Jaffaone=Old_pc scaled \magstep1  
+%\font\Jaffatwo=Old_pc scaled \magstep2  
+\font\Jaffathree=Old_pc scaled \magstep3  
+%\font\Jaffafour=Old_pc scaled \magstep4  
+\font\Jaffafive=Old_pc scaled \magstep5  
+ 
+\def\‰˜…™Œ‰{\font\hebrew=JER_PC \hebrew }
+\def\šŒ‰{\font\hebrew=Tel_pc  \hebrew }
+\def\‰„ŽŒ‡{\font\hebrew=Dead_pc  \hebrew }
+\def\‰”…{\font\hebrew=Old_pc \hebrew }
+
+\let\Jer=\‰˜…™Œ‰
+\let\Tel=\šŒ‰
+\let\Dead=\‰„ŽŒ‡
+\let\Jaffa=\‰”… 
+
+\let\bigDead=\Deadthree
+\let\biggerDead=\Deadfive  
+\let\bigJer=\Jerthree
+\let\biggerJer=\Jerfive  
+\let\bigTel=\Telthree
+\let\biggerTel=\Telfive  
+\let\bigJaffa=\Jaffathree
+\let\biggerJaffa=\Jaffafive  
+
+
+
+% To use enlargements of Hebrew fonts by specifying Hebrew
+% control sequences, use the Hebrew font name appended by bet or gimel
+% (or dalet or he in TelAviv).
+
+%\let\imdnlga=\bigDead 
+%\let\imdnlgb=\biggerDead                                 
+%\let\itea=\bigJaffa                                      
+%\let\iteb=\biggerJaffa                                 
+%\let\ixeylima=\bigJer                                       
+%\let\ixeylimb=\biggerJer                                     
+%\let\zlaiaa=\bigTel                                       
+%\let\zlaiab=\biggerTel                                    
+
+\ifundefined{LaTeX}
+\def\nohebrewtext{\rm\everypar{}\hebcheck=0\hebfalse}
+\fi
+
+\ifundefined{LaTeX}
+\def\hebrewpar{\noindent\beginR\indent\the\font
+	       \ifodd\hebcheck{}\else\hebrew\hebcheck=1\hebtrue\fi}
+\def\hebrewtext{\everypar{\leavevmode\kern-\parindent\beginR\indent\the\font} 
+	\ifundefined{fmtname}{} \else \hebrew\fi    
+	       \ifodd\hebcheck{}
+		    \else\hebrew\fi
+			 \hebcheck=1 \hebtrue\hebtext=1}
+\def\hebrewlines{\noindent\beginR\the\font 
+	       \ifodd\hebcheck{}\else\hebrew\hebcheck=1\hebtrue\fi}
+%\else
+%\def\hebrewpar{\noindent\beginR\indent
+%              \ifodd\hebcheck{}\else\hebrew\hebcheck=1\hebtrue\fi}
+%\def\hebrewtext{                                                   
+%                     \ifodd\hebcheck{}
+%                     \else\hebrew
+%                        \fi
+%               \everypar{\leavevmode\kern-\parindent\beginR\indent}
+%                        \hebcheck=1\hebtrue \hebtext=1 }
+%\def\hebrewlines{\noindent\beginR 
+%              \ifodd\hebcheck{}\else\hebrew\hebcheck=1\hebtrue\fi}
+%\fi
+%%  \def\hebrewtext{\everypar{\leavevmode\kern-\parindent\beginR\indent \hebrew }
+%                \hebcheck=1 \hebtext=1\hebtrue }
+%  \def\hebrewlines{\noindent\beginR \hebrew }
+%  \def\hebrewpar{\noindent\beginR\indent \hebrew }
+%
+\fi
+
+\let\sethebrew=\hebrewtext
+\let\unsethebrew=\nohebrewtext
+
+%\let\whrraxiz=\hebrewpar
+%\let\hwqhraxiz=\hebrewtext
+%\let\yexezraxiz\hebrewlines
+
+\everydisplay{\aftergroup\beginR }   
+
+\def\hebday{\L{\number\day}\ \R{\ifcase\month\or 
+ ‰…€˜\or
+ ”˜…€˜\or  Ž˜•\or  €”˜‰Œ
+\or  Ž€‰ \or  ‰…‰\or  ‰…Œ‰\or 
+ €…‚…‘ˆ\or  ‘”ˆŽ˜\or  €…—ˆ…˜
+\or  …Ž˜\or  ƒ–Ž˜ \fi}\
+\L{\number\year}}
+
+\let\„‰…=\hebday
+\def\—”‰–„—ˆ„{\smallskip }
+\def\—”‰–„‰…‰š{\medskip }
+\def\—”‰–„‚ƒ…Œ„{\bigskip }
+  
+%  \def\wtivdlnhd #1{\vskip #1 }
+%  \def\wtivddvicd #1{\hskip #1}
+%\def\xeegaioyexez  #1{\baselineskip #1 }
+  
+  %\def\pw{ pt }
+  %\def\pwecez{ pt }
+  %\def\qes{\end }
+  %\def\qn{ cm }
+
+\def\Ž—“‚ƒ…Œ{\L{--}}
+\def\Ž—“’—{\L{---}}
+
+\let\makafanak=\Ž—“’—
+\let\makafgadol=\Ž—“‚ƒ…Œ 
+
+\def\hadgesh#1{\leavevmode\setbox0=\hbox{#1}%
+\kern-.025em\copy0\kern-\wd0
+\kern.05em\copy0\kern-\wd0
+\kern-.025em\raise.0433em\box0 }
+
+\let\„ƒ‚™=\hadgesh
+
+\def\„ƒ‚™™#1{\leavevmode\setbox0=\hbox{#1}%
+\kern-.025em\copy0\kern-\wd0
+\kern.05em\copy0\kern-\wd0
+\kern-.025em\raise.0433em\box0\raise-.0433em\box0 }
+
+\def\wewe#1{\leavevmode\setbox0=\hbox{#1}%
+\kern-.025em\copy0\kern-\wd0
+\kern.05em\box0 }   
+
+\def\”‰‘—„#1{\item{#1}\hangindent=-\hangindent}
+\def\”‘—„#1{\item{#1}\hangindent=-\hangindent}
+
+\def\”‰‘—„”‰‘—„#1{\itemitem{#1}\hangindent=-\hangindent}
+\def\”‘—„”‘—„#1{\itemitem{#1}\hangindent=-\hangindent}
+
+\def\piska#1{\item{#1}\hangindent=-\hangindent}
+
+\def\piskapiska#1{\itemitem{#1}\hangindent=-\hangindent}
+		      
+\def\™…˜„‰Ž‰#1{\line{\R{#1 \hss}}}
+\def\™…˜„™Ž€Œ#1{\line{\R{\hss #1}}}
+\def\Ž˜‹†#1{\line{\R{\hss #1 \hss}}}
+
+  \def\‚˜™{\L{`}}
+  \let\geresh=\‚˜™
+
+\def\‘‚…˜‚˜™{\L{`}}
+\let\closegeresh=\geresh
+
+\def\”š‡‚˜™{\L{\char39}}
+\let\opengeresh=\”š‡‚˜™
+
+\def\openquote{\L{''}}
+\def\closequote{\L{``}}
+
+\def\leftquotation{\L{''}}
+\def\rightquotation{\L{``}}
+
+\let\”š‡–‰ˆ…ˆ=\openquote
+\let\‘‚…˜–‰ˆ…ˆ=\closequote
+
+\input hebcal_p.sty
+

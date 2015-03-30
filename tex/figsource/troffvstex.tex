@@ -1,0 +1,48 @@
+\documentstyle[verbatim]{article}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\setbox0=\hbox{%
+\begin{minipage}{2in}
+\vskip-\baselineskip\vskip2pt
+\begin{verbatim}
+.(z
+.hl
+Text to be floated.
+.sp
+.ce
+.hl
+Figure \*[fig]: Example
+.)z
+
+\end{verbatim}
+\end{minipage}
+}
+
+\setbox1=\hbox{%
+\begin{minipage}{2in}%
+\vskip-\baselineskip\vskip2pt
+\begin{verbatim}
+\begin{figure}
+  \begin{center}
+    \hrule
+    \vspace{8pt}
+    Text to be floated.
+    \hrule
+    \caption{Example}
+    \vspace{8pt}
+  \end{center}
+\end{figure}
+
+\end{verbatim}
+\end{minipage}
+}
+
+\begin{tabular}{cc}
+  \box0          & \box1 \\[4pt]
+  (a) & (b) \\
+\end{tabular}
+
+\end{document}

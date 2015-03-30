@@ -1,0 +1,9 @@
+\documentstyle{article}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\input{tex.06.02.tex}
+
+\end{document}

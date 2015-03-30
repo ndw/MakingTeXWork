@@ -1,0 +1,12 @@
+This is TeX version 3.141...
+** (flintstone.tex
+some
+messages [1]
+(fred.tex [2]
+some more
+messages
+[3] ) (wilma.tex [4]
+! Undefined control sequence.
+the dog \dino
+              tipped over the car.
+l.6 the dog \dino\ tipped over the car.

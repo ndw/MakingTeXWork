@@ -1,0 +1,46 @@
+%% xyamstex.tex derived from $Id: xyamstex.tex,v 1.1 2002/08/23 14:59:18 nwalsh Exp $
+%%
+%% Extracts from AMSTEX.TEX for XY-pic.  This means that this file is mainly
+%% Copyright (C) American Mathematical Society, all rights reserved.
+%% Copying of this file is authorized only if you do not name it AMSTEX.TEX.
+\ifx\xyamstexloaded\relax \message{[not reloaded]}\endinput \fi
+\edef\xyamstexloaded{\catcode`\noexpand\@=\the\catcode`\@
+ \let\noexpand\xyamstexloaded\relax \noexpand\endinput}\catcode`\@=11 %
+\ifx\amstexloaded@\relax \xyamstexloaded \fi
+\let\redefine=\def
+\def\define#1{\ifx#1\undefined \else
+ \message{! XY-pic warning: (Re)\string\definition\space of \string#1.}\fi
+ \def#1}
+\define\font@{\font}
+\define\dsize{\displaystyle}
+\define\tsize{\textstyle}
+\define\ssize{\scriptstyle}
+\define\sssize{\scriptscriptstyle}
+\toksdef\toks@@=2
+\newcount\count@@
+\newcount\count@@@
+\define\DNii@{\def\nextii@}
+\redefine\iterate{\body\expandafter\iterate\else\fi}
+\define\eat@#1{}
+\define\space@.{\futurelet\space@\relax}
+\space@. %
+\newdimen\ex@
+\ex@.2326ex
+\ifx\relaxnext@\undefined\else \xyamstexloaded \fi
+\ifx\text\undefined
+ \define\text#1{\relax
+  \ifmmode\mathchoice
+    {\hbox{\the\textfont0\relax#1}}%
+    {\hbox{\the\textfont0\relax#1}}%
+    {\hbox{\the\scriptfont0\relax#1}}%
+    {\hbox{\the\scriptscriptfont0\relax#1}}%
+  \else{\relax#1}\fi}
+\fi
+\define\FN@{\futurelet\next}
+\define\DN@{\def\next@}
+\define\setboxz@h{\setbox\z@\hbox}
+\define\wdz@{\wd\z@}
+\define\boxz@{\box\z@}
+\define\Invalid@#1{\def#1{\Err@{\Invalid@@\string#1}}}
+\define\Invalid@@{Invalid use of }
+\xyamstexloaded

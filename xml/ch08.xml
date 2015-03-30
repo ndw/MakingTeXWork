@@ -1,0 +1,1640 @@
+<chapter id="chap.printing">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>Printing</title>
+
+<para><indexterm><primary>printing</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>printing</secondary></indexterm>
+The emphasis in this book so far has been on getting &TeX; to process a 
+document that
+contains all the desired typographic elements without error.
+The result of this effort is a <filename role="extension">DVI</filename> file<indexterm><primary>DVI files</primary></indexterm>.
+</para>
+
+<para>The next step is translating the <filename role="extension">DVI</filename> file into a printed 
+document<indexterm><primary>documents</primary><secondary>printed</secondary></indexterm>.
+That is the focus of this chapter.  Usually, you want to preview a document
+before you print it, but in many ways previewers are just a special kind
+of printer. The two do differ significantly, however, so we will discuss
+them separately.
+(Chapter&nbsp;<xref role="label" linkend="chap.preview"/>, <emphasis><xref role="label" linkend="chap.preview"/></emphasis>, describes 
+previewers.)
+</para>
+
+<para>This chapter explores the issues related to printing a DVI file. 
+There are sections concerning the printing of fonts, the printing of 
+pictures and figures, and descriptions of several kinds of drivers 
+you can use to print &TeX; documents.
+</para>
+
+<section id="sec.printing"><title>Printing Fonts</title>
+
+<para>If you have 
+<indexterm><primary>printing</primary><secondary>fonts</secondary></indexterm><indexterm><primary>fonts</primary><secondary>printing</secondary></indexterm>
+a <filename role="extension">TFM</filename> file for a font, you can use that font in &TeX;.
+In fact, you can use that font at an arbitrary magnification in &TeX;,
+which means that you can use Courier at 13.4pt as easily as Computer
+Modern Roman at 10pt.
+Unfortunately, this ease of use does not imply that the resulting <filename role="extension">DVI</filename>
+file will be easy to print.  It doesn't even imply that it will be possible
+to print the document.  For example, if you request Courier at 13.4pt, but
+it is available in your printer only at 10pt and 12pt (and you have no
+other source for Courier),
+there is no way to print your document without distortion.
+</para>
+
+<para>This section discusses the issues involved in getting the desired fonts 
+to print from your DVI file. Both bitmapped
+and scalable fonts are considered, as well
+as fonts built into the printer.
+You will also gain a better understanding of why some documents do not
+print, and learn alternatives that may enable you to print your
+documents.
+</para>
+
+<para>Every font can be classified in two broad, independent ways: internal
+versus external, and scalable versus bitmapped.  Each class of fonts
+has some advantages and some unique problems.  In general, there
+are more restrictions on built-in fonts than on external fonts, and
+more restrictions on bitmapped fonts than on scalable fonts.
+</para>
+
+<section id="sec.bitfonts"><title>Built-in Fonts</title>
+
+<para>Built-in fonts<indexterm><primary>fonts</primary><secondary>built-in</secondary><tertiary>printing</tertiary></indexterm>, whether 
+scalable or bitmapped, pose two problems.
+First, you must obtain the 
+appropriate <filename role="extension">TFM</filename> files<indexterm><primary>TFM files</primary><secondary>for printing</secondary></indexterm>.  Usually, the
+metric information has to be supplied by the vendor and then translated
+into &TeX; <filename role="extension">TFM</filename> format using a conversion tool.  No vendor that I
+am aware of distributes &TeX; metric<indexterm><primary>metrics font</primary></indexterm> information 
+directly.  
+The section called <quote><xref role="label" linkend="sec.gettingtfms"/></quote> in Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>,
+<emphasis><xref role="label" linkend="chap.fonts"/></emphasis>,
+describes several
+options for obtaining metric information for built-in fonts.
+</para>
+
+<para>The second problem is that the &dvidriver; you are using must <quote>know</quote>
+somehow that the <filename role="extension">TFM</filename> file corresponds to one of the printer's
+internal fonts.  When the &dvidriver; examines the <filename role="extension">DVI</filename> file, the
+only information available about each font is the name of the
+<filename role="extension">TFM</filename> file that describes its metrics.  
+The most common way &dvidriver;s handle this problem is with 
+a font translation file or
+a font substitution file.  
+</para>
+
+<section><title>Font substitution in &emTeX;</title>
+
+<para>&emTeX;'s &dvidriver;  reads 
+a user-specified font substitution file<indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>font substitution file</secondary></indexterm> before 
+processing the <filename role="extension">DVI</filename> file.  A line like the following in
+the font substitution file informs the <command>dvihplj</command><indexterm><primary>dvihplj</primary></indexterm> driver that
+<filename>lpr1610u</filename> is an internal font and describes the LaserJet
+control sequence required to select it:
+</para>
+
+<informalexample>
+  <literallayout>lpr1610u 300 =&gt; pcl: 10U s0P s16.66H s8.5V s0S s0B s0T</literallayout>
+</informalexample>
+
+<para>Other substitutions are also possible.  For example, if you 
+work with documents that come from other systems that    allow long
+filenames, you can substitute the long names for shorter filenames
+that are legal under MS-DOS.  The following line in a font substitution
+file tells &emTeX; that the font <quote><literal>tmsrmn</literal></quote> should be used anywhere
+that a <filename role="extension">DVI</filename> file uses the font <quote><literal>Times-Roman</literal></quote>:
+</para>
+
+<informalexample>
+  <literallayout>Times-Roman -&gt; tmsrmn</literallayout>
+</informalexample>
+
+<para>You can use even more sophisticated substitutions, including pattern matching, 
+for example.  Consult <emphasis>The {&emTeX;} DVI Driver Manual</emphasis>&nbsp;<xref linkend="em:dvidrv"/> 
+for more information.
+</para>
+
+</section>
+<section><title>Font substitution in \dvips</title>
+
+<para>The <command>dvips</command><indexterm><primary>dvips</primary><secondary>font substitution file</secondary></indexterm> program, 
+which translates <filename role="extension">DVI</filename> files into
+PostScript, also reads a font substitution file before processing a
+<filename role="extension">DVI</filename> file.  In addition to identifying which fonts are built into the
+printer, the substitution file can also instruct <command>dvips</command> to 
+download PostScript fonts that are not resident in your printer 
+if they are used in a document.
+</para>
+
+<para><command>dvips</command> has a system-wide font substitution file called
+<filename>psfonts.map</filename><indexterm><primary sortas="psfontsmap files">psfonts.map files</primary></indexterm>.  This file 
+is distributed with <command>dvips</command>
+and can be customized by your system administrator.  You can tell
+<command>dvips</command> to load a personal font substitution file by
+using the <emphasis>p</emphasis> command in <command>dvips</command>'s initialization
+file (called <filename>.dvipsrc</filename> in your home directory on &unix; systems).
+Consult the <command>dvips</command> documentation for more information
+about setting up an initialization file.
+</para>
+
+<para>The following lines in a font substitution file indicate that the font
+<filename>grbk</filename> (which is the name of the <filename role="extension">TFM</filename> file) corresponds
+to the built-in printer font Garamond-Book.
+The <filename role="extension">TFM</filename> file <filename>hlvcd</filename> corresponds to the
+printer font Helvetica-Condensed.  Helvetica-Condensed is
+not built into the printer but is stored in the file
+<filename>/home/walsh/fonts/helvcd.pfb</filename>.  If <filename>hlvcd</filename> is used in
+a document, <command>dvips</command> will download <filename>helvcd.pfb</filename> automatically
+when it converts the document.
+</para>
+
+<screen>
+grbk   Garamond-Book
+hlvcd  Helvetica-Condensed &lt;/home/walsh/fonts/helvcd.pfb
+</screen>
+
+</section>
+<section><title>Font substitution in other drivers</title>
+
+<para>Other &dvidriver;s, particularly those written for operating environments
+like Microsoft Windows that
+provide a standard interface to printers, may
+leave the distinction between built-in and external fonts up to the
+operating environment.  If this is the case, you must use the tools
+provided by the operating system 
+to support the printers and fonts that you require.
+</para>
+
+<para>If your &dvidriver; does use a font substitution file, 
+make sure that the translations specified actually exist.  The
+&dvidriver; cannot practically determine if the font you have
+specified as built into the printer really exists or not.  If it
+doesn't, you won't get the output you expect, and the &dvidriver; will
+not be able to diagnose the problem.
+</para>
+
+<para>The most significant disadvantage of using built-in fonts is that they
+are not usually available for on-screen previewing of your document.
+Some form of font substitution has to be employed to 
+preview a document.  Sometimes this reduces the utility of on-screen
+previewing.  Chapter&nbsp;<xref role="label" linkend="chap.preview"/>, <emphasis><xref role="label" linkend="chap.preview"/></emphasis>,
+discusses this issue in more detail.
+</para>
+
+</section>
+</section>
+<section><title>External Fonts</title>
+
+<para>External fonts<indexterm><primary>fonts</primary><secondary>external</secondary></indexterm>, those 
+that aren't built into the printer, pose a
+different set of problems.  First, they have to be available to the
+&dvidriver;, and they have to be represented in a manner that the
+&dvidriver; understands.  For the vast majority of &dvidriver;s, this
+means that the fonts must be stored in files on your hard disk in
+<filename role="extension">PK</filename> format.  The <filename role="extension">PK</filename><indexterm><primary sortas="PK fonts"><filename role="extension">PK</filename> fonts</primary></indexterm> files contain a compressed,
+bitmapped rendering of the font at a particular resolution.  For more
+information about <filename role="extension">PK</filename> files and other bitmapped-font issues, see
+<quote><xref role="label" linkend="sec.bitfonts"/></quote> later in this chapter.
+</para>
+
+<para>Most &dvidriver;s locate fonts by searching in the directories contained
+in an environment variable or in some system-dependent locations.  
+</para>
+
+<para>Once the fonts are available, the &dvidriver; has two options for
+using them: it can download them to the printer, or it can send them as
+bitmapped graphic images.  Most laser printers can accept downloadable
+fonts, although they may require additional memory to accept large
+numbers of fonts.  In either case, the printable files are generally
+larger and print more slowly than documents that use the printer's
+built-in fonts.  Of course, using external fonts does give you far
+more flexibility than using only built-in fonts.
+</para>
+
+<para>Unlike a missing internal font, if you attempt to use an external font
+that is not available, your &dvidriver; will be able to detect the
+problem and may be able to substitute another font or compensate in
+some other way.
+</para>
+
+<sidebar><title>Increasing Printing Speed</title>
+
+<para>How can you increase printing speed<indexterm><primary>printing</primary><secondary>increasing speed</secondary></indexterm> if 
+you frequently print, on a laser printer,
+documents that use a small number of external fonts
+(for example, several sizes of Computer Modern)?  A handy trick is to 
+download the
+fonts manually and then tell the &dvidriver; that the fonts are
+built-in.  
+</para>
+
+<para>Suppose you use the 7pt, 10pt, and 12pt sizes of
+Computer Modern Roman, and the 12pt and 14pt sizes of Computer Modern
+Bold Extended in most of your documents.  If you are printing on an HP
+LaserJet printer with &emTeX;'s <command>dvihplj</command>, you could convert
+the relevant <filename role="extension">PK</filename> files  into HP LaserJet softfonts with <command>PKtoSFP</command><indexterm><primary sortas="PKtoSFP">PKtoSFP</primary></indexterm> (see the discussion of bitmapped fonts in
+the next section to determine which <filename role="extension">PK</filename> 
+files are relevant).
+Then download them to the printer every morning with a utility like
+<command>Sfload</command><indexterm><primary>Sfload</primary></indexterm>.  <command>Sfload</command> is part of the <command>Sfware</command><indexterm><primary>Sfware</primary></indexterm>
+package. (Disclaimer: I wrote <command>Sfware</command> so I'm partial to it.
+There are many other programs that can download softfonts.)  In the
+font-substitution file for <command>dvihplj</command><indexterm><primary>dvihplj</primary></indexterm>, simply indicate that
+those fonts are built-in,
+and <command>dvihplj</command> will no longer download
+them for each document.  This can significantly decrease the amount of
+data that must be sent to the printer for each document.
+</para>
+
+<para>Beware, however, that if you fail to download the fonts, you will
+get very badly garbled output when you print a document.
+</para>
+</sidebar>
+
+</section>
+<section><title>Bitmapped Fonts</title>
+
+<para>Each character in a bitmapped font is represented by a rectangular
+array of dots.  Some of the dots in this array are <quote>on,</quote> and some are
+<quote>off.</quote>  When the dots are printed very close together, they provide
+the illusion of a solid character.  Bitmapped fonts are common in the
+&TeX; community because all of the fonts created by &MF; are printed
+in bitmapped form.
+</para>
+
+<para>The notion of magnification discussed in the section called
+<quote><xref role="label" linkend="sec.issueofsize"/></quote> in Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>
+is interpreted as an issue of resolution
+when dealing with bitmapped fonts.
+</para>
+
+<para>Resolution<indexterm><primary>resolution of images</primary></indexterm> is used 
+in a slightly counter-intuitive way by
+&dvidriver;s.  Generally, resolution is described as a feature of a
+device that affects the <emphasis>appearance</emphasis> of images printed on that
+device and not their <emphasis>size</emphasis>.  For example, in comparing two
+drawings in which one was printed on 150dpi
+dot-matrix printer and the other
+was printed on a 300dpi laser printer, I might say, <quote>the laser printed page
+looks better because it was printed at a higher resolution.</quote>
+</para>
+
+<para>That's true, but what isn't usually stated explicitly is that the
+comparison is between a 150dpi drawing rendered at 150dpi and a
+300dpi drawing rendered at 300dpi.  This is the situation shown
+in Figure&nbsp;<xref role="label" linkend="fig.reschange"/> where a 4dpi image is printed at 4dpi
+next to an 8dpi image printed at 8dpi.
+</para>
+
+<figure id="fig.reschange">
+<title>Resolution of the bitmap and the device changed simultaneously</title>
+<screen>
+    \input{ft-resch.fig}
+</screen>
+</figure>
+
+<para>What if the resolution of the printer were held constant?  That's
+the situation shown in Figure&nbsp;<xref role="label" linkend="fig.sizechange"/>.  The 4dpi image printed
+at 4dpi is shown next to the 8dpi image printed at 4dpi.  The result
+is that the size of the image is doubled.
+</para>
+
+<figure id="fig.sizechange">
+<title>Resolution of the bitmap changed while device held constant</title>
+<screen>
+    \input{ft-sizch.fig}
+</screen>
+</figure>
+
+<para>This is the technique that &dvidriver;s use to print a larger 
+magnification of the same font; they print a version of the font
+designed for a correspondingly higher-resolution device.  The same
+technique is used to print at smaller magnifications.
+</para>
+
+<para>Most &dvidriver;s use bitmapped fonts stored in <filename role="extension">PK</filename> files<indexterm><primary sortas="PK files"><filename role="extension">PK</filename> files</primary></indexterm>.  The
+<filename role="extension">PK</filename> format is a highly compressed binary format.<footnote><para>{For a
+complete, detailed description of the <filename role="extension">PK</filename> and <filename role="extension">GF</filename> formats,
+consult <emphasis>The GF to PK Processor</emphasis>&nbsp;<xref linkend="mfware:gftopk"/>.}</para></footnote>  
+Two other bitmapped font formats
+(sometimes accepted by &dvidriver;s) are associated with &TeX;:
+<filename role="extension">GF</filename><indexterm><primary>GL format</primary></indexterm> and <filename role="extension">PXL</filename> files<indexterm><primary sortas="PXL format"><filename role="extension">PXL</filename> format</primary></indexterm>.  
+The <filename role="extension">GF</filename> format is a very flat,
+uncompressed bitmap format produced by several utility programs,
+including &MF;.  The <command>GFtoPK<indexterm><primary>GFtoPK</primary></indexterm></command> program converts <filename role="extension">GF</filename> files
+into <filename role="extension">PK</filename> files.  The <filename role="extension">PXL</filename> format<indexterm><primary sortas="PXL format"><filename role="extension">PXL</filename> format</primary></indexterm> is an uncompressed bitmap
+format; it has been superseded by the <filename role="extension">PK</filename> format (which achieves
+better compression) and is completely obsolete.  If you still have
+<filename role="extension">PXL</filename> files, you should convert them to <filename role="extension">PK</filename> format with the
+<command>PXtoPK</command><indexterm><primary>pxtopk</primary></indexterm> utility.  If you are using a &dvidriver; that still
+requires <filename role="extension">PXL</filename> files, you should find out about an upgrade;
+the program is obsolete.
+</para>
+
+<para>The fact that &dvidriver;s use different resolutions of the same
+font file to obtain different magnifications introduces
+a naming problem.  How can the &dvidriver; distinguish between
+<filename>cmr12.pk</filename> at 300dpi and <filename>cmr12.pk</filename> at 360dpi (or any
+other resolution)?  
+</para>
+
+<para>On &unix; systems, this problem is usually resolved by putting the
+resolution in the filename in front of the extension <emphasis>pk</emphasis>.
+For example, <filename>cmr12.300pk</filename> is <filename>cmr12</filename> at 300dpi while
+<filename>cmr12.360pk</filename> is <filename>cmr12</filename> at 360dpi.
+</para>
+
+<para>On many other systems, where the operating system imposes limits on
+the length of filenames, a solution is achieved by storing the
+fonts in different subdirectories.  On MS-DOS, for example,
+the 300dpi version of <filename>cmr12</filename> might be stored in 
+<emphasis>\bs texfonts\bs 300dpi\bs cmr12.pk</emphasis> while the 360dpi version is
+stored in <emphasis>\bs texfonts\bs 360dpi\bs cmr12.pk</emphasis>.    
+</para>
+
+<para>In either case, you should obey the conventions specified by your
+&dvidriver; to assure that the &dvidriver; can find the
+fonts.  One common solution to the problem of finding fonts is to
+use an environment variable to list the directories where <filename role="extension">PK</filename>
+files occur.
+For example, on a &unix; system, the environment variable <literal>TEXPKS</literal>
+might hold a list of directories separated by colons:<footnote><para>{A backslash
+is used here to escape the end of the first line.  This is a standard way
+to continue a line in most &unix; shells.  Naturally, you can simply enter
+it as one line in your editor, if you prefer.}</para></footnote>
+</para>
+
+<screen>
+TEXPKS=/usr/local/lib/tex/fonts:/usr/local/lib/tex/fonts/pk: /usr/local/lib/mf/fonts:/usr/local/lib/mf/fonts/pk
+</screen>
+
+<para>Under MS-DOS, the environment variable <literal>DVIDRVFONTS</literal> might
+hold a list of directories separated by semicolons:
+</para>
+
+<screen>
+DVIDRVFONTS=C:\TEXFONTS;C:\MYFONTS
+</screen>
+
+<para>The format of the environment variable and how it is created or modified
+is determined by the operating environment that you are using.  The name
+of the environment variable differs according to the &dvidriver;.  
+</para>
+
+<para>To recap, &TeX; works 
+with <emphasis>magnifications</emphasis><indexterm><primary>magnification</primary><secondary>converting  to resolution</secondary></indexterm><indexterm><primary>magnification</primary><secondary>of images</secondary></indexterm> of abstract,
+scalable measurements; &dvidriver;s work with <emphasis>resolutions</emphasis> of
+fixed, bitmapped images.
+</para>
+
+<para>To convert a magnification into a resolution, multiply the resolution of
+your output device by the magnification.  A font at a magnification of
+120\% on a 300dpi laser printer has a resolution of 360dpi.  
+</para>
+
+<para>To convert a resolution into a magnification, divide the font resolution by
+the resolution of the printer.  A 420dpi font on a 300dpi laser printer
+has a magnification of 140\%.
+</para>
+
+</section>
+<section><title>Scalable Fonts</title>
+
+<para>Although scalable fonts<indexterm><primary>fonts</primary><secondary>scalable</secondary></indexterm> used to 
+be very uncommon, the proliferation of 
+PostScript
+printers and products like Adobe Type Manager (not to mention built-in
+support for TrueType fonts in Apple System 7.0 and Microsoft Windows 3.1)
+have made these fonts very common.
+It is important to remember that scalable fonts are ultimately
+converted into bitmapped fonts.  All printers eventually treat the
+page as a very large bitmap and either do or do not deposit a small
+amount of ink in each position in the bitmap.
+</para>
+
+<para>Most &dvidriver;s leave the work of performing this rasterization to 
+someone else.  If you are not using a PostScript printer,
+you probably rely on some other piece of software to do the
+work.  Adobe Type Manager and built-in support for TrueType are the most
+common software solutions.
+Some printers, like the LaserJet III, have built-in scalable fonts as
+well, even though they are not PostScript printers.
+</para>
+
+</section>
+<section><title>Font Printing Pitfalls</title>
+
+<para>Sometimes you need a font at a size that is not available.  Because scalable
+fonts are available at any size, this is a problem only with
+bitmapped fonts<indexterm><primary sortas="metafont">&MF;</primary><secondary>fonts</secondary></indexterm><indexterm><primary>fonts</primary><secondary sortas="metafont">&MF;</secondary></indexterm>.  Remember 
+that &MF; creates bitmapped fonts, but they
+can be scaled because the <filename role="extension">MF</filename> source for the font is not
+a bitmap.  You can't scale the <filename role="extension">PK</filename> file, but you can generate a new
+<filename role="extension">PK</filename> file at the size you need.  In order to do this, you must
+have &MF; installed, and you must have the <filename role="extension">MF</filename> source for the font.
+Chapter&nbsp;<xref role="label" linkend="chap.mf"/>, <emphasis><xref role="label" linkend="chap.mf"/></emphasis>, describes how to create a 
+&MF; font at any size.
+</para>
+
+<para>If the font isn't a &MF; font, or you don't have the <filename role="extension">MF</filename> source,
+you may still be able to scale the font.  However, you should be aware
+before you try that the result may be unacceptable.  Scaling bitmapped fonts
+causes ugly, jagged edges if the font is scaled larger, and loss of
+detail if it is scaled smaller.  Small changes in size are sometimes
+manageable.
+</para>
+
+<para>The <command>dvips</command> driver will scale bitmapped fonts if it cannot
+find or build the requested font.  Alternatively, the <command>sffx</command><indexterm><primary>sffx</primary></indexterm>
+program can scale HP LaserJet softfonts.  I don't know of any other
+scaling options.
+</para>
+
+<para>Non-scalable fonts that are built into the printer cannot be
+scaled at all.  If you need to have a built-in font at an unavailable
+size, you will have to substitute another font in place of the built-in
+one.
+</para>
+
+</section>
+</section>
+<section><title>Printing Pictures and Figures</title>
+
+<para>Pictures<indexterm><primary>printing</primary><secondary>pictures</secondary></indexterm><indexterm><primary>pictures</primary><secondary>printing</secondary></indexterm> and 
+figures<indexterm><primary>printing</primary><secondary>figures</secondary></indexterm><indexterm><primary>figures</primary><secondary>printing</secondary></indexterm> are 
+frequently the least portable elements of a document.
+Chapter&nbsp;<xref role="label" linkend="chap.pictures"/>, <emphasis><xref role="label" linkend="chap.pictures"/></emphasis>, describes many of
+the options that are available for including pictures and figures in a 
+document.  
+</para>
+
+<para>If the method used is supported by the &dvidriver;  and
+printer that you use, pictures and figures are transparently printed.
+They are even less difficult to print than fonts.
+On the other hand, if you are attempting to print a document which
+incorporates pictures and figures using a method not supported by your
+&dvidriver; or printer, it may be exceptionally difficult to print
+the document.
+</para>
+
+<section><title>Unsolvable Problems</title>
+
+<para><filename role="extension">DVI</filename> files are not always <quote>complete</quote> with respect to pictures
+and figures.  Many documents
+use \special commands to access &dvidriver; or printer-specific 
+features in order to include pictures and figures.  These
+\specials may have just the name of an external file that
+contains the graphic image to be included.  For example, 
+using the &emTeX; drivers, I can include a bitmapped graphic image
+with the command \special\verb|{em:graph spslogo}|.  When &emTeX;'s
+&dvidriver;s process this command, the graphic image in the file
+<filename>spslogo.pcx</filename> is included in the output.  If I transmit
+this <filename role="extension">DVI</filename> file to another computer but forget to transmit the
+file <filename>spslogo.pcx</filename>, there is no way to print the
+<filename role="extension">DVI</filename> file with the SPS logo.
+</para>
+
+<para>At first, it may seem that a good solution to the problem described
+above would be to include the actual data for the image in the
+\special command.  But to do that, &TeX; would have to
+process the image data, defeating the purpose of the \special
+mechanism.  The \special mechanism is better because it is open
+ended---it can handle new types of graphics, for example, without 
+changing &TeX;.
+</para>
+
+<para>The second, essentially unsolvable, problem involves
+<filename role="extension">DVI</filename> files containing \special commands that
+have embedded data.  For example, one set of picture drawing \special
+commands are the <literal>tpic</literal> \specials.  If your &dvidriver; does not understand these commands,
+there is no practical way to extract them from the <filename role="extension">DVI</filename> file
+in order to convert them into a format your &dvidriver; understands.
+There may not even be a practical way of extracting them from the &TeX; document to construct a printable image.
+You simply can't print that document with the <literal>tpic</literal> figures intact.
+</para>
+
+</section>
+<section><title>Solvable Problems</title>
+
+<para>If you have a document that includes an external picture or figure
+using a method that your &dvidriver; or printer does not understand,
+and you have the file that contains the graphic image and
+the &TeX; source for the document, you may be able to print it.
+</para>
+
+<para>
+The section called <quote><xref role="label" linkend="sec.picconv"/></quote> in Chapter&nbsp;<xref role="label" linkend="chap.pictures"/>,
+lists a wide variety of picture conversion
+tools that may allow you to convert the image into a printable form.
+For example, if the document in question uses a \special
+command to include a <filename role="extension">PCX</filename> graphic
+image, but your &dvidriver; only understands the Macintosh <filename role="extension">PICT</filename> format,
+you could use the <command>PBMplus</command><indexterm><primary>PBMplus</primary></indexterm> utilities to convert the <filename role="extension">PCX</filename>
+image into <filename role="extension">PICT</filename> format.
+</para>
+
+<para>A conversion that might frequently be necessary if you work on both
+PostScript and non-PostScript printers is  conversion from encapsulated
+PostScript to a bitmap format.
+This is a translation that <command>Ghostscript</command> or some other PostScript
+interpreter can perform.
+</para>
+
+</section>
+<section><title>Pictures Using Only &TeX;</title>
+
+<para>Device-independent pictures created using only &TeX; pose no particular
+printing problems.  These include the &LaTeX; <literal>picture</literal> environment,
+as well as the &PiCTeX; and <command>&XYPic;</command> macro packages.
+</para>
+
+</section>
+<section><title>&MF; Figures</title>
+
+<para>Pictures<indexterm><primary sortas="metafont">&MF;</primary><secondary>pictures</secondary></indexterm><indexterm><primary>pictures</primary><secondary sortas="metafont">&MF;</secondary></indexterm> created 
+with &MF; (using <command>&MFPic;</command>, <command>&FigMF;</command>, or &MF; directly) are
+really &MF; fonts.  As a result, they can be created for almost
+any raster output device.<footnote><para>{Because figures are frequently much
+larger than individual characters, &MF; may have difficulty with large
+figures at very high resolutions.}</para></footnote>
+As long as &MF; is available and the figures aren't too large, they pose no
+problems. Very large images may break some &dvidriver;s or may not be
+printable on some output devices.
+</para>
+
+</section>
+<section><title>Scalable Images</title>
+
+<para>Scalable formats<indexterm><primary>images</primary><secondary>scalable (vector)</secondary></indexterm>, 
+primarily PostScript and HPGL, are difficult to convert
+to other printing technologies.  However, the <command>Ghostscript</command><indexterm><primary>Ghostscript</primary></indexterm>
+program is one option for PostScript figures, and <command>hp2xx</command><indexterm><primary>hp2xx</primary></indexterm> can
+convert a subset of HPGL commands into other formats.
+</para>
+
+</section>
+<section><title>Bitmap Images</title>
+
+<para>Bitmap images<indexterm><primary>images</primary><secondary>bitmap</secondary></indexterm> are generally the easiest to convert from one format
+to another, but there is another issue that is more difficult to 
+deal with---resolution.  Printing a bitmap image at 1200dpi if the
+original is only 300dpi is not easy.
+</para>
+
+</section>
+</section>
+<section><title>Selected Drivers</title>
+
+<para>Table&nbsp;<xref role="label" linkend="tab.drivers"/> lists a number of 
+common &dvidriver;s<indexterm><primary>DVI drivers</primary></indexterm><indexterm><primary>printing</primary><secondary>DVI drivers</secondary></indexterm> used
+to print &TeX; documents (as opposed to previewing them).  These drivers
+are discussed in more detail in this section.
+The list of drivers described here is nowhere near
+complete.  The presence or absence of a particular driver from this
+list is not intended as a reflection on the quality of the driver.
+I tried to select a representative set of free and commercial drivers.
+Drivers for other printers usually offer similar features.
+</para>
+
+<table id="tab.drivers">
+<title>Common DVI Drivers</title>
+<tgroup cols="4">
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf &dvidriver;</entry>
+  <entry>\bf Supplier</entry>
+  <entry>\bf System</entry>
+  <entry>\bf Printers </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry><command>dvihplj</command></entry>
+  <entry>Free (&emTeX;)</entry>
+  <entry></entry>
+  <entry>HP LaserJet compatible </entry>
+</row>
+<row>
+  <entry><command>dvidot</command></entry>
+  <entry>Free (&emTeX;)</entry>
+  <entry>MS-DOS+OS/2</entry>
+  <entry>Most dot matrix </entry>
+</row>
+<row>
+  <entry><command>dvipcx</command></entry>
+  <entry>Free (&emTeX;)</entry>
+  <entry></entry>
+  <entry><filename role="extension">PCX</filename> graphic images</entry>
+</row>
+<row>
+  <entry><command>dvilj2</command></entry>
+  <entry>Free (<emphasis>dvi2xx</emphasis>)</entry>
+  <entry>Most</entry>
+  <entry>HP LaserJet compatible </entry>
+</row>
+<row>
+  <entry><command>dvips</command></entry>
+  <entry>Free (<emphasis>dvips</emphasis>)</entry>
+  <entry>Most</entry>
+  <entry>PostScript </entry>
+</row>
+<row>
+  <entry><command>DVILASER/HP</command></entry>
+  <entry>ArborText</entry>
+  <entry>MS-DOS, Unix</entry>
+  <entry>HP LaserJet compatible</entry>
+</row>
+<row>
+  <entry><command>DVILASER/PS</command></entry>
+  <entry>ArborText</entry>
+  <entry>MS-DOS, Unix</entry>
+  <entry>PostScript </entry>
+</row>
+<row>
+  <entry><command>PTI Laser/HP</command></entry>
+  <entry>Personal &TeX;</entry>
+  <entry>MS-DOS</entry>
+  <entry>HP LaserJet compatible </entry>
+</row>
+<row>
+  <entry><command>PTI Laser/PS</command></entry>
+  <entry>Personal &TeX;</entry>
+  <entry>MS-DOS</entry>
+  <entry>PostScript</entry>
+</row>
+<row>
+  <entry><command>PTI Jet</command></entry>
+  <entry>Personal &TeX;</entry>
+  <entry>MS-DOS</entry>
+  <entry>HP DeskJet compatible</entry>
+</row>
+<row>
+  <entry><command>dvipsone</command></entry>
+  <entry>&YY;</entry>
+  <entry>MS-DOS</entry>
+  <entry>PostScript</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+<section><title>&emTeX; Drivers</title>
+
+<para>The &emTeX;<indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>drivers</secondary></indexterm> distribution 
+includes three &dvidriver;s: <command>dvihplj</command><indexterm><primary>dvihplj</primary></indexterm> for
+printing on HP LaserJet, DeskJet, PaintJet, QuietJet printers 
+(as well as the Kyocera laser printer), <command>dvidot</command><indexterm><primary>dvidot</primary></indexterm> 
+for printing on a wide variety of dot-matrix printers, and
+<command>dvipcx</command><indexterm><primary>dvipcx</primary></indexterm> for translating DVI files into
+<filename role="extension">PCX</filename> graphics images (for faxing, for example).
+The printers that <command>dvidot</command> supports are listed below.  
+If your dot-matrix
+printer isn't listed, detailed instructions in the &emTeX; documentation
+will probably allow you to construct an appropriate parameter file.
+</para>
+
+<simplelist columns="2" type="horiz">
+<member>Apple Imagewriter</member>
+<member>IBM Proprinter 4202</member>
+<member>C.ITOH 8510A</member>
+<member>IBM Proprinter 4207</member>
+<member>Canon Bubble Jet BJ-10e</member>
+<member>IBM Proprinter 4208</member>
+<member>EPSON FX and RX series</member>
+<member>NEC P6, Panasonic KX-P1124</member>
+<member>EPSON LQ series</member>
+<member>NEC P7</member>
+<member>IBM Proprinter 4201</member>
+<member>Tandy DMP-130</member>
+</simplelist>
+
+<para>All of the &emTeX; drivers support several \special commands for
+including bitmapped graphics and lines at any angle.
+</para>
+
+<para>The Computer Modern fonts in <filename role="extension">PK</filename> format occupy several directories
+and considerable space on disk.  To minimize the impact of keeping several
+magnifications of fonts around, the &emTeX; drivers introduced the concept
+of <emphasis>font libraries</emphasis>.  Font libraries<indexterm><primary>font libraries</primary></indexterm> are 
+single files that contain many,
+many <filename role="extension">PK</filename> fonts<indexterm><primary sortas="PK fonts"><filename role="extension">PK</filename> fonts</primary></indexterm><indexterm><primary>fonts</primary><secondary>PK</secondary></indexterm>.  The fonts 
+distributed with &emTeX; are distributed
+in font library format.  The <command>fontlib</command> program, distributed with
+&emTeX;, allows you to create and maintain font libraries of your own.
+</para>
+
+<para>The &emTeX; drivers support automatic font generation starting with 
+version 1.4S.  This is accomplished by a second program, <command>dvidrv</command><indexterm><primary>dvidrv</primary></indexterm>,
+that runs the &dvidriver; and then <command>MFjob</command><indexterm><primary>MFjob</primary></indexterm>, if required, to build
+the fonts.  The relationship between these components is shown in
+Figure&nbsp;<xref role="label" linkend="fig.emdvi"/>.
+</para>
+
+<figure id="fig.emdvi">
+<title>Previewing and printing with &emTeX;</title>
+<screen>FIXME:</screen>
+</figure>
+
+<para>Starting with version 1.4t,<footnote><para>{In alpha-testing at the time of this
+writing.}</para></footnote> &emTeX;'s <command>dvihplj</command> supports 600dpi fonts (for the
+LaserJet 4 series) and built-in printer fonts.
+</para>
+
+<para>The following list of features highlights some of the capabilities of the
+&emTeX; drivers:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Printing of a range of pages
+  </para>
+</listitem>
+<listitem>
+<para> Printing of multiple copies (with or without collating)
+  </para>
+</listitem>
+<listitem>
+<para> Reverse ordering of pages
+  </para>
+</listitem>
+<listitem>
+<para> Selection of duplex printing
+  </para>
+</listitem>
+<listitem>
+<para> Ability to scale <filename role="extension">PK</filename> files to the requested size if an appropriate
+        <filename role="extension">PK</filename> file is unavailable.  This may result in poorer output
+        quality due to distortion, but that's not &emTeX;'s
+        fault.
+  </para>
+</listitem>
+<listitem>
+<para> Extremely flexible support for printing booklets and <quote>n-up</quote>
+        arrangements of pages
+  </para>
+</listitem>
+<listitem>
+<para> Selection of paper size and dimensions (margins, etc.)
+  </para>
+</listitem>
+<listitem>
+<para> Transformations (rotation by a multiple of 90 degrees)
+  </para>
+</listitem>
+<listitem>
+<para> Changes in magnification and resolution of output
+  </para>
+</listitem>
+<listitem>
+<para> Support for font libraries
+  </para>
+</listitem>
+<listitem>
+<para> Support for font compression in printers with that feature
+  </para>
+</listitem>
+<listitem>
+<para> Ability to download each page as a large bitmap (to overcome font
+        limitations in some printers)
+  </para>
+</listitem>
+<listitem>
+<para> Support for automatic font generation
+</para>
+</listitem>
+</itemizedlist>
+
+</section>
+<section><title>dvilj2</title>
+
+<para><command>dvilj2</command><indexterm><primary>dvilj2</primary></indexterm> is a free driver for the HP LaserJet Series II printer.
+It is part of the <command>dvi2xx</command> distribution, which also includes drivers
+for the HP LaserJet Series IIP and III printers, as well as a driver for the
+IBM 3812 page printer.
+</para>
+
+</section>
+<section><title>dvips</title>
+
+<para><command>dvips</command><indexterm><primary>dvips</primary></indexterm> is one of the most popular PostScript <filename role="extension">DVI</filename> drivers.
+It is available for &unix;, MS-DOS, and OS/2 platforms.  It may also
+be available on other platforms because the source code is freely
+available.
+<command>dvips</command> supports a wide range of \special commands for 
+controlling the PostScript output, including pictures and figures and
+raw PostScript code.
+</para>
+
+<para>The following list of features highlights some of <command>dvips</command>'s 
+capabilities:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Inclusion of printer-specific prologue files
+  </para>
+</listitem>
+<listitem>
+<para> Support for compressed PostScript pictures and figures
+  </para>
+</listitem>
+<listitem>
+<para> Automatic creation of pseudo-bold and pseudo-italic fonts
+  </para>
+</listitem>
+<listitem>
+<para> Ability to run as a filter
+  </para>
+</listitem>
+<listitem>
+<para> Automatic splitting of documents into sections to prevent
+        out-of-memory errors on the printer
+  </para>
+</listitem>
+<listitem>
+<para> Printing of crop marks
+  </para>
+</listitem>
+<listitem>
+<para> Printing of a range of pages (by physical sheet or &TeX; page number)
+  </para>
+</listitem>
+<listitem>
+<para> Selection of manual-feed on the printer
+  </para>
+</listitem>
+<listitem>
+<para> Limit on number of output pages
+  </para>
+</listitem>
+<listitem>
+<para> Reverse order of pages
+  </para>
+</listitem>
+<listitem>
+<para> Selection of paper type
+  </para>
+</listitem>
+<listitem>
+<para> Changes in magnification of the output
+  </para>
+</listitem>
+<listitem>
+<para> Printing of odd/even pages only
+  </para>
+</listitem>
+<listitem>
+<para> Printing of multiple copies (with or without collating)
+  </para>
+</listitem>
+<listitem>
+<para> Stripping of comments (to avoid printer/spooler bugs)
+  </para>
+</listitem>
+<listitem>
+<para> Moving of printed image left/right or up/down page
+  </para>
+</listitem>
+<listitem>
+<para> Compression of fonts before downloading
+</para>
+</listitem>
+</itemizedlist>
+
+<para>An option to the <command>dvips</command> driver can be used to indicate which
+printer the output is destined for.  This allows many printer-specific
+options (resolution, paper sizes, etc.) to be specified in a configuration
+file, removing from the user the burden of remembering them.
+</para>
+
+<para>Automatic font generation is supported by <command>dvips</command>, as described
+above.  <command>dvipsk</command><indexterm><primary>dvipsk</primary></indexterm>, a modified version of <command>dvips</command>, also 
+supports a font-searching mechanism that 
+greatly simplifies the task of specifying which directories contain
+font files.  If any directory specification in the font path ends with
+two slashes, <command>dvips</command> searches that directory and all of its
+subdirectories for the font files.  This allows you to create a font
+directory structure like the one shown here:
+</para>
+
+<screen>
+/usr/local/lib/tex/fonts/<emphasis>supplier</emphasis>
+/usr/local/lib/tex/fonts/<emphasis>supplier</emphasis>/<emphasis>typeface</emphasis>
+/usr/local/lib/tex/fonts/<emphasis>supplier</emphasis>/<emphasis>typeface</emphasis>/src
+/usr/local/lib/tex/fonts/<emphasis>supplier</emphasis>/<emphasis>typeface</emphasis>/tfm
+/usr/local/lib/tex/fonts/<emphasis>supplier</emphasis>/<emphasis>typeface</emphasis>/vf
+/usr/local/lib/tex/fonts/<emphasis>supplier</emphasis>/<emphasis>typeface</emphasis>/vpl
+/usr/local/lib/tex/fonts/<emphasis>supplier</emphasis>/<emphasis>typeface</emphasis>/glyphs
+/usr/local/lib/tex/fonts/<emphasis>supplier</emphasis>/<emphasis>typeface</emphasis>/glyphs/pk
+</screen>
+
+<para>This arrangement is advantageous because it organizes your
+fonts and simplifies maintenance of the directories
+that contain them.  If <filename>/usr/local/lib/tex/fonts//</filename> is 
+in the font search path, <command>dvips</command> will search through
+all of the font directories for the files that it needs.  For example,
+it might find the <filename role="extension">TFM</filename> file for <literal>cmr10</literal> in
+<filename>/usr/local/lib/tex/fonts/free/cm/tfm</filename>. 
+The directory <filename>/usr/local/lib/tex/fonts/adobe/garamond/glyphs/type1</filename>
+is the location for the PostScript source of the Garamond-Italic font.
+</para>
+
+<para>The <command>dvips</command> distribution includes the <command>afm2tfm</command><indexterm><primary>afm2tfm</primary></indexterm>
+program for creating &TeX; font metrics from Adobe <filename role="extension">AFM</filename> files<indexterm><primary sortas="AFM files"><filename role="extension">AFM</filename> files</primary></indexterm>.
+This version of <command>afm2tfm</command> can perform several useful tasks
+such as automatically creating appropriate virtual fonts (for mapping
+&TeX; font encodings to PostScript encodings) or changing the encoding
+of the PostScript font.
+</para>
+
+</section>
+<section id="sec.pr.dvilaserhp"><title>DVILASER/HP</title>
+
+<para>ArborText<indexterm><primary>ArborText</primary></indexterm>'s \dvilaserhp<indexterm><primary>DVILASER/HP drivers</primary></indexterm> &dvidriver; translates 
+&TeX; <filename role="extension">DVI</filename> files into
+a format that can be printed on HP LaserJet printers.  These drivers
+are available for both MS-DOS and supported &unix; workstations.  The
+following discussion is based on experiences with \dvilaserhp version 5.3.3, the MS-DOS implementation of ArborText's HP LaserJet driver.
+</para>
+
+<para>\dvilaserhp functions in the way you would expect, generating
+LaserJet printable documents from &TeX; <filename role="extension">DVI</filename> files.  It also
+has many special features.  Some of the more interesting features
+are summarized below.  \dvilaserhp can print documents
+using <filename role="extension">PK</filename> files, HP LaserJet softfonts, and built-in fonts
+(including fonts from cartridges).
+</para>
+
+<para>ArborText supplies a complete set of Computer Modern fonts in <filename role="extension">PK</filename> format.
+Recent releases of \dvilaserhp can use the virtual fonts introduced in &TeX; version 3.0.
+</para>
+
+<para>ArborText's \dvilaserhp &dvidriver; provides the following features:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Selectable number of copies
+  </para>
+</listitem>
+<listitem>
+<para> Optional reverse ordering of pages
+  </para>
+</listitem>
+<listitem>
+<para> Selectable manual-feed
+  </para>
+</listitem>
+<listitem>
+<para> Portrait or landscape orientation
+  </para>
+</listitem>
+<listitem>
+<para> Selectable page size
+  </para>
+</listitem>
+<listitem>
+<para> Ability to scale <filename role="extension">PK</filename> files to the requested size if an appropriate
+        <filename role="extension">PK</filename> file is unavailable.  This may result in poorer output
+        quality due to distortion, but that's not \dvilaserhp's 
+        fault.<footnote><para>{The scaling uses the next larger-sized <filename role="extension">PK</filename> file,
+        and ArborText claims that this results in good quality over a large 
+        range of point sizes without providing <filename role="extension">PK</filename> files for every 
+        exact size.}</para></footnote>
+  </para>
+</listitem>
+<listitem>
+<para> Page movement and reordering options (for printing multiple pages
+        on a single sheet of paper, for example)
+  </para>
+</listitem>
+<listitem>
+<para> Configurable font substitution
+  </para>
+</listitem>
+<listitem>
+<para> Support for LaserJet <quote>overlays.</quote>  \dvilaserhp recognizes 
+        \special commands for inserting raw HP LaserJet format documents
+        and inserting HP LaserJet overlays<footnote><para>{Consult your HP LaserJet 
+        reference manual for more information about overlays.}</para></footnote>
+  </para>
+</listitem>
+<listitem>
+<para> An interactive mode (useful for printing only selected pages from
+        a document without re-running \dvilaserhp many times or when many
+        options are going to be used)
+  </para>
+</listitem>
+<listitem>
+<para> Selectable paper tray
+</para>
+</listitem>
+</itemizedlist>
+
+<para>Many other utilities come with \dvilaserhp; they are summarized in
+Table&nbsp;<xref role="label" linkend="tab.dvilaserhp.util"/>.<indexterm><primary>aftovt</primary></indexterm><indexterm><primary>gltopk</primary></indexterm><indexterm><primary>hpformat</primary></indexterm><indexterm><primary>packpxl</primary></indexterm>
+<indexterm><primary>painthp</primary></indexterm><indexterm><primary>pcltopk</primary></indexterm><indexterm><primary>pktopx</primary></indexterm><indexterm><primary>pxtopk</primary></indexterm><indexterm><primary>spr</primary></indexterm>
+<indexterm><primary>tftovp</primary></indexterm><indexterm><primary>unpkpxl</primary></indexterm><indexterm><primary>VFtoVP</primary></indexterm>\index{VPtoVF}{\def\x{${}^1$}
+</para>
+
+<table id="tab.dvilaserhp.util">
+<title>Other \protect\dvilaserhp Utilities</title>
+<tgroup cols="2">
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf Utility</entry>
+  <entry>\bf Description </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>\it aftovp</entry>
+  <entry>Converts <filename role="extension">VPL</filename> from <filename role="extension">AFM</filename> file </entry>
+</row>
+<row>
+  <entry>\it gftopk\,\x</entry>
+  <entry>Converts <filename role="extension">GF</filename> files into <filename role="extension">PK</filename> files </entry>
+</row>
+<row>
+  <entry>\it hpformat</entry>
+  <entry>A print formatter for ASCII files </entry>
+</row>
+<row>
+  <entry>\it packpxl</entry>
+  <entry>Creates packed (byte-aligned) <filename role="extension">PXL</filename> file </entry>
+</row>
+<row>
+  <entry>\it painthp</entry>
+  <entry>Converts MacPaint files into HP LaserJet format </entry>
+</row>
+<row>
+  <entry>\it pcltopk\,\x</entry>
+  <entry>Converts HP LaserJet softfonts into <filename role="extension">PK</filename>/<filename role="extension">TFM</filename> file </entry>
+</row>
+<row>
+  <entry>\it pktopx\,\x</entry>
+  <entry>Converts <filename role="extension">PK</filename> files into <filename role="extension">PXL</filename> files </entry>
+</row>
+<row>
+  <entry>\it pxtopk\,\x</entry>
+  <entry>Converts <filename role="extension">PXL</filename> files into <filename role="extension">PK</filename> files </entry>
+</row>
+<row>
+  <entry>\it spr</entry>
+  <entry>A serial-line print spooler</entry>
+</row>
+<row>
+  <entry>\it tftovp</entry>
+  <entry>Converts <filename role="extension">VPL</filename> from <filename role="extension">TFM</filename> file </entry>
+</row>
+<row>
+  <entry>\it unpkpxl</entry>
+  <entry>Creates standard, word-aligned <filename role="extension">PXL</filename> file </entry>
+</row>
+<row>
+  <entry>\it vftovp\,\x</entry>
+  <entry>Converts <filename role="extension">VF</filename> files into <filename role="extension">VPL</filename> files </entry>
+</row>
+<row>
+  <entry>\it vptovf\,\,\x</entry>
+  <entry>Converts <filename role="extension">VPL</filename> files into <filename role="extension">VF</filename> files </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>ArborText recently released <command>DVILASER/HP3 drivers<indexterm><primary>DVILASER/HP3 drivers</primary></indexterm></command> for the HP LaserJet III and IV
+printers.  In addition to the features described above, <command>DVILASER/HP3</command>
+supports more complex documents, compressed font downloading, 
+600dpi and duplex printing, paper tray and output bin selection, 
+and the ability to include TIFF images via a \special command.
+</para>
+
+</section>
+<section id="sec.pr.dvilaserps"><title>DVILASER/PS</title>
+
+<para>ArborText<indexterm><primary>ArborText</primary></indexterm>'s \dvilaserps<indexterm><primary>DVILASER/PS drivers</primary></indexterm> &dvidriver; translates &TeX; <filename role="extension">DVI</filename> files
+into PostScript.  These drivers are available for both MS-DOS and
+supported &unix; workstations.  The following discussion is based on
+experiences with \dvilaserps version 6.3.5, the MS-DOS implementation
+of ArborText's PostScript driver.
+</para>
+
+<para>PostScript &dvidriver;s are more flexible than many other
+&dvidriver;s because PostScript is a very powerful page description
+language.  Some of \dvilaserps's more interesting features are
+summarized below.  \dvilaserps can print documents using
+<filename role="extension">PK</filename> files, downloadable PostScript fonts, and built-in fonts.
+ArborText supplies <filename role="extension">TFM</filename> files for many built-in PostScript fonts.
+Recent releases of \dvilaserps can use the virtual fonts introduced
+in &TeX; version 3.0.
+</para>
+
+<para>ArborText's \dvilaserps &dvidriver; provides the following features:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Options for loading custom PostScript prologue code
+  </para>
+</listitem>
+<listitem>
+<para> Ability to be used as a filter (sends PostScript code to 
+        standard output)
+  </para>
+</listitem>
+<listitem>
+<para> Selectable number of copies
+  </para>
+</listitem>
+<listitem>
+<para> Optional reverse ordering of pages
+  </para>
+</listitem>
+<listitem>
+<para> Portrait or landscape orientation
+  </para>
+</listitem>
+<listitem>
+<para> Selectable page size
+  </para>
+</listitem>
+<listitem>
+<para> Ability to scale <filename role="extension">PK</filename> files to the requested size if an appropriate
+        <filename role="extension">PK</filename> file is unavailable.  This may result in poorer output
+        quality due to distortion, but that's not \dvilaserps's fault.
+  </para>
+</listitem>
+<listitem>
+<para> Page movement and reordering options (for printing multiple pages
+        on a single sheet of paper, for example)
+  </para>
+</listitem>
+<listitem>
+<para> Selectable paper tray
+  </para>
+</listitem>
+<listitem>
+<para> Configurable font substitution
+  </para>
+</listitem>
+<listitem>
+<para> Support for LaserJet <quote>overlays</quote>
+  </para>
+</listitem>
+<listitem>
+<para> An interactive mode (useful for printing only selected pages from
+        a document without re-running \dvilaserps many times or when many
+        options are going to be used)
+  </para>
+</listitem>
+<listitem>
+<para> Ability to download <filename role="extension">PK</filename> files permanently, speeding printing of
+        future documents
+  </para>
+</listitem>
+<listitem>
+<para> Document, page, or encapsulated PostScript document structuring
+        options
+  </para>
+</listitem>
+<listitem>
+<para> Optional clipping of characters that fall outside the normally
+        printable page area
+  </para>
+</listitem>
+</itemizedlist>
+
+<para>Many other utilities come with \dvilaserps. They are summarized 
+in<indexterm><primary>afmtopl</primary></indexterm><indexterm><primary>afmtoplm</primary></indexterm><indexterm><primary>aftovp</primary></indexterm><indexterm><primary>gftopk</primary></indexterm>
+<indexterm><primary>packpxl</primary></indexterm><indexterm><primary>pktopx</primary></indexterm><indexterm><primary>PLtoTF</primary></indexterm><indexterm><primary>psformat</primary></indexterm><indexterm><primary>pxtopk</primary></indexterm>
+<indexterm><primary>pltot</primary></indexterm><indexterm><primary>spr</primary></indexterm><indexterm><primary>tftopl</primary></indexterm><indexterm><primary>unpkpxl</primary></indexterm>
+<indexterm><primary>VFtoVP</primary></indexterm><indexterm><primary>VPtoVF</primary></indexterm> Table&nbsp;<xref role="label" linkend="tab.dvilaserps.util"/>.
+</para>
+
+<table id="tab.dvilaserps.util">
+<title>Other \protect\dvilaserps Utilities</title>
+<tgroup cols="2">
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf Utility</entry>
+  <entry>\bf Description </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>\it afmtopl</entry>
+  <entry>Converts <filename role="extension">AFM</filename> files into unmapped <filename role="extension">PL</filename> files </entry>
+</row>
+<row>
+  <entry>\it afmtoplm</entry>
+  <entry>Converts <filename role="extension">AFM</filename> files into mapped <filename role="extension">PL</filename> files\y</entry>
+</row>
+<row>
+  <entry>\it aftovp</entry>
+  <entry>Converts <filename role="extension">VPL</filename> from <filename role="extension">AFM</filename> file </entry>
+</row>
+<row>
+  <entry>\it gftopk\,\x</entry>
+  <entry>Converts <filename role="extension">GF</filename> files into <filename role="extension">PK</filename> files </entry>
+</row>
+<row>
+  <entry>\it packpxl</entry>
+  <entry>Creates packed (byte-aligned) <filename role="extension">PXL</filename> file </entry>
+</row>
+<row>
+  <entry>\it pktopx\,\x</entry>
+  <entry>Converts <filename role="extension">PK</filename> files into <filename role="extension">PXL</filename> files </entry>
+</row>
+<row>
+  <entry>\it pltotf\,\,\x</entry>
+  <entry>Converts <filename role="extension">PL</filename> files into <filename role="extension">TFM</filename> files</entry>
+</row>
+<row>
+  <entry>\it psformat</entry>
+  <entry>A print formatter for ASCII files</entry>
+</row>
+<row>
+  <entry>\it pxtopk\,\x</entry>
+  <entry>Converts <filename role="extension">PXL</filename> files into <filename role="extension">PK</filename> files </entry>
+</row>
+<row>
+  <entry>\it spr</entry>
+  <entry>A serial-line print spooler </entry>
+</row>
+<row>
+  <entry>\it tftopl\,\x</entry>
+  <entry>Converts <filename role="extension">TFM</filename> files into <filename role="extension">PL</filename> files</entry>
+</row>
+<row>
+  <entry>\it tftovp</entry>
+  <entry>Converts <filename role="extension">VPL</filename> from <filename role="extension">TFM</filename> file </entry>
+</row>
+<row>
+  <entry>\it unpkpxl</entry>
+  <entry>Creates standard, word-aligned <filename role="extension">PXL</filename> file </entry>
+</row>
+<row>
+  <entry>\it vftovp\,\x</entry>
+  <entry>Converts <filename role="extension">VF</filename> files into <filename role="extension">VPL</filename> files </entry>
+</row>
+<row>
+  <entry>\it vptovf\,\,\x</entry>
+  <entry>Converts <filename role="extension">VPL</filename> files into <filename role="extension">VF</filename> files </entry>
+</row>
+<row>
+  <entry>\multicolumn{2}{l}{ ${}^1$\vrule height11pt width0pt\tiny A standard, or otherwise freely available, utility.} </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>\dvilaserps recognizes \special commands for inserting raw
+PostScript files and commands, encapsulated PostScript files, and
+automatic page overlays (which can be selectively enabled and
+disabled).  Other \special commands allow you to set most
+of the \dvilaserps command-line options directly in the document,
+rotate any &TeX; <quote>box</quote> to any angle, and print change
+bars.  For &LaTeX; users, ArborText includes a plug-in replacement
+for &LaTeX;'s picture environments that uses PostScript instead of
+special fonts to draw each figure.
+</para>
+
+</section>
+<section><title>PTI Laser/HP and PTI Jet</title>
+
+<para><command>PTI Laser/HP</command><indexterm><primary>PTI Laser/HP</primary></indexterm> and <command>PTI Jet</command><indexterm><primary>PTI Jet</primary></indexterm> are 
+distributed together
+by Personal &TeX;, Inc.<indexterm><primary sortas="Personal tex, Inc.">Personal &TeX;, Inc.</primary></indexterm>  <command>PTI Laser/HP</command> is an HP LaserJet driver.
+<command>PTI Jet</command> is a DeskJet driver.  The <command>PTI Jet</command> driver works
+with a standard DeskJet printer; no additional options or memory are
+required.  The <command>PTI Laser/HP</command> driver is for HP LaserJet II and III
+series printers.  A separate program, <command>PTI Laser/HP4</command>, is sold
+for LaserJet 4 series printers (to support 600dpi fonts, for example).
+</para>
+
+<para>The following features are available in these drivers:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Support for font substitution
+  </para>
+</listitem>
+<listitem>
+<para> Support for built-in fonts
+  </para>
+</listitem>
+<listitem>
+<para> Printing multiple copies of each page
+  </para>
+</listitem>
+<listitem>
+<para> Setting page size
+  </para>
+</listitem>
+<listitem>
+<para> Printing in landscape mode
+  </para>
+</listitem>
+<listitem>
+<para> Selecting magnification
+  </para>
+</listitem>
+<listitem>
+<para> Ability to print a range of pages 
+        (by physical sheet or &TeX; page number)
+  </para>
+</listitem>
+<listitem>
+<para> Reversing order of pages
+  </para>
+</listitem>
+<listitem>
+<para> Ability to move the page image left/right or up/down the page
+  </para>
+</listitem>
+<listitem>
+<para> Support for 256 character fonts
+  </para>
+</listitem>
+</itemizedlist>
+
+<para><command>PTI Laser/HP</command> offers the following additional features,
+which are not supported by <command>PTI Jet</command>:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Ability to reserve printer font ID numbers
+  </para>
+</listitem>
+<listitem>
+<para> A utility program, <command>sftopk</command>, for converting
+        HP LaserJet softfonts into &TeX; <filename role="extension">PK</filename> fonts
+  </para>
+</listitem>
+<listitem>
+<para> Support for directly including HP LaserJet printer commands via
+        the \special mechanism in &TeX;
+  </para>
+</listitem>
+</itemizedlist>
+
+</section>
+<section><title>PTI Laser/PS</title>
+
+<para><command>PTI Laser/PS</command><indexterm><primary>PTI Laser/PS</primary></indexterm> is Personal &TeX;'s PostScript &dvidriver;.  
+In addition to the &dvidriver;, the <command>PTI Laser/PS</command> package
+includes utilities for spooling output to a serially-connected printer
+and converting <filename role="extension">AFM</filename> files into <filename role="extension">TFM</filename> files.
+</para>
+
+<para>Some of <command>PTI Laser/PS</command>'s more interesting options are summarized
+below.  
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Ability to select different printer resolutions
+  </para>
+</listitem>
+<listitem>
+<para> Selectable number of copies
+  </para>
+</listitem>
+<listitem>
+<para> Configurable font substitution
+  </para>
+</listitem>
+<listitem>
+<para> Selectable page size
+  </para>
+</listitem>
+<listitem>
+<para> An interactive mode for selecting options and reacting to errors
+        (characters that fall off the page, missing fonts, etc.)
+  </para>
+</listitem>
+<listitem>
+<para> Portrait or landscape orientation
+  </para>
+</listitem>
+<listitem>
+<para> Selectable &TeX; magnification
+  </para>
+</listitem>
+<listitem>
+<para> Option files for storing frequently used options.
+  </para>
+</listitem>
+<listitem>
+<para> Selectable output filename
+  </para>
+</listitem>
+<listitem>
+<para> Options to select individual pages or ranges of pages by &TeX;         page number or physical sheet number
+  </para>
+</listitem>
+<listitem>
+<para> Optional reverse ordering of pages
+  </para>
+</listitem>
+<listitem>
+<para> Adjustable page offset (adjusts the position of the printed page
+        on the physical page)
+  </para>
+</listitem>
+<listitem>
+<para> Support for 256-character fonts
+  </para>
+</listitem>
+<listitem>
+<para> Special support for the eccentricities of the Apple LaserWriter
+        printer
+  </para>
+</listitem>
+</itemizedlist>
+
+<para><command>PTI Laser/PS</command> recognizes a \special command for inserting
+raw PostScript files into the printed document.  The horizontal and
+vertical size of the inserted image can be changed.
+</para>
+
+</section>
+<section><title>dvipsone</title>
+
+<para><command>dvipsone</command><indexterm><primary>dvipsone</primary></indexterm> is a commercial PostScript driver for MS-DOS
+distributed by &YY; Inc.<indexterm><primary sortas="YY Inc.">&YY; Inc.</primary></indexterm> It
+produces PostScript output from a &TeX; <filename role="extension">DVI</filename> file.
+<command>dvipsone</command> is designed for a <quote>bitmap-free</quote> environment.
+This makes <command>dvipsone</command> almost unique among <filename role="extension">DVI</filename> drivers
+because it <emphasis>cannot</emphasis> use standard <filename role="extension">PK</filename> fonts.  To
+use <command>dvipsone</command>, you must have PostScript fonts for
+every font that you use (or the font must be built into the
+printer).<footnote><para>{The <command>dvipsone</command> distribution includes a utility
+which can convert <filename role="extension">PK</filename> fonts into bitmapped PostScript fonts.
+This program translates a <filename role="extension">PK</filename> file into an Adobe
+Type&nbsp;3 font.  Once in Type&nbsp;3 format, <command>dvipsone</command> can
+use the font.  Using Type&nbsp;3 fonts created in this way 
+adds resolution-dependence to your PostScript file.}</para></footnote>
+&YY; sells a complete set of Computer Modern fonts
+in Adobe Type&nbsp;1 format.  
+</para>
+
+<para><command>dvipsone</command> has a rich set of features:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Printing multiple <filename role="extension">DVI</filename> files with a single command
+  </para>
+</listitem>
+<listitem>
+<para> Printing pages in reverse order
+  </para>
+</listitem>
+<listitem>
+<para> Printing only odd or even pages
+  </para>
+</listitem>
+<listitem>
+<para> Ability to force output to conform to EPS standards
+  </para>
+</listitem>
+<listitem>
+<para> Assumption that all requested fonts are printer-resident
+  </para>
+</listitem>
+<listitem>
+<para> Insertion of verbatim PostScript
+  </para>
+</listitem>
+<listitem>
+<para> Printing a range of pages
+  </para>
+</listitem>
+<listitem>
+<para> Resizing of the output
+  </para>
+</listitem>
+<listitem>
+<para> Rotation of output by arbitrary angle
+  </para>
+</listitem>
+<listitem>
+<para> Shifting output left/right or up/down
+  </para>
+</listitem>
+<listitem>
+<para> Printing arbitrary number of copies
+  </para>
+</listitem>
+<listitem>
+<para> Selection of paper type (letter, landscape, legal, etc.)
+  </para>
+</listitem>
+<listitem>
+<para> Insertion of user-specified PostScript prologue
+  </para>
+</listitem>
+<listitem>
+<para> Conservation of memory by downloading partial fonts
+  </para>
+</listitem>
+<listitem>
+<para> Remapping of the font encoding on-the-fly
+  </para>
+</listitem>
+<listitem>
+<para> Support for ten different styles of \special commands for
+        including encapsulated PostScript images
+  </para>
+</listitem>
+</itemizedlist>
+
+<para>Perhaps the most interesting feature of the <command>dvipsone</command> driver is its ability to
+download partial PostScript fonts.  &YY; claim that partial font downloading
+is a feature unique to <command>dvipsone</command>.  A moderately complex &TeX; document may use twenty or more fonts and each font is typically between 20K
+and 30K.  This means that the &dvidriver; downloads roughly 500K of font data
+for the document.  In addition to requiring considerable printer memory, all
+that font data increases the amount of time that it takes to send your
+document to the printer.  The partial font downloading feature of
+<command>dvipsone</command> means that only the characters that are actually used in
+your document are sent to the printer.  The ability to download partial fonts
+can result in a substantially smaller PostScript file.
+</para>
+
+<para>Several other utilities are distributed with <command>dvipsone</command>.  They
+are summarized in
+<indexterm><primary>download</primary></indexterm><indexterm><primary>afmtotfm</primary></indexterm><indexterm><primary>tfmtoafm</primary></indexterm><indexterm><primary>pfatopfb</primary></indexterm>
+<indexterm><primary>pfbtopfa</primary></indexterm><indexterm><primary>twoup</primary></indexterm><indexterm><primary>pktops</primary></indexterm> Table&nbsp;<xref role="label" linkend="tab.dvipsone.util"/>.
+</para>
+
+<table id="tab.dvipsone.util">
+<title>Other dvipsone Utilities</title>
+<tgroup cols="2">
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry><phrase>\bf Utility</phrase></entry>
+  <entry>\bf Description </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry><filename>download</filename></entry>
+  <entry>Robust font-downloading program for PostScript fonts</entry>
+</row>
+<row>
+  <entry><filename>afmtotfm</filename>\,\x</entry>
+  <entry>Converts <filename role="extension">AFM</filename> files into <filename role="extension">TFM</filename> files</entry>
+</row>
+<row>
+  <entry><filename>tfmtoafm</filename></entry>
+  <entry>Converts <filename role="extension">TFM</filename> files into <filename role="extension">AFM</filename> files</entry>
+</row>
+<row>
+  <entry><filename>pfatopfb</filename>\,\x</entry>
+  <entry>Convert <filename role="extension">PFA</filename> files into <filename role="extension">PFB</filename> files</entry>
+</row>
+<row>
+  <entry><filename>pfbtopfa</filename>\,\x</entry>
+  <entry>Convert <filename role="extension">PFB</filename> files into <filename role="extension">PFA</filename> files</entry>
+</row>
+<row>
+  <entry><filename>twoup</filename></entry>
+  <entry>Reorders pages in a PostScript file</entry>
+</row>
+<row>
+  <entry><filename>pktops</filename></entry>
+  <entry>Provides access to <filename role="extension">PK</filename> fonts for <command>dvipsone</command></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+</section>
+</section>
+</chapter>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: xml
+sgml-parent-document: "book.xml"
+ispell-skip-sgml: t
+End:
+-->

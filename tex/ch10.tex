@@ -1,0 +1,310 @@
+\chapter[Online Documentation]{Online\\Documentation}
+\RCSID$Id: ch10.tex,v 1.1 2002/08/23 14:58:46 nwalsh Exp $
+\label{chap:online}
+
+\ifincludechapter\else\endinput\fi
+
+Some common kinds of documentation---for example, manuals for computer 
+programs---present a unique challenge to the author.  In many cases, it 
+would be nice to be able to provide online documentation\index{online documentation}\index{documentation (online)} in addition to a typeset manual.
+
+One option is to maintain two different documents: one for publication
+and one for online access.  This is difficult to maintain and is prone
+to error.  As the documentation evolves, it is almost inevitable that
+some changes to one document will not be implemented in the other.
+
+Another option is to include only very limited formatting information
+in the document designed for publication so that it is easy
+to ``strip out'' the formatting commands and produce an online manual.
+The unfortunate side effect of this approach is that the resulting
+typeset documentation doesn't have a very professional appearance.
+
+With care, \TeX\ can be the basis for a middle-ground approach to this 
+problem.\footnote{Structured
+markup languages like SGML also address this problem, but they introduce
+their own set of difficulties.  Regardless of whatever advantages they
+may hold, I'm not going to discuss them here.}  
+If you are starting a new documentation project,
+\ixx{\TeXinfo}{texinfo@\TeXinfo} and \ixx{Lame\TeX}{Lametex@Lame\TeX} provide two alternatives for the production of
+typeset and online documentation from the same source.  \ixx{\LaTeX2HTML}{latex2HTML@\LaTeX2HTML} and
+\ixx{\LaTeX2hy}{latex2hy} provide alternatives that may be suitable for existing 
+documentation.
+
+You'll find that the best results occur when you plan ahead: if you know
+that you need both typeset and ASCII documentation, try to use tools
+that will make the task easier.  But, even if you try to plan ahead,
+it's not uncommon to find out after the fact that you need or want
+ASCII documentation.  If you don't have the \TeX\ sources, you'll just
+have to take the best results you can get with one of the tools described
+later in this chapter
+and do whatever hand-editing is required.  
+
+If you have the \TeX\ sources for a document, 
+here are some guidelines that can help improve the quality of
+the conversion to plain ASCII: 
+
+\begin{itemize}
+  \item Redefine all font commands to use \cs{tt}.  This makes \TeX\
+        work with a fixed-width font.  You will probably get many, many
+        overfull and underfull box messages.  This can't be helped.  Setting
+        \cs{tolerance} and \cs{hbadness} to large values
+        (10000 with \TeX\ 2.x or 100000 with \TeX\ 3.x, for example) will
+        reduce the number of warnings.
+
+        Similarly, redefine all the commands that change font size to select
+        the same size (probably 10pt or 12pt will work best, but larger
+        values may be better if you have wide margins).
+
+  \item Don't use any special fonts---no \verb|picture| environments in \LaTeX,
+        for example.  Take out rules, too.
+
+  \item Use \cs{raggedright}.  There's no point in trying to line
+        up the right margin.
+
+  \item Remove or redefine all mathematics to avoid the use of math-mode.
+        It won't work; don't ask \TeX\ to try.
+
+  \item Remove all tables (\cs{halign} in Plain \TeX, \verb|tabular|
+        environments in \LaTeX).
+ 
+  \item Remove floating environments; this may help.
+
+  \item Depending on your level of expertise and the number of documents
+        that you have to convert, redefine footnotes and other environments
+        to give you more marginal improvements.
+\end{itemize}
+
+The \filename{ascii.sty} style\index{ascii.sty style files} for 
+\LaTeX\ encapsulates many of these rules for you.
+
+\section{Something Is Lost}
+
+Many things that can easily be represented
+on paper cannot be represented in plain ASCII.  One reason for this
+is that plain ASCII output is not proportionally spaced.  Also, in ASCII
+you can move up or down only by
+rows, and left or right only by columns; you can't move down ``3 points'' 
+on a terminal to typeset a subscript, for example.
+
+These differences combine to make many things impossible.  For all of
+its marvelous sophistication, \TeX\ cannot help you 
+typeset mathematics\index{mathematics!in ASCII} in 
+plain ASCII.  It just can't be done.  Most tables can't be done in
+plain ASCII either (at least not if you want lines that are only 80 characters
+or so long).
+
+The following sections describe tools that may help you achieve the
+goal of online and typeset documentation from the same sources.  Each
+tool has its own advantages and disadvantages. The ones that work best
+for you will depend on the type of documentation you are producing
+and the amount of work you are willing to do.
+
+\section{\protect\TeXinfo}
+
+\ixx{\TeXinfo}{texinfo@\TeXinfo} is the document formatting system adopted by the
+\idx{Free Software Foundation (FSF)} and the \idx{GNU Project}.  It is 
+a special \TeX\ format
+that is very different from standard \TeX.\footnote{A \LaTeX\
+implementation, called \LaTeX{}info, is also available.}  The goal of
+\TeXinfo\ is to devise an input format that can be processed by
+\TeX\ to produce typeset output and then be processed by another program to
+produce \emph{hypertext} output.  (The other program in this case is
+\ixx{\program{MakeInfo}}{MakeInfo}.)
+
+\TeXinfo\ supports ordinary text, sectioning commands, itemize and
+enumeration environments, footnotes, cross-references, tables of
+contents, lists of figures and tables, and multiple indexes.
+
+The \TeXinfo\ example from Chapter~\ref{chap:macpack},
+{\it \nameref{chap:macpack}}, is reproduced in Example~\ref{ex:on:infinp}
+(the \TeXinfo\ input), Figure~\ref{fig:on:infex} (the typeset page), 
+and Figure~\ref{fig:on:infinf} (the resulting online documentation).
+
+\exampleinput{perf-inf}{ex:on:infinp}{\protect\TeX{}info Commands}
+
+\epspage{perf-inf.eps}{3.25in}{.49,3.075}{\protect\TeX{}info sample page}{fig:on:infex}
+
+\begin{figure}
+  \begin{center}
+    \FramedVerbInput{perf-inf.inf}
+    \caption{Online documentation produced by MakeInfo}
+    \label{fig:on:infinf}
+  \end{center}
+\end{figure}
+
+The output from \program{MakeInfo} is very nearly pure ASCII.  The
+motivation for {hypertext} output is to make cross 
+references dynamic\index{cross references!dynamic} when 
+the ``info'' version of the document is used for online
+reference.\footnote{``Info'' is the name of both the output format and a
+program for displaying the text in a hypertext fashion.  Another common
+way to access info files is with the GNU emacs online help system.}  
+The result is close enough to pure ASCII that converting
+it to pure ASCII is not (usually) too difficult.  For example, the
+\ixx{\textit{comp.fonts} newsgroup}{comp.fonts newsgroup}'s Frequently Asked Questions list is 
+maintained as a \TeXinfo\ document. It is 
+posted as an info version that has been processed
+by a Perl script to ``flatten'' the hypertext.
+
+The \TeXinfo\ format is well documented, so a brief description here
+will suffice.  First, the backslash, which is ordinarily
+used to introduce control sequences in \TeX, is not special.  Instead
+the ``@''-sign is used.  Second, a
+\TeXinfo\ document is divided into ``\idx{nodes}.''  A node corresponds
+roughly to a chapter or a large section of a chapter.  In the online
+documentation, it is easy to jump between related nodes. 
+
+Because the info version of the document is ASCII text, many
+of the special typesetting features of \TeX\ aren't applicable.
+To support them in the typeset document, \TeXinfo\ allows you to
+specify that some portions of the input should be seen only by \TeX\
+and some should be seen only by \program{MakeInfo}.
+Example~\ref{ex:on:infinp} uses this feature to typeset
+mathematics using the best features of both \TeX\ and \program{MakeInfo}.
+
+\section{\protect\LaTeX2HTML}
+
+\ixx{\LaTeX2HTML}{latex2HTML@\LaTeX2HTML} attempts 
+to convert \LaTeX\ documents into \idx{HTML}, the
+document structuring language used by the \idx{World Wide Web (WWW)} project.
+HTML stands for HyperText Markup 
+Language\index{HyperText Markup Language (HTML)}; it is a way of describing
+documents in terms of their structure (headings, paragraphs, lists,
+etc.).  
+\idx{SGML}, the Standard Generalized Markup Language,
+provides
+a framework for developing structured documentation; HTML is one specific
+SGML document type.
+HTML documents are displayed by special programs called
+\idx{browsers} that interpret the markup and present the information in a
+consistent manner.  Because an HTML document is described in
+terms of its structure and not its appearance, HTML documents can be
+effectively displayed by browsers in non-graphical environments.
+
+\newpage
+One of the most important features of HTML documents is the ability to
+form hypertext links\index{links!hypertext}\index{hypertext links} between 
+documents.  Hypertext links allow you to
+build dynamic relationships between documents.  For example, selecting
+a marked word or phrase in the current document displays more
+information about the topic, or a list of related topics.  
+
+\LaTeX2HTML preserves many of the features of a \LaTeX\ document in 
+HTML.  Elements that are too complex to represent in HTML, such
+as mathematical equations and logos like ``\TeX,'' are converted into
+graphic images that can be displayed online by graphical browsers.
+All types of cross referencing elements (including footnotes) are preserved as
+hypertext links.
+
+When installed, \LaTeX2HTML understands many basic \LaTeX\ commands, but
+it can be customized to handle other styles.  \LaTeX2HTML is written in
+\program{Perl}.
+
+All in all, \LaTeX2HTML is one of the easiest and most effective tools
+for translating typeset documentation into a format suitable for online
+presentation.  In a graphical environment like X11, Microsoft Windows,
+or the Macintosh, HTML documents offer very good support for online
+documentation.
+
+\section{Lame\protect\TeX}
+
+\ixx{Lame\TeX}{Lametex@Lame\TeX} is a \ixx{PostScript translator}{PostScript!translator} for 
+a (very limited) subset of
+\LaTeX.  One of its original design goals, the inclusion of sophisticated
+PostScript commands directly in a \LaTeX\ document, has been superseded
+by the \ixx{\PSTricks}{PSTricks@\PSTricks} package.
+However, one of the side effects of a special-purpose translator for
+\LaTeX\ is the ability of that translator to produce different kinds of
+output, including plain ASCII.
+
+The primary advantage of this method is that it does not require learning
+an entirely foreign macro package like \TeXinfo.  The disadvantage
+is that it understands only a very small subset of \LaTeX.
+This subset includes \emph{only} the following commands: 
+
+\begin{xtable}{lll}
+\cs{\#} & \cs{footnotesize}     & \cs{ref} \\
+\cs{\$} & \cs{hspace}   & \cs{rm} \\
+\cs{\%} & \cs{hspace*}  & \cs{sc} \\
+\cs{\&} & \cs{huge}             & \cs{scriptsize} \\
+\cs{Huge}       & \cs{include}  & \cs{section} \\
+\cs{LARGE}      & \cs{input}            & \cs{section*} \\
+\cs{Large}      & \cs{it}               & \cs{setlength} \\
+\cs{\_} & \cs{item}             & \cs{sf} \\
+\cs{addtolength}        & \cs{itemize} & \cs{sl} \\
+\cs{backslash}  & \cs{label}    & \cs{small}\cs{smallskip} \\
+\cs{begin}      & \cs{large}            & \cs{subparagraph} \\
+\cs{bf} & \cs{ldots}            & \cs{subparagraph*} \\
+\cs{bigskip}    & \cs{medskip}  & \cs{subsection} \\
+\cs{center}     & \cs{newlength}        & \cs{subsection*} \\
+\cs{chapter}    & \cs{newline}  & \cs{subsubsection} \\
+\cs{chapter*}   & \cs{normalsize}       & \cs{subsubsection*} \\
+\cs{clearpage}  & \cs{par}              & \cs{tiny} \\
+\cs{description}        & \cs{paragraph}        & \cs{today} \\
+\cs{document}   & \cs{paragraph*}       & \cs{tt} \\
+\cs{documentstyle}      & \cs{part}             & \cs{verbatim} \\
+\cs{em}         & \cs{part*}            & \cs{verbatim*} \\
+\cs{end}                & \cs{quotation}        & \cs{verse} \\
+\cs{enumerate}  & \cs{quote}            & \cs{vspace} \\
+\cs{flushleft}  & \cs{raggedleft}       & \cs{vspace*} \\
+\cs{flushright} & \cs{raggedright}      & \\
+\end{xtable}
+
+In addition, unlike \LaTeX, Lame\TeX\ doesn't
+understand any Plain \TeX\ commands (other than the ones listed).
+
+\section{latex2hy}
+
+\ixx{\program{latex2hy}}{latex2hy} is 
+a \LaTeX-to-ASCII converter\index{latex@\LaTeX!converter to ASCII}.  It has several
+options for controlling the input and output character sets.  In
+addition, \program{latex2hy} has a number of options for improving the
+quality of both ASCII and printed documentation.  For example, input
+documents can contain both \TeX\ and ASCII representations for complex
+objects (like mathematical formulae).  The printed documentation uses
+the \TeX\ version while \program{latex2hy} uses the ASCII version.
+Provision is also made for ``fixups,'' which allow character sequences
+from the input text to be translated into different sequences on
+output.  For example, ``$9.81\frac{m}{s^2}$'' can be automatically
+translated into \verb|9.81m/s^2|.  By adding specific fixups to each
+document that you translate, you can obtain successively better 
+approximations automatically.
+
+\program{latex2hy} gives particular attention to 
+cross references\index{cross references!in latex2hy}.
+Cross references are translated into ``\idx{links}''
+between topics in \emph{hypertext} output formats.  Currently, only the
+\ixx{\emph{TurboVision}}{TurboVision} hypertext format is supported, although several
+other formats are being considered.
+
+\section{detex}
+
+\ixx{\program{detex}}{detex} is a simple program that does little more than strip
+control sequences and other \TeX{}ish character sequences from your document.
+Doing this makes the document more amenable to other kinds of processing (like
+spellchecking) but does a poor job of producing ``online documentation.''
+Still, it's an option.
+
+\section{dvispell}
+
+The \ixx{\program{dvispell}}{dvispell} program produces plain text output from a \ext{DVI}
+file.  It is not a spellchecker, but it was designed to extract the
+words from a \TeX\ document which were then fed to a spellchecking
+program that was unable to ignore \TeX\ control sequences.
+
+The \program{dvispell} program is part of the \ixx{\emTeX}{emTeX@\emTeX} package, and it is
+remarkably sophisticated.  There are many ways in which \program{dvispell}
+can be programmed to perform complex manipulations.  One special strength
+of \program{dvispell} is its ability to handle conversion of accented 
+characters and Greek symbols.
+
+\program{dvispell} differs from the other programs described here
+because it works with \TeX\ output, the \ext{DVI} file.  On the one
+hand, this provides \program{dvispell} with more information
+(character positions, line breaks, floating bodies, etc).  On the
+other hand, all of the formatting commands are missing, so it isn't
+easy to determine what the user had in mind. (It's a bit like
+reverse-engineering a piece of software---without the source code,
+it's not always easy to tell why things look the way they do.)  But
+\program{dvispell} gives you access to most of the information that is
+present in the \ext{DVI} file.

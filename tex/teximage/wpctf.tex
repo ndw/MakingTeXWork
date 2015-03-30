@@ -1,0 +1,17 @@
+\newbox\wpctfbox
+\newdimen\wpctfwd
+\font\wpctfa=wpctfa at 72.27truept
+\font\wpctfb=wpctfb at 72.27truept
+\setbox\wpctfbox=\vbox{\hbox{%
+\wpctfa\char0\char1\char2\char3\char4}}
+\wpctfwd=\wd\wpctfbox
+\setbox\wpctfbox=\hbox{\vbox{\hsize=\wpctfwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\wpctfa\char0\char1\char2\char3\char4}
+\hbox{\wpctfa\char5\char6\char7\char8\char9}
+\hbox{\wpctfa\char10\wpctfb\char0\char1\char2\char3}}}
+\ifx\parbox\undefined
+    \def\setwpctf{\box\wpctfbox}
+\else
+    \def\setwpctf{\parbox{\wd\wpctfbox}{\box\wpctfbox}}
+\fi

@@ -1,0 +1,1218 @@
+\chapter[The Big Picture]{The Big Picture}
+\RCSID$Id: ch01.tex,v 1.1 2002/08/23 14:58:45 nwalsh Exp $
+\label{chap:overview}
+\label{chap:tex}
+
+\ifincludechapter\else\endinput\fi
+
+\section{What Is \protect\TeX?}
+
+\ixx{\TeX}{tex@\TeX!introduction}\index{typesetting!tex@\TeX} is 
+a \emph{typesetting system}.  It is a collection of
+programs, files, and procedures for producing professional quality
+documents with minimum effort.
+
+\TeX's job is to translate the text you type into a 
+\ixx{beautiful}{beauty of text}
+typeset page.  The key word here is ``beautiful,'' and it is a very
+lofty goal.\ff{Before I proceed, the notion of beautiful in this context
+needs some explanation.  Several people have pointed out that the logo
+type used by many \TeX-related programs (including \TeX\ itself) is
+intrinsically ugly.  These same folks argue that a sentence like
+``\TeX\ is designed to typeset beautiful pages'' is self-contradictory
+because it begins with such an ugly construction.  Obviously, \TeX\
+can't {\em prevent\/} you from typesetting ugly things. But \TeX\ can
+typeset beautiful things too.  We at O'Reilly \& Associates think that
+this book, typeset completely in \TeX, is an excellent example.}
+What I mean by beautiful is that \TeX, when presented with several
+paragraphs of plain text and left to its own devices, produces a remarkably
+aesthetic page.  Despite the fact that \TeX\ may have to contend with
+\ixx{multiple fonts}{fonts!multiple} and \idx{mathematics}, it still
+manages to typeset pages in which each of the following aesthetic principles
+hold {\em simultaneously:}
+
+\begin{itemize}
+  \item The right margin is \ixx{justified}{justification}.
+  \item Proper justification is achieved without \idx{letterspacing}.
+  \item Interword spacing is neither too tight nor too 
+        loose.\index{spacing between words}
+  \item The page is evenly gray.
+  \item The \idx{baselines}\index{fonts!baselines} of multiple fonts 
+        are properly aligned.
+  \item \ixx{Hyphenation}{hyphenation} is automatic, if required, and usually correct.
+  \item \ixx{Ladders}{ladders} are avoided.
+\end{itemize}
+\goodbreak
+
+\TeX\ processes documents a paragraph at a time, rather than a line
+at a time like most other programs.  Internally, \TeX\ computes a value 
+called {\it\idx{badness}} for each
+line of the \ixx{paragraph}{paragraphs (building)}.  Anything that
+detracts from the appearance of a line (tight or loose spacing, a
+hyphen, etc.) increases the badness associated with that line.  Every
+paragraph that \TeX\ produces is optimal in terms of the total amount
+of badness present.  Because \TeX\ searches for an optimal
+solution, changing the last word of a paragraph can affect
+the spacing of the first line of the paragraph.
+After you've gained a little bit of experience with \TeX, you'll be
+able to override any one, or all, of the rules it uses to compute
+badness, but in most situations you won't want to.  I will describe more
+of \TeX's approach to text formatting and how it differs from that
+of word processors, desktop publishers, and other markup languages in
+the following sections.
+
+\TeX\ is not a simple program, but a set of
+programs, tools, fonts, and other types of files. 
+Two programs form the core of the \TeX\ typesetting
+system.  One of them is \TeX\ itself, the program that reads
+your input files and transforms them into typeset form.  The other
+program is \MF, a tool for creating fonts. 
+Producing \TeX\ documents involves a series of steps, including
+editing the document, running \TeX\ itself, and processing \TeX's
+output in various ways.
+
+%\TeX's twin goals of beauty and efficiency (minimum effort) are
+%frequently in conflict.  The result of this conflict is an environment
+%where minimum effort does not necessarily mean ``easiest for the
+%novice.''  Don't worry, though, it's not really difficult so
+%much as it is different. 
+%
+%The rest of this chapter surveys the ``lay of the land''; if you've
+%never seen \TeX\ before, this chapter will give you the ``big picture''
+%introduction to document production with \TeX.  If you're an old hand
+%at \TeX\ hackery, this chapter will help you quickly find the sections
+%of the book that you're most interested in.
+
+Over the years, \TeX\ has been made available on almost every computer
+\ixx{platform}{tex@\TeX!platforms}, so it is probably available for the
+computer system that you use.  Compiling \TeX\ on different systems
+has been possible, in large part, because \TeX\ is a text formatter and
+not a word processor. 
+Unlike a word processor, \TeX\ never deals directly with displaying
+text on the screen or interacting with input from the keyboard (except in a
+very basic way).  These features of an application are
+typically the most difficult to port from one system to another.
+
+Beyond the technical details that make translation from one system to
+another possible, \ixx{Donald Knuth}{Knuth, Donald} added an 
+important stipulation to
+the free distribution of \TeX: in order for any program to be called
+``\TeX,'' it must pass a rigorous \idx{test suite}.  This means that
+the \TeX\ you use behaves exactly like the \TeX\ I use.\ff{This
+is not a whole-truth.  Implementors of \TeX\ may make some system-dependent 
+alterations as long as the resulting program still passes
+the test suite; so our \TeX{}s may not behave {\em exactly\/} the
+same way.  They will, however, produce identical documents given
+identical input (unless the input relies on system-dependent features
+not available in both \TeX{}s, naturally.  ;-)}  This feature has
+contributed greatly to \TeX's success.  It means that a large
+community of \TeX\ users can transparently
+\ixx{share}{documents!sharing} documents.
+
+\section{\protect\TeX\ for Beginners}
+\label{sec:texforbeginners}
+
+If you are already familiar with \TeX, you may find some of the
+material in this section repetitive.  If so, just skim it quickly.
+This section will help you understand how \TeX\ interprets the things
+you type into your input file.  When you understand the concepts
+discussed here, you'll be ready to write really, really simple
+documents in \TeX.
+
+\subsection{Boxes and Glue}
+\index{boxes|(}
+
+Despite the apparent complexity of \TeX's job, it uses a very simple
+metaphor: all typographic elements are \idx{boxes}.  The simplest boxes,
+individual \ixx{characters}{characters!as boxes}\index{boxes!characters} have 
+a set shape
+defined by the font they come from.  There are three parameters
+that define a box: 
+\ixx{width}{boxes!width}\index{width!of box}, 
+\ixx{height}{boxes!height}\index{height of box},
+and \ixx{depth}{boxes!depth}\index{depth of box}.   
+The distinction between height and
+depth is a bit subtle.  When a row of characters is typeset,
+every character rests on an imaginary line called the \textit{baseline}.  
+Some characters, like the lowercase ``g,'' 
+descend below the \ixx{baseline}{baselines}.
+The distance from the baseline to
+the top of a box is its height; the distance from the baseline to the
+bottom is its depth.  
+
+Figure~\ref{fig:charbox} shows the character boxes formed by the \ixx{Computer Modern}{Computer Modern fonts} Roman letters ``g'' and ``h.''  The {\it x-y\/}
+distance of each box is its height and the {\it y-z\/} distance is its depth.
+The \ixx{\textit{reference point}}{reference point (of boxes)} of the box,
+marked with an \textit{r}, is on the leftmost edge of the box where the height
+and depth meet.  Characters that have no \textit{\idx{descenders}} 
+(no elements that go below the baseline), have a depth of zero.  
+\TeX\ uses the character box metrics, but font designers are free to allow 
+glyphs to extend outside the box (for example, at the top of the ``g'').
+
+\epsbox[g-h.eps]{fig:charbox}{The Letters ``g'' and ``h'' inside their boxes.}
+
+The following paragraph demonstrates how \TeX\ uses the metrics from
+the physical dimensions of each character to build word, line, and
+paragraph boxes. 
+
+\bgroup
+\tolerance=10000
+\hbadness=10000
+\def\surit#1{\hbox{\hskip.5pt\vbox{\vskip.5pt\hbox{#1}\vskip.5pt}\hskip.5pt}}
+\def\boxit#1{%
+  \setbox0=\hbox{#1}%
+  \dimen0=\ht0
+  \advance\dimen0 by .9pt
+  \hbox{\vbox to \ht0{%
+      \vss\hbox{\vbox to \dimen0{%
+          \hbox{\vrule\vbox{\hrule\surit{#1}\hrule}\vrule}\vss}}}}}
+\dimen1=\textwidth
+\advance\dimen1 by -8pt
+\beginsbox{\sidebarbox}
+  \tolerance=100000
+  \begin{minipage}{\dimen1}
+    \TeX\ \ixx{``glues'}{glue}' 
+    character boxes together to form words.  When boxes are
+    joined, they are always joined so their reference points are horizontally
+    aligned as shown in Figure~\hbox{1-1}.\footnotemark\ Character-boxes (like
+    \boxit{t}\kern.5pt\boxit{h}\kern.5pt\boxit{i}\kern.5pt\boxit{s}) are
+    joined to form words, \ixx{word-boxes}{boxes!word} 
+    (like \boxit{this}) are joined
+    \advance\dimen1 by -1.8pt \boxit{\hbox to \dimen1{to form lines, and
+    \ixx{line-boxes}{boxes!line} (like this) form paragraphs.  
+    \TeX\ accomplishes the task}} of
+    forming a justified paragraph by allowing the glue between words to
+    \ixx{stretch}{stretching} and 
+    \ixx{shrink}{shrinking} a little
+    bit and by occasionally breaking the glue between characters to insert a
+    hyphen.  Although the rules are slightly different, \TeX\ builds a page
+    out of vertical boxes (paragraphs, figures, etc.) in an analogous manner.
+  \end{minipage}
+\endsbox
+\leavevmode
+\hbox{\vrule\vbox{\hrule\surit{\usebox{\sidebarbox}}\hrule}\vrule}
+\footnotetext{This is subtly different from saying that they are joined at the
+baseline.  There are \TeX\ commands which can change the position of the
+reference point in a box, whereas the baseline is an imaginary line that
+depends solely on the shape of the character.}
+\egroup
+
+This is a very generalized overview.  In reality, a lot of subtlety
+is required to capture all of the nuances of typographical appearance.
+
+\index{boxes|)}
+\subsection{Control Sequences}
+\label{sec:tex:controlsequences}
+
+A \textit{\ixx{control sequence}{control sequences}} 
+is a special ``word'' that you put in your
+document.  These extra words are instructions for \TeX, and they do
+not usually appear in your typeset document.
+Example~\ref{ex:csexample} shows a contrived example of a \TeX\
+document that uses several control sequences.
+
+\begin{example}{ex:csexample}{An Example of a \protect\TeX\ Document}
+\def\ora{O'Reilly \& Associates}
+\font\orafont=grlg10
+\parskip=\baselineskip
+\parindent=0pt
+\pageno=5
+This book is published by \ora\ in
+the \textit{Nutshell} series.
+\bye
+\end{example}
+
+In most macro packages, a control sequence is
+a backslash followed by a sequence of letters.\ff[2]{Technically,
+it's any character defined to be in the ``escape'' category followed
+by any sequence of characters defined to be in the ``letter'' category or
+a single character in the ``other'' category.}  \TeX\ is case-sensitive, 
+so the control sequence
+\cs{large} is different from \cs{Large} (these control
+sequences switch to large and very large fonts in the
+\LaTeX\ macro package).  Control sequences end with the first
+non-letter, even if it isn't a space.  For example,
+\cs{parskip0pt} is the control sequence \cs{parskip}
+followed by \verb|0pt|. This control sequence tells \TeX\ to
+insert zero points of extra space between paragraphs.
+
+Unless instructed otherwise (with control sequences),
+\TeX\ builds rectangular paragraphs out of lines of words.
+Changing fonts, building tables, and typesetting 
+\ixx{mathematical equations}{mathematics}
+are examples of situations in your document where \TeX\ needs 
+extra information.  
+
+The number of control sequences used in a \TeX\ document may seem
+overwhelming at first.  Luckily, every
+control sequence falls into one of several categories:
+
+\begin{iplist}{.25in}
+  \ipitem[Macro control sequences]
+        \ixx{Macro control sequences}{control sequences!macro} associate a 
+        name with an arbitrary string of text (including other control
+        sequences).  
+        They are interpreted by 
+        replacing the control sequence with the text of its 
+        definition.\ff{Actually, macro expansion differs from pure 
+        textual replacement in 
+        a number of technical ways, but they aren't important here.}
+\goodbreak
+        Macro control sequences are the root of \TeX's tremendous
+        flexibility.  By defining control sequences with meaningful
+        names, like \cs{chapter} and \cs{footnote}, \TeX\ can
+        present a reasonably simple interface to the user.  By 
+        redefining those control sequences, the typeset output can
+        be modified without requiring you to retype large quantities of text.
+
+        In Example~\ref{ex:csexample}, the macro control sequence 
+        \cs{ora} is defined as a shortcut for typing ``O'Reilly \& 
+        Associates.''  This is a simple example of how a macro control 
+        sequence can be used.
+
+  \ipitem[\ixx{Font control sequences}{control sequences!font}]
+        In Example~\ref{ex:csexample}, the
+        line \cs{font}\verb|\orafont=grlg10| creates a font 
+        control sequence
+        called \cs{orafont}.  When \cs{orafont} is used, \TeX\
+        will begin typesetting in the font  \texttt{grlg10}.  The name of
+        the font, \texttt{grlg10} in this case, refers to an external file 
+        that
+        contains font metric information.  Fonts are discussed in
+        Chapter~\ref{chap:fonts}, {\it \nameref{chap:fonts}}.
+
+  \ipitem[Registers]
+        Registers\index{control sequences!use of registers by} are like
+        variables in a programming language.  They hold a single
+        value of a particular type.  Many types of
+        values can be stored: numbers (also called ``count''
+        values because they are simple counting numbers like 1, 2,
+        17, or -5), dimensions (also called ``lengths''; they
+        are distances like 3.5pt or 2in), boxes, glue, and token 
+        lists (an internal representation of your document used by 
+        \TeX).\ff[2]{Technically, several other kinds of values are
+        stored this way as well, but they are less common and won't
+        be discussed in this book at all.}
+
+        If you are unfamiliar with computer programming, think of
+        these registers as place holders.  When \TeX\ needs to save a
+        piece of information, like how much space should be inserted
+        between paragraphs, it stores the information in a register.  
+        When the information is needed again, in this case when \TeX\
+        has finished typesetting one paragraph and is about to start
+        another, it can retrieve that information from the register.
+        Registers are usually given names that at least hint at how
+        they are used.  This helps people read and modify the rules
+        that \TeX\ uses to typeset documents.
+
+        In Example~\ref{ex:csexample}, \cs{parskip}, 
+        \cs{baselineskip}, and \cs{parindent} are dimension 
+        registers.  The \cs{pageno} control sequence is a 
+        count register.  
+
+        There are only 256 registers of each type. The type of information 
+        (number, dimension, or token list)
+        that a register can contain is defined when the control sequence
+        is created.  Once a variable like
+        \cs{parindent} is created to hold a dimension, it can never
+        hold a number or a token list.\ff{Most control sequences can
+        be redefined to hold different kinds of values, but they can never
+        hold different kinds of values at the same time.  A dimension register
+        can be redefined to hold tokens, for example, but then it can't hold
+        dimensions anymore (unless it is redefined again).}
+
+        Registers may seem unnecessary now that you know about macro
+        control sequences, which can store arbitrary information.
+        However, registers differ from macro control sequences not only in the
+        types of values they can hold, but also in the types of
+        operations that can be performed on them.  There is a \TeX\
+        command called \cs{advance}, for example, that can 
+        increment the value stored in a register by an arbitrary amount.
+        You can't \cs{advance} a macro control
+        sequence.  
+
+  \ipitem[Built-in commands]
+        A number of control\index{control sequences!built-in commands}
+        sequences are built into \TeX.  These ``primitive''
+        operations form the basis for all higher-level functionality.
+        There are a wide variety of control sequences of this type.
+        Everything that can be done in \TeX\ can be reduced to a
+        sequence of primitive operations.
+
+        There is no way to know, simply by inspection, if a control
+        sequence is one of the built-in sequences or not.  Luckily, it
+        doesn't matter very often; it really only
+        matters when you are writing complex macros.
+
+        The \cs{font} control sequence in Example~\ref{ex:csexample}
+        is a built-in control sequence.  So is \cs{advance}, mentioned
+        above.
+
+%  \item Any others????\editorial{how much detail is too much?}
+\end{iplist}
+
+The number and kind of control sequences available depends upon the
+macro package that you are using. (Macro packages are discussed fully
+in Chapter~\ref{chap:macpack}, {\it \nameref{chap:macpack}}.)  For the
+rest of this chapter, the default settings of \ixx{Plain \TeX}{Plain tex@Plain \TeX} are
+assumed.\ff[2]{Plain \TeX\ is the name of a particular macro
+package.  I selected it for the purpose of example in this chapter
+because it is always installed with \TeX.  Most of what follows in
+this chapter is true in other macro packages as well, but some of the
+details are different.  See Chapter~\ref{chap:macpack} for more
+information.}  There are other macro packages, like \LaTeX,
+Lollipop, and \TeXinfo, which have different default values.
+
+\subsection{Special Characters}
+\index{special characters}
+
+In addition to control sequences, \TeX\ reserves several characters
+\index{special characters} for special purposes.  Most 
+of them do not occur very frequently in
+ordinary text, but you must be aware of them because there will be
+very surprising consequences if you use them incorrectly.
+
+Table~\ref{tab:activechars} shows all of the special characters in
+Plain \TeX.\ff[3]{All of these special characters are configurable,
+but most macro packages use the Plain \TeX\ defaults.}  Most of these 
+characters are special in other macro
+packages as well.  Font-specific characters are not reserved by \TeX,
+but they don't produce the results you would expect when typeset in
+Computer Modern because of the way \TeX\ expects fonts to be laid out.
+Fonts are discussed in detail in Chapter~\ref{chap:fonts}, {\it
+\nameref{chap:fonts}}.
+
+\begin{xtable}{c|l}
+  \caption{Special Characters in Plain \protect\TeX
+    \label{tab:activechars}
+    \index{characters!special!typesetting}}\\
+  \bf Character & \bf Meaning \\[2pt]
+  \hline
+%\endfirsthead
+%  \caption{Special Characters in Plain \protect\TeX\ (continued)}\\
+%  \bf Character & \bf Meaning \\[2pt]
+%  \hline
+%\endhead
+  \tstrut
+  \verb|#| & Used for parameter definition in macros and tables \\
+  \verb|$| & Toggles in and out of math mode \\
+  \verb|%| & A comment (\TeX\ ignores everything to the end of the line) \\
+  \verb|&| & The column separator in tables \\
+  \verb|~| & The active space (an unbreakable space) \\
+  \verb|_| & Marks a subscript (valid only in math mode) \\
+  \verb|^| & Marks a superscript (valid only in math mode) \\
+  \verb|\| & Begins a control sequence \\
+  \verb|{| & Begins a group \\
+  \verb|}| & Ends a group \\[2pt]
+  \verb+|+ & Produces an em-dash (---) (font-specific)\\
+  \verb|<| & Produces an upside down exclamation mark (\,!`\,) 
+             (font-specific)\\
+  \verb|>| & Produces an upside down question mark (\,?`\,) 
+             (font-specific) \\
+  \verb|"| & Incorrect for quoted text; use `{}` and '{}' instead 
+             (font-specific)\\[2pt]
+  \hline
+\end{xtable}
+
+It is best to avoid these characters until you are familiar with \TeX.
+If you need to typeset\index{special characters!typesetting} one 
+of these characters,
+Table~\ref{tab:acttype} shows what to put in your document. You
+should also avoid characters outside the standard printable
+\idx{ASCII character set} (characters with ASCII values below 32 and
+above 126).  \TeX\ can be configured to accept characters outside the
+printable ASCII range, to support non-English languages, for example,
+but it is not configured to do so ``out of the box.''
+Chapter~\ref{chap:foreign}, {\it \nameref{chap:foreign}}, discusses
+the issues of typesetting in different languages.
+
+\begin{xtable}{c|l}
+  \caption{How to Typeset Special Characters
+    \label{tab:acttype}
+    \index{special characters!typesetting}}\\
+  \bf To Get  & \bf Put This in Your Document\\[2pt]
+  \hline
+\endfirsthead
+  \caption[]{How to Typeset Special Characters (continued)}\\
+  \bf To Get  & \bf Put This in Your Document\\[2pt]
+  \hline
+\endhead
+  \tstrut
+  \#                & \verb|\#| \\
+  \$                & \verb|\$| \\
+  \%                & \verb|\%| \\
+  \&                & \verb|\&| \\
+  ``                & \verb|``| \\
+  ''                & \verb|''| \\
+  \~{\ }            & \verb|\~{\ }| \\
+  $\{$              & \verb|$\{$| \\
+  $\}$              & \verb|$\}$| \\
+  $<$               & \verb|$<$| \\
+  $>$               & \verb|$>$| \\
+  $|$               & \verb+$|$+ \\
+  $\underbar{\hbox{\ }}$ & \verb|$\underbar{\hbox{\ }}$| \\
+  $\hat{\hbox{\ }}$ & \verb|$\hat{\hbox{\ }}$| \\
+  $\backslash$      & \verb|$\backslash$| \\[2pt]
+  \hline
+\end{xtable}
+
+\begin{sidebar}
+Some of the suggestions in Table~\ref{tab:acttype} will not always produce
+exactly what you want.  The entry for ``\~{\ }'' really produces a tilde
+accent, not a tilde character and the entries for ``$\{$'' through
+``$\backslash$'' all get the actual characters from \TeX's math fonts.  The
+Computer Modern text fonts don't include these characters so it is necessary
+to get them from the math fonts.  However, if you are using PostScript
+or other kinds of fonts, you may very well have curly braces, angle brackets,
+underscores, etc. in the font.  You can access these characters directly 
+with the \cs{char} primitive.  I strongly recommend that you always
+define macros for this purpose, so that you can easily switch to some other
+method if you change fonts.  Introducing \cs{char} primitives makes your
+document less portable.  To use the \cs{char} primitive, simply put
+the decimal ASCII value of the character that you want to print.  For example,
+this book is typeset with PostScript fonts that include a backslash character
+at position 92, so I defined \cs{bs} to print a backslash like this:
+
+\begin{shortexample}
+\def\bs{\char92\relax}
+\end{shortexample}
+
+Using \cs{relax} after the decimal value assures that \TeX\ won't
+get confused if I put a backslash in front of other digits like
+this \cs{bs300dpi}.
+\end{sidebar}
+
+The \ixx{braces}{curly braces} ``\{'' and ``\}'' are a very special
+case.  \TeX\ uses curly braces to delimit arguments and make changes
+(like switching fonts) that are local to a small section of the
+document.  These are 
+called \textit{\idx{grouping characters}}\index{characters!grouping} in \TeX\
+jargon.  For example, to typeset a single word in boldface, you 
+put \verb|{\bf word}| into your input file.  The \cs{bf}
+control sequence switches to boldface type, and the curly braces
+localize the effect to the single word {\bf word}.  As a result, it is
+very important that you avoid braces (except when you use them as
+delimiters) and that you carefully match all opening and closing
+braces.  One of the most common errors in \TeX\ is to forget a closing
+brace.
+
+One last special character is the \idx{blank space}.  For the most part,
+\TeX\ doesn't care how you space your lines of text.  Any space that
+occurs is simply a word break to \TeX, and inserting multiple spaces
+doesn't influence how \TeX\ typesets the line.  \TeX\ also considers
+the end of a line an implicit space.  If you are trying to control
+the layout of your input text and want to break a line without
+introducing a space, place a comment character (\% in most macro
+packages)\index{comments!in tex@in \TeX} at the very 
+end of the line.  If the last character of a
+line is the comment character, \TeX\ ignores the line break and all
+the leading spaces on the following line.  This allows you to use
+\idx{indentation} to make your input file more readable.
+\goodbreak
+
+For example, the following lines in your input file:
+
+\begin{shortexample}
+``This                      is some ex%
+      ample text.''
+\end{shortexample}
+
+and this line:
+
+\begin{shortexample}
+``This is some example text.''
+\end{shortexample}
+
+both produce:
+
+\begin{exindent}
+  \small{``This is some example text.''}
+\end{exindent}
+
+in your typeset document.
+
+\section{Text Formatting Versus Word Processing}
+\label{sec:textformVSwordproc}
+
+For many people, writing documents with a computer implies using a
+word processor like \ixx{\product{WordPerfect}}{WordPerfect} or \ixx{\product{Microsoft Word}}{Microsoft Word}.\index{tex@\TeX!vs. word processing}\index{word processing!vs. tex text processing@vs. \TeX\ text processing}
+The word processing program controls
+every aspect of what you do: it's where you type your text, where you
+see what it will look like, where you print, and where you do
+everything else.  Some of these environments, the so-called 
+WYSIWYG\index{WYSIWYG programs}
+(what-you-see-is-what-you-get) programs, attempt to show you what the
+printed document will actually look like {\em while\/} you edit
+it.\ff{\TeX\ pundits, and other folks who have been frustrated by
+the limitations of these environments, frequently refer to this as
+WYSIAYG---what you see is {\em all\/} you get.}
+
+If WYSIWYG environments are what you're used to, or what you expect, \TeX's approach may
+seem very strange at first because \TeX\ is 
+a {\em text formatter\/},\index{tex@\TeX!as  a text formatter}\index{text formatting}
+not a word processor.  Instead of trying to show you what your
+document will look like while you type, \TeX\ expects you to do all
+the typing somewhere else, and then pass it a source file
+containing all of your text plus control sequences that tell
+\TeX\ how you'd like it printed.
+
+In {\it The Psychology of Everyday Things}~\cite{dn:psyeveryday},
+\ixx{Donald Norman}{Norman, Donald} describes these 
+two modes of interaction as first person
+and third person.  First person interaction provides the user with
+the ability to directly manipulate the elements of a task, whether it's
+flying an airplane or resizing text.  Third person interaction, on the
+other hand, occurs where the user is expected to type commands to the
+computer in an appropriate command language; the shell prompt is a good
+example of third person interaction.
+
+Is first person interaction really better?  Well, it depends.  Norman 
+writes, ``Although
+they [WYSIWYG environments] are often easy to use, fun, and entertaining, it is often difficult
+to do a really good job with them.''  The
+problem which arises is that the user is required to do the task, and he
+or she may not be very good at it.  Third person systems are better when
+the computer program can be trusted to do a better job of the task than
+the user.
+
+Is \TeX\ really better than a word processor?  Well, it depends on the
+task and the person doing it.  \TeX\ probably isn't better for designing
+one page flyers with lots of fonts and graphics (although I've done it).
+But for longer documents, \TeX\ offers all of these advantages: 
+
+\begin{itemize}
+  \item \TeX\ has a precise understanding of the rules of 
+        typesetting,\index{typesetting!rules} so you don't have to.
+  \item Predefined styles allow experts to extend (or bend) the rules
+        of typesetting without burdening the user.
+  \item Journals and magazines can achieve consistency of appearance
+        much more reliably because the consistency is in the style files.
+  \item \TeX\ runs on cheap systems (old PCs with monochrome monitors and
+        no graphics capability, for example).
+  \item Although complex and difficult to learn, \TeX\ offers incredibly flexible table
+        construction tools.
+  \item Few, if any, word processors can provide running headers and footers
+        as flexibly as \TeX.  Imagine the task of writing a dictionary: the
+        left and right hand side headers change on each page, each time a 
+        new entry is added.
+  \item \TeX\ offers flexible bibliography layouts.
+  \item \TeX\ is extensible.\index{extensibility of tex@extensibility of \TeX} Its behavior 
+        can be modified by defining new commands and environments 
+        without changing the actual program.
+\end{itemize}
+
+There are some other good reasons to separate document creation from
+text formatting:
+
+\begin{itemize}
+  \item Documents are portable.\index{portability of tex@portability of \TeX}  Because the 
+        source files are just plain
+        text without any nonprintable characters, they can easily be
+        copied from one system to another.
+  \item \TeX\ is portable.  
+        \TeX\ runs everywhere.  You can
+        process your documents with \TeX\ on \Unix\ workstations; personal
+        computers running MS-DOS, OS/2, and Windows; IBM mainframes
+        running VM/CMS; workstations running VAX/VMS; Macintoshes; Amigas;
+        Ataris; and just about every other computer with a reasonable
+        amount of memory.  And the typeset output will be the same!
+        This adds another dimension of portability to your documents.
+  \item \TeX\ is free.  You can afford to have it on every system
+        you use.  Several sources of \TeX\ software are listed in
+        the preface of this book.  
+
+  \item \TeX\ allows you to separate markup and output.
+        Logical divisions in the text (chapters,
+        sections, itemized lists, etc.) are identified by control sequences.
+        An entirely different page layout can result from simply changing the
+        definition of a few control sequences.
+
+        This means that the look of your documents
+        can be changed (to fit the style guidelines of a particular
+        journal or publisher, for example) without changing the text
+        of your documents at all.  
+
+  \item Plain text files are easier to manipulate with other tools than
+        specially encoded word processor files are.  This
+        means that you can use standard utilities on your documents:
+        revision control, grep, shell scripts, etc.  This is a less common
+        practice in non-\Unix\ environments, but it is still convenient.
+
+  \item You can continue to use your favorite editing tools.  The extent
+        to which you find this advantageous is dependent, naturally, on the
+        extent to which you have a favorite editing program.
+        Nevertheless, this can be a considerable advantage.  For example, 
+        users familiar with \program{emacs}\index{GNU Emacs} can 
+        continue to rely on all of the
+        features they are used to, including interactive spellchecking,
+        access to online services like Webster's dictionary, customized
+        editor macros, and convenient services like reading mail.
+
+  \item You get better looking output.  \TeX\ gives you far more precise
+        control
+        over the placement of elements on the page than most word processing
+        programs.  And \TeX\ is very intelligent about typesetting (paragraph
+        breaking, \idx{kerning}, \idx{ligatures}, etc.).
+\end{itemize}
+
+\subsection{What About Desktop Publishing?}
+
+Desktop publishing systems\index{tex@\TeX!vs. desktop publishing}\index{desktop publishing!vs. tex text  processing@vs. \TeX\ text  processing} like \ixx{\product{Ventura Publisher}}{Ventura Publisher} and
+\ixx{\product{Aldus PageMaker}}{Aldus PageMaker} are noted for their ability to incorporate
+multiple fonts and graphics into a document.  As word processors
+become more sophisticated, the line between word processing and desktop
+publishing is becoming blurry.
+
+\setbox0=\hbox to\textwidth{\hfill\epsfig{figure=figs/lint.eps,width=2.1in}}
+\parshape13
+0pt \textwidth
+0pt 3.9in
+0pt 3.6in
+0pt 3.2in
+0pt 3.1in
+0pt 3.1in
+0pt 3.15in
+0pt 3.05in
+0pt 3.05in 
+0pt 3in 
+0pt 3.9in 
+0pt 4.3in
+0pt \textwidth
+\leavevmode\hbox to 0pt{\vbox to 0pt{\vskip8pt\box0\vss}\hss}%
+This book shows you many ways that \TeX\ can provide access to the same
+sophisticated features.  \TeX\ can incorporate pictures and figures in
+a number of ways
+(just take a look at the way I've wrapped text around this kiwi),\ff{\TeX\
+doesn't do this sort of thing automatically, but it isn't hard to 
+do.  Why the kiwi?  It's on my business card$\ldots$}
+and \TeX\ can use almost any font that another 
+program can use---it can certainly use {\em all\/} of the popular types
+of fonts.  Like typical word processors, desktop publishing programs
+force you to
+use a single application to create your entire document, and they lack
+the flexibility required to combine just the pieces that you want.  All of the
+advantages of text formatting over word processing also apply to desktop
+publishing programs.  I'll grant, however, that WYSIWYG
+environments are easier for first-time users.  But that doesn't make 
+them better, it just makes them more popular.\par
+\parshape0
+
+\subsection{What About troff?}
+
+\program{troff}\index{tex@\TeX!vs. troff}%
+\index{troff!vs. tex text processing@vs. \TeX\ text processing}
+is the ``other'' text formatting system.  If you've ever
+tried to read a \Unix\ reference page without formatting it first,
+you've seen \program{troff}.  For a long time it was distributed as part of all
+\Unix\ systems.  Now it is more likely an extra-cost option.  
+The \ixx{Free Software Foundation's }{Free Software Foundation (FSF)}\ixx{\program{groff}}{groff} processor is a free,
+\program{troff}-compatible system.
+
+On the surface, it is easier to compare \TeX\ and \troff\ than to
+compare \TeX\ to the other
+document preparation systems described in this chapter.  In reality,
+the differences are subtle: \TeX\ and \troff\ have the same
+general paradigm; they are equally powerful to a large extent,
+and both have advantages and disadvantages.
+
+\program{troff} is similar to \TeX\ in many ways.  Like \TeX, \troff\
+processes a plain text file and produces a typeset document.  \TeX\
+and \troff\ differ in the way that formatting information is inserted
+into the text.  \TeX\ uses \idx{control sequences}, where \troff\ uses a
+mixture of control sequences\ff{Although it has a very different
+notion of what constitutes a control sequence.} and ``dot'' commands
+(lines of text that begin with a period and contain typesetting
+commands).
+
+Although I am inclined to say that \troff\ documents are far more cryptic
+than \TeX\ documents, I am certain that there are plenty of \troff\ users
+who would disagree (strongly).  
+
+Objectively, \TeX\ handles \ixx{mathematical  typesetting}{typesetting!mathematics} far better than
+\troff\ and probably has better support 
+for \ixx{multilingual documents}{typesetting!multilingual documents}\index{international!typesetting}.
+The \ixx{\program{nroff}}{nroff} processor, which produces plain text output
+from a \troff\ document, at one time provided a strong argument in favor of
+\troff\ for typesetting documents required in both typeset and plain
+text formats.  However, the \ixx{\TeXinfo}{texinfo@\TeXinfo} macro package for \TeX\
+has largely defeated that argument.  In \troff's defense, \TeXinfo\ is
+very, very different from other \TeX\ macro packages, so it really is
+necessary to plan ahead and learn a very different set of macros to
+typeset both plain text and typeset documents with \TeXinfo.
+Chapter~\ref{chap:online}, {\it \nameref{chap:online}\/}, discusses this
+issue further.
+
+In my experience, there is more free support for \TeX\ than \troff.
+\TeX\ is supported by a large community of users actively producing
+new, useful document-preparation formats, styles, and tools.
+In addition, \TeX\ is more widely available than \troff:
+a \TeX\ port exists for almost every practical computer system, whereas
+\troff\ is still mostly confined to \Unix\ systems (although the Free
+Software Foundation's \program{groff} package has been ported to similar
+systems like MS-DOS, Windows NT, and OS/2).
+
+The following fragments show a side-by-side comparison of \TeX\
+commands, on the left, and \troff\ commands, on the right:
+
+\begin{shortexample}
+\begin{figure}                    .(z                    
+ \begin{center}                   .hl                    
+   \hrule                         Text to be floated.    
+   \vspace{8pt}                   .sp                    
+   Text to be floated.            .ce                    
+   \hrule                         .hl                    
+   \caption{Example figure...}    Figure \*[fig]: Example figure...
+   \vspace{8pt}                   .)z                    
+ \end{center}
+\end{figure}
+\end{shortexample}
+
+Both examples
+produce a floating figure that looks like this:
+
+\begin{figure}
+  \begin{center}
+    \hrule
+    \vspace{8pt}
+    Text to be floated.
+    \label{fig:texexample}
+    \vspace{8pt}
+    \hrule
+    \caption{Example figure produced by both \TeX\ and \program{troff}.}
+  \end{center}
+\end{figure}
+
+\subsection{What About SGML?}
+
+The \idx{Standard Generalized Markup Language (SGML)} is a document
+description language.  SGML aims to separate the content of a document
+from its presentation.  In other words, SGML identifies the features
+of a document (chapter headings, paragraphs, etc.) without specifying
+how they are to be presented.
+
+This means that all SGML documents must interact with a
+document formatter of some sort.  Many people are finding that \TeX\
+is a natural choice when selecting a document formatter for their SGML
+environment.  In fact, \ixx{\LaTeX}{latex@\LaTeX!use with SGML} 
+%\fxxtnote{\LaTeX\ is a macro package for \TeX.
+%Macro packages provide additional commands for \TeX\ and make typesetting
+%some kinds of documents relatively easier than other macro packages.  They
+%are discussed fully in Chapter~\ref{chap:macpack}, 
+%{\it \nameref{chap:macpack}}.}  
+already provides many SGML-like
+commands because it was designed to separate markup from presentation.
+  One of the specific goals of an effort (currently
+underway) to develop a new version of \LaTeX\ is to make SGML and
+\LaTeX\ work together easily, cleanly, and efficiently.  For more
+information about the goals of this project and information about what
+you can do to help, please read {\it The \LaTeX3 Project}~\cite{l3:project}.
+
+\section{How \protect\TeX\ Works}
+\label{sec:howtexworks}
+
+A functioning \TeX\ system\index{tex@\TeX!overview of operations} in 
+which you are producing documents of
+medium size and complexity is really a collection of tools and files
+that are related to each other in well defined (if somewhat subtle)
+ways.
+
+One of the fundamental goals of this book is to shed light on these
+relationships and allow you to put together a \TeX\ system that quickly 
+and easily does the jobs you need to accomplish.
+
+\subsection{\protect\TeX{}ing a Simple Document}
+
+This section briefly describes what you need to know about how \TeX\
+processes a simple document (that is, one that does not contain complex
+document elements like a table of contents, indexes, bibliographies, etc.).
+Figure~\ref{fig:wholesimple} shows how the standard \TeX\ tools fit
+together at the most basic level.
+\goodbreak
+
+\epsimage{fig:wholesimple}{A high-level view of \protect\TeX}
+
+Figure~\ref{fig:wholething} expands on Figure~\ref{fig:wholesimple},
+showing additional tools and files that you'll often need to use.
+
+\epsimage{fig:wholething}{High-level view of \TeX\ including 
+  more detail}
+
+\subsubsection{Editing your document}
+
+The most tangible and important part of your \TeX\ system is 
+your \ixx{document}{documents!tex@\TeX}.
+This is the file (or files) in which you write down what you want to typeset with
+\TeX.  In addition to the actual text, you include 
+control sequences to describe how you want the final text
+to appear (size, font, justification, etc.).  The section
+``\nameref{sec:texforbeginners}'' earlier in this chapter tells you briefly
+what goes into your document file.
+
+The most common way to create a document is with 
+an \ixx{editor}{editors}\index{editing tex@editing \TeX}\index{tex@\TeX!editing}, which can provide you with a number of features to
+make typing \TeX\
+documents easier.  For example, an editor can help you insert
+common \idx{control sequences} automatically, run \TeX\ automatically 
+(from within
+the editor), and keep you from making common mistakes (like typing a left
+brace, but not the matching right one).  These features and how they
+work in editors including GNU Emacs, \auctex, and Multi-Edit are
+described in Chapter~\ref{chap:editing}, {\it\nameref{chap:editing}}.
+
+\subsubsection{Running \protect\TeX}
+\label{subsubsec:runningtex}
+
+Once you have prepared your document file, it is time 
+to run\index{running tex@running \TeX}\index{tex@\TeX!running} the \TeX\
+program itself.  This may not be as easy as it sounds.  You need to determine
+the name of the \TeX\ program at your site, to make sure
+all of the files \TeX\ needs are available to it; you also need to specify the correct
+command-line options.  Chapter~\ref{chap:running}, {\it\nameref{chap:running}},
+describes everything you need to know.
+
+\TeX\ may find errors in your document (places where \TeX\ doesn't
+understand the instructions you used; not spelling or grammatical
+errors, unfortunately ;-). Chapter~\ref{chap:running} also describes
+the most common errors you're likely to make and gives advice for
+interpreting error messages.
+
+\newpage
+If \TeX\ is successful in formatting your document (i.e., your 
+document doesn't contain any errors), it produces a \ext{DVI}
+(DeVice Independent)\index{DVI files} file.  The \ext{DVI} file 
+is a device-independent
+representation of the typeset output of your document.  \ext{DVI}
+files are transitory.  Although there are a few programs that can
+manipulate them (to rearrange the order of the pages in the output,
+for example), most of the time you will immediately transform
+them into something else---either printed output or previewed output
+on the screen.  (See the following section ``\nameref{subsubsec:printpreview}.'')
+
+\subsubsection{Using macros}
+
+The \ixx{control sequences}{control sequences!macro} that you 
+insert in your document are 
+defined by a \ixx{macro package}{macro packages}.\ff{Well, 
+actually, they're
+\TeX\ primitives, are defined by a macro package,
+defined in a file loaded by a macro package, or defined in
+your document.}
+Macro packages are collections of \TeX\
+commands (macros) that extend \TeX.  Macro packages are frequently
+stored in format files, specially compiled versions of the macro
+package.  The \ixx{ini\TeX}{initex@ini\TeX} program interprets all of the control sequences
+in a macro package to create a format file that \TeX\ reads when it runs.
+
+\newpage
+Many macro packages are particularly effective in implementing
+particular document styles or supporting particular types of writing.
+Two of the most common are \ixx{Plain \TeX}{Plain tex@Plain \TeX} and \ixx{\LaTeX}{latex@\LaTeX}.
+Chapter~\ref{chap:macpack}, {\it\nameref{chap:macpack}}, describes Plain
+\TeX, \LaTeX, and a number of other macro packages that extend the power
+and ease of \TeX.
+
+\subsubsection{Using fonts}
+
+One of \TeX's strengths is its support for a myriad 
+of predefined \ixx{fonts}{fonts!tex@\TeX}  and its
+ability to let you create fonts of your own.  
+In addition to your document and the format file, when \TeX\ runs it
+needs font information as well.  This is provided in the form of a set
+of \ext{TFM} (\TeX\ Font Metric)\index{TFM files} files 
+that tell \TeX\ the size and
+shape (roughly speaking, at least) of each character, as well as
+some other information about how characters are related to each other.
+
+Historically, the \ixx{\MF}{metafont@\MF} program was the way a \TeX\ user created fonts.
+Like \TeX\ itself, \MF\ is about ten years old.  Ten years ago, it was
+a unique program that was indispensible for creating the type of
+output \TeX\ produces.  Today there are many competing font
+technologies, all of them more common than \MF, and \MF's role is
+diminishing.  Many people use \TeX\ today without ever using \MF\ at
+all.  Nevertheless, \MF\ still has some importance, and we describe
+how to run and use it in Chapter~\ref{chap:mf},
+{\it\nameref{chap:mf}}.  Because the standard fonts that come
+with \TeX\ are still the fonts produced by \MF, it will also be
+mentioned elsewhere in this book.
+
+If you are writing complex documents, you may need to learn a lot about
+fonts and how to define and use them.  Chapter~\ref{chap:fonts},
+\textit{\nameref{chap:fonts}},
+tells you everything you need to know, including information about 
+the New Font Selection Scheme,
+a new way of describing and selecting fonts in \TeX.
+
+\subsubsection{Previewing or printing \TeX\ documents}
+\label{subsubsec:printpreview}
+
+After you have produced a \ext{DVI} file, as described in the section
+``\nameref{subsubsec:runningtex},'' later in this chapter, you run another program (generically
+called a \dvidriver)\index{DVI drivers} to 
+translate the \ext{DVI} file so you can either preview
+or print your document.  Driver programs need your \ext{DVI} file and some
+collection of fonts 
+(usually \ext{PK} (packed)\index{PK fonts@\ext{PK} fonts}\index{fonts!PK}\index{PK files@\ext{PK} files} font 
+files).\ff{Some
+drivers may also benefit from loading the \ext{TFM} files used to create your
+document.}  Many different kinds of fonts are described in
+Chapter~\ref{chap:fonts}.
+
+Chapter~\ref{chap:printing}, {\it\nameref{chap:printing}}, tells you
+how to print\index{printing}\index{tex@\TeX!printing} your 
+documents and deal with the problems you may
+encounter using bitmapped or scalable fonts, printing pictures and figures,
+and other printing issues.
+
+Often you will want to look at your document before you actually print it.
+Because \TeX\ is not a WYSIWYG system,\ff[2]{\Textures\ for the Mac
+and \program{Scientific Word} offer WYSIWYG-like environments, but that's
+not the point ;-)} you cannot do this until you have processed the 
+\ext{DVI} file.  There are a number of 
+good previewing products\index{previewing}\index{tex@\TeX!previewing},
+including \ixx{\xdvi}{xdvi}, \ixx{\program{dvimswin}}{dvimswin}, 
+and \ixx{\program{dviscr}}{dviscr}, that let you look at
+your processed document on the screen before you decide whether to print it.
+See Chapter~\ref{chap:preview}, {\it\nameref{chap:preview}}, for complete
+information.
+
+\subsection{\protect\TeX{}ing More Complex Documents}
+
+This section briefly describes how \TeX\ processes a more complex
+document (that is, one that includes elements like a
+table of contents, indexes, bibliographies, etc.).
+
+Many \TeX\ formats implement sophisticated cross-referencing schemes.  
+\ixx{Cross references}{cross references} may sound 
+rather esoteric, but they occur
+frequently.  Tables of contents, figure and table numbers, indexes,
+and bibliographic references are all flavors of cross referencing.
+
+Cross references make your document more complex because they require more
+information than is immediately available when \TeX\ initially
+processes your document.
+For example, if you refer to a figure which occurs later in the document,
+\TeX\ has no way of knowing what figure number to insert into the text at the
+point of the reference.  These are called \ixx{\textit{forward references}}{forward references}.
+
+\TeX\ macro packages that support cross referencing overcome the difficulty of
+forward references by requiring you to process your document more than once.
+Each time your document is processed, the necessary reference information is
+stored into a separate file.  If that file exists when you process your
+document, the information saved {\em last time\/} is loaded so that it is
+available {\em this time}.  The practical implication of this functionality is
+that documents with cross references frequently have to be processed twice.
+Occasionally, you may have to process a document three times.  This occurs
+when the inserted reference causes \TeX\ to format a paragraph differently,
+which in turn causes \TeX\ to change a page break.\ff{With extreme
+cleverness or extreme bad luck you can create a document which will {\em
+never\/} format correctly.}  Because most changes  are incremental
+while revising
+a document,
+this is normally only an issue the first
+time you process a document.
+
+The following sections describe the \LaTeX\ methods for constructing a
+table of contents, figure references, an index, and a bibliography.
+\LaTeX\ is used in this example because it is a very common macro
+package and is typical of the way macro packages provide these
+features.  Similar mechanisms exist in most formats, except Plain \TeX.
+
+Figure~\ref{fig:texcmplx} shows the relationships between many of the
+components described in the following sections.  \LaTeX\ creates several
+sorts of auxiliary files depending on the kind of cross references required
+by your document and the style files you use.  These auxiliary files may
+be modified (and others may be created) by other sorts of post-processing
+programs (like \ixx{\program{MakeIndex}}{MakeIndex} for 
+constructing indexes or \ixx{\BibTeX}{bibtex@\BibTeX}
+for constructing bibliographies).   \LaTeX\ uses these auxiliary files,
+if they exist, to update your document when it is processed again.
+
+\epsimage{fig:texcmplx}{\TeX{}ing a More Complex Document}
+
+\subsection{Building a Table of Contents}
+
+A \idx{table of contents} is the simplest form of 
+cross reference.  In \LaTeX, you
+request a table of contents by 
+inserting the \cs{tableofcontents} command wherever you want it to 
+appear in your document.  If you request the
+table of contents at the end of your document rather than the
+beginning, your document can be printed with only one pass through \TeX.
+
+\LaTeX\ uses a file with the same name as your document and the extension
+\filename{.toc} to hold the table of contents entries.  You can control the
+level of detail in your table of contents by setting 
+the \cs{secnumdepth} counter.  A value of zero includes only chapters; one includes
+chapters and sections; two includes chapters, sections, and subsections, 
+and so on.
+
+The \LaTeX\ 
+commands \cs{listoftables} and
+\cs{listoffigures} perform the same functions as
+\cs{tableofcontents} for lists of tables and figures.  They use
+external files with the 
+extensions \filename{.lot}\index{lot files@.lot files} and
+\filename{.lof}\index{lof files@.lof files}, respectively.  As 
+with the table of contents, your
+document can be correctly formatted in one pass if the
+\cs{listoftables} and \cs{listoffigures} commands are placed at
+the end of the document.
+
+\subsection{Figure References}
+
+\ixx{Figure references}{figures!references to} are a 
+special case of \LaTeX's cross referencing mechanism.
+The \LaTeX\ command \cs{label}\verb|{|\texttt{\textit{string}}\verb|}| 
+creates a referent.
+You refer to the label with the command
+\cs{ref}\verb|{|\texttt{\textit{string}}\verb|}|.
+In normal body text, the label refers to the current section or subsection.
+In a figure or table environment, the label refers to that figure or table.
+
+If your document contains no \idx{forward references} (if all
+\cs{label} commands occur before the \cs{ref}'s that refer
+to them) then it can be formatted in one pass.  Otherwise, \TeX\ will 
+have to be run two or three times
+to make all of the references correct.
+
+%\LaTeX\ issues a warning message each time it encounters a reference to a
+%label that has not been defined.  After formatting the entire document,
+%\LaTeX\ prints the following message if any references in the
+%document are incorrect.
+%
+%\begin{center}
+%  \tiny%
+%  \verb|Label(s) may have changed. Rerun to get cross-references right|
+%\end{center}
+%
+%If this occurs, you should process your document again.  In some cases, it may
+%be necessary to process your document three times in order to make this
+%message go away.  Your document {\em has not} been typeset correctly until
+%\LaTeX\ stops issuing this warning.
+
+\subsection{Indexes and Glossaries}
+
+\ixx{Indexes}{indexes} and \idx{glossaries} differ from the preceding 
+forms of reference in that they
+must be processed by a separate program.  In general, this is true
+regardless of the macro package or format you use.
+An external program is required because indexes and glossaries must be 
+alphabetized, and in indexes, 
+consecutive page numbers have to be converted into ranges, and so on.
+
+%To construct an index in \LaTeX, you must do six things. 
+%
+%\begin{enumerate}
+%  \item Use the \ext{makeidx} style file. 
+%  \item Insert the command \cs{printindex} where you want the
+%        index to appear in your document.  
+%  \item Use the \cs{index} command to mark all index entries.
+%  \item Process your document with \TeX.
+%  \item Run the \program{MakeIndex} program to build the actual index.
+%  \item Process your document again to include the index.
+%\end{enumerate}
+%
+%The \cs{index} command accumulates page number references in a file
+%with the extension \filename{.idx}.  The command \cs{index{}{\it
+%string}\verb|}| creates an index entry for the word or phrase ``{\it
+%string\/}'' with the number of the page on which it occurs.  
+%Specially coded index entries can be used to produce cross references 
+%(``Infinite Loop / see Loop, Infinite'', for example), multi-level
+%entries, specially typeset entries, etc.  Consult {\it MakeIndex: An
+%Index Processor for \LaTeX}~\cite{ll:makeindex} for more information
+%about specially formatted index entries.
+%\editorial{example of each...}
+%
+%After processing your document with \TeX, run \program{MakeIndex}
+%(or \program{MakeIndx} on file systems with 8-character filename restrictions)
+%to build
+%the index.  \program{MakeIndex} reads the \ext{IDX} file and collects the
+%index entries; then it sorts the entries, combines multiple entries that refer
+%to a contiguous sequence of pages into a single entry with a range of pages,
+%and builds nested entries before writing the index to a file with the
+%extension \filename{.ind}.  The next time you process your document, the
+%\ext{IND} file will be inserted where the \cs{printindex} command
+%occurs.
+
+\subsection{Bibliographies}
+
+\LaTeX\ works in conjunction with another program, called \ixx{\BibTeX}{bibtex@\BibTeX}, 
+to provide
+a flexible, convenient way to construct \idx{bibliographies}.  The \cs{cite}
+commands allows you to refer to other documents in much the same way that the
+\cs{ref} command allows you to refer to other portions of the same
+document.
+
+You make a citation by placing the command 
+\cs{cite}\verb|{|\textit{string}\verb|}|
+where you wish the citation to occur.  The {\it string\/} is a
+key that refers to the document in your bibliography database that
+you wish to cite.  Example~\ref{ex:knuthbbl} is a
+typical entry in a bibliography database.  It 
+describes Knuth's\index{Knuth, Donald} classic 
+book {\it The \TeX{}book}~\cite{kn:texbook}.  The key for this
+entry is ``kn:texbook.''
+
+\begin{example}{ex:knuthbbl}{A typical bibliography database entry}
+@Book{kn:texbook,
+  author    = "Donald E. Knuth",
+  title     = "The {\TeX}book",
+  publisher = "Addison-Wesley",
+  year      = 1989,
+  edition   = "Fifteenth",
+  isbn      = "0-201-13447-0"
+  note      = "Paperback ISBN: 0-201-13448-9"
+}
+\end{example}
+
+Each entry in the database consists of a type (book, article, magazine, etc.),
+a key, and a number of fields.  The number and names of the fields depend
+on the type of entry.  The database is simply a plain ASCII file containing
+any number of entries.  You can have multiple databases.
+
+These are the commands you use, in addition to
+\cs{cite}, to include a bibliography in your document:
+
+\begin{shortexample}
+% The bibliography goes here.
+%
+\bibliographystyle{plain}
+\bibliography{textools,refbooks}
+\end{shortexample}
+
+The \cs{bibliographystyle} command tells \BibTeX\ how to format the
+bibliography, and the \cs{bibliography} command identifies which
+bibliographic databases contain the citations that you have made.  The
+``plain'' style of bibliography is selected, and the
+\filename{textools} and \filename{refbooks} files contain the
+bibliographic information for the documents cited.  Document styles
+can be used to alter the format of citations in your text.
+The default extension for bibliographic 
+styles is \filename{.bst}\index{bst files@.bst files}. The 
+default extension 
+for database files is \filename{.bib}\index{bib files@.bib files}. 
+\goodbreak
+
+\LaTeX\ places citations and bibliography information into 
+the \filename{.aux} file\index{aux files@.aux files}.  \BibTeX\ 
+reads the \filename{.aux}\index{aux files@.aux files} file 
+and constructs a bibliography,
+which it places into a file with the 
+extension \filename{.bbl}\index{bbl files@.bbl files}, using the
+entries you cited and the bibliography style you selected.
+
+\subsection{Special Things}
+
+Sometimes, producing a complex document requires the ability to interface
+with objects outside of \TeX\ (pictures or figures created by high-end
+graphics packages, special features of a particular printer, etc.).  To
+support this kind of communication, \TeX\ provides a control sequence
+called \cs{special}.  The arguments passed to the \cs{special}
+command are written directly to the \ext{DVI} file for the \dvidriver.
+It is the responsibility of the \dvidriver\ to handle them.  \dvidriver{}s
+typically ignore \cs{special} commands that they do not recognize.
+
+You will find \cs{special} commands of various kinds described throughout
+this book, particularly when discussing color typesetting in 
+Chapter~\ref{chap:macpack}, \textit{\nameref{chap:macpack}}, and graphics
+in Chapter~\ref{chap:pictures}, \textit{\nameref{chap:pictures}}.

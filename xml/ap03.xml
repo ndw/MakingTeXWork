@@ -1,0 +1,1779 @@
+<appendix id="app.resources">
+<appendixinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</appendixinfo>
+<title>Resources</title>
+
+<para>This appendix lists the resources described in this book.  Each of the tools
+(with the exception of tools mentioned only in Chapter&nbsp;<xref role="label" linkend="chap.utils"/>,
+<emphasis><xref role="label" linkend="chap.utils"/></emphasis>, which are already listed in a similar format)
+described in the book is presented here.  Each entry credits the author and
+provides information about where the software can be obtained.
+</para>
+
+<para>Most of the resources in this appendix are availble from the CTAN archives.
+Where other sites are listed (for example, <filename>oak.oakland.edu</filename> for
+MS-DOS software), the addresses are only one possibility.  Most of these
+archives are mirrored around the world.  When possible, use an FTP site
+that is geographically nearby.  If you are connected to the Internet, the
+<filename>archie</filename> service can help you locate nearby sites.
+</para>
+
+<section><title>TUG: The &TeX; Users Group</title>
+
+<para>The &TeX; Users Group <phrase role="smallcaps">TUG</phrase>, begun in 1980, is the
+international group for &TeX; users. Their mission is to encourage and
+expand the use of &TeX;, &MF;, and related systems; to ensure the
+integrity and portability of these systems; and to foster innovation
+in high-quality electronic document preparation.
+</para>
+
+<para>Membership includes the quarterly <citetitle>TUGboat</citetitle>, the newsletter TTN (also a
+quarterly), and a membership directory; as well, <phrase role="smallcaps">TUG</phrase> publishes an
+occasional series called &TeX;niques, for special topics (e.g.,
+&PiCTeX;, <literal>edmac.sty</literal>).
+</para>
+
+<para><phrase role="smallcaps">TUG</phrase> annual meetings are held in various locations, currently
+in North America and Europe, in a regular rotation; proceedings are
+published in <citetitle>TUGboat</citetitle>. Most of the publications now available on &TeX;,
+&MF;, and related systems are available from the <phrase role="smallcaps">TUG</phrase> office, which
+also distributes the main public domain &TeX; implementations.
+</para>
+
+<para>In addition to its publications, <phrase role="smallcaps">TUG</phrase> promotes active development
+work via the Technical Council and its Technical Working Groups.
+\pagebreak
+Efforts here include the CTAN archive work, multilingual &TeX;, &TeX; for the disabled, and the intersection of &TeX; with SGML and with
+Acrobat.
+</para>
+
+<para>Information about joining <phrase role="smallcaps">TUG</phrase>, receiving <citetitle>TUGboat</citetitle>, and attending the
+annual meetings is available from:
+</para>
+
+<para>
+   &TeX; Users Group \\
+   P.O. Box 869 \\
+   Santa Barbara, California \\
+   93102 USA
+</para>
+
+<section><title>Other User Groups</title>
+
+<para>There are also many other user groups, often based on
+language or geography: German-speaking users ({\sc DANTE}), French-speaking
+users ({\sc GUT}enberg\hskip.25pt), Dutch-speaking users ({\sc NTG}), users in the Nordic
+countries (the Nordic group), users in the UK ({\sc UK} &TeX; Users Group). 
+There are active groups in existence in Japan, in Russia (Cyr<phrase role="smallcaps">TUG</phrase>), in Estonia,
+in Poland ({\sc GUST}), and in the Czech Republic (Cs<phrase role="smallcaps">TUG</phrase>), to name but a
+few.
+</para>
+
+<para>Contact <phrase role="smallcaps">TUG</phrase> for details on how to get in touch with these or other
+&TeX; user groups.  
+</para>
+
+<!-- \begin{multicols}{2} -->
+<!-- % -->
+
+</section>
+</section>
+<section><title>&TeX; Software</title>
+
+<para>\package{\cmactex}
+\author{Thomas R. Kiffe}
+\ftp{CTAN:systems/mac/cmactex}
+\print
+</para>
+
+<para>\package{\directex}
+\author{Wilfried Ricken}
+\ftp{CTAN:systems/mac/directtex}
+\print
+</para>
+
+<para>\package{\emTeX}
+<anchor id="ap03.emtex"/>
+\author{Eberhard Mattes}
+\ftp{CTAN:systems/msdos/emtex}
+\print
+</para>
+
+<para>\package{\gTeX}
+\author{Young U. Ryu}
+\ftp{CTAN:systems/msdos/gtex}
+\print
+</para>
+
+<para>\package{\oztex}
+<anchor id="ap03.oztex"/>
+\author{Andrew Trevorrow}
+\files{$\Sigma$Edit}
+\ftp{CTAN:systems/mac/oztex}
+</para>
+
+<para>\package{\PCTeX}
+<anchor id="ap03.pctex"/>
+\author{Personal \TeX, Inc.}
+\address{12 Madrona Avenue\\Mill Valley, CA 94941\\USA}
+\phone{(415) 388--8853 / (413) 388--8865 FAX}
+\print
+</para>
+
+<para>\package{\sbTeX}
+<anchor id="ap03.sbtex"/>
+\author{Wayne G. Sullivan}
+\ftp{CTAN:systems/msdos/sbtex}
+\print
+</para>
+
+<para>\package{\TeX}
+<anchor id="ap03.tex"/>
+\author{Donald Knuth}
+\ftp{CTAN:systems/web2c}
+\comment{The \Web sources and the \Web2C programs are both available here.}
+\print
+</para>
+
+<para>\package{texas}
+\author{Shih-Ping Chan}
+\ftp{CTAN:systems/msdos/texas}
+\print
+</para>
+
+<para>\package{Textures}
+<anchor id="ap03.textures"/>
+\author{Blue Sky Research}
+\address{534 SW Third Avenue\\Portland, OR 97204\\USA}
+\phone{(800) 622--8398 or (503) 222--9571 / (503) 222--1643 FAX}
+\files{dvitool}
+\print
+</para>
+
+<para>\package{\TurboTeX}
+<anchor id="ap03.turbotex"/>
+\author{Kinch Computer Company}
+\address{501 Meadow Street\\Ithaca, NY 14850\\USA}
+\phone{(607) 273--0222 / (607) 273--0484 FAX}
+\print
+</para>
+
+<para>\package{\utex}
+<anchor id="ap03.utex"/>
+\author{ArborText}
+\address{1000 Victors Way\\Ann Arbor, MI 48108\\USA}
+\phone{(313) 996--3566 / (313) 996--3573 FAX}
+\print
+</para>
+
+<para>\package{\yyTeX}
+\author{\YY, Inc.}
+\address{106 Indian Hill\\Carlisle, MA 01741\\USA}
+\phone{(508) 371--3286 / (508) 371--2004 FAX}
+<anchor id="ap03.yytex"/>
+\print
+</para>
+
+</section>
+<section><title>&TeX; Shells</title>
+
+<para>\vskip2pt
+</para>
+
+<para>\package{\fourTeX}
+\author{Wietse Dol, Erik Frambach, Arjen Merckens, and Maarten van der Vlerk}
+\ftp{CTAN:systems/msdos/4tex}
+\print
+</para>
+
+<para>\package{\PMTeX}
+\author{Guillaume Schiltz}
+\ftp{CTAN:systems/os2/pmtex}
+\print
+</para>
+
+<para>\package{\TeXPert}
+\author{Johannes Martin}
+\ftp{CTAN:systems/msdos/texpert}
+\print
+</para>
+
+<para>\package{\TeXShell}
+\author{J\"urgen Schlegelmilch}
+\ftp{CTAN:systems/msdos/texshell}
+\print
+</para>
+
+<para>\package{X\TeX{}Shell}
+\author{Michael Hofmann}
+\ftp{tsx-11.mit.edu:pub/linux/packages/TeX}
+\print
+</para>
+
+</section>
+<section><title>Editors</title>
+
+<para>\vskip2pt
+</para>
+
+<para>\package{$\Sigma$Edit}
+\xref{\oztex}{ap03:oztex}
+\print
+</para>
+
+<para>\package{Alpha}
+\author{Pete Keheler}
+\ftp{CTAN:systems/mac}
+\print
+</para>
+
+<para>\package{BBEdit}
+\author{Rich Siegel}
+\ftp{mac.archive.umich.edu:/mac/util/text}
+\print
+</para>
+
+<para>\package{Brief}
+\author{Borland International, Inc.}
+\address{1800 Green Hills Road\\P.O. Box 660001\\Scotts Valley, CA 95067--0001}
+\phone{(408) 438--8400}
+\print
+</para>
+
+<para>\package{demacs}
+\author{Manabu Higashida and Hirano Satoshi}
+\ftp{oak.oakland.edu:/pub/msdos/demacs}
+\print
+</para>
+
+<para>\package{Doc}
+\xref{idraw}{ap03:idraw}
+\print
+</para>
+
+<para>\package{emacs}
+\xref{GNU emacs}{ap03:emacs}
+\print
+</para>
+
+<para>\package{epm}
+\author{International Business Machines}
+\ftp{ftp.cdrom.com:/pub/os2/ibm/epm}
+\print
+</para>
+
+<para>\package{GNU emacs}
+<anchor id="ap03.emacs"/>
+\author{Free Software Foundation}
+\address{675 Massachusetts Avenue\\Cambridge, MA  02139\\USA}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\print
+</para>
+
+<para>\package{Jove}
+\author{Jonathan Payne}
+\ftp{oak.oakland.edu:/pub/msdos/editor}
+\print
+</para>
+
+<para>\package{MathPad}
+\author{Roland Backhouse, Richard Verhoeven, and Olaf Weber}
+\ftp{CTAN:support/mathpad}
+\print
+</para>
+
+<para>\package{MEwin}
+<anchor id="ap03.mewin"/>
+\author{Pierre Perret}
+\ftp{oak.oakland.edu:/pub/msdos/windows3}
+\print
+</para>
+
+<para>\package{MicroEMACS}
+\xref{MEwin}{ap03:mewin}
+\print
+</para>
+
+<para>\package{Multi-Edit}
+\author{American Cybernetics}
+\address{1830 West University Drive, Suite 112\\Tempe, AZ 85821}
+\phone{(602) 968--1945 / (602) 966--1654 FAX}
+\print
+</para>
+
+<para>\package{Scientific Word}
+\author{TCI Software Research}
+\address{1190 Foster Road\\Las Cruces, NM 88001\\USA}
+\phone{(505) 522--4600 / (505) 522--0116}
+\print
+</para>
+
+<para>\package{Xnot}
+\author{Julie Melbin}
+\ftp{oak.oakland.edu:/pub/msdos/editor}
+\print
+</para>
+
+</section>
+<section><title>Macro Packages (Formats)</title>
+
+<para>\vskip2pt
+</para>
+
+<para>\package{\AMSTeX}
+\author{\ams}
+\ftp{CTAN:fonts/ams/amstex}
+\print
+</para>
+
+<para>\package{Eplain}
+\xref{Extended Plain \TeX}{ap03:eplain}
+\print
+</para>
+
+<para>\package{Extended Plain \TeX}
+<anchor id="ap03.eplain"/>
+\author{Karl Berry}
+\ftp{CTAN:macros/eplain}
+\print
+</para>
+
+<para>\package{Lame\TeX}
+\author{Jonathan Monsarrat}
+\ftp{CTAN:misc/lametex}
+\print
+</para>
+
+<para>\package{\LamSTeX}
+\author{Michael Spivak}
+\ftp{CTAN:macros/lamstex}
+\print
+</para>
+
+<para>\package{\LaTeX}
+\author{Leslie Lamport}
+\ftp{CTAN:macros/latex/core}
+\print
+</para>
+
+<para>\package{\LaTeXe}
+\author{Leslie Lamport, et. al.}
+\ftp{CTAN:macros/latex2e/core}
+\print
+</para>
+
+<para>\package{Lollipop}
+\author{Victor Eijkhout}
+\ftp{CTAN:macros/lollipop}
+\print
+</para>
+
+<para>\package{\MusicTeX}
+\author{Daniel Taupin}
+\ftp{CTAN:macros/musictex}
+\print
+</para>
+
+<para>\package{Plain \TeX}
+\author{Donald Knuth}
+\ftp{CTAN:macros/plain/base}
+\print
+</para>
+
+<para>\package{\SliTeX}
+\author{Leslie Lamport}
+\ftp{CTAN:macros/latex/core}
+\print
+</para>
+
+</section>
+<section><title>Styles and Macros</title>
+
+<para>\vskip2pt
+</para>
+
+<para>\package{\AMSLaTeX}
+\author{\ams}
+\ftp{CTAN:fonts/ams/amslatex}
+\print
+</para>
+
+<para>\package{\arabTeX}
+\author{Klaus Lagally}
+\ftp{CTAN:language/arabtex}
+\print
+</para>
+
+<para>\package{ascii.sty}
+\author{R. W. D. Nickalls}
+\ftp{CTAN:fonts/ascii}
+\print
+</para>
+
+<para>\package{Babel}
+\author{J. L. Braams}
+\ftp{language/babel}
+\print
+</para>
+
+<para>\package{bibunits.sty}
+\author{Jose Alberto}
+\ftp{CTAN:macros/latex/contrib/misc}
+\print
+</para>
+
+<para>\package{chapterbib}
+\author{Niel Kempson and Donald Arseneau}
+\ftp{CTAN:macros/latex/contrib/misc}
+\print
+</para>
+
+<para>\package{Chem\TeX}
+\author{Roswitha T. Haas and Kevin C. O'Kane}
+\ftp{CTAN:macros/latex/contrib/chemtex}
+\print
+</para>
+
+<para>\package{ChemStruct}
+\author{Michael Ramek}
+\ftp{CTAN:macros/latex/contrib/chemstruct}
+\print
+</para>
+
+<para>\package{\DraTeX}
+\author{Eitan M. Gurari}
+\ftp{CTAN:macros/generic/dratex}
+\print
+</para>
+
+<para>\package{EDMAC}
+\author{John Lavagnino}
+\ftp{CTAN:macros/plain/contrib/edmac}
+\print
+</para>
+
+<para>\package{eepic.sty}
+\author{Conrad Kwok}
+\ftp{CTAN:macros/latex/contrib/eepic}
+\print
+</para>
+
+<para>\package{epic.sty}
+\author{Sunil Podar}
+\ftp{CTAN:macros/latex/contrib/epic}
+\print
+</para>
+
+<para>\package{epsf.tex}
+\xref{dvips}{ap03:dvips}
+\print
+</para>
+
+<para>\package{epsfig.sty}
+\author{Sebastian Rahtz, Tom Rokicki, Trevor Darrell, et. al.}
+\ftp{CTAN:macros/latex/contrib/epsfig}
+\print
+</para>
+
+<para>\package{\FoilTeX}
+\author{James Hafner}
+\ftp{CTAN:macros/foiltex}
+\print
+</para>
+
+<para>\package{idxmac.tex}
+\ftp{CTAN:indexing/makeindex/lib}
+\print
+</para>
+
+<para>\package{index.sty}
+\author{David Jones}
+\ftp{CTAN:macros/latex/contrib/misc}
+</para>
+
+<para>\package{\INRSTeX}
+\author{Michael J. Ferguson}
+\ftp{CTAN:macros/inrstex}
+\print
+</para>
+
+<para>\package{isolatin1.sty}
+\ftp{CTAN:macros/latex/contrib/misc}
+\print
+</para>
+
+<para>\package{Midnight}
+\author{Marcel van der Goot}
+\ftp{CTAN:macros/generic/midnight}
+\print
+</para>
+
+<para>\package{multind}
+\author{F. W. Long}
+\ftp{CTAN:macros/latex/contrib/misc}
+\print
+</para>
+
+<para>\package{\PiCTeX}
+\author{Michael Wichura}
+\ftp{CTAN:graphics/pictex}
+\print
+</para>
+
+<para>\package{\REVTeX}
+\author{American Physical Society, American Institute of Physics, and
+  Optical Society of America}
+\ftp{CTAN:macros/latex/contrib/revtex}
+\print
+</para>
+
+<para>\package{\ScriptTeX}
+\author{Adrian McCarthy}
+\ftp{CTAN:macros/scripttex}
+\print
+</para>
+
+<para>\package{Seminar}
+\author{Timothy Van Zandt}
+\ftp{CTAN:macros/latex/contrib/seminar}
+\print
+</para>
+
+<para>\package{\TeX/Mathematica}
+\author{Dan Dill}
+\ftp{CTAN:macros/mathematica}
+\print
+</para>
+
+<para>\package{\TeX{}sis}
+\author{Eric Myers and Frank E. Paige}
+\ftp{CTAN:macros/texsis}
+\print
+</para>
+
+<para>\package{Ver\TeX}
+\author{Hal Varian}
+\ftp{CTAN:macros/plain/contrib}
+\print
+</para>
+
+<para>\package{\XYPic}
+\author{Kristoffer H. Rose}
+\ftp{ftp.diku.dk:/diku/users/kris}
+\print
+</para>
+
+<section><title>Styles That Produced This Book</title>
+
+<para>This book was formatted with an extensively modified version of the 
+standard &LaTeX; book style.  In addition to the <filename>pstricks</filename>,
+<filename>index.sty</filename>, <filename>epsfig.sty</filename>, <filename>epic.sty</filename>,
+and <filename>eepic.sty</filename> files described above, the following styles
+were used to format this book:
+\vskip6pt
+</para>
+
+<para>\package{pageframe.sty}
+\author{Cameron Smith}
+\ftp{CTAN:macros/latex/contrib/pageframe}
+\print
+</para>
+
+<para>\package{footnpag.sty}
+\author{Joachim Schrod}
+\ftp{CTAN:macros/latex/contrib/footnpag}
+\print
+</para>
+
+<para>\package{fancybox.sty}
+\author{Timothy Van Zandt}
+\ftp{CTAN:macros/latex/contrib/misc}
+\print
+</para>
+
+<para>\package{fancyheadings.sty}
+\author{Piet van Oostrum}
+\ftp{CTAN:macros/latex/contrib/fancyheadings}
+\print
+</para>
+
+<para>\package{array.sty}
+\author{Frank Mittelbach and David Carlisle}
+\ftp{CTAN:macros/latex/distribs/array}
+\print
+</para>
+
+<para>\package{dcolumn.sty}
+\author{David Carlisle}
+\ftp{CTAN:macros/latex/distribs/array}
+\print
+</para>
+
+<para>\package{tabularx.sty}
+\author{David Carlisle}
+\ftp{CTAN:macros/latex/distribs/array}
+\print
+</para>
+
+<para>\package{longtable.sty}
+\author{David Carlisle}
+\ftp{CTAN:macros/latex/distribs/array}
+\print
+</para>
+
+<para>\package{verbatim.sty}
+\author{Rainer Sch\"opf}
+\ftp{CTAN:macros/latex/distribs/verbatim}
+\print
+</para>
+
+<para>\package{vrbinput.sty}
+\author{Bernd Raichle}
+\ftp{CTAN:macros/latex/distribs/verbatim}
+\print
+</para>
+
+<para>\package{path.sty}
+\author{Philip Taylor}
+\ftp{CTAN:macros/latex/contrib/misc}
+\print
+</para>
+
+</section>
+</section>
+<section><title>Utilities</title>
+
+<para>\vskip2pt
+</para>
+
+<para>\package{afm2tfm}
+\xref{dvips}{ap03:dvips}
+\print
+</para>
+
+<para>\package{amSpell}
+\author{Erik Frambach}
+\address{Faculty of Econometrics\\University of Groningen\\Netherlands}
+\ftp{CTAN:support/amspel}
+\print
+</para>
+
+<para>\package{animate}
+\xref{Image Magick}{ap03:imagemagick}
+\print
+</para>
+
+<para>\package{\auctex}
+\author{Kresten Krab Thorup and Per Abrahamsen}
+\ftp{CTAN:support/auctex}
+\print
+</para>
+
+<para>\package{awk}
+\author{Free Software Foundation}
+\address{675 Massachusetts Avenue\\Cambridge, MA  02139\\USA}
+\comment{The FSF's version of \program{awk} is called \program{gawk}.
+Many commercial implementations of \program{awk} are also available.}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\print
+</para>
+
+<para>\package{bbfig}
+\author{Ned Betchelder}
+\ftp{CTAN:dviware/dvips/dvips/contrib/bbfig}
+\print
+</para>
+
+<para>\package{bibclean}
+\author{Nelson H. F. Beebe}
+\ftp{CTAN:bibtex/utils/bibclean}
+\print
+</para>
+
+<para>\package{bibdb}
+\author{Eyal Doron}
+\ftp{CTAN:support/bibdb}
+\print
+</para>
+
+<para>\package{bibdestringify}
+\xref{lookbibtex}{ap03:lookbibtex}
+\print
+</para>
+
+<para>\package{bibextract}
+<anchor id="ap03.bibextract"/>
+\author{Nelson H. F. Beebe}
+\ftp{CTAN:biblio/bibtex/utils/bibextract}
+\print
+</para>
+
+<para>\package{bibindex}
+<anchor id="ap03.bibindex"/>
+\author{Nelson H. F. Beebe}
+\ftp{CTAN:biblio/bibtex/utils/bibindex}
+\print
+</para>
+
+<para>\package{biblook}
+\xref{bibindex}{ap03:bibindex}
+\print
+</para>
+
+<para>\package{bibsort}
+\author{Nelson H. F. Beebe}
+\ftp{CTAN:biblio/bibtex/utils/bibsort}
+\print
+</para>
+
+<para>\package{\BibTeX}
+<anchor id="ap03.bibtex"/>
+\author{Oren Patashnik}
+\ftp{CTAN:biblio/bibtex}
+\print
+</para>
+
+<para>\package{bibview}
+\author{Holger Martin, Peter Urban, and Armin Liebl} 
+\comment{Available from volume 18 of the \texttt{comp.sources.x} newsgroup.}
+\print
+</para>
+
+<para>\package{Bitmap}
+\author{Davor Matic}
+\ftp{ftp.x.org:/contrib}
+\print
+</para>
+
+<para>\package{Bm2font}
+\author{Friedhelm Sowa}
+\ftp{CTAN:graphics/bm2font}
+\print
+</para>
+
+<para>\package{citefind}
+\xref{bibextract}{ap03:bibextract}
+\print
+</para>
+
+<para>\package{citetags}
+\xref{bibextract}{ap03:bibextract}
+\print
+</para>
+
+<para>\package{combine}
+\xref{Image Magick}{ap03:imagemagick}
+\print
+</para>
+
+<para>\package{convert}
+\xref{Image Magick}{ap03:imagemagick}
+\print
+</para>
+
+<para>\package{crudetype}
+\author{R. M. Damerell}
+\ftp{CTAN:dviware/crudetype}
+\print
+</para>
+
+<para>\package{detex}
+\author{Daniel Trinkle}
+\ftp{CTAN:support/detex}
+\print
+</para>
+
+<para>\package{display}
+\xref{Image Magick}{ap03:imagemagick}
+\print
+</para>
+
+<para>\package{dvgt}
+\author{Geoffrey Tobin}
+\ftp{CTAN:dviware/dvgt}
+\print
+</para>
+
+<para>\package{dvi2tty}
+\author{Marcel J. E. Mol}
+\ftp{CTAN:dviware/dvi2tty}
+\print
+</para>
+
+<para>\package{dvi2xx}
+<anchor id="ap03.dvi2xx"/>
+\author{Gustaf Neumann}
+\ftp{CTAN:dviware/dvi2xx}
+\print
+</para>
+
+<para>\package{dvicopy}
+<anchor id="ap03.dvicopy"/>
+\author{Peter Breitenlohner}
+\ftp{CTAN:dviware/dvicopy}
+\print
+</para>
+
+<para>\package{dvideo}
+\xref{\TurboTeX}{ap03:turbotex}
+\print
+</para>
+
+<para>\package{dvidot}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{dvidrv}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{dvidvi}
+\author{Tom Rokicki}
+\ftp{CTAN:dviware/dvidvi}
+\print
+</para>
+
+<para>\package{dvidxx}
+\comment{See Example&nbsp;\ref{ex:dvidxx} in Chapter&nbsp;\ref{app:examples},
+\textit{\nameref{app:examples}}.}  
+\print
+</para>
+
+<para>\package{dvihplj}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{DVILASER/HP}
+\xref{\utex}{ap03:utex}
+\print
+</para>
+
+<para>\package{DVILASER/PS}
+\xref{\utex}{ap03:utex}
+\print
+</para>
+
+<para>\package{\dvilaserhp}
+\xref{\utex}{ap03:utex}
+\print
+</para>
+
+<para>\package{\dvilaserps}
+\xref{\utex}{ap03:utex}
+\print
+</para>
+
+<para>\package{dvilj2}
+\xref{dvi2xx}{ap03:dvi2xx}
+\print
+</para>
+
+<para>\package{dvimsp}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{dvimswin}
+\author{J. D. McDonald}
+\ftp{CTAN:dviware/dvimswin}
+\print
+</para>
+
+<para>\package{dvipaste}
+\author{Michael Spivak}
+\ftp{CTAN:macros/lamstex/dvipaste}
+\print
+</para>
+
+<para>\package{dvipcx}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{dvipm}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{dvips}
+<anchor id="ap03.dvips"/>
+\author{Tomas Rokicki}
+\ftp{CTAN:dviware/dvips}
+\print
+</para>
+
+<para>\package{dvipsk}
+\author{Karl Berry}
+\ftp{CTAN:dviware/dvipsk}
+\comment{\program{dvips} enhanced to support path searching for fonts.}
+\print
+</para>
+
+<para>\package{dvipsone}
+\xref{\yyTeX}{ap03:yytex}
+\print
+</para>
+
+<para>\package{dviscr}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{dvispell}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{DVITool}
+\author{Jeff W. McCarrell}
+\ftp{CTAN:support/vortex/dvitool}
+\comment{Unrelated to the \program{Textures} tool of the same name.}
+\print
+</para>
+
+<para>\package{dvitovdu}
+\author{Andrew Trevorrow}
+\ftp{CTAN:dviware/dvitovdu}
+\print
+</para>
+
+<para>\package{dvitype}
+\xref{\texware}{ap03:texware}
+\print
+</para>
+
+<para>\package{dvivga}
+\ftp{CTAN:dviware/dvivga}
+\print
+</para>
+
+<para>\package{dviwin}
+<anchor id="ap03.dviwin"/>
+\author{Hippocrates Sendoukas}
+\ftp{CTAN:dviware/dviwin}
+\print
+</para>
+
+<para>\package{DVIWindo}
+\xref{\yyTeX}{ap03:yytex}
+\print
+</para>
+
+<para>\package{enc-afm.pl}
+\comment{See Example&nbsp;\ref{ex:encafmpl} in Chapter&nbsp;\ref{app:examples},
+\textit{\nameref{app:examples}}.}  
+\print
+</para>
+
+<para>\package{epmtex}
+\author{Jon Hacker}
+\ftp{CTAN:systems/os2/epmtex}
+\print
+</para>
+
+<para>\package{epsfig}
+\author{Peter Whaite}
+\ftp{CTAN:macros/latex/contrib/epsfig}
+</para>
+
+<para>\package{Excalibur}
+\author{Rick Zaccone}
+\ftp{CTAN:systems/mac/excalibur}
+\print
+</para>
+
+<para>\package{Fig}
+\author{Supoj Sutanthavibul}
+\print
+</para>
+
+<para>\package{\FigMF}
+\author{Anthony Starks}
+\ftp{CTAN:graphics/fig2mf}
+\print
+</para>
+
+<para>\package{fontinst}
+\author{Alan Jeffrey}
+\ftp{CTAN:fonts/utilities/fontinst}
+\print
+</para>
+
+<para>\package{fontlib}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{GFtoDVI}
+\xref{\mfware}{ap03:mfware}
+\print
+</para>
+
+<para>\package{GFtoPK}
+\xref{\mfware}{ap03:mfware}
+\print
+</para>
+
+<para>\package{Ghostscript}
+<anchor id="ap03.ghostscript"/>
+\author{Aladdin Enterprises}
+\address{P.O. box 60264\\Palo Alto, CA 94306\\USA}
+\phone{(415) 322--0103 / (415) 322--1734 FAX}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\print
+</para>
+
+<para>\package{Ghostview}
+\author{Timothy O. Theisen}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\print
+</para>
+
+<para>\package{gnuplot}
+\author{Free Software Foundation}
+\address{675 Massachusetts Avenue\\Cambridge, MA  02139\\USA}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\print
+</para>
+
+<para>\package{GoScript}
+<anchor id="ap03.goscript"/>
+\author{LaserGo, Inc.}
+\address{9369 Carroll Park Drive, Suite A\\San Diego, CA 92121\\USA}
+\phone{(619) 450--4600 / (619) 450-9334 FAX}
+\print
+</para>
+
+<para>\package{GoScript Plus}
+\xref{GoScript}{ap03:goscript}
+\print
+</para>
+
+<para>\package{groff}
+<anchor id="ap03.groff"/>
+\author{Free Software Foundation}
+\address{675 Massachusetts Avenue\\Cambridge, MA  02139\\USA}
+\comment{The FSF's version of \program{troff} is called \program{groff}.
+Many commercial implementations of \program{troff} are also available.}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\print
+</para>
+
+<para>\package{hp2xx}
+\author{Heinz W. Werntges}
+\ftp{CTAN:support/hp2xx}
+\print
+</para>
+
+<para>\package{HPTFM2PL}
+\author{Norman Walsh}
+\ftp{CTAN:support/hp2pl}
+\print
+</para>
+
+<para>\package{Hyper\BibTeX}
+\author{Evan Antwork}
+\ftp{mac.archive.umich.edu:/mac/misc/tex}
+\print
+</para>
+
+<para>\package{idraw}
+<anchor id="ap03.idraw"/>
+\ftp{interviews.stanford.edu}
+\print
+</para>
+
+<para>\package{Image Alchemy}
+\author{Handmade Software, Inc.}
+\address{15951 Los Gatos Blvd., Ste. 17\\Los Gatos, CA  95032\\USA}
+\phone{(408) 358--1292 / (408) 358--2694}
+\ftp{oak.oakland.edu:/pub/msdos/graphics}
+\print
+</para>
+
+<para>\package{Image Magick}
+<anchor id="ap03.imagemagick"/>
+\author{John Cristy}
+\ftp{ftp.x.org:/contrib}
+\print
+</para>
+
+<para>\package{import}
+\xref{Image Magick}{ap03:imagemagick}
+\print
+</para>
+
+<para>\package{Info-Zip}
+<anchor id="ap03.info-zip"/>
+\author{Mark Adler, et. al.}
+\files{zip, unzip}
+\ftp{ftp.uu.net:/pub/archiving/zip}
+\print
+</para>
+
+<para>\package{\iniMF}
+\xref{\MF}{ap03:mf}
+\print
+</para>
+
+<para>\package{\iniTeX}
+\xref{\TeX}{ap03:tex}
+\print
+</para>
+
+<para>\package{ispell}
+\ftp{CTAN:support/ispell}
+\print
+</para>
+
+<para>\package{ivd2dvi}
+\author{Larry Denenberg}
+\ftp{CTAN:dviware/ivd2dvi}
+\print
+</para>
+
+<para>\package{\jemtex}
+\author{Fran\c cois Jalbert}
+\ftp{CTAN:systems/msdos/jemtex2}
+\print
+</para>
+
+<para>\package{LaCheck}
+\author{Kresten Krab Thorup and Per Abrahamsen}
+\ftp{CTAN:support/lacheck}
+\print
+</para>
+
+<para>\package{lookbibtex}
+<anchor id="ap03.lookbibtex"/>
+\author{John Heidemann}
+\ftp{CTAN:biblio/bibtex/utils/lookbibtex}
+\print
+</para>
+
+<para>\package{Mac\BibTeX}
+\xref{\BibTeX}{ap03:bibtex}
+\author{Michael Kahn}
+\ftp{CTAN:systems/mac}
+\comment{This is a Mac port of \BibTeX.}
+\print
+</para>
+
+<para>\package{MacDVIcopy}
+\author{Yannis Haralambous}
+\xref{dvicopy}{ap03:dvicopy}
+\comment{This is a Mac port of \program{dvicopy}.}
+\print
+</para>
+
+<para>\package{MacGS}
+\author{Martin Fong}
+\xref{GhostScript}{ap03:ghostscript}
+\ftp{mac.archive.umich.edu:/mac/graphics/graphicsutil}
+\comment{This is a Mac port of \program{GhostScript}.}
+\print
+</para>
+
+<para>\package{MacMakeIndex}
+\author{Johnny Tolliver}
+\xref{MakeIndex}{ap03:makeindex}
+\ftp{CTAN:systems/mac}
+\comment{This is a Mac port of \program{MakeIndex}.}
+\print
+</para>
+
+<para>\package{makebst}
+\author{Patrick W. Daly}
+\ftp{CTAN:macros/latex/contrib/custom-bib}
+\print
+</para>
+
+<para>\package{makeidx.sty}
+\ftp{CTAN:indexing/makeindex/lib}
+\print
+</para>
+
+<para>\package{MakeIndex}
+\author{Pehong Chen}
+\ftp{CTAN:indexing/makeindex}
+<anchor id="ap03.makeindex"/>
+\print
+</para>
+
+<para>\package{MakeIndx}
+\xref{MakeIndex}{ap03:makeindex}
+\print
+</para>
+
+<para>\package{MakeInfo}
+\xref{\TeXinfo}{ap03:texinfo}
+\print
+</para>
+
+<para>\package{maketcp}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{MakeTeXPK}
+\xref{dvips}{ap03:dvips}
+\comment{There are several versions of this file available.  See
+Example&nbsp;\ref{ex:maketexpk} in Chapter&nbsp;\ref{app:examples},
+\textit{\nameref{app:examples}}.}
+\print
+</para>
+
+<para>\package{MakeTeXTFM}
+\comment{See Example&nbsp;\ref{ex:maketextfm} in Chapter&nbsp;\ref{app:examples},
+\textit{\nameref{app:examples}}.}  
+\print
+</para>
+
+<para>\package{\MF}
+<anchor id="ap03.mf"/>
+\author{Donald Knuth}
+\ftp{CTAN:systems/web2c}
+\comment{The \Web sources and the \Web2C programs are both available here.}
+\print
+</para>
+
+<para>\package{\MF for Textures}
+\author{Blue Sky Research}
+\address{534 SW Third Avenue\\Portland, OR 97204\\USA}
+\phone{(800) 622--8398 or (503) 222--9571 / (503) 222--1643 FAX}
+\ftp{CTAN:systems/mac/metafont/bluesky}
+\print
+</para>
+
+<para>\package{MFjob}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{\MFpic}
+\author{Thomas Leathrum}
+\ftp{CTAN:graphics/mfpic}
+\print
+</para>
+
+<para>\package{MFT}
+\xref{\mfware}{ap03:mfware}
+\print
+</para>
+
+<para>\package{\mfware}
+<anchor id="ap03.mfware"/>
+\author{Donald Knuth}
+\ftp{CTAN:systems/web2c}
+\comment{The \Web sources and the \Web2C programs are both available here.}
+\print
+</para>
+
+<para>\package{mogrify}
+\xref{Image Magick}{ap03:imagemagick}
+\print
+</para>
+
+<para>\package{montage}
+\xref{Image Magick}{ap03:imagemagick}
+\print
+</para>
+
+<para>\package{Nikon II}
+\author{Bitware, Software &amp; Services}
+\address{P.O. Box 3097\\Manuka  A.C.T.  2603\\Australia}
+\ftp{ftp.cdrom.com:/pub/os2/2_x/graphics}
+\print
+</para>
+
+<para>\package{nroff}
+\xref{groff}{ap03:groff}
+\print
+</para>
+
+<para>\package{PBMplus}
+<anchor id="ap03.pbmplus"/>
+\author{Jef Poskanzer}
+\ftp{ftp.x.org:/contrib}
+\print
+</para>
+
+<para>\package{pbmtopk}
+<anchor id="ap03.pbmtopk"/>
+\author{Angus Duggan}
+\ftp{CTAN:graphics/pbmtopk}
+\print
+</para>
+
+<para>\package{pfatopfb}
+\xref{\tutils}{ap03:t1utils}
+\print
+</para>
+
+<para>\package{pfbtopfa}
+\xref{\tutils}{ap03:t1utils}
+\print
+</para>
+
+<para>\package{PFM2AFM}
+\author{Ken Borgendale}
+\ftp{CTAN:fonts/utilities/pfm2afm}
+\print
+</para>
+
+<para>\package{pixmap}
+\author{Lionel Mallet}
+\ftp{ftp.x.org:/contrib/pixmap}
+\print
+</para>
+
+<para>\package{PKBBOX}
+\author{Norman Walsh}
+\ftp{CTAN:fonts/utilities/pkbbox}
+\print
+</para>
+
+<para>\package{PKEdit}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{PKtoGF}
+\xref{\mfware}{ap03:mfware}
+\print
+</para>
+
+<para>\package{pktopbm}
+\xref{pbmtopk}{ap03:pbmtopk}
+\print
+</para>
+
+<para>\package{pktops}
+\xref{\yyTeX}{ap03:yytex}
+\print
+</para>
+
+<para>\package{PKtoPX}
+\xref{\mfware}{ap03:mfware}
+\print
+</para>
+
+<para>\package{PKtoSFP}
+\author{Norman Walsh}
+\ftp{CTAN:font/softfonts}
+\print
+</para>
+
+<para>\package{PKtype}
+\xref{\mfware}{ap03:mfware}
+\print
+</para>
+
+<para>\package{PLtoTF}
+\xref{\texware}{ap03:texware}
+\print
+</para>
+
+<para>\package{PM-Cam}
+\author{J. von Kaenel}
+\ftp{ftp.cdrom.com:/pub/os2/ibm/ews}
+\print
+</para>
+
+<para>\package{\pmc}
+\author{Tom Ridgeway}
+\ftp{CTAN:fonts/poorman}
+\print
+</para>
+
+<para>\package{\pmj}
+\author{Tom Ridgeway}
+\ftp{CTAN:fonts/poorman}
+\print
+</para>
+
+<para>\package{Pmjpeg}
+\author{Norman Yee}
+\ftp{ftp.cdrom.com:/pub/os2/2_x/graphics}
+\print
+</para>
+
+<para>\package{ps2epsi}
+\xref{ghostscript}{ap03:ghostscript}
+\print
+</para>
+
+<para>\package{PS2PK}
+\author{Piet Tutelaers}
+\ftp{CTAN:fonts/utilities/ps2pk}
+\print
+</para>
+
+<para>\package{\PSTricks}
+\author{Timothy Van Zandt}
+\ftp{CTAN:graphics/pstricks}
+\print
+</para>
+
+<para>\package{PTI Jet}
+\xref{\PCTeX}{ap03:pctex}
+\print
+</para>
+
+<para>\package{PTI Laser/HP}
+\xref{\PCTeX}{ap03:pctex}
+\print
+</para>
+
+<para>\package{PTI Laser/HP4}
+\xref{\PCTeX}{ap03:pctex}
+\print
+</para>
+
+<para>\package{PTI Laser/PS}
+\xref{\PCTeX}{ap03:pctex}
+\print
+</para>
+
+<para>\package{PTI View}
+\xref{\PCTeX}{ap03:pctex}
+\print
+</para>
+
+<para>\package{PXtoPK}
+\author{Peter Breitenlohner}
+\ftp{systems/msdos/utilities}
+\print
+</para>
+
+<para>\package{RCS}
+\author{Walter F. Tichy}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\print
+</para>
+
+<para>\package{Recode}
+\author{Francois Pinard}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\print
+</para>
+
+<para>\package{REXX}
+\author{International Business Machines}
+\print
+</para>
+
+<para>\package{\sbMF}
+\xref{\sbTeX}{ap03:sbtex}
+\print
+</para>
+
+<para>\package{sed}
+\author{Free Software Foundation}
+\address{675 Massachusetts Avenue\\Cambridge, MA  02139\\USA}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\comment{Many commercial implementations of \program{sed} are also available.}
+\print
+</para>
+
+<para>\package{\SeeTeX}
+<anchor id="ap03.seetex"/>
+\author{David Grunwald}
+\ftp{CTAN:dviware/seetex}
+\print
+</para>
+
+<para>\package{sffx}
+\xref{Sfware}{ap03:sfware}
+\print
+</para>
+
+<para>\package{Sfload}
+\xref{Sfware}{ap03:sfware}
+\print
+</para>
+
+<para>\package{SFPtoPK}
+\author{Norman Walsh}
+\ftp{CTAN:font/softfonts}
+\print
+</para>
+
+<para>\package{Sfware}
+<anchor id="ap03.sfware"/>
+\author{Norman Walsh}
+\ftp{CTAN:font/softfonts/sfware}
+\print
+</para>
+
+<para>\package{tangle}
+\xref{\Web2c}{ap03:web2c}
+\print
+</para>
+
+<para>\package{tar}
+\author{Free Software Foundation}
+\address{675 Massachusetts Avenue\\Cambridge, MA  02139\\USA}
+\ftp{prep.ai.mit.edu:/pub/gnu}
+\comment{Many commercial implementations of \program{tar} are also available.}
+\print
+</para>
+
+<para>\package{tex386}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{\TeX Preview}
+\xref{\utex}{ap03:utex}
+\print
+</para>
+
+<para>\package{texcad}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{texchk}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{texconv}
+\xref{\emTeX}{ap03:emtex}
+\print
+</para>
+
+<para>\package{\TeXinfo}
+<anchor id="ap03.texinfo"/>
+\author{Free Software Foundation}
+\address{675 Massachusetts Avenue\\Cambridge, MA  02139\\USA}
+\ftp{prep.ai.mit.edu:/pbu/gnu}
+\print
+</para>
+
+<para>\package{\TeXtoXfont}
+\comment{See Example&nbsp;\ref{ex:textoxfont} in Chapter&nbsp;\ref{app:examples},
+\textit{\nameref{app:examples}}.}  
+\print
+</para>
+
+<para>\package{\texware}
+<anchor id="ap03.texware"/>
+\author{Donald Knuth}
+\ftp{CTAN:systems/web2c}
+\comment{The \Web sources and the \Web2C programs are both available here.}
+\print
+</para>
+
+<para>\package{TFtoPL}
+\xref{\texware}{ap03:texware}
+\print
+</para>
+
+<para>\package{Tgif}
+\author{William Chia-Wei Cheng}
+\ftp{ftp.x.org:/contrib}
+\print
+</para>
+
+<para>\package{\Tib}
+\author{James C. Alexander}
+\ftp{CTAN:biblio/tib}
+\print
+</para>
+
+<para>\package{\tpre}
+\xref{\utex}{ap03:utex}
+\print
+</para>
+
+<para>\package{troff}
+\xref{groff}{ap03:groff}
+\print
+</para>
+
+<para>\package{\tutils}
+<anchor id="ap03.t1utils"/>
+\author{I. Lee Hetherington}
+\ftp{CTAN:fonts/utilities/t1utils}
+\print
+</para>
+
+<para>\package{txt2pcx}
+\author{DECISIONS Software}
+\address{P.O. Box 31418\\Phoenix, AZ 85046\\USA}
+\phone{(602) 992--0310}
+\print
+</para>
+
+<para>\package{unzip}
+\xref{Info-Zip}{ap03:info-zip}
+\print
+</para>
+
+<para>\package{VFtoVP}
+\xref{\mfware}{ap03:mfware}
+\print
+</para>
+
+<para>\package{VPtoVF}
+\xref{\mfware}{ap03:mfware}
+\print
+</para>
+
+<para>\package{wbr}
+\xref{dviwin}{ap03:dviwin}
+\print
+</para>
+
+<para>\package{wdviwin}
+\xref{\TurboTeX}{ap03:turbotex}
+\print
+</para>
+
+<para>\package{weave}
+\xref{\Web2c}{ap03:web2c}
+\print
+</para>
+
+<para>\package{xbibtex}
+\author{Nicholas Kelly and Christian H. Bischof}
+\ftp{CTAN:biblio/bibtex/utils/xbibtex}
+\print
+</para>
+
+<para>\package{Xdvi}
+\author{Paul Vojta}
+\ftp{CTAN:dviware/xdvi}
+\print
+</para>
+
+<para>\package{\XeT}
+\ftp{noa.huji.ac.il:/tex}
+\comment{Several implementations of \XeT-{}-\TeX are available here.}
+\print
+</para>
+
+<para>\package{xfig}
+\author{Brian V. Smith}
+\ftp{ftp.x.org:/contrib}
+\print
+</para>
+
+<para>\package{xloadimage}
+\author{Jim Frost}
+\ftp{ftp.x.org:/contrib}
+\print
+</para>
+
+<para>\package{xpaint}
+\author{David Koblas}
+\ftp{ftp.x.org:/contrib}
+</para>
+
+<para>\package{\XTeX}
+\xref{See\TeX}{ap03:seetex}
+\print
+</para>
+
+<para>\package{Xtexcad}
+\comment{Available from volume 17 of the \texttt{comp.sources.x} newsgroup.}
+\print
+</para>
+
+<para>\package{xv}
+\author{John Bradley}
+\ftp{ftp.x.org:/contrib}
+\print
+</para>
+
+</section>
+<section><title>Miscellaneous</title>
+
+<para>\vskip2pt
+</para>
+
+<para>\package{4DOS}
+\author{JP Software Inc.}
+\address{P.O. Box 1470\\E. Arlington, MA 02174\\USA}
+\phone{(617) 646--3975}
+\ftp{oak.oakland.edu:/pub/msdos/4dos}
+\print
+</para>
+
+<para>\package{4OS2}
+\author{JP Software Inc.}
+\address{P.O. Box 1470\\E. Arlington, MA 02174\\USA}
+\phone{(617) 646--3975}
+\ftp{ftp.cdrom.com:/pub/os2/2_x/sysutils}
+\print
+</para>
+
+<para>\package{Channel 1\regtm}
+\address{1030 Massachusetts Avenue\\Cambridge, MA 02138}
+\phone{(617) 864--0100 voice / (617) 354-3230 v32.bis modem}
+\comment{The Channel 1 BBS carries a \TeX conference with many MS-DOS
+tools available for downloading to registered users.}
+\print
+</para>
+
+<para>\package{edb}
+\author{Michael Ernst}
+\ftp{theory.lcs.mit.edu:/pub/emacs/edb}
+\comment{Database manager for GNU Emacs.}
+\print
+</para>
+
+<para>\package{Linux}
+\author{Linus Torvalds}
+\ftp{ftp.cdrom.com:/pub/linux}
+\print
+</para>
+
+<para>\package{mewltx}
+\author{Michael F. Reid}
+\ftp{CTAN:support/mewltx}
+\comment{\LaTeX extensions for \filename{MicroEMACS}.}
+\xref{MEwin}{ap03:mewin}
+\print
+</para>
+
+<para>\package{modes.mf}
+\author{Karl Berry}
+\ftp{CTAN:fonts/modes}
+\print
+</para>
+
+<para>\package{Perl}
+\author{Larry Wall}
+\print
+</para>
+
+<para>\package{TeX-index}
+<anchor id="ap03.texindex"/>
+\author{David Jones}
+\ftp{CTAN:info}
+\comment{Also known as \filename{tex-styles-and-macros.txt}.}
+\print
+</para>
+
+<para>\package{tex-styles-and-macros.txt}
+\xref{TeX-index}{ap03:texindex}
+\print
+</para>
+
+<para>\package{\Web2c}
+<anchor id="ap03.web2c"/>
+\author{Karl Berry}
+\ftp{CTAN:systems/web2c}
+\print
+</para>
+
+</section>
+</appendix>

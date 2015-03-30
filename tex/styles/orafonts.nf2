@@ -1,0 +1,123 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ORA Fonts addition to the ORA style..
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\fileversion{1.0/NFSS2}
+\def\filedate{02Sep93}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\immediate\write\sixt@@n{File: `orafonts.nf2' 
+\fileversion\space <\filedate> (ndw)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Fonts for the MF logo
+
+\DeclareFontShape{OT1}{logo}{m}{n}{%
+  <-8>logo8%
+  <9><10>gen * logo%
+  <11->logo10}{}
+
+\DeclareFontShape{OT1}{logo}{m}{sl}{%
+  <->logosl10}{}
+
+\DeclareFontShape{OT1}{logo}{bx}{n}{%
+  <->logobf10}{}
+
+\DeclareFontShape{OT1}{logo}{m}{it}{%
+  <->ssub * logo/m/sl}{}
+
+\DeclareFontShape{OT1}{logo}{b}{n}{%
+  <->ssub * logo/bx/n}{}
+
+\DeclareFontShape{OT1}{logo}{b}{it}{%
+  <->ssub * logo/m/sl}{}
+
+\DeclareFontShape{OT1}{logo}{b}{sl}{%
+  <->ssub * logo/m/sl}{}
+
+\DeclareFontShape{OT1}{logo}{bx}{it}{%
+  <->ssub * logo/m/sl}{}
+
+\DeclareFontShape{OT1}{logo}{bx}{sl}{%
+  <->ssub * logo/m/sl}{}
+
+% Special fonts for the AMS logo.  I'm sure there's a better, more standard
+% way to get bold math caligraphic letters, but this was easier ... for me
+
+\DeclareFontFamily{OT1}{amslogofam}{}
+
+\DeclareFontShape{OT1}{amslogofam}{b}{n}{%
+  <-5>cmbsy5%
+  <5><6><7><8>gen * cmbsy%
+  <9->cmbsy9}{}
+
+\DeclareFontShape{OT1}{amslogofam}{m}{n}{%
+  <-5>cmsy5%
+  <5><6><7><8><9>gen * cmsy%
+  <10->cmsy10}{}
+
+\DeclareFontShape{OT1}{amslogofam}{m}{it}{%
+  <->ssub * amslogofam/m/n}{}
+
+\DeclareFontShape{OT1}{amslogofam}{b}{it}{%
+  <->ssub * amslogofam/b/n}{}
+
+% Adobe Garamond.
+
+\DeclareFontFamily{OT1}{garamond}{}
+
+\DeclareFontShape{OT1}{garamond}{m}{n}{%
+  <->grlg}{}
+
+\DeclareFontShape{OT1}{garamond}{m}{it}{%
+  <->grlgit}{}
+
+\DeclareFontShape{OT1}{garamond}{b}{n}{%
+  <->grbk}{}
+
+\DeclareFontShape{OT1}{garamond}{b}{it}{%
+  <->grbkit}{}
+
+% Smallcaps variation
+
+\DeclareFontShape{OT1}{garamond}{m}{sc}{%
+  <->grlgc}{}
+
+% New Courier
+
+\DeclareFontFamily{OT1}{courier}{\hyphenchar\font=-1}
+
+\DeclareFontShape{OT1}{courier}{m}{n}{%
+  <-> [0.95] NewCoPla}{}
+
+\DeclareFontShape{OT1}{courier}{m}{it}{%
+  <-> [0.95] NewCoIta}{}
+
+\DeclareFontShape{OT1}{courier}{b}{n}{%
+  <-> [0.95] NewCoBol}{}
+
+\DeclareFontShape{OT1}{courier}{b}{it}{%
+  <->sub * courier/m/it}{}
+
+% Some other font shapes ...
+
+\DeclareFontShape{OT1}{cmss}{m}{it}{%
+  <->ssub * cmss/m/sl}{}
+
+\DeclareFontShape{OT1}{cmss}{b}{it}{%
+  <->ssub * cmss/m/sl}{}
+
+% Make Garamond and Courier the default fonts...
+\renewcommand{\ttdefault}{courier}
+\renewcommand{\rmdefault}{garamond}
+
+\def\bf{\fontseries{b}\selectfont}
+\def\it{\fontshape{it}\selectfont}
+\def\sc{\fontshape{sc}\selectfont}
+
+% Avoid some math problems
+\define@nomathsize{13}
+\define@nomathsize{14}
+\define@nomathsize{18}
+\define@nomathsize{24}
+\define@nomathsize{30}
+\define@nomathsize{96}
+

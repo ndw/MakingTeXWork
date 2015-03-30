@@ -1,0 +1,18 @@
+\newbox\dvscrbox
+\newdimen\dvscrwd
+\font\dvscra=dvscra at 72.27truept
+\font\dvscrb=dvscrb at 72.27truept
+\setbox\dvscrbox=\vbox{\hbox{%
+\dvscra\char0\char1\char2\char3\char4}}
+\dvscrwd=\wd\dvscrbox
+\setbox\dvscrbox=\hbox{\vbox{\hsize=\dvscrwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\dvscra\char0\char1\char2\char3\char4}
+\hbox{\dvscra\char5\char6\char7\char8\char9}
+\hbox{\dvscra\char10\dvscrb\char0\char1\char2\char3}
+\hbox{\dvscrb\char4\char5\char6\char7\char8}}}
+\ifx\parbox\undefined
+    \def\setdvscr{\box\dvscrbox}
+\else
+    \def\setdvscr{\parbox{\wd\dvscrbox}{\box\dvscrbox}}
+\fi

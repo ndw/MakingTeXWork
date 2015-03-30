@@ -1,0 +1,17 @@
+\newbox\dtxmpbox
+\newdimen\dtxmpwd
+\font\dtxmpa=dtxmpa at 72.27truept
+\setbox\dtxmpbox=\vbox{\hbox{%
+\dtxmpa\char0\char1\char2\char3}}
+\dtxmpwd=\wd\dtxmpbox
+\setbox\dtxmpbox=\hbox{\vbox{\hsize=\dtxmpwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\dtxmpa\char0\char1\char2\char3}
+\hbox{\dtxmpa\char4\char5\char6\char7}
+\hbox{\dtxmpa\char8\char9\char10\char11}
+\hbox{\dtxmpa\char12\char13\char14\char15}}}
+\ifx\parbox\undefined
+    \def\setdtxmp{\box\dtxmpbox}
+\else
+    \def\setdtxmp{\parbox{\wd\dtxmpbox}{\box\dtxmpbox}}
+\fi

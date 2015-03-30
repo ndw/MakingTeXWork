@@ -1,0 +1,394 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  v 1.0
+%  AlProTex                                             %
+%  Copyright (C) 1992 by Eitan M. Gurari                %
+%                                                       %
+%  Permission is granted to use and copy this package,  %
+%  but not to sell any part of it without the author's  %
+%  written permission. This notice must remain in any   %
+%  copy or derivative.                                  %
+%                            gurari@cis.ohio-state.edu  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\expandafter\edef\csname :RestoreCatcodes\endcsname{%
+   \catcode`\noexpand :=\the\catcode`:%
+   \catcode`\noexpand @=\the\catcode`@%
+   \catcode`\noexpand -=\the\catcode`-%
+   \catcode`\noexpand +=\the\catcode`+%
+   \catcode`\noexpand /=\the\catcode`/%
+   \catcode`\noexpand .=\the\catcode`.%
+   \catcode`\noexpand \^^M=\the\catcode`\^^M%
+   \catcode`\noexpand \^^I=\the\catcode`\^^I%
+   \catcode`\noexpand \%=\the\catcode`\%%
+   \expandafter\let\csname:RestoreCatcodes\endcsname=\noexpand\undefined}
+\catcode`\@=11  \catcode`\:=11
+\def\TagLine[#1]{}     \def\ResetLineCount{}
+\def\RefLine[#1]{}     \def\ShowLineCount{}
+\def\HideLineCount{}   \def\PauseLineCount{}
+\def\ContLineCount{} \def\:InitAlProTex#1,#2//{
+   \let\:ModifyOutputCodeO=\ModifyOutputCode
+   \def\ModifyOutputCode{\def\Extension{#1}\:ModifyOutputCodeO}
+   \def\AlProTex{#2}}
+
+\expandafter\:InitAlProTex\AlProTex,//
+
+\newif\if:option
+\def\:CheckOption#1{ \def\:temp{#1}
+   \:optionfalse
+   \expandafter\:GetOptions\AlProTex,,// }
+
+\def\:GetOptions#1,#2//{  \def\:next{#1}
+   \ifx        \:next\empty
+   \else \ifx  \:temp\:next   \:optiontrue   \let\:next=\relax
+   \else \def\:next{\:GetOptions#2//}
+   \fi  \fi  \:next }
+\:CheckOption{<<<>>>}     \if:option
+\let\:ModifyAppendCodeI=\ModifyAppendCode
+                                   \catcode`\^^M=13
+\def\ModifyAppendCode{%
+\catcode`\{=12  \catcode`\}=12 %
+\let\::ScanAppend=\:ScanAppend %
+\def\:ScanAppend<<<^^M##1>>>{\::ScanAppend{##1}}%
+\:ModifyAppendCodeI}%
+                                             \catcode`\^^M=5
+\fi \def\:temp{ \catcode`\@=12
+   \def\:temp##1{\catcode`\@=11
+                 \:CheckOption{##1}} \:temp}
+\:temp{@}
+\if:option     \let\:ModifyAppendCodeII=\ModifyAppendCode
+   \let\:ModifyShowCodeII=\ModifyShowCode
+   \let\:ModifyOutputCodeII=\ModifyOutputCode
+   \def\ModifyAppendCode{\catcode`\@=0   \catcode`\\=12
+      \:ModifyAppendCodeII}
+   \def\ModifyOutputCode{\def\@{@}\:ModifyOutputCodeII}
+   \def\ModifyShowCode#1{\:ModifyShowCodeII{#1}\def\@{\char64}}
+\else  \ifx \:ModifyAppendCodeII\:undefined
+   \:CheckOption{|}   \if:option
+         \let\:ModifyAppendCodeII=\ModifyAppendCode
+      \let\:ModifyShowCodeII=\ModifyShowCode
+      \let\:ModifyOutputCodeII=\ModifyOutputCode
+      \def\ModifyAppendCode{\catcode`\|=0   \catcode`\\=12
+         \:ModifyAppendCodeII}
+      \def\ModifyOutputCode{\def\|{|}\:ModifyOutputCodeII}
+      \def\ModifyShowCode#1{\:ModifyShowCodeII{#1}\def\|{\char124}}
+\else   \ifx \:ModifyAppendCodeII\:undefined
+   \:CheckOption{`}   \if:option
+      \let\:ModifyAppendCodeII=\ModifyAppendCode
+   \let\:ModifyShowCodeII=\ModifyShowCode
+   \let\:ModifyOutputCodeII=\ModifyOutputCode
+   \def\ModifyAppendCode{\catcode`\`=0   \catcode`\\=12
+      \:ModifyAppendCodeII}
+   \def\ModifyOutputCode{\def\`{`}\:ModifyOutputCodeII}
+   \def\ModifyShowCode#1{\:ModifyShowCodeII{#1}\def\`{\char96}}
+\fi \fi \fi \fi  \fi\:CheckOption{[]}
+\def\:temp{}
+\if:option
+     \def\:temp{\csname newdimen\endcsname\:BoxDepth}
+      \def\WindowTitle#1{{\leavevmode
+         \leftskip=0em  \rightskip=0em
+         \parindent=0em \:BoxDepth=0.4pt
+         \setbox0=\hbox{#1}%
+         \advance\:BoxDepth by \dp0
+         \advance\:BoxDepth by 0.4mm   \raise -\:BoxDepth
+         \hbox{\vrule
+            \vbox{\hrule          \vskip 0.4mm
+                  \hbox{\hskip 0.4mm\relax #1\hskip 0.4mm}%
+                  \vskip 0.4mm    \hrule}%
+               \vrule}}}
+      \let\:ModifyShowCodeIII=\ModifyShowCode
+      \def\ModifyShowCode#1{\:ModifyShowCodeIII{#1}%
+         \def\PortTitle##1{\WindowTitle{\WindowTitle{##1}}}%
+         \def\:BackTitle{\hbox{---}}}
+\fi   \:temp \:CheckOption{list}  \if:option
+\def\:show{%
+   \ifx \:title\empty \def\:show{\ShowCode-}%
+   \else              \def\:show{\ShowCode}%
+   \fi     \:show}
+\fi
+
+\catcode`\-=13 \catcode`\+=13  \if:option
+\def\AfterCode#1{{%
+   \def-##1##2{\def\:title{##1}}%
+   \let+=\:ignoreII
+   #1\relax
+   \:show #1}}
+\def\:ignoreII#1#2{}
+\fi
+\catcode`\-=12 \catcode`\+=12
+
+ \:CheckOption{enumerate} \def\:temp{}  \if:option
+   \def\:temp{\csname newcount\endcsname\:LineCount}
+   \let\:ModifyShowLastCode=\ModifyShowLastCode
+   \def\ModifyShowLastCode{\everypar={\:CountLines
+      {\it \:ShowLineCount \quad}}%
+      \let\:BottomTitleX=\:BottomTitle
+      \def\:BottomTitle{\everypar={}\:BottomTitleX}%
+   \:ModifyShowLastCode}
+   \def\ResetLineCount{ \global\:LineCount=0 }
+   \def\ShowLineCount{\def\:ShowLineCount{\ifnum\:LineCount<100 0\fi
+                                          \ifnum\:LineCount<10  0\fi
+                                          \the\:LineCount}}
+   \def\HideLineCount{\def\:ShowLineCount{}}
+   \def\ContLineCount{\def\:CountLines{\global\advance\:LineCount by 1 }}
+   \def\PauseLineCount{\def\:CountLines{}}
+   \ShowLineCount \ContLineCount
+   \def\TagLine[#1]{%
+      \edef\:temp{\noexpand\Tag\noexpand{C #1\noexpand}\noexpand{%
+                  \the\:LineCount\noexpand}}\:temp}
+   \def\RefLine[#1]{\Ref{C #1}}
+   \let\:ModifyOutputCodeZ=\ModifyOutputCode
+   \def\ModifyOutputCode{\def\RefLine[##1]{}%
+      \def\TagLine[##1]{}\:ModifyOutputCodeZ}
+\fi
+\:temp \:CheckOption{ClearCode}
+\if:option
+   \gdef\:EraseCode{}
+   \def\ModifyCode#1{%
+      \def\:temp{\gdef\:EraseCode}%
+      \expandafter\expandafter\expandafter
+      \:temp\expandafter{\:EraseCode~#1}}
+   \def\ClearCode{{\def~##1{\global\let##1=\:undefined}%
+      \:EraseCode}\gdef\:EraseCode{}}
+\fi\def\TextIndex#1{}   \def\SecIndex#1{}
+\def\ShowIndex{\:warn{\string\ShowIndex?}}
+
+\:CheckOption{ShowIndex}
+
+\def\:temp{}
+\catcode`\-=13 \catcode`\+=13
+
+\if:option
+\def\:temp{\csname newcount\endcsname \:IdxCount}
+\def\:GetTrc{%
+   \immediate\read15 to \:x
+   \ifx \:PAR\:x \let\:GetTrc=\relax
+   \else \expandafter\:AddEntry\:x \fi
+   \:GetTrc}                           \def\:PAR{\par}
+
+\def\:AddEntry#1{\def\:cs{#1}\futurelet\:p\:RemoveField}
+\def\:RemoveField{\ifx .\:p \def\:next##1 {\:AppendEntry}
+                  \else    \let\:next=\:AppendEntry \fi \:next}
+
+\def\:AppendEntry#1#2#3{\def\:y{#1}%
+   \ifx \:y\:NS \AppendCode\:idx{\endgroup
+                   \:Section{#2}{#3}\begingroup}%
+      \expandafter\let\csname :idx\the\:IdxCount\endcsname=\:idx
+      \def\:temp{\Code\:idx{}}%
+      \expandafter\expandafter\expandafter\:temp\expandafter
+                      {\csname :idx\the\:IdxCount\endcsname}%
+      \advance\:IdxCount by 1
+   \else\ifx \:y\:V
+      \expandafter\ifx \csname :\:Title #2;;:\endcsname\relax
+         \expandafter\Code\csname :\:Title #2;;:\endcsname{}{\?{#2}}%
+      \fi
+      \expandafter\AppendCode\csname :\:Title #2;;:\endcsname{ #3}%
+      \:AddIdx{\csname :\:Title #2;;:\endcsname}%
+   \else
+      \edef\:cs{\expandafter\string\:cs.:}
+\edef\:cs{\expandafter\noexpand\csname\:cs\endcsname}
+      \ifx      \:y\:DT \expandafter\Code\:cs{}{\tr{#2}}%
+      \else\ifx \:y\:ST \expandafter\AppendCode\:cs{ \underbar{#3}}%
+                \:AddIdx{\:cs}%
+      \else\ifx \:y\:SC \expandafter\AppendCode\:cs{ #3}%
+                \:AddIdx{\:cs}%
+   \fi\fi\fi\fi\fi}\def\:AddIdx{%
+   \def\:y{\AppendCode\:idx}%
+   \expandafter\expandafter\expandafter\:y\expandafter}
+
+\def\SecIndex#1{{\let\:refout=\:trcfile  \def\:TagCs{.}%
+   \Tag{section}{{#1};;}}}
+
+\def\TextIndex#1{{\let\:refout=\:trcfile  \def\:TagCs{.}%
+   \Tag{user}{#1;;}}}
+\def\:V{user}
+\def\:DT{DefineTitle}  \def\:ST{ShowTitle}  \def\:SC{ShowCode}
+\def\:NS{section}
+
+\def\:Title#1;;#2;;{#1}
+\def\:TitleA#1;;#2;;{$\triangleleft\triangleleft$ #1
+   $\triangleright\triangleright$}
+
+\def\:Index{\vfil\eject   \Comment{}{}%
+   \immediate\closeout\:trcfile
+   \def\ModifyShowCode##1{}%
+   \def\ModifyAppendCode##1{}%
+   \def\ModifyFrontTitle##1{}%
+   \def\ModifyShowLastCode##1{##1}%
+   \def\AfterCode##1{}%
+   \def\:WriteTrc##1{}%
+   \let\:TraceDef=\:ignoreII
+   \def\:warn##1{}%
+   \def\:gobble##1{}%
+   \let\CodeId=\:ignoreII
+   \def\ModifyOutputCode##1{\def\:FileName{\jobname.xidx}}%
+   \Code\:idx{}{\BeforeIndex\begingroup}%
+   \:PauseIndex  \immediate\openin15=\:jobname
+   \:GetTrc  \AppendCode\:idx{\endgroup}%
+   {\def\?##1{\par\noindent{\tt\:Title ##1;;}\hfill}%
+    \def\tr##1{\par\noindent{\tt\:TitleA ##1;;}\hfill}%
+    \def\:Section##1##2{{\bf\smallskip\noindent{\:Title ##1;;}\hfill
+                         ##2\smallskip}}%
+    \def\ModifyShowLastCode##1{%
+       \leftskip=0pt \rightskip=0pt
+       \def\:LastCode{\:idx}%
+       \:SetShowIndex}%
+     \expandafter   \ShowCode\:minus\:idx   }}
+
+
+\def\:ignoreII#1#2{}
+
+\def\:SetShowIndex{\def-##1##2{\expandafter\def\csname
+       \expandafter\:gobble##2\endcsname{}}%
+                   \def+##1##2{##1}}
+
+\def\BeforeIndex{}
+\def\:PauseIndex{}
+\def\PauseIndex{\def\PauseIndex{\immediate\read16 to \PressReturn}}
+\def\ShowIndex{{%
+   \let\:SvCode=\Code
+   \def\Code##1{\ModifyCode{##1}\:SvCode##1}%
+   \ifx \::AddEntry\:undefined
+   \else    \let\:AddEntry=\::AddEntry   \fi
+   \:Index   \global\let\:idx=\:undefined }%
+   \xdef\:jobname{\jobname.trc\the\pageno}%
+   \immediate\openout\:trcfile=\:jobname \relax        }
+
+\xdef\:jobname{\jobname.trc}
+    \fi    \catcode`\-=12 \catcode`\+=12   \:temp  \:CheckOption{title}
+\if:option
+    \def\:Name#1{<#1\string\>\endcsname}
+\def\:DoName#1{\expandafter#1\csname\:Name}
+
+\def\<#1\>{\:DoName\ifx{#1}\relax
+      \edef\:temp{\noexpand\Code\:DoName
+         \noexpand{#1}\noexpand{#1\noexpand}}%
+      \:DoName\let{#1}=\:undefined
+   \else  \def\:temp{\:DoName\AppendCode{#1}}\fi\:temp}
+
+                     \catcode`\.=10 \catcode`\ =13
+\let\:ModifyShowCodeIV=\ModifyShowCode%
+\def\ModifyShowCode{%
+..\def\:gobble##1{}%
+..\def\<##1\>{{\def {\space}%
+...\:DoName\ifx{##1}\relax%
+.....\let\AppendCode=\:gobble%
+.....\:DoName\Code{##1}{##1}{}\fi%
+..\csname\:Name{##1}}}\:ModifyShowCodeIV}%
+\def\:OutputCodeI#1\<#2\>{%
+...\let\:SaveSp= \def {}%
+...\def\:temp{#2}%
+...\ifx\:temp\empty.\def\:temp{ProTexOutput}%
+...\else.\let\:temp=\empty.\fi%
+...\expandafter\ifx.\csname.\:temp#2\endcsname\relax%
+...\else.\immediate\write16{---.AlProTex. warning.---.%
+......\string\OutputCode#1%
+......\string\<#2\string\>\space.temporarily\space.%
+......redefines.\:backslash#2}\fi%
+...\edef\:FileName{\:temp#2}%
+...\let =\:SaveSp%
+...\expandafter\def\csname\:FileName\endcsname{\csname\:Name{#2}}%
+...\def\:tempa{\:OutputCodeIV#1}%
+...\expandafter\:tempa\csname\:FileName\endcsname%
+..\endgroup}%
+\catcode`\ =10\catcode`\.=12
+
+\let\:OutputCodeIV=\OutputCode
+\def\OutputCode{%
+   \begingroup
+      \def\<##1\>{\csname\:Name{##1}}%
+      \let\:WriteTrcI=\:WriteTrc     \def\:gobble##1{}%
+      \def\:WriteTrc{\edef\:TagCs{\string\<\expandafter\expandafter
+                              \expandafter\:gobble \:TagCs\string\>}%
+                   \:WriteTrcI}
+      \catcode` =13 \:OutputCodeI}
+
+\def\ShowCode#1{%
+   \def\:test{#1}%
+   \ifx \:test\:minus  \def\:next{\:iname\:ShowCode}\else
+      \def\:next{\:iname\:ShowCode#1}\fi
+   \:next}
+
+\def\:iname#1#2{\def\:next{#2}\def\:temp{\<}%
+   \ifx \:next\:temp
+      \def\:next##1\>{\expandafter#1\csname\:Name{##1}}\else
+   \def\:next{#1#2}\fi   \:next}
+
+\def\::AddEntry#1{%
+   \ifx #1\<    \let\:Next=\:AddEntryA
+   \else        \def\:Next{\def\:cs{#1}\:AddEntryB}\fi
+   \:Next }
+
+\def\:AddEntryA#1\>{%
+   \edef\:cs{\expandafter\noexpand
+             \csname#1:.\endcsname}\:AddEntryB}
+
+\def\:AddEntryB{%
+   \futurelet\:p\:RemoveField}%
+   \def\:RemoveField{\ifx .\:p \def\:next##1 {\:AppendEntry}%
+                  \else    \let\:next=\:AppendEntry \fi \:next}
+
+
+\fi\:CheckOption{eline}
+\catcode`\%=12
+\if:option
+  \let\:ModifyOutputCodeJ=\ModifyOutputCode
+  \def\ModifyOutputCode{\def\:Ln{ %^^J}\:ModifyOutputCodeJ}
+\fi  \catcode`\%=14
+\:CheckOption{ShowFile}
+\if:option
+\catcode`\^^I=13\catcode`\ =13\catcode`\^^M=13%
+\def\:ObeyIn{\CodeFont\parindent=0pt%
+   \parskip=0pt\everypar{}%
+   \:NoSpecials{12}{0}{255}\catcode`\ =13%
+   \catcode`\^^M=13\catcode`\^^I=13%
+   \def^^M{\leavevmode\par}\def^^I{  }%
+   \def {\leavevmode\phantom{x}}}%
+\catcode`\^^M=5\catcode`\ =10\catcode`\^^I=10
+
+\def\ShowFile#1{{\:ObeyIn    \openin15=#1
+  \ifeof15 \:warn{\string\ShowFile{#1}?}\else
+  \input #1 \fi \closein15 }}
+\else  \def\ShowFile#1{\:warn{\string\ShowFile?}}
+\fi\let\Note=\empty   \let\EndNote=\empty
+
+\:CheckOption{NoShow}  \if:option
+   \let\:svShowCode=\:ShowCode
+   \def\ShowOn{\let\Note=\empty
+               \let\:ShowCode=\:svShowCode}
+   \def\ShowOff{\let\Note=\:NoShow
+                \def\:ShowCode##1{}}
+   \def\:NoShow{\begingroup
+      \:NoSpecials{11}{0}{255}\:EndNoShow}
+   \catcode`\/=0   \catcode`\\=11
+   /def/:EndNoShow#1\EndNote{/endgroup}
+   /catcode`/\=0   /catcode`//=12
+\fi\:CheckOption{ShowTop}
+\catcode`\-=13  \catcode`\+=13
+\if:option
+\def\:ShowTop#1{{\par
+   \def\ModifyFrontTitle##1{\def\:AppendSign{}}%
+   \def\ModifyShowLastCode##1{\let\:save=-%
+      \def\:LastCode{#1}%
+      \def-####1####2{\let-=\:save}%
+      \def+####1####2{{\ShowSep\let+=\:ignoreII ####1}}}%
+   \ShowCode#1}}
+
+\def\ShowSep{}
+\def\ShowTop{\:iname\:ShowTop}
+\def\:ignoreII#1#2{}
+\def\:iname#1#2{\def\:next{#2}\def\:temp{\<}%
+   \ifx \:next\:temp
+      \def\:next##1\>{\expandafter#1\csname\:Name{##1}}\else
+   \def\:next{#1#2}\fi   \:next}
+\fi
+\catcode`\-=12  \catcode`\+=12
+\:CheckOption{_^}  \if:option
+\let\:sub=_  \let\:sup=^
+\catcode`\_=13  \catcode`\^=13
+\def_{\ifmmode \:sub \else \string_\fi}
+\def^{\ifmmode \:sup \else \string^\fi}
+  \fi\def\AlProTex{\:warn{AlProTex already loaded}}
+\let\:InitAlProTex=\:undefined
+\let\if:option=\:undefined
+\let\:CheckOption=\:undefined
+\let\:GetOptions=\:undefined
+\let\:temp=\:undefined 
+\:RestoreCatcodes  

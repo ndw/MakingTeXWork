@@ -1,0 +1,44 @@
+\documentstyle[epic]{article}
+
+\pagestyle{empty}
+
+\makeatletter
+\long\def\jputfile#1#2{\openin\@datafile = #1
+\@stillmoretrue
+\loop
+\ifeof\@datafile\relax\else\read\@datafile to\@dataline\fi
+%if file nonexistent, do nothing.
+\ifeof\@datafile\@stillmorefalse
+\else\ifx\@dataline\@empty \relax
+     \else
+\expandafter\expandafter\expandafter\jput\expandafter\splittwoargs%
+\@dataline{#2}
+     \fi
+\fi
+\if@stillmore
+\repeat
+\closein\@datafile
+}
+\makeatother
+
+\begin{document}
+
+\setbox0=\hbox{%
+\input{tex.06.03.tex}%
+}
+
+\makeatletter
+\input{eepic.sty}
+\makeatother
+
+\setbox1=\hbox{%
+\input{tex.06.03.tex}%
+}
+
+\font\foo=grlg at 10pt
+\begin{tabular}{ccc}
+  \box0 &\hbox to .25in{\hfil}& \box1 \\[.2in]
+  \foo (a) & & \foo (b) \\
+\end{tabular}
+
+\end{document}

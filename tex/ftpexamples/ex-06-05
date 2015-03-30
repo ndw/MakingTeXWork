@@ -1,0 +1,91 @@
+\newdimen\unit   \unit=1.375in
+\newdimen\shadeunit
+\newif \ifFirstPass
+\FirstPasstrue
+%\FirstPassfalse  % uncomment this after you have the size you want
+%
+\def\DF{{\cal A}}%
+%
+%The following figure appears in the preface to the \PiCTeX\ manual
+%
+$$   
+\beginpicture
+  \ifFirstPass
+    \savelinesandcurves on "pictex-Arcsine.tex"
+  \else
+    \replot "pictex-Arcsine.tex"
+  \fi
+% \ninepoint  %   (See Appendix E of the TeXbook.)
+  \normalgraphs
+  % Density plot
+  \setcoordinatesystem  units <\unit,.4\unit>  point at 0 0  
+  \setplotarea x from 0 to 1, y from 0 to 2.5 
+  \axis bottom invisible label {\lines {$t$\cr
+    shaded area is $\DF(\beta) - \DF(\alpha)$\cr}} ticks
+      numbered from 0.0 to 1.0 by 0.5   
+      unlabeled short quantity 11
+      length <0pt> withvalues $\alpha$ $\beta$ / at .65 .85 /  /
+  \axis left invisible label {$a(t)$} ticks
+    numbered from 0.0 to 2.0 by 1.0
+    unlabeled short from 0.5 to 2.5 by 1.0  /
+  \plotheading{\lineskiplimit=1pt \lines{%
+     Density\cr
+     $a(t) = 1\big/\bigl(\pi \sqrt{t(1-t)}\,\bigr)$\cr
+     of the arc sine law\cr}}
+  \grid 1 1
+  \putrule from  .65 0.0  to  .65 .66736
+  \putrule from  .85 0.0  to  .85 .89145
+  \shadeunit=.2\unit  \divide\shadeunit by 12
+  \setshadegrid  span <\shadeunit>  point at .75 0
+  \setquadratic
+  \vshade .65 0 .66736   <,,,1pt> .75 0 .73511   .85 0 .89145  /
+  % Move origin to (.5,0)
+  % Left half}
+  \ifFirstPass
+    \setcoordinatesystem  point at -.5 0
+    \inboundscheckon
+    \plot  -.48429 2.55990  -.47553 2.06015  -.46489 1.72936  /
+    \inboundscheckoff
+    \plot  -.46489 1.72936  -.43815 1.32146  -.40451 1.08308  
+           -.36448  .92999  -.31871  .82623  -.26791  .75400 
+           -.21289  .70358  -.12434  .65727   .0      .63662  /
+    % Right half
+    \inboundscheckon
+    \plot   .48429 2.55990   .47553 2.06015   .46489 1.72936  /
+    \inboundscheckoff
+    \plot   .46489 1.72936   .43815 1.32146   .40451 1.08308  
+            .36448  .92999   .31871  .82623   .26791  .75400  
+            .21289  .70358   .12434  .65727   .0      .63662  /
+  \fi
+  % Distribution function 
+  % Set origin of new coordinate system 1.7*1.375in=2.34in
+  %   to the right of the original origin.
+  \setcoordinatesystem  units <\unit,\unit>  point at -1.7 0
+  \setplotarea x from 0 to 1, y from 0 to 1
+  \axis bottom label {$x\vphantom{t}$} ticks
+    numbered from 0.0 to 1.0 by 0.5  unlabeled short quantity 11 /
+  \axis left label {$\DF(x)$} ticks
+    numbered from 0.0 to 1.0 by 0.5  unlabeled short quantity 11 /
+  \plotheading{\lines{%
+    Distribution function\cr
+    $\DF(x) = {2\over \raise1pt\hbox{\seveni ^^Y}} 
+      \arcsin(\sqrt{x}\,)$\cr
+    of the arc sine law\cr}}
+  \linethickness=.25pt  \grid {20} {20}  
+  \linethickness=.4pt   \grid 2 2
+  % Left half
+  % Now move origin of coordinate system up to (.5,.5)
+  \ifFirstPass
+    \setcoordinatesystem  point at -2.2 -.5
+    \plot           -.50000 -.50   -.49901 -.48   -.49606 -.46 
+      -.49104 -.44  -.48439 -.42   -.47553 -.40   -.46489 -.38 
+      -.43815 -.34  -.40451 -.30   -.36448 -.26   -.31871 -.22 
+      -.26791 -.18  -.21289 -.14   -.12434 -.08    .0      .0  /
+    % Right half
+    \plot            .50000  .50    .49901  .48    .49606  .46 
+       .49104  .44   .48439  .42    .47553  .40    .46489  .38 
+       .43815  .34   .40451  .30    .36448  .26    .31871  .22 
+       .26791  .18   .21289  .14    .12434  .08    .0      .0  /
+  \fi
+\endpicture
+$$

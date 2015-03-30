@@ -1,0 +1,39 @@
+\documentstyle{article}
+
+\begin{document}
+
+\input feynman
+
+\begin{picture}(20000,20000) % Start at upper right.
+\thicklines\drawline\photon[\SE\REG](18000,18000)[5]
+\drawline\fermion[\S\REG](\photonfrontx,\photonfronty)[\boxlengthy]
+\drawarrow[\N\ATBASE](\pmidx,\pmidy)
+\drawline\fermion[\W\REG](\photonbackx,\photonbacky)[\photonlengthx]
+\drawarrow[\W\ATTIP](\pmidx,\pmidy)
+% Draw 2 small lines to connect the vector meson (parallel lines) at a corner:
+\thinlines\drawline\fermion[\S\REG](\fermionbackx,\fermionbacky)[150]
+\drawline\fermion[\W\REG](\fermionfrontx,\fermionfronty)[150]
+\drawline\fermion[\SW\REG](\fermionbackx,\fermionbacky)[7000] % Upper || line
+\drawline\fermion[\S\REG](\fermionbackx,\fermionbacky)[75] % Find the centre of
+\drawline\fermion[\E\REG](\fermionbackx,\fermionbacky)[75] %the double fermion
+\drawline\gluon[\SW\REG](\fermionbackx,\fermionbacky)[5]
+\put(\gluonfrontx,\gluonfronty){\circle*{500}} % A `blob': the vector->gauge trans.
+\drawline\fermion[\S\REG](\fermionbackx,\fermionbacky)[75] % Draw to position the
+\drawline\fermion[\E\REG](\fermionbackx,\fermionbacky)[75] % Second parallel line
+\drawline\fermion[\NE\REG](\fermionbackx,\fermionbacky)[7000] % Lower || line
+\put(\gluonbackx,\gluonbacky){\circle*{500}}
+\gaplength=300
+\drawline\scalar[\NW\REG](\gluonbackx,\gluonbacky)[3] % Left half of scalar
+\thicklines\drawarrow[\NW\ATBASE](\scalarbackx,\scalarbacky)
+\gaplength=300 \thinlines
+\drawline\scalar[\SE\REG](\gluonbackx,\gluonbacky)[3] % Right half of scalar
+\put(\pfrontx,\scalarbacky){{\bf H}$^0$}
+\put(\gluonfrontx,\gluonfronty){\ $\,{}_{\longleftarrow f_6(\omega,p_+\cdot q_-)}$}
+\drawline\fermion[\NW\REG](\photonfrontx,\photonfronty)[2000]
+\drawarrow[\NW\ATBASE](\pbackx,\pbacky)
+\drawline\fermion[\SE\REG](\photonbackx,\photonbacky)[2000]
+\drawarrow[\NW\ATTIP](\pmidx,\pmidy)
+\put(\pbackx,\pbacky){$\,\,p+q$} % \, gives extra space in math mode.
+\end{picture}
+
+\end{document}

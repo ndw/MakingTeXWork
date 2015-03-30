@@ -1,0 +1,16 @@
+\newbox\tgifbox
+\newdimen\tgifwd
+\font\tgifa=tgifa at 72.27truept
+\setbox\tgifbox=\vbox{\hbox{%
+\tgifa\char0\char1\char2\char3}}
+\tgifwd=\wd\tgifbox
+\setbox\tgifbox=\hbox{\vbox{\hsize=\tgifwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\tgifa\char0\char1\char2\char3}
+\hbox{\tgifa\char4\char5\char6\char7}
+\hbox{\tgifa\char8\char9\char10\char11}}}
+\ifx\parbox\undefined
+    \def\settgif{\box\tgifbox}
+\else
+    \def\settgif{\parbox{\wd\tgifbox}{\box\tgifbox}}
+\fi

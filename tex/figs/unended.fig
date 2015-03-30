@@ -1,0 +1,13 @@
+\begin{figure}
+\begin{center}
+\begin{FramedVerb}
+% This is UNENDED.TEX
+Now is the time for all good men
+to come to the aid of their country.
+% Note: there's no \bye command to end 
+% TeX's processing...
+\end{FramedVerb}
+\caption{The example file ``{\tt unended.tex}''}
+\label{fig:run:unended}
+\end{center}
+\end{figure}

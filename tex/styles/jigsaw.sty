@@ -1,0 +1,318 @@
+% JIGSAW.STY a style addition to the ORA style for my book...
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\fileversion{1.0}
+\def\filedate{13Jun93}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\@ifundefined{jigsawstyle}{}{\endinput}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\immediate\write\sixt@@n{File: `jigsaw.sty' 
+\fileversion\space <\filedate> (ndw)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\jigsawstyle{Version 1.1 (ndw)}
+%
+% Fixed \LARGE in extdesc
+% added \image for bm2font'd images
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define a ``extdescription'' environment that allows filename extensions
+% to be described like this:
+%
+%  ----- This is the explanation for the ``xyz'' extension.  It is
+%  XYZ   several paragraphs long and looks like this.  Blah, blah.
+%        Blah, blah, blah.  Blah blah, blah blah, blah blah blah.
+%        Blah blah, blah blah, blah blah blah.  Blah, blah, blah.
+%
+%        Blah, blah, blah.  Blah blah, blah blah, blah blah blah.
+%        Blah blah, blah blah, blah blah blah.  Blah, blah, blah.
+%        Blah, blah, blah.  Blah blah, blah blah, blah blah blah.
+%        Blah blah, blah blah, blah blah blah.  Blah, blah, blah.
+%
+\newlength{\hangispace} \setlength\hangispace{.6in}
+\newlength{\hangvspace} \setlength\hangvspace{6pt}
+
+\newenvironment{extdescription}{\beghang}{\endhang}%
+\def\beghang{\list {}% no default label
+  {\def\makelabel##1{\hss\llap{\vbox to\hangvspace
+   {\hrule height1.5pt depth0pt
+    \vspace{3pt}\Large\tt%
+    \hbox to \hangispace{##1\index{##1 files@{\uppercase{##1} files}}\hss}\vss}%
+   }}%
+  \labelwidth\hangispace \labelsep5pt
+  \leftmargin\labelwidth \addtolength\leftmargin{\labelsep}%
+}}
+\def\endhang{\endlist}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define a ``cmddescription'' environment that allows command keys to
+% be described like this:
+%
+%  C-x   This is the description of the ``C-x'' command.  It is
+%        several paragraphs long and looks like this.  Blah, blah.
+%        Blah, blah, blah.  Blah blah, blah blah, blah blah blah.
+%
+\newlength{\cmdhangispace} \setlength\cmdhangispace{.6in}
+
+\newenvironment{cmddescription}{\begcmdhang}{\endcmdhang}%
+\def\begcmdhang{\list {}% no default label
+  {\def\makelabel##1{%
+    \setbox0=\hbox{\tt ##1}\ifdim\wd0<\cmdhangispace\wd0=\cmdhangispace\fi%
+    \hss\llap{\tt\hbox{\box0\hss}}}%
+  \labelwidth\cmdhangispace \labelsep5pt
+  \leftmargin\labelwidth \addtolength\leftmargin{\labelsep}%
+}}
+\def\endcmdhang{\endlist}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define a ``functiontable'' environment that makes a centered table
+% of command key functions.
+\def\tblfunc#1#2{\multicolumn{2}{l|}{{\tt #1} (#2)}}
+
+\def\begfunctable#1#2{%
+  \def\functablecaption{#1}
+  \def\functablelabel{#2}
+  \begin{table}
+    \hbadness=8000
+    \begin{center}
+      \begin{tabular}{|>{\tt}l|m{0.1in}p{3in}|}
+        \hline
+        \rm Command & \multicolumn{2}{c|}{\rm Function or Variable} \\
+        \hline
+}
+
+\def\endfunctable{%
+    \hline
+    \end{tabular}
+    \caption{\functablecaption}
+    \label{\functablelabel}
+  \end{center}
+\end{table}
+}
+
+\newenvironment{functiontable}{\begfunctable}{\endfunctable}
+
+\newbox\needbox
+\newenvironment{need}{\beginsbox{\needbox}}{\endsbox\usebox{\needbox}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Indented examples
+%
+\newdimen\indent@length
+\newenvironment{variableindent}[1]%
+  {\indent@length=#1\relax%
+   \dimen0\textwidth\advance\dimen0-\indent@length%
+   \advance\dimen0-\leftmargin% 
+   \advance\dimen0 .25in%
+   \advance\dimen0-\ipindent%
+   \beginsbox{\sidebarbox}
+   \begin{minipage}{\dimen0}}
+  {\end{minipage}\endsbox%
+   \noindent\leavevmode\hskip\indent@length\usebox{\sidebarbox}}
+
+\newenvironment{exindent}{\variableindent{.25in}}{\endvariableindent}
+
+% A ttindent environment that combines exindent and alltt...
+\def\ttindent{\bgroup\@totalleftmargin=\example@indent\begin{alltt}}
+\def\endttindent{\end{alltt}\egroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EPS ``pages''
+%
+\def\@epspage#1#2#3[#4]#5#6{%
+% #1 = image
+% #2 = image width
+% #3 = image offset
+% #4 = short caption
+% #5 = caption
+% #6 = label
+  \begin{figure}
+    \setlength{\unitlength}{1in}
+    \begin{center}
+      \begin{picture}(4.25,5.5)
+        \put(#3){\epsfig{figure=figs/#1,width=#2}}
+        %
+        \drawline(4.25,5.25)(4,5.25)(4,5.5)(4.25,5.25)(4.25,0)%
+                 (0,0)(0,5.5)(4,5.5)
+      \end{picture}
+    \end{center}
+    \caption[#4]{#5}
+    \label{#6}
+  \end{figure}
+}
+
+\def\@@epspage#1#2#3#4#5{\@epspage{#1}{#2}{#3}[#4]{#4}{#5}}
+
+\def\epspage#1#2#3{%
+  \@ifnextchar[{\@epspage{#1}{#2}{#3}}{\@@epspage{#1}{#2}{#3}}% ]
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Logos...
+%
+\input{logos.sty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Indexing and glossary making...
+%
+%\def\idx#1{\WildStrawberry{#1}\index{#1}}
+%\def\ixx#1#2{\WildStrawberry{#1}\index{#2}}
+%\def\glo#1{\YellowOrange{#1}\marginpar{\tiny glo:#1}\glossary{#1}}
+%\def\gxx#1#2{\YellowOrange{#1}\marginpar{\tiny glo:#2}\glossary{#2}}
+\def\idx#1{#1\index{#1}}
+\def\ixx#1#2{#1\index{#2}}
+\def\glo#1{#1}
+\def\gxx#1#2{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Relative font resizing and \key
+%
+% From the TeXbook.  Get the non-fractional digits of a point size returned
+% by evaluating \the<dimen>.
+%
+\let\@tempa=\\
+{\catcode`.=12 \catcode`p=12 \catcode`t=12 \gdef\\#1.#2pt{#1}}
+\let\get@ptsize=\\
+\let\\=\@tempa
+
+% This macro defines \fontrelsize to be the current font size + #1pt.  In
+% other words, if the current font size is 8.3pt and you issue the command
+% \setupfontrelsize{-2}, \fontrelsize will be defined to be "6.3".  The
+% \fontrelsize control sequence can be passed to \fontsize to change the
+% size of the font.
+%
+\def\setupfontrelsize#1{%
+{%
+  \def\digitsdigit##1{##1}%
+  \def\digitstens##1##2{0.##1##2}%
+  \def\digitshund##1##2##3{##1.##2##3}%
+  \def\digitsthou##1##2##3##4{##1##2.##3##4}%
+  \def\digitstenth##1##2##3##4##5{##1##2##3.##4##5}%
+%
+  \dimen0=\f@size pt\relax%
+  \advance\dimen0 #1pt\relax%
+  \multiply\dimen0 by 100\relax%
+  \count0=\expandafter\get@ptsize\the\dimen0\relax%
+%
+  \ifnum\count0<10\relax%
+    \xdef\fontrelsize{expandafter\digitsdigit\the\count0}%
+  \else%
+    \ifnum\count0<100\relax%
+      \xdef\fontrelsize{\expandafter\digitstens\the\count0}%
+    \else%
+      \ifnum\count0<1000\relax%
+        \xdef\fontrelsize{\expandafter\digitshund\the\count0}%
+      \else%
+        \ifnum\count0<10000\relax%
+          \xdef\fontrelsize{\expandafter\digitsthou\the\count0}%
+        \else%
+          \ifnum\count0<100000\relax%
+            \xdef\fontrelsize{\expandafter\digitstenth\the\count0}%
+          \else%
+            \typeout{Warning: \string\fontrelsize\space confused by \count0.}%
+            \xdef\fontrelsize{10}%
+          \fi%
+        \fi%
+      \fi%
+    \fi%
+  \fi%
+}}
+
+% Initialize \fontrelsize to the current font size.
+\setupfontrelsize{0}
+
+% Define a \key macro that puts its argument in a rounded box (by relying
+% on the 'fancybox' style).  The argument is set in a slightly smaller \tt
+% font and the box is raised a bit.
+\def\key#1{%
+{%
+  \fboxsep=0.5pt%
+  \setupfontrelsize{-1}%
+  \rm\fontsize{\fontrelsize}{\f@baselineskip}\selectfont%
+  % use \box0 to find the appropriate strut size
+  \setbox0=\hbox{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz}% 
+  \def\strut{\vrule height\ht0 depth\dp0 width0pt}%
+  \setbox1=\hbox{#1}%
+  \ifdim\wd1<1em\setbox1=\hbox to 1em{\hfil#1\hfil}\fi%
+  \leavevmode\raise.5pt\hbox{\ovalbox{\strut\box1}}%
+}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Adjust spacing in tables
+%
+\def\tabular{\bgroup\fontsize{10}{11pt}\selectfont\begin{defaulttabular}}
+\def\endtabular{\end{defaulttabular}\egroup}
+
+\def\xtable{\bgroup\fontsize{10}{11pt}\selectfont\begin{longtable}}
+\def\endxtable{\end{longtable}\egroup}
+
+\LTleft=0pt
+\LTcapwidth=\textwidth
+
+\def\LT@mkcaption#1{%
+  \LT@mc{\LT@cols}{l}{\hbox to \z@{\hskip-\tabcolsep\parbox[t]{\LTcapwidth}{%
+    \setbox\@tempboxa\hbox{\rm\small\it #1}%
+   \ifdim \wd\@tempboxa >\hsize {\rm\small\it #1}
+     \else \hbox to\hsize{\box\@tempboxa\hfil}\fi
+            \endgraf\vskip\baselineskip}\hss}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix footnotes
+%
+\def\@ff[#1]#2{\@xfootnote[#1]{#2}}
+\def\@@ff#1{\@ff[1]{#1}}
+\def\ff{\@ifnextchar[{\@ff}{\@@ff} %]
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Misc definitions...
+%
+\font\regfont=grbk at 5pt
+\font\circfont=lcircle10
+\def\regtm{%
+  \setbox0=\hbox{\circfont\char"65\relax}%
+  \setbox1=\hbox to \wd0{\kern.5\wd0\vbox to \wd0{\kern.5\wd0\box0\vss}\hss}%
+  \raise1ex\hbox{%
+    \rlap{\hbox to \wd1{\hss\vbox to \wd1{\vss\hbox{\hskip.6pt\regfont R}\vss}\hss}}%
+    \box1%
+    }%
+}
+
+\def\@cs[#1]#2{\texttt{\bs #2}\index{#1@\protect\texttt{\protect\bs #1}}}
+\def\@@cs#1{\@cs[#1]{#1}}
+\def\cs{\@ifnextchar[{\@cs}{\@@cs} %]
+  }
+
+\def\env#1{\texttt{#1}}
+\def\envvar#1{\texttt{#1}}
+\def\nn#1{#1n}
+
+\def\ptag#1{{\rm\small(#1)}}
+\def\rtag#1{(#1)}
+
+\def\frac#1#2{{}^{#1}\kern-.25em/\kern-.2em{}_{#2}}
+
+\def\bs{\char"5C{}}
+\def\tstrut{\setbox0=\hbox{T}\dimen0=\ht0\advance\dimen0 by 2pt%
+  \vrule height\dimen0 depth0pt width0pt\relax}
+\def\caret{\char'136{}}
+
+\def\filename#1{{\def\\{\bs}\textit{#1}}}
+\def\program#1{\textit{#1}}
+\def\product#1{\textit{#1}}
+\def\ext#1{{#1}}
+\def\cmd#1{{\tt #1}}
+\def\ctandir#1{\filename{#1}}
+
+\def\ttopenbrace{{\tt \char123}}
+\def\ttclosebrace{{\tt \char125}}
+\def\ttpercent{{\tt \char37}}
+\def\ttpound{{\tt \char35}}
+\def\tttilde{{\tt \char126}}
+\def\ttdollar{{\tt \char36}}
+\def\tthat{{\tt \char"5E}}
+\def\ttunder{{\tt \char"5F}}
+\def\ttbackslash{{\tt \char"5C}}
+
+% need _real_ CMTT space...
+\def\ttspace{{\rm\fontfamily{cmtt}\selectfont \char32}}
+

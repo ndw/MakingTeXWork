@@ -1,0 +1,31 @@
+\begin{table}
+  \begin{center}
+    \begin{tabular}{lll}
+Apricot	          & GreenYellow        & RedOrange       \\
+Aquamarine	  & JungleGreen        & RedViolet       \\
+Bittersweet	  & Lavender           & Rhodamine       \\
+Black		  & LimeGreen          & RoyalBlue       \\
+Blue		  & Magenta            & RoyalPurple     \\
+BlueGreen	  & Mahogany           & RubineRed       \\
+BlueViolet	  & Maroon             & Salmon          \\
+BrickRed	  & Melon              & SeaGreen        \\
+Brown		  & MidnightBlue       & Sepia           \\
+BurntOrange	  & Mulberry           & SkyBlue         \\
+CadetBlue	  & NavyBlue           & SpringGreen     \\
+CarnationPink	  & OliveGreen         & Tan             \\
+Cerulean	  & Orange             & TealBlue        \\
+CornflowerBlue	  & OrangeRed          & Thistle         \\
+Cyan		  & Orchid             & Turquoise       \\
+Dandelion	  & Peach              & Violet          \\
+DarkOrchid	  & Periwinkle         & VioletRed       \\
+Emerald		  & PineGreen          & White           \\
+ForestGreen	  & Plum               & WildStrawberry  \\
+Fuchsia		  & ProcessBlue        & Yellow          \\
+Goldenrod	  & Purple             & YellowGreen     \\
+Gray		  & RawSienna          & YellowOrange    \\
+Green		  & Red                &                 \\
+      \end{tabular}
+    \caption{Predefined colors}
+    \label{tab:colors}
+  \end{center}
+\end{table}

@@ -1,0 +1,30 @@
+$$   \beginpicture
+      \ifFirstPass
+        \savelinesandcurves on "Arcsine.tex"
+      \else
+        \replot "Arcsine.tex"
+      \fi
+      \normalgraphs
+      % Density plot
+      \setcoordinatesystem  units <\unit,.4\unit>  point at 0 0  
+      \setplotarea x from 0 to 1, y from 0 to 2.5 
+      \axis bottom invisible label {\lines {$t$\cr
+        shaded area is $\DF(\beta) - \DF(\alpha)$\cr}} ticks
+          numbered from 0.0 to 1.0 by 0.5   
+          unlabeled short quantity 11
+          length <0pt> withvalues $\alpha$ $\beta$ / at .65 .85 /  /
+      \axis left invisible label {$a(t)$} ticks
+        numbered from 0.0 to 2.0 by 1.0
+        unlabeled short from 0.5 to 2.5 by 1.0  /
+      \plotheading{\lineskiplimit=1pt \lines{%
+         Density\cr
+         $a(t) = 1\big/\bigl(\pi \sqrt{t(1-t)}\,\bigr)$\cr
+         of the arc sine law\cr}}
+      \grid 1 1
+      \putrule from  .65 0.0  to  .65 .66736
+      \putrule from  .85 0.0  to  .85 .89145
+      \shadeunit=.2\unit  \divide\shadeunit by 12
+      \setshadegrid  span <\shadeunit>  point at .75 0
+      \setquadratic
+      \vshade .65 0 .66736   <,,,1pt> .75 0 .73511   .85 0 .89145  /
+      ...

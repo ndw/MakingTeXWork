@@ -1,0 +1,15 @@
+\newbox\smpchcbox
+\newdimen\smpchcw
+\font\smpchca=smpchca at 72.27truept
+\setbox\smpchcbox=\vbox{\hbox{%
+\smpchca\char0\char1}}
+\smpchcw=\wd\smpchcbox
+\setbox\smpchcbox=\hbox{\vbox{\hsize=\smpchcw
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\smpchca\char0\char1}
+\hbox{\smpchca\char2\char3}}}
+\ifx\parbox\undefined
+    \def\setsmpchc{\box\smpchcbox}
+\else
+    \def\setsmpchc{\parbox{\wd\smpchcbox}{\box\smpchcbox}}
+\fi

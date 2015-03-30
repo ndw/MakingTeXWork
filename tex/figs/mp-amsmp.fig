@@ -1,0 +1,47 @@
+\begin{figure}
+  \begin{center}
+    \font\chapfont=cmr7
+    \font\titlfont=cmbx7
+    \font\secfont=cmcsc10 at 7pt
+    \font\txtfont=cmr7
+    \font\itfont=cmti7
+    \baselineskip=8pt
+    \parskip=\baselineskip
+    \parindent=0pt
+    \fbox{\hbox{%
+    \begin{minipage}{\interiorwidth}%
+
+      \hbox to 3.75in{\hfil \chapfont CHAPTER I\hfil}
+      \vskip 7pt
+
+      \hbox to 3.75in{\hfil \titlfont UNSOLVED PROBLEMS\hfil}
+      \vskip 14pt
+
+      \hbox to 3.75in{\hfil \secfont 1.1\ \ Odd Perfect Numbers\hfil}
+      \vskip 8pt
+
+      \small\txtfont
+      A number is said to be {\itfont perfect\/} if it
+      is the sum of its divisors.  For example, 6 is
+      perfect because $1+2+3 = 6$, and 1, 2, and 3
+      are the only numbers that divide evenly into 6 
+      (apart from 6 itself).
+
+      \vskip\baselineskip
+      It has been shown that all even perfect numbers
+      have the form $$2^{p-1}(2^{p}-1)$$ where $p$
+      and $2^{p}-1$ are both prime.
+
+      \vskip\baselineskip
+      The existence of {\itfont odd\/} perfect numbers is 
+      an open question.
+
+      \vskip.5in
+      \hbox to 3.75in{\hfil Typeset by \AMSTeX}
+      \begin{center} 1 \end{center}
+    \end{minipage}%
+    }}
+  \caption{AMS Sample Page}
+  \label{fig:amsresults}
+  \end{center}
+\end{figure}

@@ -1,0 +1,23 @@
+\colcount=128
+\begin{xtable}{r|c|c|c|c|c|c|c|c|}
+  \caption[]{The Cork Font Encoding (continued)\label{tab:font:cork2}}\\
+  \hline
+             & \bf 0 & \bf 1 & \bf 2 & \bf 3 & \bf 4 & \bf 5 & \bf 6 & \bf 7\strut \\ \hline
+  \colnum{8} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{9} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{A} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{B} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{C} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{D} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{E} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{F} & \row \\ \cline{2-9}
+             & \row \\ \hline
+             & \bf 8 & \bf 9 & \bf A & \bf B & \bf C & \bf D & \bf E & \bf F\strut \\ 
+\end{xtable}

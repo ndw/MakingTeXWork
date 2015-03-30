@@ -1,0 +1,2119 @@
+\chapter{Fonts} 
+\RCSID$Id: ch05.tex,v 1.1 2002/08/23 14:58:46 nwalsh Exp $ 
+\label{chap:fonts}
+
+\ifincludechapter\else\endinput\fi
+
+All of the common \TeX\ macro packages use 
+the \idx{Computer Modern fonts}\index{fonts}\index{tex@\TeX!fonts}\index{fonts!Computer Modern}
+by default.  In fact, the Computer Modern fonts are so frequently used
+in \TeX\ documents that some people believe they are \emph{the} \TeX\ fonts
+and that no other options are available.
+
+This is not the case.  In fact, using different fonts in \TeX\ is quite
+easy.  However, many interrelated font issues can be quite complicated,
+and it is possible to do things that
+make your documents print incorrectly (or make them unprintable).
+
+This chapter explores all of the issues related to fonts and how these
+issues are resolved by a combination of font files, \TeX\ macros,
+\dvidriver{}s, and careful planning.  At a high level, it works like
+this:
+
+\begin{enumerate}
+  \item \TeX\ macros 
+%are interpreted which \emph{eventually}
+        select a 
+        font (by assigning \verb|\font\fontid=fonttfm|).  The macros
+%which are interpreted 
+        may be very simple or quite complex (as is
+        the case in \LaTeX's New Font Selection Scheme).
+  \item \TeX\ loads the metric information from 
+        \filename{fonttfm.tfm}\index{fonttfmtfm files@fonttfm.tfm files}.
+        Many implementations of \TeX\ look for this file in the 
+        directories on the \envvar{TEXFONTS} path.  \TeX\ cannot process
+        your document if it cannot find 
+        the \ext{TFM} file\index{TFM files}.\footnote{Some
+        fonts may be preloaded in the format file.  \TeX\ does not need
+        \ext{TFM} files for those fonts since the metric information is
+        already available.}
+  \item \TeX\ writes a \ext{DVI} file\index{DVI files}.  The \ext{DVI} 
+        file contains the name
+        of each font (the name of the \ext{TFM} file) and the magnification
+        used (magnification is discussed in the section 
+        ``\nameref{sec:issueofsize}''
+        later in this chapter).
+  \item The \dvidriver\ attempts to locate font files for each font used
+        at each magnification.  Depending on the \dvidriver, fonts can come
+        from many places.  Many drivers consult a list of built-in fonts to
+        see if the desired font resides in the printer.  Some also consult
+        a list of font substitutions.  (This can be used to substitute existing
+        fonts for fonts that you do not have, like Computer Modern Roman
+        in place of Times Roman if you don't have Times Roman.)
+
+        Assuming that the font is not 
+        built-in\index{fonts!built-in} or replaced by substitution
+        of a built-in font, the \dvidriver\ looks for a font file.  Most
+        modern \dvidriver{}s look for \ext{PK} fonts, although some also
+        look for \ext{GF}\index{fonts!GF} 
+        and \ext{PXL} fonts\index{fonts!PXL} as well.
+
+        The exact location of these files varies.  Some implementations look
+        in the directories on the \envvar{TEXFONTS} path, others look in
+        the \envvar{TEXPKS} or \envvar{PKFONTS} paths.
+
+        A typical font directory on a \Unix\ system is 
+        \filename{/usr/local/lib/tex/fonts/pk}.
+        The files in this directory typically have names of the form
+        \filename{tfmname.999pk}; where \textit{tfmname} is
+        the name of the font and \textit{999} is the resolution.
+
+        On file systems which have short filenames (for example, MS-DOS)
+        a typical font directory is 
+        \filename{\bs tex\bs fonts\bs 999dpi} (or
+        \filename{\bs tex\bs fonts\bs dpi999}).\footnote{Older \dvidriver{}s
+        may still use \ext{PXL} files.  They are frequently stored 
+        in directories
+        with names like \filename{pxl999}.}  The files are then
+        simply \filename{tfmname.pk}.
+
+        Some \dvidriver{}s employ automatic font generation to attempt
+        to create the font if it cannot be found.
+  \item The \dvidriver\ produces output suitable for a particular device.
+        This may include one or more forms of downloaded fonts as well as
+        requests for built-in fonts that are assumed to exist.
+\end{enumerate}
+
+\begin{note}{NOTE}
+  \TeX\ output isn't printable directly.
+  \TeX\ typesets a document in a device-independent fashion; it's the
+  \dvidriver\ that actually {\em prints\/} the document.  This is important
+  because many of the font issues are really \dvidriver\ issues more than
+  \TeX\ issues, and because the distinction between \TeX{}ing a document
+  and printing a document is another layer of complexity that can be a
+  source of difficulty.
+\end{note}
+
+\section{What \protect\TeX\ Needs To Know}
+
+\TeX\ needs remarkably little information about a font.  Recall from
+Chapter~\ref{chap:tex}, \textit{\nameref{chap:tex}}, that \TeX\ typesets
+each page using ``\idx{boxes} and \idx{glue}.''  In order to perform this
+function, \TeX\ needs to know only the size of each character (its
+width, height, and 
+depth)\index{boxes!height}\index{boxes!depth}\index{boxes!width}\index{characters!as  boxes}\index{height of box}\index{depth of box}\index{width!of box}.
+In practice, \TeX\ fonts contain a little
+bit more information than simply the size of each character.
+Generally, they contain ligature and kerning information as well.
+
+{\em Ligatures\/}\index{ligatures} are a 
+typographic convention for replacing some letter
+combinations with single symbols.  In English, this is done solely to improve
+the appearance of the letter combinations.  Figure~\ref{fig:filig}
+shows a common ligature in English, ``fi.''  Other common ligatures
+in English are ``ff'', ``fl'', and the combinations ``ffi'' and ``ffl.''
+Other languages have different ligatures.
+
+\epsbox[fi-ligs.eps]{fig:filig}{``fi'' as two 
+  characters and as a ligature}
+
+{\em Kerning\/}\index{kerning} is the process of 
+adding or removing small amounts of space
+between characters
+to improve the appearance of particular letter combinations.   Although every
+character has a natural width, some combinations of characters give the
+illusion of too much or too little space.  Figure~\ref{fig:kerning}
+shows a common example in the word ``We.''  
+
+\epsbox[we-we.eps]{fig:kerning}{``We'' unkerned 
+  and kerned}
+
+This is all the information that \TeX\ needs, and it is all that is contained
+in the \ext{TFM} files that \TeX\ uses.\footnote{Actually, \ext{TFM} files
+contain a little bit more information.  The width of a space, the amount of
+stretch and shrink allowed between words, the amount of extra space allowed
+after a punctuation mark, and some specialized information used only in fonts
+for mathematics also appear in the \ixx{\ext{TFM} files}{TFM files}.  In 
+principle, \ext{TFM}
+files can contain even more information, although they rarely do.  For a
+complete, detailed description of the information stored in a \ext{TFM} file,
+consult Appendix F of {\it The \TeX{}book}~\cite{kn:texbook} and \textit{The
+TF To PL Processor}~\cite{texware:tftopl}.}
+
+\subsection{Selecting a Font in \protect\TeX}
+
+\TeX's macro language includes a \cs{font} primitive for
+loading a 
+font\index{fonts!metrics}\index{fonts!selecting  with tex@selecting  with \TeX}\index{metrics font}.  This primitive operation 
+associates a control sequence\index{control sequences!font}
+with the metrics in a particular \ext{TFM} file.  For example, the
+following line associates the control sequence \cs{tinyfont} with
+the metrics in \filename{cmr5.tfm} (the Computer Modern Roman 5pt font):
+
+\begin{shortexample}
+\font\tinyfont=cmr5
+\end{shortexample}
+
+\begin{note}{NOTE}
+  Remember, only letters can appear in a \TeX\ control sequence.  You
+  cannot say \verb|\font\cmr5=cmr5| because \cs{cmr5} is not
+  a valid control sequence.
+\end{note}
+
+The control sequence defined with \cs{font} can subsequently be
+used to change the current font.   After the above command,
+\cs{tinyfont} in your document selects the Computer
+Modern Roman 5pt font as the current font.
+
+In practice, using the primitive operations to select fonts has a
+number of disadvantages.  Later in this chapter,
+the worst of these disadvantages is described
+and a better alternative is offered.  For simplicity, the primitive
+operations are used in most of the examples in this chapter.
+
+\subsection{Which Character Is Which?}
+
+How does \TeX\ know which
+character\index{characters!array as font} to 
+use when it reads a symbol from an input file?  The
+answer is simple: \TeX\ considers each font to be an array of
+characters.  It uses the numeric 
+ASCII\index{ASCII character set!code in font array} 
+code of each character to
+determine what element in the array to use.\footnote{This is true even
+if your computer's natural character set is not ASCII.  It is the
+responsibility of the implementor to map the computer's natural
+character set into ASCII.}  
+This is a reasonable and efficient scheme as long as the ASCII values
+of the characters in your input file are the same as the metric information
+that \TeX\ is using.
+
+The section called ``\nameref{sec:fonts:encodingvec}'' in this chapter
+describes how the ordering of characters in a font is determined. It also 
+discusses
+some of the problems that can arise when \TeX\ and your printer have
+conflicting information about the arrangement of characters in the font.  The
+``\nameref{sec:fonts:virtualfonts}'' section describes the \TeX\ mechanism for
+constructing fonts with different arrangements of characters.
+
+%Some implementations of \TeX\ allow you to define a custom mapping
+%between the computer's displayed font and the ASCII character (or
+%characters) that it represents.  For example, \emTeX\ has a feature
+%that allows you to define ``\TeX\ Code Pages'' which perform this
+%mapping.  This feature is unimportant, albeit very convenient for the
+%typist, and can be ignored.  For a number reasons, explored in the
+%``\nameref{sec:fonts:encodingvec}'' and
+%``\nameref{sec:fonts:virtualfonts}'' sections of this chapter, another
+%level of translation when \TeX\ reads the input file cannot solve many
+%of the problems that occur when using fonts.\editorial{this is confusing!}
+
+\section{The Issue of Size}
+\label{sec:issueofsize}
+
+In the purest sense, selecting a font determines only 
+what shape\index{shape of fonts}\index{fonts!shape} each 
+character will have; it does not determine the 
+size\index{size of fonts}\index{fonts!size} of the font.
+Unfortunately in practice, the issue of shape and size cannot be
+separated.  The same shapes {\em appear\/} to be different at different
+sizes.  
+\ixx{\textit{Optical scaling}}{optical scaling}\index{scaling!optical} 
+uses different designs to
+make letters at different sizes appear to have the same shape.
+Conversly, \idx{linear scaling}\index{scaling!linear} produces 
+characters with
+exactly the same shape at different sizes, although they appear
+slightly different.
+
+%In Figure~\ref{fig:sizeandshape}, for example, only the first
+%row of R's {\em appear\/} to be from exactly the same font.  This is because
+%the characters in the first row were designed to appear the
+%same at the sizes shown.  This is called {\em optical scaling}.  The
+%remaining three rows show each of the fonts from the first row {\em
+%linearly scaled\/} to the requested size.
+%
+%\input{ft-scale.fig}
+
+Because the size of an object affects the way that the human eye and
+the brain perceive its shape, a simple linear scaling of each
+character does not produce the most aesthetically pleasing results.
+To overcome this problem, \TeX\ uses two different quantities to
+express the notion of size: design size and magnification.
+
+{\em Design size\/}\index{fonts!design size}
+addresses the issue of perception: a font looks most like
+the way it was designed to appear when printed at or close to its
+design size.  Furthermore, two fonts with different design sizes (say
+8pt and 12pt) that are the same typeface should {\em appear\/}
+identical when printed at 8pt and 12pt, respectively, even though the
+actual shapes may be slightly different.  The design size of a font is
+intrinsic to the font itself and cannot be changed or influenced by
+\TeX.  It is important because it has a direct impact on the aesthetics
+of the typeset page.
+
+{\em Magnification\/}\index{fonts!magnification} addresses the 
+notion of linear scaling.  Changing 
+magnifications
+changes the size of each character without altering its actual shape.
+Although, as noted above, changing its size may change its {\em apparent\/}
+shape.  In general, you should print fonts as close to their design
+size as possible---in other words, with a magnifcation as close to 1.0 as
+possible.  Figure~\ref{fig:Rs} demonstrates how different characters
+may look when printed at very large magnifications.  
+%
+%The two R's have
+%the same apparent shape when printed at 10pt and 17pt, respectively
+%(``{\fontfamily{cmr}\fontshape{n}\fontsize{10}{12pt}\selectfont R}'' and
+%``{\fontfamily{cmr}\fontshape{n}\fontsize{17}{18pt}\selectfont R}'', see?).
+
+\epsbox[two-rs.eps]{fig:Rs}{The Computer Modern Roman letter ``R'' at 150pt:
+  (a) from a 5pt design; (b) from a 17pt design}
+
+\subsection{Expressing Design Size in \protect\TeX}
+
+The design size\index{fonts!design size} of 
+a font is an integral part of the \ext{TFM} file (because
+it is intrinsic to the font that 
+the \ext{TFM} file\index{TFM files!design size} describes).
+In order to select a different design size, you must select a
+different \ext{TFM} file.  For example, the Computer Modern Roman font
+is usually distributed at eight design sizes: 5, 6, 7, 8, 9, 10, 12,
+and 17 points.  Metrics for these sizes are stored in the \ext{TFM}
+files \filename{cmr5.tfm}, \filename{cmr6.tfm}, \filename{cmr7.tfm},
+$\ldots$, and \filename{cmr17.tfm}.
+
+Every font that you select has a specific design size, even though you may
+elect to use the font at another size.
+
+%When you select a font in \TeX, you are really selecting a font and a
+%design size.
+
+\subsection{Expressing Magnification in \protect\TeX}
+
+Magnification\index{fonts!magnification} can be 
+expressed either implicitly or explicitly in
+\TeX.  Implicitly, magnification can be expressed by selecting a
+particular font \verb|at| a particular size.  For example, the
+following line defines the control sequence \cs{big} to be the
+Computer Modern Roman 10pt font \verb|at| a size of 12pt (an implicit
+magnification of 120\%):
+
+\begin{shortexample}
+\font\big=cmr10 at 12pt
+\end{shortexample}
+
+Explicit magnification is selected by requesting a font
+\verb|scaled| to a particular extent.  For example, the following
+line defines the control sequence \cs{bigger} to be the Computer
+Modern Roman 10pt font at a magnification of 144\% (in other words,
+at 14.4pt):
+
+\begin{shortexample}
+\font\bigger=cmr10 scaled 1440
+\end{shortexample}
+
+As you can see, \TeX\ expects the \verb|scaled| magnification to be ten times
+the percentage of magnification.  The magnification that you request must be
+an integer (you can't say \verb|scaled 1440.4|).  Multiplying the
+magnification by 10 allows \TeX\ to accept fractional percentages like
+104.5\%.
+
+\subsection{Standard Magnifications}
+
+\TeX\ provides seven standard 
+magnifications.  There are several good
+reasons to use these magnifications whenever possible.  The most
+important is that most \TeX\ systems can easily print fonts at
+these sizes.  As described later in the section ``\nameref{sec:printing},''
+\TeX's ability to select any font at any magnification does
+not guarantee that it can be printed at that size.  By using standard
+sizes, you increase the likelihood that your document will be
+printable on your system and on other \TeX\ systems (if portability is
+an issue).  Using standard sizes will also give consistency to your
+documents.  If you write many documents separately that may eventually
+be collected together (as a collection of short stories or a series of
+technical reports, for example), the internal consistency of sizes
+will make them appear more uniform.  Finally, the standard sizes have
+aesthetic characteristics as well.  Each size is 1.2 times the
+preceding size.  The geometric relationship between the sizes is
+designed to make them appear pleasing when mixed together.
+
+The standard sizes can be selected with the \cs{magstep} control
+sequence.  The standard sizes (or steps) are called \textit{magsteps} in
+\TeX\ jargon.  The natural size of a font is its \cs{magstep0}
+size.  The \cs{magstep1} size is 20\% larger.  And
+\cs{magstep2} is 20\% larger than that (44\% larger than the
+original design), etc.  To select the Computer Modern Roman 10pt font
+at its next largest standard size, use:
+
+\begin{shortexample}
+\font\larger=cmr10 scaled\magstep1
+\end{shortexample}
+
+For those occasions when you want a font that is only a little bit
+larger, \TeX\ includes the control sequence \cs{magstephalf} which
+is halfway between \cs{magstep0} and \cs{magstep1}.
+
+Most \TeX\ formats that are based upon Plain \TeX\ define seven magsteps:
+\cs{magstep0}, \cs{magstephalf}, and \cs{magstep1} through 
+\cs{magstep5}.
+
+By using different design sizes and different standard magnifications,
+you gain access to a very wide range of sizes.  For example, given
+the seven standard design sizes and seven standard magsteps, it is
+possible to print Computer Modern Roman at any of the following sizes
+(all sizes are in points):
+
+{\def\b{\phantom{0}}\def\d{\phantom{.}}%
+\begin{tabular}{rrrrrrrr}
+5\d\b\b & 7.67    &  9.6\b   & 10.95    & 13.15  & 16.59 & 19.91 & 29.38\\
+5.48    & 8\d\b\b &  9.86    & 11.52    & 13.82  & 17\d\b\b & 20.4\b  & 29.86\\
+6\d\b\b & 8.4\b   & 10\d\b\b & 12\d\b\b & 14.4\b & 17.28 & 20.74 & 35.25\\
+6.57    & 8.64    & 10.08    & 12.1\b   & 14.52  & 17.42 & 22.39 & 42.3\b \\
+7\d\b\b & 8.76    & 10.37    & 12.44    & 14.93  & 18.62 & 24.48 & \\   
+7.2\b   & 9\d\b\b & 10.8\b   & 12.96    & 15.55  & 18.66 & 24.88 & \\   
+\end{tabular}%
+}
+
+\subsection{Where Do TFM Files Come From?}
+\label{sec:gettingtfms}
+
+In order to use {\em any\/} font in \TeX, you must have a \ext{TFM} file
+for it.  How you can 
+acquire \ext{TFM} files\index{TFM files!getting} for the fonts you use depends
+on the kinds of fonts and where they were developed.  The following
+list offers suggestions for the most commonly used fonts:
+
+\begin{iplist}{.25in}
+\ipitem[PostScript fonts]
+  
+  Every vendor that supplies PostScript 
+  fonts\index{PostScript!fonts}\index{fonts!PostScript} (either as font files
+  or built-in to a printer or cartridge) should also supply Adobe Font
+  Metric (\ext{AFM}) files.  \ext{AFM} files provide complete metric
+  information about the fonts.\footnote{Actually, for math fonts, \TeX\
+  requires several metrics that are not 
+  usually provided.  \ixx{\program{afm2tfm}}{afm2tfm}
+  has options which allow you to specify these extra metrics when you
+  convert the \ext{AFM} file.}
+  The \ext{AFM} files can be converted
+  into \ext{TFM} files with the \program{afm2tfm} utility distributed
+  with \program{dvips}.
+
+\ipitem[LaserJet built-in fonts]
+
+  The complete metric information for LaserJet built-in 
+  fonts\index{fonts!LaserJet built-in} is supplied
+  by Hewlett-Packard in ``Tagged Font Metric'' files.  These are available
+  directly from Hewlett-Packard (unfortunately, they are not distributed
+  with the printers).  The Tagged Font Metrics can be converted into
+  \TeX\ \ext{TFM} files with \program{hptfm2pl}, a free utility written
+  by, well, me, actually.
+
+  A collection of \ext{TFM} files for the standard built-in fonts on the
+  LaserJet III and IV printers is available in the CTAN archives in
+  \ctandir{/tex-archive/fonts/ljmetrics}.
+
+\ipitem[LaserJet softfonts]
+
+  Bitmapped LaserJet softfonts\index{fonts!LaserJet softfonts}
+  can be converted into \TeX\ fonts with
+  the \ixx{\program{SFPtoPK}}{SFPtoPK} utility.  The resulting font includes both
+  \TeX\ \ext{PK} and \ext{TFM} files.
+
+  Scalable LaserJet softfonts should be distributed with Hewlett-Packard 
+  Tagged Font Metric files.  These can be converted into \TeX\ \ext{TFM}
+  files with the free utility \ixx{\program{hptfm2pl}}{hptfm2pl}.
+
+\newpage
+\ipitem[\TeX\ fonts (\textnormal{\MF})]
+
+  The \MF\index{fonts!metafont@\MF} program 
+  renders \TeX\ \ixx{\ext{MF} files}{MF files@\ext{MF} files} 
+  and produces a \ext{TFM}
+  file.  Usually it produces a \ext{GF} file\index{GF files} as 
+  well, but the special
+  mode \textit{tfmonly} can be used to create just the 
+  \ext{TFM} file.\footnote{If your \MF\ distribution
+  does not include a \textit{tfmonly} mode, you can find one in the 
+  \filename{modes.mf} file on CTAN.  Consult Chapter~\ref{chap:mf}, 
+  {\it\nameref{chap:mf}}, for more information.}
+  \MF\ modes and other aspects of font creation with \MF\ are 
+  described in Chapter~\ref{chap:mf}, {\it \nameref{chap:mf}}.
+
+\ipitem[TrueType fonts] 
+
+  Incomplete metrics are frequently\index{fonts!TrueType}
+  distributed in the form
+  of Windows' \ixx{\ext{PFM} files}{PFM files@\ext{PFM} files}.  Some commercial previewers
+  for Windows can extract metric information and build a \ext{TFM} file.
+  However, at present, I do not know of any free utilities which can
+  build \TeX\ metrics from TrueType fonts. 
+\end{iplist}
+
+\section{The New Font Selection Scheme}
+\label{sec:nfss2}
+
+The \idx{New Font Selection Scheme} is a method 
+for selecting fonts in Plain
+\TeX\ and \LaTeX.  It was introduced briefly in the section
+``\nameref{macpack:sec:latexvslatexe}'' of Chapter~\ref{chap:macpack},
+{\it\nameref{chap:macpack}}.  This section describes release two of the New
+Font Selection Scheme (known as the 
+NFSS2)\index{New Font Selection Scheme!version 2 (NFSS2)}
+as it exists in the \LaTeXe\
+format.  Because version one\index{New Font Selection Scheme!version 1 (NFSS)}
+is now obsolete, it is not described. 
+
+The NFSS defines a method of font selection used in place of \TeX's primitive
+\cs{font} command.  The problem with font selection
+using \cs{font} is that it ties a control sequence to a particular font at
+a particular size, which has unpleasant consequences when more than one font
+is used in a document.  Consider the definition \verb|\font\it=cmti10|.  This
+associates the control sequence \cs{it} with the italic Computer Modern
+font (at 10pt).  After this definition, a sentence like:
+
+\begin{shortexample}
+This requires {\it emphasis}.
+\end{shortexample}
+
+has the desired result, if Computer Modern Roman at 10pt is the font in
+use when \cs{it} is encountered:
+
+\begin{exindent}
+\fontfamily{cmr}\selectfont
+This requires {\it emphasis}.
+\end{exindent}
+
+If you are using some other font, perhaps in a chapter heading, you get:
+
+\begin{exindent}
+\fontfamily{cmr}\fontseries{bx}\fontsize{14}{16pt}\selectfont
+This requires {\fontfamily{cmr}\fontseries{m}\fontsize{10}{12pt}\selectfont
+\it emphasis}.
+\end{exindent}
+
+This is almost certainly not what you wanted.  The NFSS
+overcomes this difficulty by describing each font with five
+independent parameters: encoding, family, series, shape, and size.
+
+\newpage
+\begin{iplist}{.25in}
+\ipitem[Font encoding]
+ 
+The encoding\index{font encoding (in NFSS2)}
+parameter identifies the encoding vector of the font.  Encoding
+vectors play an important role in the selection of characters in a font.
+Encoding vectors are described more thoroughly 
+later in this chapter.
+\TeX\ Text, \TeX\ Math Italic, and Adobe Standard are all 
+\ixx{\textit{encoding vectors}}{encoding vectors}.
+
+\ipitem[Font family]
+
+The family parameter describes the typeface of the font\index{font family (in NFSS2)}.
+Computer Modern,
+Times Roman, Helvetica, Galliard, and Gill Sans are all {\em families}.
+
+\ipitem[Font series]
+
+Font series\index{font series (in NFSS2)} describes 
+the joint notions of weight and width.  
+Weight\index{weight of font} is a
+measure of how darkly each character is printed, 
+and width\index{width!of font} is a measure of how
+wide or narrow the font is.  Standard abbreviations for weight and width are
+shown in Table~\ref{tab:fontshapeww}.  Normal, bold-compressed,
+extrabold-ultraexpanded, and light-medium are all examples of font {\em
+series}.
+
+{\LTleft=.25in%
+\begin{xtable}{l|l||l|l}
+  \caption{Standard Weight and Width Designations
+    \label{tab:fontshapeww}}\\
+  \rm\bf Abbr & \bf Weight        & \rm\bf Abbr & \bf Width\\
+  \hline
+  \tstrut
+  ul & Ultra-light     & uc & Ultra-condensed  \\
+  el & Extra-light     & ec & Extra-condensed  \\
+  l  & Light           & c  & Condensed        \\
+  sl & Semi-light      & sc & Semi-condensed   \\
+  m  & Medium (normal) & m  & Medium           \\
+  sb & Semi-bold       & sx & Semi-expanded    \\
+  b  & Bold            & x  & Expanded         \\
+  eb & Extra-bold      & ex & Extra-expanded   \\
+  ub & Ultra-bold      & ux & Ultra-expanded   \\[2pt]
+  \hline
+\end{xtable}
+}
+
+The general rule for combining weight and width to form a series abbreviation
+is to use the abbreviation for weight followed by the abbreviation for width,
+unless one is ``medium,'' in which case it is left out.
+Table~\ref{tab:fontshapeex} shows how several weight/width combinations are
+used to form the series.  The series designation for a light-medium
+font demonstrates that a single medium attribute is omitted.  If both the
+width and weight are medium, use a single ``m'' for the series.
+
+{\LTleft=.25in%
+\begin{xtable}{l|l}
+  \caption{Weight and Width Are Combined to Form Series
+    \label{tab:fontshapeex}}\\
+  \bf Weight and Width & \bf Series \\
+  \hline
+  \tstrut
+  Bold extended               & bx \\
+  Light medium                & l \\
+  Medium extra-expanded       & ex \\
+  Light extra-expanded         & lex \\
+  Normal (medium, medium) & m \\[2pt]
+  \hline
+\end{xtable}
+}
+
+\ipitem[Font shape]
+
+The shape\index{font shape (in NFSS2)}, in 
+conjunction with series, defines the appearance
+of the font.  Shape generally refers to the style of the face.  Bold,
+italic, slanted, and outline are all examples of font shape.
+
+The standard designations of font shape are shown in 
+Table~\ref{tab:fontshapeshape}.
+
+{\LTleft=.25in%
+\begin{xtable}{l|l}
+  \caption{Standard Abbreviations of Font Shape
+    \label{tab:fontshapeshape}}\\
+  \rm\bf Abbr. & \bf Shape \\[2pt]
+  \hline
+  \tstrut
+  n  & Normal \\
+  it & Italic \\
+  sl & Slanted \\
+  sc & Small caps \\
+  u  & Upright italics \\[2pt]
+  \hline
+\end{xtable}
+}
+
+\ipitem[Font size]
+
+Font size\index{font size (in NFSS2)} defines 
+both the size of the characters and the spacing
+between lines of text in that size.  The distinction between
+design size and magnification, discussed at length in the first
+part of this chapter, is hidden within the NFSS;
+you need only select the size you want.\footnote{This 
+doesn't mean that every size you want is available.  See the section
+``\nameref{sec:fonts:defnfss2}'' for information about defining
+font sizes in the NFSS.}
+
+The spacing between lines of text is described as the (vertical)
+distance between the baselines of two consecutive lines of type.
+It is usually about 20\% larger than the size of the font.  For
+example, a 10pt font is usually printed with 12pts between the
+baselines of consecutive lines.  The inter-line distance that looks
+best depends on the font and other design elements
+of the document.  There really isn't a good rule for the value
+that looks best, which is why you have to specify it.
+\end{iplist}
+
+\subsection{Selecting Fonts with the New Font Selection Scheme}
+
+One of the most visible differences in the NFSS2 is that you are 
+encouraged to change the way you 
+select\index{fonts!selecting with NFSS2} fonts.  The NFSS2 defines
+nine control 
+sequences\index{control sequences!for selecting fonts with NFSS2} for 
+user-level font selection.  They are
+shown in Table~\ref{tab:nfss2:userlevel}.
+
+\begin{xtable}{l|l}
+  \caption{User-level Font Selection Control Sequences in NFSS2
+    \label{tab:nfss2:userlevel}}\\
+  \bf Control Sequence & \bf Resulting Change \\[2pt]
+  \hline
+\endfirsthead
+  \caption[]{User-level Font Selection Control Sequences in NFSS2 (continued)}\\
+  \bf Control Sequence & \bf Resulting Change \\[2pt]
+  \hline
+\endhead 
+  \tstrut
+  \cs{textrm}\verb|{}| & Switch to roman family \\
+  \cs{textsf}\verb|{}| & Switch to sans-serif family \\
+  \cs{texttt}\verb|{}| & Switch to typewriter family \\
+  \cs{textbf}\verb|{}| & Switch to bold face weight/width \\
+  \cs{textmedium}\verb|{}| & Switch to medium weight/width \\
+  \cs{textit}\verb|{}| & Switch to italic shape \\
+  \cs{textsl}\verb|{}| & Switch to slanted shape \\
+  \cs{textsc}\verb|{}| & Switch to small-caps shape \\
+  \cs{emph}\verb|{}|   & Switch to emphasized text \\[2pt]
+  \hline
+\end{xtable}
+
+Instead of using \cs{it}, for example, to change to an italic font within a
+group, you should use the \cs{textit} command with the text as an argument.
+For example, instead of using:
+
+\begin{shortexample}
+This is some {\it italic\/} text.
+\end{shortexample}
+
+you should use:
+
+\begin{shortexample}
+This is some \textit{italic} text.
+\end{shortexample}
+
+The advantage of the new scheme is that these macros are much more
+intelligent than the old ones.  Notice that I did not specify italic
+correction (\cs{/}) in the second case.  This is because the \cs{textit}
+macro is able to determine if the correction is necessary, and if so, inserts it
+automatically.\ff{If you wish to suppress italic correction, use
+\cs{nocorr} at the end (or beginning) of the text.}  
+The macros can also be nested.
+
+The NFSS2 allows you to use the old font selection macros, so existing
+documents will not be affected.  If you want to set several paragraphs
+in a different font, you should continue to use the old selection
+macros because you cannot pass more than one paragraph of text to a
+macro.\ff[2]{It is possible to write macros that accept
+multiple paragraphs of text, but the NFSS2 font selection macros do
+not do so.}
+
+\subsubsection{Low-level interface to NFSS}
+
+The user-level font selection commands are implemented in terms of six
+low-level commands.  At this level, you must specify the encoding, family,
+series, shape, and size of the font in order to select it.  There are six
+control sequences for selecting a font: one each for specifying the font
+parameters and one for actually switching to the new font.  This strategy
+allows the parameters to be independent; any parameters that you do not 
+explicitly change remain the same as the current font.
+
+These six control sequences are:
+
+\begin{iplist}[\textnormal]{.25in}
+\ipitem[\texttt{\cs{fontencoding}\ttopenbrace\textit{enc}\ttclosebrace}]
+
+      Selects the encoding scheme 
+      \textit{\tt enc}\index{encoding vectors!NFSS2}. The encoding schemes
+      officially supported by the NFSS2 are shown in
+      Table~\ref{tab:nfss2:encoding}.
+
+{\LTleft=.25in%
+      \begin{xtable}{l|l}
+        \caption{Encoding Schemes Supported by NFSS2
+          \label{tab:nfss2:encoding}}\\
+        \bf Encoding & \\
+        \bf Scheme   & \bf Encoding Name \\[2pt]
+        \hline
+        \tstrut
+        T1  & \TeX\ text Cork encoding \\
+        OT1 & Old \TeX\ text encoding (the CMR encoding) \\
+        OT2 & University of Washington Cyrillic encoding \\
+        OT3 & University of Washington IPA encoding \\
+        OML & \TeX\ math (italic) letters \\
+        OMS & \TeX\ math symbols \\
+        OMX & \TeX\ math extended \\
+        U   & Unknown encoding \\[2pt]
+        \hline
+      \end{xtable}
+}
+
+\ipitem[\texttt{\cs{fontfamily}\ttopenbrace\textit{fam}\ttclosebrace}]
+
+      Selects the family \textit{\tt fam}.
+
+\ipitem[\texttt{\cs{fontseries}\ttopenbrace\textit{ser}\ttclosebrace}]
+
+      Selects the series \textit{\tt ser}.
+
+\ipitem[\texttt{\cs{fontshape}\ttopenbrace\textit{shp}\ttclosebrace}]
+
+      Selects the shape \textit{\tt shp}.
+
+\ipitem[\texttt{\cs{fontsize}\ttopenbrace\textit{ptsize}\ttclosebrace
+  \ttopenbrace\textit{bskip}\ttclosebrace}]
+
+      Selects the font size \textit{\tt ptsize} with a distance of \textit{\tt
+      bskip} between lines.  Note that \textit{\tt ptsize} is a simple number,
+      whereas \textit{\tt bskip} is a \TeX\ distance and you must specify
+      units after the number.  Under the NFSS2, \textit{\tt ptsize} specifies
+      the \emph{actual} size of the font,\ff{Under the NFSS1, the
+      \textit{\texttt{ptsize}} was simply a label; the actual font loaded was
+      the nearest magstep.} but the NFSS2 will attempt to find a
+      closest match if there is no exact match for the requested size.  A
+      warning message is issued if the size does not exist and a closest match
+      has to be selected.  You can control the sensitivity of the warning with
+      the \cs{fontsubfuzz} parameter.  It is initially set to 0.4pt,
+      meaning that any font within 0.4pt of the requested size will be used
+      without issuing a warning.
+
+\ipitem[\texttt{\cs{selectfont}}]
+
+      Switches to the font described by the current values of
+      encoding, family, series, shape, and size.
+\end{iplist}
+
+From this description, can you figure out how the control sequence
+\cs{it} could be defined under the NFSS\label{footnote:question}?  
+The answer is on the bottom of page~\pageref{footnote:answer}.
+
+\subsection{Defining Fonts with NFSS2}
+\label{sec:fonts:defnfss2}
+
+The standard Computer Modern fonts and most PostScript fonts can be
+selected by using the appropriate style files or inputting the
+appropriate macros.  However, if you have nonstandard fonts or fonts
+for some other device, you can easily add them to the
+NFSS\index{fonts!defining with NFSS2}.
+
+The internal interface to the NFSS has been entirely redesigned.  
+The new interface is much cleaner than the interface to the NFSS1, but
+similar in design.
+
+If you are not very familiar with \TeX, what follows may be a bit confusing;
+treat this example as a sort of ``cookbook recipe'' and substitute the
+font you wish to define for the \verb|logo| font (the
+\verb|logo| font is the typeface used for the \MF\ logo).
+
+\subsubsection{Declaring a family}
+
+In order to add a new typeface, you must declare a new 
+font family\index{font family (in NFSS2)!declaring} with
+the control sequence 
+\cs{DeclareFontFamily}.  If you are only adding new sizes or shapes to an
+existing family, do not redeclare the family.
+
+The parameters to \cs{DeclareFontFamily} are the encoding, name, and
+loading options for the family.  Loading options are any commands that
+should be executed every time this family is selected.  For most fonts,
+there are no loading options.\footnote{One possible use of loading
+options is to inhibit hyphenation in fixed-width fonts intended for use
+in verbatim material.  The loading options \texttt{\ttbackslash 
+hyphenchar\ttbackslash font=-1} have this effect.}
+
+The following declaration creates the \textit{logo} family with the old \TeX\
+encoding and no loading options:
+
+\begin{shortexample}
+\DeclareFontFamily{OT1}{logo}{}
+\end{shortexample}
+
+\subsubsection{Declaring shapes}
+
+After a family has been created, you must specify what font 
+shapes\index{font shape (in NFSS2)!declaring} are
+available with \cs{DeclareFontShape}.  To make the font usable, you must
+declare at least one font shape for each family.
+
+The general form of a call to \cs{DeclareFontShape} is: 
+
+\begin{ttindent}
+\verb|\DeclareFontShape{|\textit{enc}\verb|}|%
+   \verb|{|\textit{fam}\verb|}|%
+   \verb|{|\textit{series}\verb|}|%
+   \verb|{|\textit{shape}\verb|}|%
+   \verb|{|\textit{sizes}\verb|}|%
+   \verb|{|\textit{loading options}\verb|}|
+\end{ttindent}
+
+The family \texttt{\textit{fam}} (with the appropriate encoding \texttt{\textit{enc}})
+must already have been created with \cs{DeclareFontFamily}.  The
+\texttt{\textit{series}} and \texttt{\textit{shape}} parameters identify the
+name of the series and shape.  Table~\ref{tab:fontshapeex} and
+Table~\ref{tab:fontshapeshape} list some common series and shapes.  The
+\textit{\tt sizes} parameter is a list of \textit{font-shape declarations},
+described below, and the \textit{\tt loading options}, if specified, override
+the loading options for the font family.
+
+Each font-shape declaration indicates how the request for a font should be
+handled.  The complete syntax for font-shape declarations is described in
+\textit{Interface Description of NFSS2}~\cite{nfss2interface}.  Here we look
+at three simple cases: substituting another font for the one requested,
+generating the name of the \ext{TFM} file for the requested font, and
+identifying a particular \ext{TFM} file for a size or range of sizes.  Each of
+these techniques is used in the declaration of the medium, normal logo font in
+Example~\ref{ex:logoshape}.  There should be no extra spaces in the font size
+parameter.  If you spread it over multiple lines in your input file, make sure
+that a comment character (\%) appears at the end of each line.
+
+\begin{example}{ex:logoshape}{Font-shape Declaration with NFSS2}
+\DeclareFontShape{OT1}{logo}{m}{n}{%
+  <-8>sub * cmr/m/n%
+  <8><9><10>gen * logo%
+  <10.95>logo10 at 10.95pt%
+  <12->logo10}{}
+\end{example}
+
+Each font-shape declaration begins with one or more 
+size\index{font size (in NFSS2)!declaring} specifications in
+angle brackets.  This indicates either a specific size (\verb|<10>| for a 10pt
+font) or a range of sizes (\verb|<8-9>| for any size larger than or equal to
+8pt and less than 9pt, \verb|<-8>| for all sizes less than 8pt, or
+\verb|<10->| for all sizes larger than or equal to 10pt).  
+
+In Example~\ref{ex:logoshape}, the first font-shape declaration indicates that
+font substitution should be performed for any request at a size
+smaller than 8pt.  The string \texttt{cmr/m/n} indicates that medium, normal,
+Computer Modern Roman should be substituted in its place.  In general, the
+substitution specifies the
+\texttt{\textit{family}/\textit{shape}/\textit{series}} to be substituted.
+
+The second declaration indicates that the name of the external font for 8pt,
+9pt and 10pt fonts should be generated from the string \texttt{logo}
+and the size (at 8pt, \texttt{logo8} will be used; at 9pt,
+\texttt{logo9}; and at 10pt, \texttt{logo10}).
+
+The third declaration demonstrates that the font specified (\texttt{logo10 at
+10.95pt}) can be any valid \TeX\ font selection command.  After special
+declarations have been processed (substitution, generation, etc.), the
+remaining declaration text is passed to the \TeX\ \cs{font} primitive.
+
+The last declaration specifies that \textit{any} size larger than 12pt is
+valid.  Any size larger than 12pt will use the font \texttt{logo10}, scaled
+appropriately.  Automatic font generation, if it is being used, can take care 
+of actually generating the font.  Example~\ref{ex:logoshape} was constructed
+to demonstrate several features of the font-shape declaration syntax.  A
+simpler, more likely declaration for the medium normal logo font is
+shown in Example~\ref{ex:logoshape2}.  
+
+\begin{example}{ex:logoshape2}{Font-shape declaration with NFSS2 (simplified)}
+\DeclareFontShape{OT1}{logo}{m}{n}{%
+  <-8>sub * cmr/m/n%
+  <8-9>logo8%
+  <9-10>logo9%
+  <10->logo10}{}
+\end{example}
+
+\newpage
+The 8pt design could have been scaled down for sizes less
+than 8pt, but you should try to avoid
+large deviations from the design size.  Because the design for my book
+does not require the logo font at sizes less than 8pt, substitution
+was the best choice.\footnote{The only reason that sizes less than 8pt need to
+be declared at all is that marginal notes (used for editorial comments
+while the book was in revision) were set in 5pt, and the logo font 
+occasionally turned up in a marginal note.}
+
+\subsection{Storing Font Definitions}
+
+The NFSS will load your font definitions automatically if you store
+them\index{fonts!storing} in \ext{FD} files\index{FD files@\ext{FD} files} in 
+a directory where \TeX\ looks for input files.
+Whenever an unknown encoding/family is requested, NFSS attempts to load
+the file \filename{encfamily.fd}. 
+For example, if the font declarations described in the preceding sections
+are stored in a file called \filename{OT1logo.fd}, nothing special
+has do be done to use the logo family.  The first time the logo family
+is selected, the definitions will be read from \filename{OT1logo.fd}.
+
+If you are using \LaTeXe\ (or \LaTeX\ with the NFSS), there must already be a
+large number of \ext{FD} files on your system.  For more information about
+building the \LaTeXe\ format (which includes the NFSS2), consult the section
+``\nameref{sec:buildlatexe}'' in Chapter~\ref{chap:macpack},
+\textit{\nameref{chap:macpack}}.
+
+\subsection{Changing the Defaults}
+
+Sometimes you want the fonts that you define to replace the standard
+Computer Modern fonts.  This is easily accomplished.  The NFSS
+defines control sequences\index{control sequences!for identifying default fonts} which 
+identify the default
+fonts.  These control sequences are listed in Table~\ref{tab:nfssdefaults}.
+
+\begin{xtable}{l|l}
+  \caption{Default Fonts
+    \label{tab:nfssdefaults}}\\
+  \bf Control Sequence & \bf Font \\[2pt]
+  \hline
+  \tstrut
+  \cs{rmdefault} & The default normal (roman) font \\
+  \cs{bfdefault} & The default boldface font \\
+  \cs{sfdefault} & The default sans-serif font \\
+  \cs{itdefault} & The default italic font \\
+  \cs{scdefault} & The default caps and small-caps font. \\
+  \cs{defaultshape} & The default shape (\verb|n|) \\
+  \cs{defaultseries} & The default series (\verb|m|) \\[2pt]
+  \hline
+\end{xtable}
+
+If you have defined a new font, perhaps \verb|garamond| as I did
+for this book, you can make it the default normal font by changing
+\cs{rmdefault}.  In \LaTeX, the following command makes
+\verb|garamond| the default normal font:
+
+\begin{shortexample}
+\renewcommand{\rmdefault}{garamond}
+\end{shortexample}
+
+\newpage
+In Plain \TeX, it's written like this:
+
+\begin{shortexample}
+\def\rmdefault{garamond}
+\end{shortexample}
+
+\subsection{NFSS Pitfalls}
+
+Defining your own fonts with the NFSS is 
+straightforward, but it is not without its subtleties.  There are 
+several things going on behind the scenes that you must be aware
+of if you are going to define your own fonts.
+
+The first consideration is font substitution.  When NFSS cannot find a
+font, it tries to substitute a different one.  First, it tries to find the
+font you requested in the default shape, then in the default series, and
+finally, in the default family.  You can change the defaults used by NFSS2
+with the \cs{DeclareFontSubstitution} command:
+
+\begin{exindent}
+  \verb|\DeclareFontSubstitution{|\texttt{\textit{encoding}}%
+  \verb|}{|\texttt{\textit{family}}%
+  \verb|}{|\texttt{\textit{series}}%
+  \verb|}{|\texttt{\textit{shape}}%
+  \verb|}|
+\end{exindent}
+
+You must specify the defaults for each encoding you use because
+the encoding is never substituted.
+
+The next consideration is the use of 
+mathematics\index{mathematics!typesetting}\index{typesetting!mathematics},
+which is typeset
+using an entirely different set of fonts. Even if you don't use
+any math in your document, the NFSS is prepared to function in math-mode
+at a moment's notice.  In order to be prepared, it has to know what fonts
+to use.  Ordinarily, mathematics is typeset using fonts at the same size
+as the current text font.  This means that every time you change font sizes
+for text, NFSS changes font sizes for mathematics as well.
+
+By default, the NFSS  defines \idx{math fonts}\index{fonts!math} only 
+at the following sizes:
+5, 6, 7, 8, 9, 10, 11, 12, 14, 17, 20, and 25pt.  If you define a new
+font at a different size, 24pt for example, the first time you
+try to use that font, you will get several warning messages indicating
+that \texttt{cmr/m/n/24} (Computer Modern Roman),
+\texttt{cmm/m/it/24} (Computer Modern Math Italic), 
+\texttt{cmsy/m/n/24} (Computer Modern
+Math Symbols), and \texttt{lasy/m/n/24} (\LaTeX\ Symbols, if
+using \LaTeX), are not available.
+This is very confusing because
+it won't appear that you have selected 24pt Computer Modern {\em anywhere}
+in your document.  
+
+There are two ways to solve this problem:\footnote{Under earlier versions
+of the NFSS, this problem actually resulted in an error rather than a warning.
+If you wish, you can simply ignore the warning; you no longer have to fix
+the problem.}
+
+\begin{itemize}
+  \item Redefine the required fonts at the sizes requested.
+        This involves copying the definition of each of the fonts
+        from NFSS \ixx{\ext{FD} files}{FD files@\ext{FD} files} and adding new sizes.  
+
+  \item Tell NFSS to use existing math sizes for the new text
+        sizes that you define.  This
+        option is reasonable only if you won't be using any math
+        at the new sizes (or the sizes are so close that the mathematics
+        doesn't appear disproportional).  NFSS includes a macro called
+        \cs{DeclareMathSizes} for this purpose.  Insert it
+        directly after the \cs{DeclareFontShape} command that
+        declares the new font sizes.  You must call \cs{DeclareMathSizes}
+        once for each new size.  For example, to use the 25pt math sizes
+        with 24pt text,
+        insert the following control sequence
+        after you define the 24pt font:
+
+\begin{shortexample}
+\DeclareMathSizes{25}{24}{20}{17}
+\end{shortexample}
+
+        The general form of a call to \cs{DeclareMathSizes} is:
+
+\begin{ttindent}
+\verb|\DeclareMathSizes{|\textit{text-size}\verb|}|%
+   \verb|{|\textit{math-size}\verb|}|%
+   \verb|{|\textit{script-size}\verb|}|%
+   \verb|{|\textit{script-script-size}\verb|}|
+\end{ttindent}
+
+        Where \textit{\texttt{math-size}},
+        \textit{\texttt{script-size}}, and
+        \textit{\texttt{script-script-size}} are the normal (123), 
+        script ($x^{123}$), and script-script ($x^{y^{123}}$) math sizes
+        for the specified \textit{\texttt{text-size}}.
+\end{itemize}
+
+\LaTeX\ sometimes resets the current
+font to the \cs{rmdefault} font.  For example, it does this when a
+\cs{ref} is going to be printed.  This means that the font you define as
+the \cs{rmdefault} font should be available in every size that you use.
+This may require redefining the Computer Modern Roman font, as described
+above, if you add a new size but leave Computer Modern as the default font.
+
+\section{PostScript Fonts Under NFSS}
+
+PostScript fonts\index{PostScript!fonts!under NFSS2}\index{fonts!PostScript}
+and other scalable font technologies like TrueType
+differ from the way the ``standard'' \TeX\ fonts work.  They do not separate 
+the notions of design size and magnification.  Instead, PostScript fonts 
+can be rendered at \emph{any} size from a single design.  
+In daily use, the PostScript fonts under NFSS are indistinguishable from
+non-PostScript fonts. 
+The NFSS distribution includes style files for accessing the 35 standard
+PostScript fonts.
+
+\subsection{Adjustments to Scale}
+
+\index{fonts!scaling}Some 
+combinations of PostScript fonts, particularly PostScript fonts
+with Computer Modern mathematics, look bad because there is a large
+discrepancy between the apparent sizes of the fonts.  For example, as a consequence
+of design, 10pt Helvetica looks bigger than 10pt
+Computer Modern Math Italic.  In order to correct this problem, 
+you can specify a scaling factor when declaring PostScript 
+fonts.\footnote{Actually, you can declare a scaling factor in any font
+declaration, although it seems to make less sense for non-PostScript
+fonts.}
+The scaling factor is specified in square brackets at the beginning of
+the font-shape declaration in the \cs{DeclareFontShape} command.
+
+\newpage
+The easiest way to find an approximation of the correct scaling factor is to
+look at the \emph{x-height} of each font.\footnote{Usually, scaling fonts to
+the same x-height makes them look acceptable together, but depending
+on the particular fonts involved, a little more or a little less scaling may be
+required to achieve a pleasant balance.}  The x-height is the
+height of a lowercase ``x'' in the font.  
+The following macro will print the x-height of a font:
+
+\begin{shortexample}
+\def\showxheight#1{%
+  \font\fontfoo=#1 at 10pt%
+  \message{The x-height of #1 at 10pt is \the\fontdimen5\fontfoo}}
+\end{shortexample}
+
+%The document in Example~\ref{ex:scaledhelv} 
+The following \TeX\ input will print the x-heights of
+Helvetica and Computer Modern Roman (assuming that your Helvetica font
+is called \filename{phvr}):
+
+%\begin{example}{ex:scaledhelv}{A \protect\TeX\ document to display the x-height of Helvetica and Computer Modern Roman.}
+\begin{shortexample}
+\input showxheight
+\showxheight{phvr}
+\showxheight{cmr10}
+\bye
+\end{shortexample}
+%\end{example}
+
+On my system, the x-height of Helvetica is 5.23pt and the x-height of
+Computer Modern Roman is 4.30554pt.  The following font declaration
+makes Helvetica have the same apparent size as Computer Modern Roman:
+
+\begin{shortexample}
+\DeclareFontShape{OT1}{phv}{m}{n}{%
+  <-> [0.8232] phvr}{}
+\end{shortexample}
+
+Compare scaled Helvetica to unscaled Helvetica:
+
+{%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclareFontFamily{OT1}{phv}{}
+\DeclareFontFamily{OT1}{sphv}{}
+\DeclareFontShape{OT1}{phv}{m}{n}{%
+  <-> phvr}{}
+\DeclareFontShape{OT1}{sphv}{m}{n}{%
+  <-> [0.8232] phvr}{}
+
+\begin{exindent}
+  \rm\fontfamily{phv}\selectfont
+  Unscaled Helvetica, 
+  \fontfamily{cmr}\selectfont
+  Computer Modern Roman,
+  \fontfamily{sphv}\selectfont
+  Scaled Helvetica.
+\end{exindent}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+}
+
+Unscaled Helvetica looks much larger than Computer Modern, but the scaled
+Helvetica appears a little too small.  Experimentation is the only way to find
+the scale that looks best.
+
+\section{When Things Go Wrong}
+
+A number of font-related problems can arise\index{error messages!fonts (tex)@fonts (\TeX)} which either prevent you
+from formatting and printing your document or cause the output to differ
+from what you anticipated.  The following sections describe many common
+problems and their solutions.
+
+\subsection{When \protect\TeX\ Complains}
+
+The first time an error can occur is when \TeX\ is processing your
+document.  Some of these errors prevent \TeX\ from continuing while
+others are simply warnings. 
+
+\begin{iplist}{.25in}
+\ipitem[\texttt{! Font \bs myfont=xxxxx not loadable: %
+               Metric (TFM) file not found.}]
+
+This error indicates that \TeX\ tried to process a \cs{font} control sequence which
+assigned the font \texttt{xxxxx} to the control sequence \cs{myfont}, but \TeX\
+could not find a \ext{TFM} file for the font \texttt{xxxxx}.  All the characters
+from the missing font will be blank in the resulting \ext{DVI} file.
+
+You cannot process your document until this error is corrected, which is 
+a matter of fixing the offending \cs{font} command if 
+you are using the old font selection scheme.
+
+Under the NFSS2, this error occurs if you specify
+an invalid font in the command \cs{DeclareFontShape}.  
+Examine the font that you were attempting to select
+and make sure that it exists.
+
+\ipitem[\texttt{Warning Font/shape `x/y/z' undefined on input line \textit{n}}]
+
+This is a warning message from the NFSS.  It indicates
+that you requested the font family \texttt{x}, series \texttt{y}, and shape
+\texttt{z},
+but the requested font does not exist.  This message is followed by 
+another indicating
+which font NFSS chose to substitute in place of the one you requested.
+NFSS substitutes the closest possible font to the one you requested.
+It is usually an acceptable replacement.
+
+For example, if you are currently using Computer Modern Bold Extended and
+you select Computer Modern Typewriter, the NFSS will report that there
+is no bold-extended-typewriter font and that normal typewriter is being
+substituted in its place.
+
+\ipitem[\texttt{! Font x/y/z/999 not found.}]
+
+This is a fatal error from the NFSS.  It indicates
+that you selected font family \texttt{x}, series \texttt{y}, shape \texttt{z}
+at a size
+of 999pts and that no such font exists.  This error occurs when
+the size 999 is not defined in the \cs{DeclareFontShape} command
+for x/y/z.  
+
+\ipitem[\texttt{Missing character: There is no X in font foo!}]
+
+This is a warning message from \TeX.  Usually it occurs only in the 
+log file.  This error occurs when you attempt to access a character
+that does not exist in the current font.
+This can happen if you select the wrong font or if the selected font has a
+different encoding vector than anticipated.  See the section
+``\nameref{sec:fonts:encodingvec}'' in this chapter for more information.
+\end{iplist}
+
+\subsection{When the DVI Driver Complains}
+
+Getting \TeX\ to successfully produce a \ext{DVI} file\index{error messages!fonts (DVI)} is only half
+the battle.  The next hurdle is getting a \dvidriver\ to print it.
+Here are some of the things that can go wrong:
+
+\subsubsection{Can't find PK file}
+
+When a \dvidriver\ complains that it cannot find the appropriate \ext{PK}
+file, there are several things that could be wrong.
+
+\begin{itemize}
+\item The font is built into the printer.
+
+If the \dvidriver\ complains that it cannot find the \ext{PK} file
+for a built-in font, you need to adjust the \dvidriver's configuration
+to indicate that the font is built-in.
+Exactly how this 
+is done depends on the \dvidriver\ that you are using.  For example,
+if you are using \program{dvips}, add an entry to the 
+\filename{psfonts.map}
+file\index{psfontsmap files@psfonts.map files}.  If you are using \emTeX, add an entry to 
+the font substitution
+file specified in the configuration file.  Consult the
+references for your particular \dvidriver\ for more information about
+using built-in fonts.
+
+\item The font does not exist on the printer you are using.
+
+This is the same problem as the error above except that it cannot be
+fixed.  For example, I have \ext{TFM} files for many PostScript fonts
+at home because it helps me format bits of documentation that I bring
+home from work without error.  However, if I try to print one of these
+documents without first changing the fonts, the \dvidriver\ complains
+that it cannot find several fonts.  There is no way that I can
+correct this because the missing fonts are built-in fonts for a printer
+that I do not have at home.  In this case, font substitution by the
+\dvidriver\ may allow you to preview (and even print) the document,
+but it won't look very good unless the font metrics of the substituted
+font are very close to the metrics for the original.
+
+\item Uncommon size or font (no \ext{PK} file).
+
+The Computer Modern family contains a number of fonts that are very
+rarely used.  If you don't keep \ext{PK} files for these fonts around
+all the time and attempt to use one of them (or attempt to use
+a common font at a very unusual size), the \dvidriver\ will not be
+able to find the necessary \ext{PK} file.  You have to build the 
+\ext{PK} file first.  Consult Chapter~\ref{chap:mf}
+for more information about building \ext{PK}
+files with \MF.  Also consult the section called ``\nameref{sec:autofont}''
+later in this chapter.
+\end{itemize}
+
+\subsubsection{Accents don't work or the wrong characters are printed}
+
+This problem is usually caused by a bad encoding vector.  See the
+section ``\nameref{sec:fonts:encodingvec}'' in this chapter for 
+more information.
+
+\subsubsection{Printer prints the right characters but the wrong font}
+
+This is usually an indication that you are trying to use a font that
+does not exist on the printer.  PostScript printers, for example,
+substitute Courier for any font that does not exist.
+
+Another possibility is that you have configured your \dvidriver\ incorrectly.
+I once told \program{dvips} to download Galliard when I used Garamond.
+It took me quite a while to find that error.
+Make sure that the printer contains the fonts that you think it does
+and make sure that you are mapping the \TeX\ font names to the correct printer
+fonts.
+
+\newpage
+\section{Encoding Vectors}
+\label{sec:fonts:encodingvec}
+
+An \ixx{encoding vector}{encoding vectors} describes 
+the order and position of characters within a
+font.  The purpose of this section is to help you understand the role that
+encoding vectors play in the translation of text from your input file to
+printed output.
+
+Encoding vectors cause a lot of confusion.  Whenever the characters that
+you type in your input file are printed incorrectly (``\texttt{flight}'' in
+your input file prints
+out as ``ight''; ``\verb|\oe{}vres|'' prints out as ``\'uvres''; or
+``\verb|---|'' prints out as ``-{}-{}-'' instead of ``---''), you've probably
+encountered some sort of encoding problem.
+
+The root of this problem is that the characters in your input
+file are really just numbers between 0 and 255.\footnote{In some
+special versions of \TeX, notably those for handling languages like
+Japanese, this may be extended to a much larger number, but the
+problem is the same.}  The number 65 is usually a capital A, but
+there is nothing intrinsic to the value 65 to signify this.  In order
+to display these byte values, they have to be translated into symbols.
+
+These problems arise because there are at least four different
+translations occurring between what you type and what appears on the
+printed (or previewed) page:
+
+\begin{enumerate}
+\item You type some symbols on the keyboard, and they are displayed by
+your editor.  The configuration of your system determines how these characters
+appear.  Sometimes they are from the ISO Latin-1 symbol set, sometimes US
+ASCII, sometimes something else, and sometimes it is user configurable.  If
+you confine yourself to pure ASCII, you're pretty safe, but that's not
+convenient for languages other than English.  When you are typing documents
+in Spanish, it's very convenient to be able to type ``\~n'' directly in your
+document.
+
+\item \TeX\ reads your input file and translates it into an internal
+encoding (basically ASCII).  (The reverse translation is performed
+before \TeX\ prints any output to the terminal or the log file.)
+The translation tables used in this step are generally determined when
+the \TeX\ program is compiled, but several modern \TeX{}s allow you
+to modify these tables at runtime.
+
+\TeX\ assumes that fonts use \TeX's internal encoding.  For example, on
+an IBM mainframe, which uses the \idx{EBCDIC character set}, \TeX\ translates
+a capital A (EBCDIC 193) into ASCII 65 and assumes that
+position 65 of the metric
+information for the current font contains the information
+(including ligature and kerning information) for a capital A.
+
+%This used to severly limit your ability to include characters outside
+%of US ASCII in your input file.  Version 3 of \TeX\ addressed this shortcoming
+%with virtual fonts, discussed in the next section.
+
+\item If you use control sequences to represent special characters
+(\cs{oe} for ``\oe'', for example), the macro package you 
+use is responsible for defining those control sequences so they
+produce the correct characters.  If the macro package 
+assumes that the ``\oe'' character appears at position 247 of the current
+font, the output will not be correct in a font with a
+different encoding.
+
+\item The \dvidriver\ reads \TeX's \ext{DVI} file and assumes that the
+encoding vector of each font used in the \ext{DVI} file is the same as
+the encoding vector of the actual fonts in the output device.  For
+\ext{PK} fonts, this is probably true (since the \dvidriver\ sends the
+font to the printer), but for fonts built into the printer, it is less
+likely to be true.
+\end{enumerate}
+
+You may think of a font as a collection of 1 to 256 different
+symbols in a particular order.  This is really a font plus a particular
+encoding vector.  It is more accurate to think of a font as simply a
+collection of symbols (with no particular number or ordering).  An encoding
+vector selects which symbols are used and in what order they appear.
+Typically, an encoding vector can contain only 256 different symbols.
+It is important to note that changing an encoding vector of a font does not
+simply permute the order of the characters in the font, it can change which
+symbols are actually present as well.
+
+Encoding vectors are either implicit or explicit.  Most fonts have an implicit
+encoding, but some (for example, Adobe Type~1 fonts) contain an explicit,
+configurable encoding.
+\TeX\ fonts have an implicit encoding.  \TeX\ actually uses several different
+encoding vectors (it uses more than one because it has both text or body
+fonts and several kinds of math and symbol fonts).  The character set tables
+in Appendix~\ref{app:fonts}, {\it\nameref{app:fonts}}, show the encoding of
+several different fonts.
+
+% Table~\ref{tab:cmrencode}
+%shows the ordering of characters in the \TeX\ text encoding vector used
+%for text fonts.  For comparison, Table~\ref{tab:font:corkencoding} shows the
+%Cork encoding for international
+%\TeX\ fonts, Table~\ref{tab:adbstdencode} shows the Adobe Standard encoding,
+%and Table~\ref{tab:winansi} shows the Windows ANSI encoding.
+%
+%\input{ft-cmr.tab}
+%
+%\input{ft-cork.tab}
+%
+%\input{ft-adb.tab}
+%
+%\input{ft-ansi.tab}
+%
+%In order to talk about encoding vectors, a distinction is made between
+%characters and ``glyphs.''  A {\em glyph} is a ``splotch of ink'', a symbol
+%without any meaning.  A character, on the other hand, is a particular
+%symbol: the upper-case letter A, an open parenthesis, and
+%lambda are all {\em characters}.
+%
+
+\font\mathit=cmmi10
+Most macro packages assume that the TEX TEXT encoding is being used.
+For example, Plain \TeX\ defines the control sequence \cs{AE} as
+an abbreviation for character number 29 in the current font.  Even
+when control sequences aren't involved, problems can arise if the 
+output font does not have the anticipated encoding.  The byte-value
+34 in your input file is almost always the literal
+double quote character  (\verb|"|) and usually prints as a double
+quote (which is probably what your editor displays and probably what
+you expect).  If the font encoding is something different, the result
+will not be what you expect.  For example, if the current font has
+the TEX MATH ITALIC encoding, the result is ``{\mathit\char34}''.
+
+%No matter what encoding vector you use, the following four conditions
+%must hold:
+%
+%\begin{enumerate}
+%\item \ext{TFM} files have to be created with that encoding vector.
+%\item Your \dvidriver\ must be aware of the encoding vector.
+%\item Macros that refer to symbols in the font have to be redefined
+%      to use the new encoding.
+%\item System-specific metric information (like Windows \ext{PFM} files)
+%      must be created with the correct encoding vector.
+%\end{enumerate}
+%
+%Virtual fonts can help alleviate these problems.  See the
+%``\nameref{sec:fonts:virtualfonts}'' section in this chapter.
+
+\section{Virtual Fonts}
+\label{sec:fonts:virtualfonts}
+
+\ixx{Virtual fonts}{virtual fonts}\index{fonts!virtual} (stored 
+in \ixx{\ext{VF} files}{VF files@\ext{VF} files}\footnote{For 
+a complete description, consult \textit{The VP To VF
+Processor}~\cite{texware:vptovf} and \textit{The VF to VP
+Processor}~\cite{texware:vftovp}.}) are a relatively new addition to the \TeX\
+family.  When \TeX\ was originally defined in 1970, 
+Knuth\index{Knuth, Donald} chose a
+character encoding that suited his purposes, and very little effort was made
+to parameterize the encoding.  (In fact, any \TeX\ macro writer can use {\em
+any\/} encoding she wants, but no general mechanism for identifying the
+encoding exists.\footnote{Version 2 of NFSS includes ``encoding'' as a
+parameter in font selection.  In the long run, this will allow macro writers
+to hide many of these difficulties, dramatically reducing the
+burden currently placed on the user.})  Virtual fonts combat this problem by allowing the creator
+to define a virtual font in terms of (multiple) characters from one or more
+fonts.
+
+\newpage
+Virtual fonts are used most commonly to change the encoding
+vector of a font.  This provides a convenient way of mapping different
+fonts into the required encoding so that they are easy to use in \TeX.
+A virtual font consists of a \ext{VF} file and a \ext{TFM} file.  \TeX\
+uses the \ext{TFM} file as it would any other.
+
+Figure~\ref{fig:vfdiagram} shows how a virtual font is used by the \TeX\
+system.  In this case, a virtual font \verb|ctmr| has been created
+combining characters from the fonts \verb|trr0n|, \verb|trr6m|, 
+\verb|trr6j|, and \verb|trr10j|.
+
+\epsimage{fig:vfdiagram}{How \protect\TeX\ uses a virtual font}
+
+The document uses the font \verb|ctmr|.  \TeX\ uses the
+font metric information in \filename{ctmr.tfm} to compose the \ext{DVI} file.
+The \dvidriver, however, discovers a \ext{VF} file named \verb|ctmr|, so it
+uses the instructions in the virtual font to select characters from the four
+built-in fonts.  This is a practical example.  It
+shows how the HP LaserJet built-in fonts may be accessed with the standard
+\TeX\ text encoding.
+
+In practice, virtual fonts suffer from one limitation:  A virtual font can
+only permute the encoding vector; it cannot access characters that do
+not appear in the encoding vector of the ``real'' font.  For example, an
+Adobe Type~1 font might contain all of the characters that appear in the
+\TeX\ text encoding, but many of them do not appear in the standard 
+Adobe encoding vector.  A virtual font alone cannot remap the characters 
+into the \TeX\ text encoding.  The encoding vector of the font must also
+be changed.  Several PostScript \dvidriver{}s have this ability.
+
+\newpage
+Virtual fonts are binary files and are very difficult to edit.
+To make it possible to construct virtual fonts by hand, \TeX\
+includes standard utilities (\ixx{\program{VFtoVP}}{VFtoVP} and 
+\ixx{\program{VPtoVF}}{VPtoVF}) for
+converting the binary \ext{VF} format into a human-readable \ext{VPL}
+format.  The \ext{VPL} files are text files that can be edited with
+a text editor.
+
+A complete description of how to create virtual fonts is beyond the scope of
+this book.  If you are interested in experimenting with virtual fonts, I
+strongly recommend that you examine the \program{fontinst}
+package.\footnote{You can retrieve the \program{fontinst} package from the
+CTAN archives in the directory \ctandir{fonts/utilities/fontinst}.}
+\ixx{\program{fontinst}}{fontinst} allows you 
+to construct 
+\ext{VPL} files with \TeX\ documents.  
+This isn't as strange as it first sounds.  Virtual font
+files have to include the metric information from \ext{TFM} files for each
+font that they include.  Because \TeX\ can easily read this information, and
+the output is a plain text document anyway, \TeX\ is a very capable, if
+somewhat slow, tool.
+
+\section{Automatic Font Generation by DVI Drivers}
+\label{sec:autofont}
+
+Recent releases of many popular \dvidriver{}s (\ixx{\dvips}{dvips}, 
+\ixx{\xdvi}{xdvi}, \ixx{\SeeTeX}{SeeTeX@\SeeTeX},
+and \ixx{\emTeX}{emTeX@\emTeX}'s \dvidriver{}s, to name a few) include the ability
+to generate missing fonts 
+automatically\index{fonts!automatic generation}\index{DVI drivers!automatic  font generation}.  
+Automatic font generation overcomes two problems simultaneously: it
+reduces disk space requirements, and it makes font generation easier.
+Most implementations of \TeX\ are distributed with a complete set of
+Computer Modern fonts at seven or more magnifications.  This can easily
+amount to several megabytes of disk space (even more if you are using
+other fonts, like the \ixx{\AmS\ fonts}{AmS fonts@\AmS\ fonts} from the 
+\idx{American Mathematical Society}).  In practice, you probably use only a small subset of these
+fonts.
+
+One way to combat the disk-space problem is to delete all of the \TeX\
+fonts on your system and build just the ones you actually use.
+In the days before automatic font generation, this would have
+been quite unpleasant.  The first time you discovered that you needed
+a font that you did not have, you would have to stop your \dvidriver,
+figure out what size was missing, figure out how to get \MF\ to
+build the font that was missing at the appropriate resolution,
+run \MF, store the font in the right place, and return to your
+\dvidriver.  Moments later, you might discover that you had to do
+the whole process again for some other font.
+
+Using a driver that provides automatic font generation makes it nearly
+painless to delete fonts and let them be built automatically.\footnote{It's
+still a bit tedious, at least on slow machines, but now you can walk away and
+get a cup of coffee ;-).  All the fonts will be built automatically.}
+The \dvidriver\ determines the resolution required, runs \MF\
+with the appropriate parameters, stores the font in the correct
+place, and continues processing the document uninterrupted.
+
+The down side of automatic font generation is that you must keep
+the \MF\ program around and make available the source files
+for the Computer Modern fonts (and any other \MF\ fonts that you
+use).  If you do not already have these files on your
+hard disk, the potential disk space savings are  somewhat reduced.
+(\MF\ is discussed fully in Chapter~\ref{chap:mf}.)
+Moreover, automatic font generation
+can only build \ixx{\ext{PK} files}{PK files@\ext{PK} files}; if \ext{TFM} files are also missing,
+you will have to build those by hand before \TeX\ can process your
+document.\footnote{Recent versions of \TeX\ derived from the 
+\Web2C package can build \ext{TFM} files automatically as well.}
+
+Another benefit of automatic font generation is that it can be used to
+provide previewers, even non-PostScript previewers, with the ability
+to preview documents that use PostScript fonts, provided that you have
+the \ixx{Printer Font ASCII (\ext{PFA})}{Printer Font  ASCII (PFA)} or 
+\ixx{Printer Font Binary (\ext{PFB})}{Printer Font Binary (PFB)} font sources 
+and \ixx{Adobe Font Metric (\ext{AFM})}{Adobe Font Metric (AFM)} for 
+your PostScript fonts.
+
+The following lines, added to the \ixx{\filename{MakeTeXPK}}{MakeTeXPK} script
+distributed with \program{dvips}, provide automatic font generation
+for PostScript fonts with \ixx{\program{ps2pk}}{ps2pk}.  This is useful even on
+systems where PostScript printers are used for output, because previewers
+like \ixx{\program{xdvi}}{xdvi} also use \program{MakeTeXPK} to build missing
+fonts.
+
+\begin{shortexample}
+# Look for a PostScript outline font...
+if [ -r /usr/local/lib/tex/ps/outlines/$NAME.pfa ] 
+then
+  echo Building TeX font from PostScript outline
+  # Hack.  If $6 is null, $DESTDIR => $6 ...
+  PStoTeXfont $1 $2 $3 $4 $5 $6 $DESTDIR
+  exit 0
+else
+  echo Building TeX font from MetaFont outline
+fi
+\end{shortexample}
+
+In this example, PostScript fonts are stored in the 
+\filename{/usr/local/lib/tex/ps/outlines} directory.
+You should change this directory to something appropriate for your system.
+On a \Unix\ system, the \program{PStoTeXfont} script shown in 
+Example~\ref{ex:pstotexfont} is appropriate.\footnote{OK, so not
+\emph{every} example in this book is in \program{Perl}.}  A \program{Perl}
+version of \program{MakeTeXPK} that handles both \MF\ and PostScript
+fonts is shown in Example~\ref{ex:maketexpk} in Appendix~\ref{app:examples}, 
+\textit{\nameref{app:examples}}.
+
+\begin{example}{ex:pstotexfont}{The PStoTeXfont script}
+#!/usr/local/bin/bash
+#
+#   This script file makes a new TeX font from a PS outline.  
+#
+#   Parameters are:
+#
+#   name dpi bdpi [mag mode destdir]
+#
+#   `name' is the name of the font, such as `ptmr'.  `dpi' 
+#   is the resolution the font is needed at.  `bdpi' is 
+#   the base resolution.
+#
+#   This script ignores the remaining parameters.  They are 
+#   left here to document the fact that the caller may provide 
+#   them.  They may be provided because the caller thinks 
+#   MetaFont is going to do the work...
+#
+#   Of course, this needs to be set up for your site.
+#
+# TEMPDIR needs to be unique for each process because of the 
+# possibility of simultaneous processes running this script.
+
+TEMPDIR=/tmp/temp-tex-PS.$$
+NAME=$1
+DPI=$2
+BDPI=$3
+
+LOCALDIR=/usr/local/lib/mf/fonts
+DESTDIR=$LOCALDIR/pk
+
+BASENAME=$NAME.$DPI
+PFADIR=/usr/local/lib/tex/ps/outlines
+
+# Clean up on normal or abnormal exit
+trap "cd /; rm -rf $TEMPDIR" 0 1 2 15
+
+mkdir $TEMPDIR
+cd $TEMPDIR
+
+# We proceed by making a 10pt font at the resolution 
+# requested...
+echo Making ${DPI}dpi version of $NAME.
+ps2pk -X$DPI -P10 -a$PFADIR/$NAME.afm \
+    $PFADIR/$NAME.pfa ${BASENAME}pk
+
+mv ${BASENAME}pk $DESTDIR
+
+exit 0
+\end{example}
+
+A similar script for using automatic font generation under \emTeX\ with \program{4DOS}
+is shown in Examples~\ref{ex:dvidxx} and~\ref{ex:makepk} in
+Appendix~\ref{app:examples}.
+Several other options are available for performing automatic font generation
+on a number of platforms, including a \program{REXX} version for OS/2 and a compiled
+program called \program{MKTeXPK}.
+
+\section{Math Fonts in \protect\TeX}
+
+Changing \idx{math fonts}\index{fonts!math} is 
+more difficult than changing text fonts.  In addition
+to the large number of special symbols that must be available, \TeX\ needs a
+lot more information to use the fonts because the characters are combined more
+frequently and in more complex ways.  For example, the open brace character
+(\{) in math mode is ``extensible;'' this means that it can be as large as
+required.  In order for \TeX\ to construct a brace of arbitrary size, one of
+the math fonts (the math extensions font) contains four different characters
+that \TeX\ combines to form the brace:
+
+\begin{exindent}
+\font\mathex=cmex10
+{\mathex\char'070}, {\mathex\char'102}, 
+{\mathex\char'074}, and {\mathex\char'072}
+\end{exindent}
+
+Extensible recipes for characters like ``\{'', ``\}'', ``('', and ``)''
+are examples of additional metric information that must be available in
+math fonts for \TeX.
+
+In addition to the Computer Modern math fonts, there are really only
+three other choices at present: the \ixx{\AmS\ fonts}{AmS fonts@\AmS\ fonts} 
+(\MF\ fonts freely
+distributed by the \idx{American Mathematical Society} which extend but do
+not replace the Computer Modern math fonts), the \idx{Lucida Bright+New Math fonts}, and the \idx{MathTime fonts}.
+Lucida Bright and MathTime are both sets of commercial PostScript Type~1
+fonts.
+
+\section{Concrete Examples}
+
+The following sections describe by example how you can use several
+different kinds of fonts in \TeX.  The tools described are generally
+free and generally available for multiple platforms.  Where specific
+commercial tools are used, free alternatives are discussed.  
+
+The specific tools I mention here are not
+the only tools available nor are they necessarily the best,
+although I hope I've found the best ones.  If you have
+found a different and better solution, don't abandon it in favor of what
+I use here.  But please do tell me about the method that
+you have found.  With every passing day, more free software becomes
+available.  
+
+\subsection{\protect\MF\ Fonts}
+
+Chapter~\ref{chap:mf} describes how to use
+\MF\ to create fonts for \TeX.\index{metafont@\MF!fonts}\index{fonts!metafont@\MF} If 
+you have \MF\ installed, you can
+easily create fonts that are usable in \TeX.  
+
+\MF\ reads \ext{MF} files, which are plain text files that describe
+a font analogous to the way \TeX\ reads \ext{TEX} files that
+describe a document.
+
+Appendix~\ref{app:fonts}, \textit{\nameref{app:fonts}}, contains
+examples of many \MF\ fonts.  Consult the ``Definitive List of All
+Fonts Available for {\MF}''~\cite{lreq:metafonts} for an up-to-date
+list with availability information.
+
+\subsection{PostScript Type 1 Fonts}
+\label{sec:t1fonts}
+
+PostScript printers have many PostScript 
+Type~1\index{PostScript!fonts}\index{fonts!PostScript} fonts 
+built in.  If you want
+to use built-in fonts, you only need the metric information for them
+and  a PostScript \dvidriver. The \program{dvips} driver is the most
+popular free \dvidriver.  Several commercial drivers are also available.
+
+The metric information should be available in the form of Adobe Font
+Metric (\ext{AFM}) files\index{AFM files@\ext{AFM} files} from the printer vendor or directly from
+\idx{Adobe Systems}, Inc.  You need a program that will convert \ext{AFM}
+files into \ext{TFM} files\index{TFM files}.  There are several free programs that
+will do this conversion (one is included with \program{dvips}), and
+your \dvidriver\ may have included one.  In general, if one came with
+your \dvidriver, that is the one you should use.
+
+If you want to use PostScript Type~1 fonts on non-PostScript devices,
+like most screen previewers, you need the ``sources'' for the fonts
+that you want to use.  Many font vendors sell fonts in Adobe Type~1
+format.  In addition, there are many Type~1 fonts available on the
+Internet and on bulletin board systems.\footnote{Before you use these 
+``free'' fonts, be aware that many are of questionable
+legality.}
+
+Several companies have made complete, high-quality fonts available.
+They are: 
+
+{\LTleft=.25in%
+\begin{xtable}{ll}
+  IBM Courier       & URW Antiqua \\
+  Bitstream Courier & URW Grotesk Bold \\
+  Bitstream Charter & Nimbus Roman No9 \\
+  Adobe Utopia      & Nimbus Sans 
+\end{xtable}%
+}
+
+Check the license that accompanies these fonts to make sure that you can use
+them legally.
+
+PostScript Type~1 font sources are available in 
+\ixx{Printer Font ASCII (\ext{PFA})}{Printer Font ASCII (PFA)} and 
+\ixx{Printer Font Binary (\ext{PFB})}{Printer Font Binary (PFB)}
+formats.\footnote{PostScript fonts for the Macintosh are stored in
+\ext{PFB} format (essentially) in the resource fork of the printer
+font file.  The metric information is stored in the screen font, which
+also contains bitmaps for on-screen display.}  The \ext{PFB} format is
+more compact, but less portable.  \Unix\ systems usually use \ext{PFA}
+files, while MS-DOS and OS/2 systems use \ext{PFB} files.  Several existing
+programs can convert \ext{PFB} files into \ext{PFA} files
+and vice-versa.  For the remainder of this section, I will
+consistently refer to PostScript Type~1 source files as \ext{PFA}
+files, although you can use \ext{PFB} files instead if they are
+supported on your platform.
+
+In addition to the \ext{PFA} files, you will also need metric information
+for the fonts.  The metric information {\em should\/} be available in
+\ext{AFM} format.  If you purchased fonts from a vendor and did not receive
+\ext{AFM} files, you should complain.  Fonts from free sources, like
+Internet archive sites and bulletin board systems sometimes include only
+\ixx{Printer Font Metric (\ext{PFM})}{Printer Font Metric (PFM)} files.  
+These are Microsoft Windows
+printer metric files, and they do not contain enough information to 
+make a \ext{TFM} file.  
+
+It is possible to create a \ext{TFM} file from the \ext{PFM}
+file, but the metrics are not particularly good.  To do this:
+
+\begin{enumerate}
+  \item Convert the \ext{PFM} file into an incomplete \ext{AFM} file
+        with the \ixx{\program{PFM2AFM}}{PFM2AFM} utility.
+  \item Use the \ixx{\program{PS2PK}}{ps2pk} program to make a \ext{PK} file.  
+  \item Use \ixx{\program{PKBBOX}}{PKBBOX} to create a more complete \ext{AFM} file
+        from the incomplete \ext{AFM} file and
+        the \ext{PK} file.  
+\end{enumerate}
+
+The \ext{AFM} file manufactured in this way can be
+used to create a \ext{TFM} file.
+The \ext{PK} file can be used by any \dvidriver\ that understands
+\TeX\ \ext{PK} fonts (almost all drivers have this ability).
+
+Creating \ext{PK} files does require more disk space, but it has the
+advantage that you can print \TeX\ documents which use PostScript Type~1
+fonts on non-PostScript devices.  This includes fast, \ext{PK}-based
+screen previewers like \program{xdvi} and \emTeX's \program{dviscr}
+that do not understand PostScript.
+
+Programs like \ixx{\program{dvipsone}}{dvipsone} and \ixx{\program{dviwindo}}{DVIWindo} which 
+run under
+the Microsoft Windows environment can use PostScript fonts directly if
+\idx{Adobe Type Manager (ATM)} is installed on the system.  However, it is
+still necessary to construct the \ext{TFM} files for \TeX.
+
+\subsubsection{Using a new PostScript font in \protect\TeX\ (for
+PostScript printers)}
+
+This section presents a step-by-step description of how
+to use a new PostScript font in \TeX\ with a PostScript printer or previewer.
+In this situation, you have a PostScript
+printer, and you use \program{dvips} to print your documents.  This
+method also allows you to preview your documents with
+\program{Ghostscript}.
+
+For either method, you must first obtain the PostScript sources for
+the font that you want to use.  You {\em must\/} have a \ext{PFA} or
+\ext{PFB} file and an \ext{AFM} file.  As a concrete example, I'll use
+the ``Nimbus Roman 9L Regular'' font.  For this font, I obtain
+\filename{unmr.pfa} and \filename{unmr.afm}.  These fonts are
+available from the CTAN archives in the directory
+\ctandir{fonts/urw}.\footnote{The Nimbus fonts actually come with
+\ext{TFM} and \ext{VF} files which makes some of the following steps
+redundant.  But because most fonts \emph{don't} come with \TeX\ metrics,
+the example is important.}
+In order to use the font in \TeX, you must create \TeX\ font metrics
+for it using \ixx{\program{afm2tfm}}{afm2tfm} (in particular, the version of
+\program{afm2tfm} that comes with \program{dvips}).  
+
+First, however, we must decide what encoding vector to use.
+Frequently, the fonts you obtain use Adobe Standard Encoding.
+The problem with this encoding is that it isn't very complete; it
+leaves out a lot of standard \TeX\ characters (like the ligatures
+``fi'' and ``fl'' as well as many accented and international letters).
+Instead of using \idx{Adobe Standard Encoding}, I recommend using 
+the \idx{Cork Encoding}.  The Cork Encoding has 
+several advantages; it is a superset
+of the original \TeX\ text encoding; it is becoming a new standard for
+\TeX; and it is supported by the NFSS2.  Of course, the Cork Encoding
+is not suitable for all fonts; there's no reason to try to re-encode a
+symbol font into the Cork Encoding---that doesn't even make any sense.
+
+Luckily, using the Cork Encoding is no more difficult than using
+whatever encoding the distributed font contains.  \program{afm2tfm}
+will do all the work.  You only need to obtain the appropriate encoding
+file.  In this case, the file is \filename{ec.enc}, and it is distributed
+with both \program{dvips} and NFSS2.
+Use \program{afm2tfm} to generate the metrics:
+
+\begin{ttindent}
+\$\ {\bf afm2tfm unmr.afm -v unmr.vpl -T ec.enc unmr0.tfm}
+\end{ttindent}
+
+This command reads \filename{unmr.afm}, the original \ext{AFM} file with
+an arbitrary encoding, and the encoding vector \filename{ec.enc}.  It
+creates the virtual font \filename{unmr.vpl} and the \ext{TFM} file
+\filename{unmr0.tfm}.
+
+The relationship between these files is subtle.  The \ext{AFM} file
+contains metric information for all the possible \idx{glyphs} in the font.
+The encoding file establishes the encoding vector---which particular
+characters occur in exactly what order.  These two files are combined
+to produce character metric information for the specific encoding
+vector.  This information is saved in the \ext{TFM} file.  This is a
+``raw'' \ext{TFM} file\index{TFM files!raw}.\footnote{Raw \ext{TFM} files 
+used to be identified
+with an ``r'' prefix, but recently the trend has turned towards a ``0''
+suffix.  For a more complete discussion of font names, consult
+\textit{Filenames for Fonts}~\cite{tug:filenames-fonts}.}
+It does not have any
+ligature or kerning information and \emph{may} have a different
+encoding from the virtual font (although, in this case it has 
+the same encoding).
+
+The next step is to produce a virtual font from the \ext{VPL} 
+file\index{VPL files}:
+
+\begin{ttindent}
+\$\ {\bf vptovf unmr.vpl unmr.vf unmr.tfm}
+\end{ttindent}
+
+This produces a virtual font file, \filename{unmr.vf}, and an appropriate
+\ext{TFM} file.  This \ext{TFM} file has ligature and kerning
+information for the characters in the font as well as the metrics for
+the individual glyphs.
+
+The names of the virtual font files and the related \ext{TFM} files
+are entirely arbitrary.  You can give them any names you wish.  In the
+long run, you will benefit if you choose a naming scheme that allows
+you to determine which files are which simply by examining the names.
+If you have a lot of fonts, take a look at \emph{Filenames for
+Fonts}~\cite{tug:filenames-fonts}.  It is also available electronically
+from CTAN in the directory \ctandir{info/filename}.
+
+Now you should install the \ext{VF} and \ext{TFM} files in the appropriate
+directories and proceed to use the \texttt{unmr} font.  \TeX\ will
+do the right thing because the \ext{TFM} file contains the appropriate
+metric information, and the \dvidriver\ will do the right thing because
+it has a virtual font which specifies how the characters should be mapped
+into the printer.  
+
+Now that \TeX\ is happy, we have the additional problem of making the
+PostScript printer happy.  The easiest way to do this is to tell
+\program{dvips} to do it for us.  The \filename{psfonts.map} file used
+by \program{dvips} identifies which fonts are built into the printer and
+which fonts need to be downloaded. 
+
+Each line in the \filename{psfonts.map} file describes how a particular
+\TeX\ font should be interpreted.  The simplest lines identify the PostScript
+name of fonts built into the printer.   For
+\linebreak
+\newpage
+example, the following line
+indicates that \ixx{\program{dvips}}{dvips} should use the PostScript font Times-Roman
+(which is assumed to be resident in the printer) everywhere that the 
+\ext{DVI} file uses the font \texttt{rptmr}:
+
+\begin{shortexample}
+rptmr Times-Roman
+\end{shortexample}
+
+To automatically download a 
+PostScript font\index{fonts!PostScript!downloading}, 
+add \verb|<|\texttt{\textit{fontfile}}
+to the corresponding line in the \filename{psfonts.map} file.  The following
+entry indicates that the PostScript font CharterBT-Roman should be used
+where \texttt{rbchr} is used in the document.  In addition, \program{dvips}
+should download the font from the file
+\filename{/usr/local/lib/fonts/psfonts/bchr.pfa} if it is used in the
+document.
+
+\begin{shortexample}
+rbchr CharterBT-Roman </usr/local/lib/fonts/psfonts/bchr.pfa
+\end{shortexample}
+
+Additional PostScript commands can be added to the entry to perform special
+effects.  Some of these are described in the documentation for
+\program{dvips}. They require a knowledge of PostScript that is beyond the 
+scope of this book.
+
+Adding the following line to \filename{psfonts.map} will download and use the
+Nimbus URW font we installed above. (It is shown on two lines only because of
+the constraints of the page; you should enter it on one line):
+
+\begin{shortexample}
+unmr0 NimbusRomanNo9L-Regular <unmr.pfa
+      "ECEncoding ReEncodeFont" <ec.enc
+\end{shortexample}
+
+This line identifies the font \texttt{unmr0} as the NimbusRomanNo9L-Regular
+PostScript font,  re-encoded with the ECEncoding
+described in the file \filename{ec.enc}.  Because this font is not resident
+in the printer, you must also tell \program{dvips} to download the font
+from \filename{unmr.pfa}.  If you keep encoding files or PostScript fonts
+(\ext{PFB} or \ext{PFA} files) in nonstandard locations, you will have
+to specify the full path of \filename{ec.enc} and/or \filename{unmr.pfa}.
+
+Notice that you specify the \emph{raw} font in the \filename{psfonts.map}
+file.  \TeX\ and \program{dvips} will use the virtual font to determine
+which character(s) from which raw font(s) should \emph{actually} be used
+to print your document.  \program{afm2tfm} prints the line that should
+be added to the font map file when it is finished converting the font,
+so you don't always have to remember which is which.
+
+The \filename{psfonts.map} file (and the encoding and font files) are
+typically stored in a system-default location.  On \Unix\ systems,
+this is frequently \filename{/usr/local/lib/tex/ps}.  If you
+can't (or don't want) to change files in this directory, you can use
+your own font map file. 
+
+When you run \program{dvips}, it loads a initialization file 
+(typically \filename{\tttilde/.dvipsrc}).  
+If you put the following line in that file:
+
+\begin{shortexample}
+p +/home/jdoe/myfonts.map
+\end{shortexample}
+
+it extends the system-wide font map using the file
+\filename{/home/jdoe/myfonts.map}, which has the same format as the
+\filename{psfonts.map} file.
+
+\newpage
+If you use the \verb|<font.pfa| syntax in your font map file to download
+PostScript fonts, you may discover that \program{dvips} is producing very
+large output files (or takes a long time to print, if output is going
+directly to a printer).  The reason is that \program{dvips} is downloading
+the font at the beginning of every document that uses it.  If you have
+a few fonts that you use all the time, it may be faster and more convenient
+to download the fonts manually at the beginning of the day and then remove
+the \verb|<font.pfa| portion of the font mapping line (leave the 
+encoding file, however).  This will produce smaller output files because
+\program{dvips} will assume that the fonts are already downloaded.
+Of course, the trade-off is that your documents will not print correctly
+(because the appropriate fonts are not attached to the PostScript file)
+if you mail them to a colleague who doesn't download the same fonts you
+do, or if you forget to download the fonts again after someone power-cycles
+the printer.\footnote{Some spooling software will transparently handle
+these problems (by downloading fonts that you forget) if the fonts
+are available.}
+
+\subsubsection{Using a new PostScript font in \protect\TeX\ (for
+non-PostScript devices)}
+
+Using PostScript fonts for screen previewing or printing on non-PostScript
+printers is a very different process from printing on PostScript devices.
+You still need the \ext{AFM} and \ext{PFA} files.
+
+This time you're going to create \ext{PK} files with \ixx{\program{ps2pk}}{ps2pk}, so
+virtual fonts are less useful.  In fact, you have to give the \ext{AFM} file
+the correct encoding in order to get the right \ext{PK} file, so we'll
+avoid virtual fonts altogether.  Of course, if you need several different encodings
+(perhaps \TeX\ Text, Cork, and Adobe Standard) for different documents, you'll
+be better off with one or two raw font files and several virtual fonts, but
+for the moment let's imagine that that is not the case.
+
+Example~\ref{ex:encafmpl} in Appendix~\ref{app:examples},
+\textit{\nameref{app:examples}}, is a Perl script that changes the encoding
+vector in an \ext{AFM} file to reflect the encoding specified in an encoding
+file (like the ones used in the preceding section).  This is an important step
+because \program{ps2pk} uses the encoding in the \ext{AFM} file to determine
+which glyphs to render.\footnote{This step isn't necessary when using a
+PostScript printers because the PostScript font always contains all the
+glyphs.  The font created by \program{ps2pk} will only contain the characters
+in a single encoding.}
+
+To install this script, save it in a file called \filename{enc-afm.pl} and
+change the top of the script (the \verb|#!| line) to reflect where Perl is
+installed on your system.  Users of Perl on non-\Unix\ systems may have to
+work a little harder, or simply use the syntax \textit{perl
+enc-afm.pl} to run the script.  \Unix\ users can create a symbolic link to
+\filename{enc-afm.pl} called \filename{enc-afm}, and mark it as executable.
+
+Using this script, transform \filename{unmr.afm} into \filename{unmrX.afm}:
+
+\begin{ttindent}
+\$\ \textbf{enc-afm unmr.afm ec.enc > unmrX.afm}
+\end{ttindent}
+
+\newpage
+Now the \filename{unmrX.afm} file has the Cork encoding.  We can use this
+file to create a \ext{TFM} file for \TeX:
+
+\begin{ttindent}
+\$\ \textbf{afm2tfm unmrX.afm unmr.tfm}
+\end{ttindent}
+
+This \ext{TFM} file should be moved to the directory where you store \ext{TFM}
+files for \TeX.  
+
+Unlike PostScript fonts on PostScript devices, different \ext{PK} files must
+be created for each size required.  As a concrete example, let's assume we
+want a 14pt font.
+The easiest way to create a 14pt font with \program{ps2pk} is to use the
+\textit{-P} parameter to specify the size.  Unfortunately, this will
+cause some \dvidriver{}s to complain because \textit{-P} sets the design
+size of the \ext{PK} file, and it won't match the design size in the \ext{TFM}
+file.  A better solution is to determine the resolution you need with the
+following formula: 
+
+$$\hbox{resolution} = {{\hbox{base resolution} * \hbox{point size}}\over{10}}$$
+
+The factor 10 is used because it is the nominal design size of PostScript
+fonts (at least, that's what  \program{afm2tfm} uses).  For example, if
+we are creating a 14pt font for a 300dpi laser printer, the desired resolution
+is $300*14/10 = 420$.  Now we can create the font:
+
+\begin{ttindent}
+\$\ \textbf{ps2pk -X420 -aunmrX.afm unmr.pfa unmr.420pk}
+\end{ttindent}
+
+This command creates a 420dpi \ext{PK} file using the \ext{AFM} file
+\filename{unmrX.afm}.  The font source comes from \filename{unmr.pfa}, and
+the resulting \ext{PK} file is called \filename{unmr.pk}.  On MS-DOS
+systems, name the output \ext{PK} file \filename{unmr.pk} because
+\filename{unmr.420pk} is not a valid filename.  Move the resulting \ext{PK}
+file to the appropriate directory.  On \Unix\ systems, it is probably
+\filename{/usr/local/lib/tex/fonts/pk}; while on MS-DOS and other systems,
+it is probably something like \filename{/texfonts/420dpi}.
+
+\subsection{HP LaserJet Softfonts}
+
+Bitmapped HP LaserJet Softfonts\index{fonts!LaserJet softfonts} can 
+easily be converted into \TeX\
+\ext{PK} files with the \program{SFPtoPK} utility.  Then they can
+be used with almost any \dvidriver.
+
+Scalable LaserJet Softfonts can be used by \TeX\ if two conditions are
+met: metric information is available, and the \dvidriver\ that you are
+using can access built-in printer fonts.  Metric information for Scalable
+LaserJet Softfonts distributed by Hewlett-Packard come in
+the form of Tagged Font Metric files.  Tagged Font Metric files 
+have the extension \ext{TFM}, but they should not be confused
+with \TeX\ \ext{TFM} files.  The utility \program{hptfm2pl} converts
+Tagged Font Metric files into \TeX\ \ext{PL} files (\ext{PL} is
+a human-readable text format of \ext{TFM} files).  \ext{PL} files
+are transformed into \ext{TFM} files by the standard \TeX\ utility
+\program{PLtoTF}.
+
+To use Scalable LaserJet Softfonts, you must convert the metric
+information into \TeX\ \ext{TFM} files so that \TeX\ can use the
+font, and then you must inform your \dvidriver\ that the fonts
+are built into the printer.  Before printing your document, download
+the Scalable LaserJet Softfont to your printer.  The \program{sfload}
+utility that is part of Sfware can download Scalable LaserJet Fonts.
+Many other free and shareware font downloading programs exist, too.
+
+\subsection{TrueType Fonts}
+
+At present, TrueType fonts\index{fonts!TrueType} can 
+be used only on systems that have built-in
+TrueType support (the Macintosh and MS-DOS computers running Microsoft
+Windows 3.1 fall into this category).  You must use \dvidriver{}s that
+communicate with the printer through the system's printer interface.
+
+\footnotetext{This\label{footnote:answer} is the answer to the
+question posed on page~\pageref{footnote:question}: ``$\backslash${\tt
+fontshape\ttopenbrace it\ttclosebrace}$\backslash${\tt selectfont}''}
+
+% Local Variables: 
+% mode: latex
+% TeX-master: "driver"
+% End: 

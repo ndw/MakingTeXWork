@@ -1,0 +1,18 @@
+\newbox\wndobox
+\newdimen\wndowd
+\font\wndoa=wndoa at 72.27truept
+\font\wndob=wndob at 72.27truept
+\setbox\wndobox=\vbox{\hbox{%
+\wndoa\char0\char1\char2\char3\char4}}
+\wndowd=\wd\wndobox
+\setbox\wndobox=\hbox{\vbox{\hsize=\wndowd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\wndoa\char0\char1\char2\char3\char4}
+\hbox{\wndoa\char5\char6\char7\char8\char9}
+\hbox{\wndob\char0\char1\char2\char3\char4}
+\hbox{\wndob\char5\char6\char7\char8\char9}}}
+\ifx\parbox\undefined
+    \def\setwndo{\box\wndobox}
+\else
+    \def\setwndo{\parbox{\wd\wndobox}{\box\wndobox}}
+\fi

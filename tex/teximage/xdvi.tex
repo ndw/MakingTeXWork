@@ -1,0 +1,22 @@
+\newbox\xdvibox
+\newdimen\xdviwd
+\font\xdvia=xdvia at 72.27truept
+\font\xdvib=xdvib at 72.27truept
+\font\xdvic=xdvic at 72.27truept
+\font\xdvid=xdvid at 72.27truept
+\setbox\xdvibox=\vbox{\hbox{%
+\xdvia\char0\char1\char2\char3\char4\char5\char6}}
+\xdviwd=\wd\xdvibox
+\setbox\xdvibox=\hbox{\vbox{\hsize=\xdviwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\xdvia\char0\char1\char2\char3\char4\char5\char6}
+\hbox{\xdvia\char7\char8\xdvib\char0\char1\char2\char3\char4}
+\hbox{\xdvib\char5\char6\char7\char8\char9\xdvic\char0\char1}
+\hbox{\xdvic\char2\char3\char4\char5\char6\char7\char8}
+\hbox{\xdvic\char9\xdvid\char0\char1\char2\char3\char4\char5}
+\hbox{\xdvid\char6\char7\char8\char9\char10\char11\char12}}}
+\ifx\parbox\undefined
+    \def\setxdvi{\box\xdvibox}
+\else
+    \def\setxdvi{\parbox{\wd\xdvibox}{\box\xdvibox}}
+\fi

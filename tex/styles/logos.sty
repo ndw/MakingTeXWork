@@ -1,0 +1,178 @@
+% TeXnical logos...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\fileversion{1.0}
+\def\filedate{13Jun93}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\@ifundefined{logosstyle}{}{\endinput}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\immediate\write\sixt@@n{File: `logos.sty' 
+\fileversion\space <\filedate> (ndw)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\logosstyle{Version 1.0 (ndw)}
+
+\input{orafonts}
+
+\def\textem#1{\textit{#1}}
+\def\textemph#1{\textem{#1}}
+
+% Handle NFSS1 w/o complaint
+\@ifundefined{mathcal}{\let\mathcal=\cal}{}
+
+\def\Unix{{\sc UNIX}}
+%\def\Tib{T\kern-.15em{\sc i}\kern-.02em b}
+\def\Tib{Tib}
+
+\def\DraTeX{Dra\TeX}
+\def\iniMF{\program{iniMF}}
+\def\iniTeX{ini\TeX}
+\def\cmactex{CMac\TeX}
+\def\oztex{Oz\TeX}
+\def\directex{Direct\TeX}
+\def\Textures{\program{Textures}}
+\def\mfware{\program{MFware}}
+\def\texware{\TeX{}ware}
+\def\turbotex{Turbo\TeX}
+\def\TurboTeX{Turbo\TeX} % move Turbo and TeX together?
+\def\utex{{\fontencoding{OML}\fontfamily{cmm}\selectfont\char"16\relax}\TeX}
+\def\sbTeX{sb\TeX}
+\def\sbMF{\program{sbMF}}
+\def\gTeX{g\TeX}
+\def\PCTeX{PC\TeX}
+\def\YY{Y\kern-.15em{\smsize\&}\kern-.15em Y}
+\def\yyTeX{\YY\TeX}
+\def\fourTeX{\leavevmode\hbox{\lower.4ex\hbox{4}\kern-.15em\TeX}}
+
+\def\TeXShell{\TeX{}Shell}
+\def\TeXPert{\TeX{}Pert}
+\def\PMTeX{PM\TeX}
+
+\def\jtex{J\TeX}
+\def\pmj{\texttt{pmJ}}
+\def\pmc{\texttt{pmC}}
+\def\jemtex{J\textit{em}\TeX}
+\def\arabTeX{Arab\TeX}
+
+\def\MusicTeX{Music\TeX}
+
+\def\XeT{X\kern-.125em\lower.3ex\hbox{E}\kern-.1667em T}
+\def\PCTeX{PC\TeX}
+\def\ams{American Mathematical Society}
+\def\XFig{X-Fig}
+\def\REVTeX{REV\TeX}
+\def\MFPic{MFPic}
+\def\FigMF{Fig2MF}
+\def\XYPic{X\kern-.2em\lower.4ex\hbox{Y}-pic}
+\def\PSTricks{PSTricks}
+\def\PiCTeX{P\kern-.08em\lower.5ex\hbox{I}\kern-.04emC\TeX}
+\def\ps{PostScript}
+\def\plainTeX{Plain \TeX}
+\def\Web{{\sc Web}}
+\def\web{\Web}
+\def\XTeX{X\TeX}
+\def\xtex{\XTeX}
+\def\SeeTeX{See\TeX}
+\def\xdvi{\program{xdvi}}
+\def\dvips{\program{dvips}}
+\def\MFpic{\program{MFpic}}
+\def\tutils{t1utils}
+\def\emTeX{em\TeX}
+\def\PBMplus{PBMplus}
+\def\texcad{\program{texcad}}
+\def\auctex{AUC-\TeX}
+\def\dvidriver{DVI driver}
+\def\MakeTeXPK{\program{MakeTeXPK}}
+\def\MakeTeXTFM{\program{MakeTeXTFM}}
+\def\TeXtoXfont{\program{TeXtoXfont}}
+\def\ghostscript{\program{Ghostscript}}
+\def\ghostview{\program{Ghostview}}
+\def\dvips{\program{dvips}}
+\def\ctan{Comprehensive \TeX\ Archive Network}
+\def\TeXinfo{\TeX{}info}
+\def\troff{\program{troff}}
+\def\dvilaserhp{\program{DVILASER/HP}}
+\def\dvilaserps{\program{DVILASER/PS}}
+\def\tpre{\program{\TeX\ Preview}}
+
+% Macros defined (not necessarily in this order)
+%
+% \AMSLaTeX 
+% \AMSTeX    (\AmS)
+% \BibTeX
+% \FoilTeX
+% \INRSTeX
+% \LaTeX
+% \LamSTeX
+% \MF
+% \MFbook
+% \ScriptTeX
+% \SliTeX
+% \TeX
+% \TeXtures
+% \TheMFbook
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Logos for Garamond
+%
+\def\smsize{%
+  \ifnum\f@size=24\fontsize{18}{20pt}\selectfont\else%
+    \ifnum\f@size=18\fontsize{14}{16pt}\selectfont\else%
+      \ifnum\f@size=14\fontsize{11}{12pt}\selectfont\else%
+        \ifnum\f@size=11\fontsize{9}{10pt}\selectfont\else%
+          \ifnum\f@size=10\fontsize{8}{9pt}\selectfont\else%
+            \ifnum\f@size=9\fontsize{7}{8pt}\selectfont\else%
+              \ifnum\f@size=8\fontsize{6}{7pt}\selectfont\else%
+                \typeout{LaTeX macro undefined for size \f@size!}\undefined%
+              \fi%
+            \fi%
+          \fi%
+        \fi%
+      \fi%
+    \fi%
+  \fi
+}
+
+%\def\TeX{T\kern-.1667em\lower.3ex\hbox{E}\kern-.125em X}
+\def\TeX{T\kern-.075em\lower.29ex\hbox{E}\kern-.075em X}
+
+\def\LaTeX{L\kern-.2em%
+           \raise.3ex%
+           \hbox{\smsize A}%
+           \kern-.15em%
+           T\kern-.1667em\lower.3ex\hbox{E}\kern-.125emX}
+
+\def\LaTeXe{\LaTeX\kern.15em$2_{\textstyle\varepsilon}$}
+
+\def\SliTeX{{S\kern-.02em{\smsize L\kern-0.02emI}\kern-0.1em\TeX}}
+
+%\def\AmS{{%
+%    $\mathcal A\kern-.1667em\lower.5ex\hbox{$\mathcal M$}\kern-.125emS$}}
+
+\def\AmSfont{\fontfamily{amslogofam}\selectfont}
+\def\AmS{{\AmSfont A\kern-.1667em\lower.5ex\hbox{M}\kern-.125em S}}
+
+\def\AMSTeX{\AmS-\TeX}
+
+\def\AMSLaTeX{\AmS-\LaTeX}
+
+\def\INRSTeX{INRST\kern-.1667em\lower.5ex\hbox{E}%
+  \kern-.2em\lower.15ex\hbox{$\hat{}$}\kern.15em X}
+
+\def\BibTeX{{B{\smsize IB}\kern-.2ex\TeX}}
+
+\def\LamSTeX{{%
+    L\kern-.25em\raise.3ex\hbox{$\scriptstyle\mathcal A$}\kern-.25em
+    \lower.4ex\hbox{$\scriptstyle\mathcal M$}\kern-.1em{$\mathcal S$}-\TeX}}
+
+\def\TeXtures{{%
+    \TeX\smsize TURES}}
+
+\def\MF{{\fontfamily{logo}\selectfont META}\-%
+        {\fontfamily{logo}\selectfont FONT}}%
+\def\TheMFbook{\textit{The \MF{}book}}
+\def\MFbook{\textit{\MF{}book}}
+
+\def\FoilTeX{{%
+   {\sf Foil}\TeX}}
+
+\def\ScriptTeX{{\tt Script}\TeX}
+

@@ -1,0 +1,151 @@
+@echo off
+: -----------------------------------------------------------------------
+: MAKEPK Copyright (C) 1992,94 by Norman Walsh
+:
+: This file is free.  You can do anything you like with it with one
+: exception: if you change this file, you MUST rename it!
+:
+: Requirements: 4DOS, ps2pk, afm2tfm, pfm2afm, pkbbox
+:
+: Usage: MAKEPK fontfn ptsize [pkfn] [-opts]
+:
+: Norman Walsh
+: <norm@ora.com>
+:
+: 12/09/1992: - Vers 0.5
+:--------------------------------------------------------------------------
+: See usage info below
+:
+: This batch file relies on the following directory structure:
+:
+: C:\PSFONTS\                 Root of the PostScript fonts directory.
+:                             This is stored in the %[PSFONTS] env. variable
+: %[PSFONTS]\PFB              Where .PFB files are kept
+: %[PSFONTS]\AFM              Where .AFM files are kept
+: %[PSFONTS]\PFM              Where .PFM files are kept (only required if the
+:                             AFM file does not exist)
+: %[PSFONTS]\TFM              Where _all_ TFM files are kept for PS fonts
+: C:\BIN\PS2PK                Where all the PS2PK utils are kept
+:--------------------------------------------------------------------------
+: Make sure the parameters are ok...
+iff %# lt 1 then
+  echo Usage: %0 fontfn ptsize [pkfn] [-opts]
+  echo.
+  echo MAKEPK rasterizes 'fontfn' at 'ptsize' and stores it in 'pkfn'.  The
+  echo default 'pkfn' is the name of the 'fontfn'.  All fonts are stored in
+  echo the %[psfonts]\@Rrdpi\ directory.  If -opts are supplied, they are
+  echo passed to PS2PK.
+  quit 1
+endiff
+
+: Setup local environment
+setlocal
+pushd %[psfonts]
+
+: Parse the command line
+set pfbfn=%@name[%1]
+set ptsz=%2
+set pkfn=%@name[%3]
+shift 2
+:toshift
+iff ³%@substr[%1,0,1]³ == ³-³ then
+  set pkopts=%pkopts %1
+else
+  set pkfn=%@name[%1]
+endiff
+shift
+if %# gt 0 goto toshift
+: -----------------------------------------------------------------------
+: Figure out the name of the appropriate PK directory.  Create it if it
+: doesn't exist.  Abort if a filename exists with that name...
+:
+: TeX seems to underestimate the font size by a very small amount.  We
+: compensate (in the calculation of the directory) by adding the small
+: amount 0.0005 to the point size before truncating to integer...
+:
+set pkres=%@int[%@eval[(%@eval[%ptsz+0.0005] * 300) / 10]]
+set pkdir=%[pkres]dpi
+if isdir %pkdir goto okdir
+iff not exist %pkdir then
+  md %pkdir
+  goto okdir
+endiff
+echo MakePK: Cannot create directory: %pkdir
+quit 1
+:okdir
+: -----------------------------------------------------------------------
+: Setup the %PKFN if it wasn't set by a parameter
+if "%pkfn" == "" set pkfn=%@name[%pfbfn]
+
+: If the font and TFM alread exist, don't bother making them
+iff exist %[pkdir]\%[pkfn].pk .and. .\tfm\%@filesize[%[pkfn].tfm] gt 0 then
+  popd
+  quit 0
+endiff
+
+: Check to see if an AFM file exists (and has a reasonable size)...
+iff %@filesize[.\afm\%[pfbfn].afm] gt 0 then
+  set afmok=1
+else
+  set afmok=0
+endiff
+: -----------------------------------------------------------------------
+: Make sure we have everything we need...a PFB and an AFM or PFM...
+set ok=1
+iff not exist .\pfb\%[pfbfn].pfb then
+  echo Cannot find PFB file: .\pfb\%[pfbfn].pfb
+  set ok=0
+endiff
+iff not exist .\pfm\%[pfbfn].pfm .and. %afmok == 0 then
+  echo Cannot find PFM file (.\pfm\%[pfbfn].pfm) and
+  echo cannot find AFM file (.\afm\%[pfbfn].afm)
+  set ok=0
+endiff
+if "%ok" == "0" quit 1
+set ok=
+: -----------------------------------------------------------------------
+: If we didn't find an AFM file, make one...
+iff %afmok == 0 then
+  echo PFMtoAFM...
+  \bin\ps2pk\pfm2afm .\pfm\%[pfbfn].pfm .\afm\%[pfbfn].afm
+endiff
+
+: -----------------------------------------------------------------------
+: Build the font...
+echo Rasterizing...
+::: The lines marked *** MERGE *** should be joined onto the end of the
+::: preceding line.  They were broken only to fit within the margins of
+::: this book.
+echo ps2pk -P10 -X%[pkres] -a.\afm\%[pfbfn].afm %pkopts 
+*** MERGE ***   .\pfb\%[pfbfn].pfb %[pkdir]\%[pkfn].pk
+ps2pk -V -P10 -X%[pkres] -a.\afm\%[pfbfn].afm %pkopts 
+*** MERGE ***   .\pfb\%[pfbfn].pfb %[pkdir]\%[pkfn].pk
+
+: If we didn't get a descent AFM then we built it with AFM2PFM.  
+: Unfortunately, the bounding boxes are missing if we did that.  
+: So add the bounding boxes with the UGLY HACKISH PKbbox program...
+iff %afmok == 0 then
+  echo PKbbox to make bounding boxes...
+  set tempafm=%@unique[.]
+  c:\tex\util\pkbbox %pkdir\%pkfn.pk .\afm\%[pfbfn].afm > %tempafm
+  move %tempafm .\afm\%[pfbfn].afm
+endiff
+
+: If there's no TFM, build it...
+iff not exist .\tfm\%[pkfn].tfm then
+  echo AFMtoTFM...
+  afm2tfm .\afm\%[pfbfn].afm .\tfm\%[pkfn].tfm
+endiff
+
+::: If we didn't build a 10pt font, scale it appropriately
+::iff not "%ptsz" == "10" then
+::  c:\tex\util\pkscale %[pkdir]\%[pkfn].pk .\tfm\%[pkfn].tfm /designsize:10
+::  del %[pkdir]\%[pkfn].bak /q
+::endiff
+
+:
+: -----------------------------------------------------------------------
+: We're all done...
+popd
+endlocal
+quit 0

@@ -1,0 +1,14 @@
+\newbox\txpmbox
+\newdimen\txpmwd
+\font\txpma=txpma at 72.27truept
+\setbox\txpmbox=\vbox{\hbox{%
+\txpma\char0\char1\char2\char3\char4\char5}}
+\txpmwd=\wd\txpmbox
+\setbox\txpmbox=\hbox{\vbox{\hsize=\txpmwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\txpma\char0\char1\char2\char3\char4\char5}}}
+\ifx\parbox\undefined
+    \def\settxpm{\box\txpmbox}
+\else
+    \def\settxpm{\parbox{\wd\txpmbox}{\box\txpmbox}}
+\fi

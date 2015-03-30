@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % entities.ent SYSTEM "entities.ent">
+%entities.ent;
+<!ENTITY VERSION SYSTEM "VERSION.xml">
+<!ENTITY ch00.xml SYSTEM "ch00.xml">
+<!ENTITY ch01.xml SYSTEM "ch01.xml">
+<!ENTITY ch02.xml SYSTEM "ch02.xml">
+<!ENTITY ch03.xml SYSTEM "ch03.xml">
+<!ENTITY ch04.xml SYSTEM "ch04.xml">
+<!ENTITY ch05.xml SYSTEM "ch05.xml">
+<!ENTITY ch06.xml SYSTEM "ch06.xml">
+<!ENTITY ch07.xml SYSTEM "ch07.xml">
+<!ENTITY ch08.xml SYSTEM "ch08.xml">
+<!ENTITY ch09.xml SYSTEM "ch09.xml">
+<!ENTITY ch10.xml SYSTEM "ch10.xml">
+<!ENTITY ch11.xml SYSTEM "ch11.xml">
+<!ENTITY ch12.xml SYSTEM "ch12.xml">
+<!ENTITY ch13.xml SYSTEM "ch13.xml">
+<!ENTITY ch14.xml SYSTEM "ch14.xml">
+<!ENTITY ch15.xml SYSTEM "ch15.xml">
+<!ENTITY ch16.xml SYSTEM "ch16.xml">
+<!ENTITY ap01.xml SYSTEM "ap01.xml">
+<!ENTITY ap02.xml SYSTEM "ap02.xml">
+<!ENTITY ap03.xml SYSTEM "ap03.xml">
+<!ENTITY ap04.xml SYSTEM "ap04.xml">
+<!ENTITY ap05.xml SYSTEM "ap05.xml">
+<!ENTITY bibl.xml SYSTEM "bibl.xml">
+<!ENTITY colophon.xml SYSTEM "colophon.xml">
+]>
+<book>
+<bookinfo>
+<mediaobject role="online">
+    <imageobject>
+      <imagedata fileref="figures/cover.png" align="left"/>
+    </imageobject>
+</mediaobject>
+<title>Making &TeX; Work</title>
+<author><firstname>Norman</firstname><surname>Walsh</surname></author>
+<editor><firstname>Deborah</firstname><surname>Russell</surname></editor>
+<editor role="production"><firstname>Stephen</firstname><surname>Spainhour</surname></editor>
+<publisher>
+<publishername>O'Reilly &amp; Associates, Inc.</publishername>
+</publisher>
+<printhistory>
+<para>April 1994: First Edition.</para>
+<para>July 1994: Minor corrections.</para>
+</printhistory>
+<isbn>156592-051-1</isbn>
+&VERSION;
+
+<legalnotice>
+<para condition="online">
+<citetitle>Making &TeX; Work</citetitle>. Copyright &copy; 1994
+O'Reilly &amp; Associates, Inc. All rights reserved.</para>
+
+<para>Permission is granted to copy, distribute and/or modify this
+document under the terms of the GNU Free Documentation License,
+Version 1.1 or any later version published by the Free Software
+Foundation; with the Back-Cover Texts being
+<!-- ulink hack because this legal notice gets diverted -->
+<ulink url="#backcover">Back Cover Text</ulink>.
+A copy of the license is included in <xref linkend="gfdl"/>.</para>
+
+<para>
+Nutshell Handbook, the Nutshell Handbook logo, and the O'Reilly
+logo are registered trademarks of O'Reilly &amp; Associates, Inc.
+The association between the image of a spider and the topic of
+&TeX; is a trademark of O'Reilly &amp; Associates, Inc. Java and
+all Java-based trademarks and logos are trademarks or
+registered trademarks of Sun Microsystems, Inc., in the United
+States and other countries. O'Reilly &amp; Associates, Inc. is
+independent of Sun Microsystems.
+</para>
+
+<para>
+Many of the designations used by manufacturers and sellers to
+distinguish their products are claimed as trademarks.  Where
+those designations appear in this book, and O'Reilly &amp;
+Associates, Inc. was aware of a trademark claim, the
+designations have been printed in caps or initial caps. While
+every precaution has been taken in the preparation of this
+book, the publisher assumes no responsibility for errors or
+omissions, or for damages resulting from the use of the
+information contained herein.
+</para>
+
+<formalpara id="backcover"><title>Back Cover Text:</title>
+<para>Visit O'Reilly on the Web at
+<ulink url="http://www.oreilly.com/">www.oreilly.com</ulink>.</para>
+</formalpara>
+
+</legalnotice>
+
+<copyright><year>1994</year>
+<holder>O'Reilly &amp; Associates, Inc. All rights reserved.</holder>
+</copyright>
+</bookinfo>
+
+&ch00.xml;
+
+<part id="part.intro">
+<title>An Introduction to &TeX;</title>
+
+<partintro>
+
+<para><xref linkend="part.intro"/>, introduces
+&TeX; and the tools that make up the &TeX; system.  It describes
+various editing environments that simplify the job of editing &TeX;
+documents.  It also discusses the mechanics of running &TeX; and
+recovery from errors, and it provides an overview of &TeX; macro
+packages and format files.</para>
+
+</partintro>
+
+&ch01.xml;
+&ch02.xml;
+&ch03.xml;
+&ch04.xml;
+
+</part>
+
+<part id="part.elements">
+<title>Elements of a Complex Document</title>
+
+<partintro>
+
+<para><xref linkend="part.elements"/>,
+describes the major components of &TeX; involved in producing a
+non-trivial document.  It discusses how to use different font
+technologies, how to incorporate pictures and figures into the
+document, how to typeset non-English languages, and how to maintain
+complex structures like indexes and bibliographies.  This section also
+explains the preview and printing processes in detail.
+</para>
+
+</partintro>
+
+&ch05.xml;
+&ch06.xml;
+&ch07.xml;
+&ch08.xml;
+&ch09.xml;
+&ch10.xml;
+&ch11.xml;
+&ch12.xml;
+
+</part>
+
+<part id="part.tools">
+<title>A Tools Overview</title>
+
+<partintro>
+
+<para><xref linkend="part.tools"/>, summarizes the
+tools you can use in processing &TeX; documents.  It describes the
+major free and commercial implementations of &TeX;, and then briefly
+summarizes the many &TeX;nical tools available.</para>
+
+</partintro>
+
+&ch13.xml;
+&ch14.xml;
+&ch15.xml;
+&ch16.xml;
+&ap01.xml;
+&ap02.xml;
+&ap03.xml;
+&ap04.xml;
+&ap05.xml;
+&bibl.xml;
+
+</part>
+
+&colophon.xml;
+
+</book>

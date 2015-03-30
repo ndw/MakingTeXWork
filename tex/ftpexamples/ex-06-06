@@ -1,0 +1,46 @@
+% Graph representing BAWL term [1]++[2].        [XY-pic & -*-tex-*-]
+% by Kristoffer H. Rose <kris@diku.dk>
+%
+\def\n#1{\llap{{\sevenit#1\/}:\,}}
+\def\op#1{(\mskip-.5\thinmuskip{#1}\mskip-.5\thinmuskip)}
+\def\concat{\mathbin{\text{\rm+\kern-.5em+}}}
+%
+\def\du#1#2{%
+ % #1: slidesign, #2: #rows to go down.
+ \save\aftergo{\go="p",[0,0]!<#1\jot,0pt>%
+  \xto`d[#2,0]+<-2.5pc,-.8pc>`"p" "p"\restore}}
+%
+\def\dul#1#2#3{%
+% #1: slidesign, #2: #rows to go down; #3: #columns to go left.
+\save\aftergo{\go="p",[0,0]!<#1\jot,0pt>%
+\xto`d[#2,0]+<-2.5pc,-.8pc>`[#2,-#3]+<-2.5pc,0pc> `"p" "p"\restore}}
+%
+\spreaddiagramrows{-1.4pc}
+\spreaddiagramcolumns{-1pc}
+%
+$$
+\displaylines{\quad
+ \left\lceil\openup-\jot\eqalign{
+  [1]\concat[2] \quad\text{where}\qquad
+    [\,] \concat ys     &= ys \cr
+    (x:xs) \concat ys   &= x:(xs \concat ys)}\right\rceil
+\hfill\cr\hfill
+ =\qquad
+ {\diagram&&       &       &     &&\n1\@\dlto\xto[2,2]\\
+  &       &       &       &     &\n2{!\@}\xto[3,-2]\drto\\
+  &       &       &       &     &&\n3\op:\dlto\dto&&\n4\op:\dlto\dto\\
+  &       &       &       &       &\n51&\n6[\,] &\n72&\n8[\,]\\
+  &       &       &\n{10}\lor\dlto\drrto \go+<-3em,0em>="10"\\
+  &       &\n{11}\lambda \dlto\ddto&&&\n{12}\lambda \dlto\drto\\
+  &\n{13}\@\dlto\drto&&   &\n{14}\@\dlto\drto
+                                   &&\n{15}\op:\du04[3,-2]\drrto\\
+\n{16}{!\@}\dul000"10"\drto&&\n{17}{?}&\n{18}{!\@} \dul023"10" \drto
+                           &&\n{19}{?}&&&\n{20}\@\ddlto\du00[0,-3]\\
+   &\n{21}[\,]&    &       &\n{22}\op:\dto\drto&&  &       &\\
+   &       &       &       &\n{23}{?}&\n{24}{?}
+                             &&\n{25}\@ \dul-27"10"\du+3[0,-2]\\
+   &       &       &       &       &       &       &\\
+   &       &       &       &       &       &       &\\
+   &       &       &       &       &       &       &\enddiagram}
+\quad\cr}
+$$

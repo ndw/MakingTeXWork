@@ -1,0 +1,554 @@
+<bibliography>
+
+<bibliomixed id="pk:texdraw">manual
+  author = "Peter Kabal",
+  title = "{\TeX draw}: PostScript drawings from {\TeX}",
+  edition = "1.4a",
+  month = jul,
+  year = 1992,
+  etext = "CTAN:graphics/texdraw/manual/*"
+</bibliomixed>
+
+<bibliomixed id="chicman">manual
+  editor = "John Grossman",
+  Title = "The Chicago Manual of Style",
+  publisher = "University of Chicago Press",
+  year = "1993",
+  edition = "fourteenth",
+  organization = "University of Chicago"
+</bibliomixed>
+
+<bibliomixed id="lw:progperl">book
+  Author = "Larry Wall and Randal L. Schwartz",
+  Title = "Programming Perl",
+  Publisher = O'Reilly &amp; Associates,
+  Year = 1992,
+  isbn = "0-937175-64-1"
+</bibliomixed>
+
+<bibliomixed id="eu:international">book
+  Author = "Emmanual Uren and Robert Howard and Tiziana Perinotti",
+  title = "Software Internationalization and Localization: An Introduction",
+  publisher = "Van Nostrand Reinhold",
+  year = 1993,
+  isbn = "0-442-01498-8"
+</bibliomixed>
+
+<bibliomixed id="latexcompanion">book
+  author = "Michel Goossens and Frank Mittelbach and Alexander Samarin",
+  title = "The {\LaTeX} Companion",
+  publisher = Addison Wesley,
+  year = 1994,
+  isbn = "0-201-54199-8"
+</bibliomixed>
+
+<bibliomixed id="eg:dratex">Book
+  author = "Eitan M. Gurari",
+  title = "{\TeX} {\&amp;} {\LaTeX}: Drawing and Literate Programming",
+  publisher = "McGraw Hill",
+  year = 1993,
+  isbn = "0-07-911616-7"
+</bibliomixed>
+
+<bibliomixed id="kl:japinfoproc">Book
+  author = "Ken Lunde",
+  title  = "Understanding Japanese Information Processing",
+  address = "Sebastopol, CA",
+  publisher = O'Reilly &amp; Associates,
+  year = 1993,
+  edition = "first",
+  isbn = "1-56592-043-0"
+</bibliomixed>
+
+<bibliomixed id="kn:texbook">Book
+  author =  "Donald E. Knuth",
+  title = "The {\TeX}book",
+  publisher = Addison Wesley,
+  year = 1989,
+  edition = "Fifteenth",
+  isbn = "0-201-13447-0",
+  paperisbn = "0-201-13448-9"
+</bibliomixed>
+
+<bibliomixed id="jh:latexforeveryone">Book
+  author = "Jane Hahn",
+  title = "{\LaTeX} For Everyone",
+  publisher = "Personal {\TeX}, Inc.",
+  year = 1991,
+  edition = "Second",
+  paperisbn = "0-9631044-0-3"
+</bibliomixed>
+
+<bibliomixed id="dn:psyeveryday">Book
+  author = "Donald A. Norman",
+  title = "The Psychology of Everyday Things",
+  publisher = "Basic Books, Inc.",
+  year = 1988,
+  paperisbn = "0-465-06709-3"
+</bibliomixed>
+
+<bibliomixed id="ll:latexbook">Book
+  author = "Leslie Lamport",
+  title = "{\rm \LaTeX:} A Document Preparation System",
+  publisher = Addison Wesley,
+  year = 1986,
+  paperisbn = "0-201-15790-X"
+</bibliomixed>
+
+<bibliomixed id="ll:makeindex">unpublished
+  author = "Leslie Lamport",
+  title = "MakeIndex: An Index Processor for {\rm\LaTeX}",
+  year = 1987,
+  month = feb,
+  etext = "CTAN:indexing/makeindex/doc/*"
+</bibliomixed>
+
+<bibliomixed id="dc:colorlatex">unpublished
+  author = "David Carlisle",
+  title = "The implementation of the {\LaTeX} Colour interface",
+  year = 1994,
+  month = feb
+</bibliomixed>
+
+<bibliomixed id="kn:mfbook">Book
+  author = "Donald E. Knuth",
+  title  = "{\TheMFbook}",
+  publisher = Addison Wesley,
+  year = 1986,
+  isbn = "0-201-13445-4"
+</bibliomixed>
+
+<bibliomixed id="ms:joyoftex">Book
+  author = "Michel Spivak",
+  title = "The Joy of {\TeX}---A Gourmet Guide to Typesetting with the
+  {\AMSTeX} Macro Package",
+  publisher = Addison Wesley,
+  year = "1986"
+</bibliomixed>
+
+<bibliomixed id="or:emacs">Book
+  author = "Debra Cameron and Bill Rosenblatt",
+  title  = "Learning GNU Emacs",
+  address = "Sebastopol, CA",
+  publisher = O'Reilly &amp; Associates,
+  year = "1991",
+  isbn = "0-937175-84-6"
+</bibliomixed>
+
+<bibliomixed id="gu:numbertheory">Book
+  author = "Richard K. Guy",
+  title = "Unsolved Problems in Number Theory",
+  publisher = "Springer-Verlag",
+  year = 1981,
+  isbn = "0-387-90593-6",
+  series = "Unsolved Problems in Intuitive Mathematics",
+  volume = 1
+</bibliomixed>
+
+<bibliomixed id="js:comp">unpublished
+  author = "Joachim Schrod",
+  title = "The Components of {\TeX{}}",
+  year = 1991,
+  month = mar,
+  etext = "CTAN:info/components-of-TeX/*"
+</bibliomixed>
+
+<bibliomixed id="em:dvidrv">manual
+  author = "Eberhard Mattes",
+  title = "The {\emTeX} DVI Driver Manual",
+  year = 1993,
+  month = Jun,
+</bibliomixed>
+
+<bibliomixed id="mw:pictex">manual
+  author = "Michael J. Wichura",
+  title = "The {\PiCTeX} Manual",
+  year = 1992,
+  month = mar,
+  publisher = "The \TeX\ User's Group"
+</bibliomixed>
+
+<bibliomixed id="l3:project">unpublished
+  author = "Frank Mittelbach and Chris Rowley",
+  title = "The {\LaTeX}3 Project",
+  year = 1993,
+  month = apr,
+  etext = "CTAN:info/ltx3pub/l3d001.tex"
+</bibliomixed>
+
+<bibliomixed id="FAQ:comp.text">unpublished
+  author = "Chris Lewis and Nils-Peter Nelson",
+  title  = "Frequently Asked Questions for {\texttt{comp.text}}",
+  year   = 1993,
+  month  = jun,
+  etext  = "rtfm.mit.edu:/pub/usenet/comp.text.tex"
+</bibliomixed>
+
+<bibliomixed id="texware:tftopl">unpublished
+  author = "Donald E. Knuth",
+  title  = "The TF to PL Processor",
+  howpublished = "Part of the {\web} distribution",
+</bibliomixed>
+
+<bibliomixed id="texware:vptovf">unpublished
+  author = "Donald E. Knuth",
+  title  = "The VP to VF Processor",
+  howpublished = "Part of the {\web} distribution",
+</bibliomixed>
+
+<bibliomixed id="mfware:gftopk">unpublished
+  author = "Donald E. Knuth",
+  title  = "The GF to PK Processor",
+  howpublished = "Part of the {\web} distribution",
+</bibliomixed>
+
+<bibliomixed id="texware:pltotf">unpublished
+  author = "Donald E. Knuth",
+  title  = "The PL to TF Processor",
+  howpublished = "Part of the {\web} distribution",
+</bibliomixed>
+
+<bibliomixed id="texware:vftovp">unpublished
+  author = "Donald E. Knuth",
+  title  = "The VF to VP Processor",
+  howpublished = "Part of the {\web} distribution",
+</bibliomixed>
+
+<bibliomixed id="gt:mfbeginners">unpublished
+  author = "Geoffrey Tobin",
+  title  = "METAFONT for Beginners",
+  year   = 1992,
+  month  = dec,
+  etext  = "CTAN:info/metafont-for-beginners.tex"
+</bibliomixed>
+
+<bibliomixed id="zw:simple">unpublished
+  author = "Zden\v{e}k Wagner",
+  title  = "Simple Drawings in {\MF}",
+  year   = "1993",
+  etext  = "CTAN:info/wagner-drawing.tex"
+</bibliomixed>
+
+<bibliomixed id="lreq:metafonts">unpublished
+  author = "Liam R. E. Quin",
+  title = "Definitive List of All Fonts Available for {\MF}",
+  year = 1991,
+  month = sep,
+  etext = "CTAN:info/metafonts.lst"
+</bibliomixed>
+
+<bibliomixed id="mf:inrstexref">Manual
+  author = "Michael J. Ferguson",
+  title = "{\INRSTeX} Manual",
+  organization = "INRS Communications",
+  year = "1991",
+</bibliomixed>
+
+<bibliomixed id="pcl5:techref">Manual
+  title =  "PCL 5 Printer Language Technical Reference Manual",
+  organization = "Hewlett Packard",
+  year =   1990,
+  month =  sep,
+  edition = "First"
+</bibliomixed>
+
+<bibliomixed id="type1:format">Manual
+  title = "Adobe Type 1 Font Format, version 1.1",
+  organization = Adobe Systems Incorporated,
+  year = 1990,
+  month = aug,
+  Edition = "First"
+</bibliomixed>
+
+<bibliomixed id="intellifont">Manual
+  title = "IntelliFont Scalable Typeface Format",
+  organization = "Agfa Compugraphic Division",
+  year = 1991,
+  Month = apr,
+  Edition = "First"
+</bibliomixed>
+
+<bibliomixed id="nfss">unpublished
+  AUTHOR = "Frank Mittelbach and Rainer {Sch\"opf}",
+  TITLE = "The New Font Selection Scheme---User Interface Standard to
+  {\LaTeX}",
+  YEAR = 1990,
+  howpublished = "Part of the NFSS distribution"
+</bibliomixed>
+
+<bibliomixed id="nfss2interface">unpublished
+  AUTHOR = "Frank Mittelbach",
+  TITLE = "Interface description of NFSS2",
+  YEAR = 1993,
+  howpublished = "Part of the NFSS2 distribution"
+</bibliomixed>
+
+<bibliomixed id="psfonts">Techreport
+  key = Adobe Systems Incorporated,
+  TITLE = "Supporting Downloadable PostScript Fonts",
+  address = "Mountain View, CA",
+  INSTITUTION = Adobe Systems Incorporated,
+  NUMBER = "5040",
+  YEAR = 1988,
+  MONTH = jan,
+  etext = "CTAN:fonts/postscript/adobe/Documents/5040.Download_Fonts.ps"
+</bibliomixed>
+
+<bibliomixed id="abffiles">techreport
+  key = adobe,
+  TITLE = "Adobe Binary Screen Font Files",
+  INSTITUTION = Adobe Systems Incorporated,
+  YEAR = 1989,
+  MONTH = jan,
+  NUMBER = 5006,
+  etext = "CTAN:fonts/postscript/adobe/Documents/5006.ABF_Spec.ps"
+</bibliomixed>
+
+<bibliomixed id="afmfiles">techreport
+  key = adobe,
+  TITLE = "Adobe Font Metric Files",
+  INSTITUTION = Adobe Systems Incorporated,
+  YEAR = 1990,
+  MONTH = mar,
+  NUMBER = 5004,
+  etext = "CTAN:fonts/postscript/adobe/Documents/5004.AFM_Spec.ps"
+</bibliomixed>
+
+<bibliomixed id="macfond">Techreport
+  key = adobe,
+  TITLE = "Macintosh {FOND} Resources",
+  INSTITUTION = Adobe Systems Incorporated,
+  NUMBER = "0091",
+  YEAR = 1990,
+  MONTH = jul,
+  etext = "jasper.ora.com:/pub/AdobeDocs/Specifications/0091-FondResources.ps"
+</bibliomixed>
+
+<bibliomixed id="bdffiles">techreport
+  key = adobe,
+  TITLE = "Character Bitmap Distribution Format",
+  INSTITUTION = Adobe Systems Incorporated,
+  YEAR = 1989,
+  MONTH = jan,
+  NUMBER = 5005,
+  etext = "CTAN:fonts/postscript/adobe/Documents/5005.BDF_Spec.ps"
+</bibliomixed>
+
+<bibliomixed id="dvi:standard">unpublished
+  key = "tug dvi driver standards committee",
+  author = "{The TUG DVI Driver Standards Committee}",
+  TITLE = "The DVI Driver Standard, Level 0 Version 0.05",
+  INSTITUTION = "The {\TeX} User's Group",
+  YEAR = 1991,
+  MONTH = aug,
+  etext = "jasper.ora.com:/pub/docs/DVI-Standard-level0/*"
+</bibliomixed>
+
+<bibliomixed id="faq:comp.text.tex">unpublished
+  AUTHOR = "Bobby Bodenheimer",
+  title = "{\TeX}, {\LaTeX}, etc.: Frequently Asked Questions with Answers",
+  year = 1992,
+  month = dec,
+  etext = "rtfm.mit.edu:/pub/usenet/comp.text.tex/*"
+</bibliomixed>
+
+<bibliomixed id="faq:comp.fonts">unpublished
+  AUTHOR = "Norman Walsh",
+  title = "The {\texttt{comp.fonts}} Frequently Asked Questions List",
+  year = 1992,
+  month = dec,
+  etext = "rtfm.mit.edu:/pub/usenet/comp.fonts/FAQ.*"
+</bibliomixed>
+
+<bibliomixed id="nw:fontbook">unpublished
+  AUTHOR = "Norman Walsh",
+  title = "Font Samples of Internet-Available PostScript Type1 Fonts",
+  year = 1992,
+  month = dec,
+  etext = "jasper.ora.com:/pub/fontbook/*"
+</bibliomixed>
+
+<bibliomixed id="metapost">unpublished
+  AUTHOR = "John D. Hobby",
+  title = "A User's Manual for MetaPost",
+  institution = "AT{\&amp;}T Bell Laboratories",
+  etext = "research.att.com:/pub/research/cstr/162.Z"
+</bibliomixed>
+
+<bibliomixed id="tug:10-2">ARTICLE
+	AUTHOR = "Frank Mittelbach and Rainer {Sch\"opf}",
+	TITLE = "A new font selection scheme for {\TeX} macro packages---the
+                 basic macros",
+	JOURNAL = "TUGboat",
+	YEAR = 1989,
+	MONTH = jul,
+	NUMBER = 2,
+	VOLUME = 10,
+	PAGES = "222--238"
+</bibliomixed>
+
+<bibliomixed id="tug:vfonts:dek">ARTICLE
+	AUTHOR = "Donald E. Knuth",
+	TITLE = "Virtual Fonts: More fun for Grand Wizards",
+	JOURNAL = "TUGboat",
+	YEAR = 1990,
+	MONTH = apr,
+	NUMBER = 1,
+	VOLUME = 11,
+	PAGES = "13--23"
+</bibliomixed>
+
+<bibliomixed id="tug:gr-tex-pc:1">ARTICLE
+	AUTHOR = "Lee S. Pickrell",
+	TITLE = "Combining graphics with {\TeX} on IBM PC-compatible systems
+	with LaserJet printers",
+	JOURNAL = "TUGboat",
+	YEAR = 1990,
+	MONTH = apr,
+	NUMBER = 1,
+	VOLUME = 11,
+	PAGES = "26--31"
+</bibliomixed>
+
+<bibliomixed id="tug:gr-tex-pc:2">ARTICLE
+	AUTHOR = "Lee S. Pickrell",
+	TITLE = "Combining graphics with {\TeX} on PC systems with laser
+	printers, part II",
+	JOURNAL = "TUGboat",
+	YEAR = 1990,
+	MONTH = jun,
+	NUMBER = 2,
+	VOLUME = 11,
+	PAGES = "200--206"
+</bibliomixed>
+
+<bibliomixed id="tug:gr-tex-implementation">ARTICLE
+	AUTHOR = "Gerhard Berendt",
+	TITLE = "On the implementation of graphics into {\TeX}",
+	JOURNAL = "TUGboat",
+	YEAR = 1990,
+	MONTH = jun,
+	NUMBER = 2,
+	VOLUME = 11,
+	PAGES = "190--194"
+</bibliomixed>
+
+<bibliomixed id="tug:mac-graphics-latex">ARTICLE
+	AUTHOR = "Len Schwer",
+	TITLE = "Including Macintosh graphics in {\LaTeX} documents",
+	JOURNAL = "TUGboat",
+	YEAR = 1990,
+	MONTH = jun,
+	NUMBER = 2,
+	VOLUME = 11,
+	PAGES = "194--200"
+</bibliomixed>
+
+<bibliomixed id="tug:nfss-userinterface">ARTICLE
+	AUTHOR = "Frank Mittelbach and Rainer {Sch\"opf}",
+	TITLE = "The new font family selection---User Interface to
+	Standard {\LaTeX}",
+	JOURNAL = "TUGboat",
+	YEAR = 1990,
+	MONTH = jun,
+	NUMBER = 1,
+	VOLUME = 11,
+	PAGES = "297--305",
+        Note = "Reprinted with corrections in TUGboat 11:2."
+</bibliomixed>
+
+<bibliomixed id="tug:transfig">ARTICLE
+	AUTHOR = "Micah Beck and A. Siegal",
+	TITLE = "Transfig: Portable Graphics for {\TeX}",
+	JOURNAL = "TUGboat",
+	YEAR = 1990,
+	MONTH = sep,
+	NUMBER = 3,
+	VOLUME = 11,
+	PAGES = "373--380"
+</bibliomixed>
+
+<bibliomixed id="tug:vtex">ARTICLE
+	AUTHOR = "Michael Vulis",
+	TITLE = "V{\TeX} enhancements to the {\TeX} language",
+	JOURNAL = "TUGboat",
+	YEAR = 1990,
+	MONTH = sep,
+	NUMBER = 3,
+	VOLUME = 11,
+	PAGES = "429--435"
+</bibliomixed>
+
+<bibliomixed id="tug:filenames-fonts">ARTICLE
+	AUTHOR = "Karl Berry",
+	TITLE = "Filenames for Fonts",
+	JOURNAL = "TUGboat",
+	YEAR = 1990,
+	MONTH = nov,
+	NUMBER = 4,
+	VOLUME = 11,
+	PAGES = "517--520"
+</bibliomixed>
+
+<bibliomixed id="tug:gr-tex-bm2font">ARTICLE
+	AUTHOR = "Friedhelm Sowa",
+	TITLE = "Integration of graphics into {\TeX}",
+	JOURNAL = "TUGboat",
+	YEAR = 1991,
+	MONTH = mar,
+	NUMBER = 1,
+	VOLUME = 12,
+	PAGES = "58--63",
+</bibliomixed>
+
+<bibliomixed id="tug:halftoning">ARTICLE
+	AUTHOR = "Adrian F. Clark",
+	TITLE = "Practical halftoning in {\TeX}",
+	JOURNAL = "TUGboat",
+	YEAR = 1991,
+	MONTH = mar,
+	NUMBER = 1,
+	VOLUME = 12,
+	PAGES = "157--165",
+</bibliomixed>
+
+<bibliomixed id="tug:xbitmaps">ARTICLE
+	AUTHOR = "Reinhard {F\"o\ss{}meier}",
+	TITLE = "X bitmaps in {\TeX}",
+	JOURNAL = "TUGboat",
+	YEAR = 1991,
+	MONTH = jun,
+	NUMBER = 2,
+	VOLUME = 12,
+	PAGES = "229--232"
+</bibliomixed>
+
+<bibliomixed id="tug:bm2font2">ARTICLE
+	AUTHOR = "Friedhelm Sowa",
+	TITLE = "Bitmaps and halftones with BM2FONT",
+	JOURNAL = "TUGboat",
+	YEAR = 1991,
+	MONTH = dec,
+	NUMBER = 3,
+	VOLUME = 12,
+        PART = "II",
+	PAGES = "534--539"
+</bibliomixed>
+
+<bibliomixed id="op:btxdoc">unpublished
+	author = "Oren Patashnik",
+	title = "{\BibTeX}ing",
+	year = 1988,
+	month = feb,
+	etext = "CTAN:biblio/bibtex/distribs/doc/btxdoc.tex"
+</bibliomixed>
+
+<bibliomixed id="op:btxhak">unpublished
+	author = "Oren Patashnik",
+	title = "Designing {\BibTeX} Styles",
+	year = 1988,
+	month = feb,
+	etext = "CTAN:biblio/bibtex/distribs/doc/btxhak.tex"
+</bibliomixed>
+
+</bibliography>

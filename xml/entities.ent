@@ -1,0 +1,46 @@
+<!ENTITY TeX "TeX">
+<!ENTITY LaTeX "La&TeX;">
+<!ENTITY AMSLaTeX "AMS&LaTeX;">
+<!ENTITY AMSTeX "AMS&TeX;">
+<!ENTITY AmS "A<subscript>m</subscript>S">
+<!ENTITY BibTeX "Bib&TeX;">
+<!ENTITY DraTeX "Dra&TeX;">
+<!ENTITY FigMF "Fig2MF">
+<!ENTITY FoilTeX "Foil&TeX;">
+<!ENTITY INRSTeX "INRS&TeX;">
+<!ENTITY LaTeX3 "La&TeX;3">
+<!ENTITY LaTeXe "La&TeX;2e">
+<!ENTITY LamSTeX "LamS&TeX;">
+<!ENTITY MF "MetaFont">
+<!ENTITY MFPic "<application>MFPic</application>">
+<!ENTITY MusicTeX "Music&TeX;">
+<!ENTITY PCTeX "PC&TeX;">
+<!ENTITY PMTeX "PM&TeX;">
+<!ENTITY PSTricks "PSTricks">
+<!ENTITY PiCTeX "PiC&TeX;">
+<!ENTITY REVTeX "REV&TeX;">
+<!ENTITY SliTeX "Sli&TeX;">
+<!ENTITY TeXPert "&TeX;Pert">
+<!ENTITY TeXShell "&TeX;Shell">
+<!ENTITY TeXinfo "TeXinfo">
+<!ENTITY Textures "Textures">
+<!ENTITY TurboTeX "Turbo&TeX;">
+<!ENTITY Unix "<phrase role='sc'>UNIX</phrase>">
+<!ENTITY Web "<phrase role='sc'>Web</phrase>">
+<!ENTITY XYPic "XYPic">
+<!ENTITY YY "Y&amp;Y">
+<!ENTITY ams "American Mathematical Society">
+<!ENTITY auctex "auc&TeX;">
+<!ENTITY backslash "\">
+<!ENTITY cmactex "CMac&TeX;">
+<!ENTITY directex "Direct&TeX;">
+<!ENTITY dvidriver "DVI driver">
+<!ENTITY emTeX "em&TeX;">
+<!ENTITY fourTeX "4&TeX;">
+<!ENTITY gTeX "g&TeX;">
+<!ENTITY oztex "Oz&TeX;">
+<!ENTITY sbTeX "sb&TeX;">
+<!ENTITY troff "<application>troff</application>">
+<!ENTITY unix "unix">
+<!ENTITY utex "&micro;&TeX;">
+<!ENTITY xdvi "<application>xdvi</application>">

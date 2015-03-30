@@ -1,0 +1,1725 @@
+<chapter id="chap.editing">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>Editing</title>
+
+<para>This chapter describes several writing environments available for
+creating and modifying &TeX; documents.  In practice, you can use almost
+any editing program<indexterm><primary>editors</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>editing</secondary></indexterm><indexterm><primary sortas="editing tex">editing &TeX;</primary></indexterm> you 
+wish, but I'll focus on GNU emacs<indexterm><primary>GNU Emacs</primary></indexterm> in this chapter.
+I've chosen GNU emacs for two reasons: it is a popular and very powerful
+editor available on many platforms (&unix;, NeXT, MS-DOS, 
+OS/2, Macintosh, VMS, Amiga, $&hellip;$), and it has the
+most comprehensive &TeX; editing environment that I've ever seen.  At the
+end of the chapter, I'll discuss several other editors for MS-DOS and OS/2
+that also have &TeX; editing environments.
+</para>
+
+<para>The sole requirement for a &TeX; editor is that it must save
+files in a flat, ASCII<indexterm><primary>ASCII character set</primary></indexterm> format 
+without any additional formatting characters
+or special encodings.  Word processors, such as 
+<application>Microsoft Word</application><indexterm>
+<primary>Microsoft Word</primary>
+</indexterm>, usually 
+add
+special formatting information to your document when they save it to disk.
+&TeX; will not understand this information, so you cannot use a word
+processor to edit &TeX; documents.<footnote><para>Most word processors can be coerced into saving your
+document in plain text.  If your word processor can do this, you may be able
+to edit &TeX; documents with it.</para></footnote>
+</para>
+
+<para>A program that allows you to edit flat ASCII files is usually called
+an editor (as opposed to a word processor<indexterm><primary>word processing</primary></indexterm>, for 
+example).  Choosing
+an editor is a remarkably personal decision.  Computer programmers
+and other people who use editors every day frequently become very
+attached to a particular editor.  This chapter explores a number of features that an
+editor can provide to make editing &TeX; documents easier.  If
+possible, choose an editor that offers these features.  In any event,
+make sure you choose an editor you will be comfortable
+using.  You'll spend a lot of time using it.  
+</para>
+
+<para>Many editors have some sort of built-in programming language.  The features
+described in this chapter rely on modifying the behavior of the editor with
+its programming language.  This does not mean that <emphasis>you</emphasis> will have to
+do any programming.  All of the editors discussed in this chapter have
+&TeX; editing environments already available.  However, if you
+use another editor and it doesn't have a programming language, it's
+unlikely that these features will be available to you.
+</para>
+
+<para>The next section explores some helpful
+editor features.  All of the editors in this
+chapter provide some or all of the features discussed, and require
+little or no programming on your part.
+</para>
+
+<section id="sec.whatcando"><title>What Can an Editor Do?</title>
+
+<para>You will do most of your work with &TeX; in the 
+editor<indexterm><primary>editors</primary><secondary>programmable</secondary></indexterm>.  There are two
+ways that an editor can help you edit &TeX; documents.  One is to
+provide typing shortcuts that are either intuitive replacements for
+cumbersome operations or quick ways of typing common &TeX; commands.
+The other way that an editor can help is by running &TeX; for you and
+automatically displaying the location of formatting errors in your
+document.
+</para>
+
+<section id="sec.auctex"><title>Quoting Automatically</title>
+
+<indexterm><primary><quote> and </quote> (quotation marks)</primary><secondary>with editor</secondary></indexterm>
+
+<para>Most typewriters and many word processors use the same symbol for
+opening and closing quotations.  You are probably used to typing the
+double-quote key to insert quotation marks into your text.  However,
+if you look carefully at &TeX; output (or any professionally typeset
+document) you will notice that the opening and closing quotation marks
+do not look the same.  The proper way to type an opening quote (&ldquo;) in
+&TeX; is with two single back-quotes in a row (<literal>``</literal>).  A closing 
+quote (&rdquo;) is entered with two single quotes (apostrophes) in a 
+row (<literal>''</literal>).  This process is
+tedious and error-prone since you are used to typing something else.
+</para>
+
+<para>If you accidentally use the double quote symbol in your input, you most
+frequently get text that looks like &rdquo;this.&rdquo;  The exact result is actually
+dependent upon the font you are using.  This is explained in
+Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>, <emphasis><xref role="label" linkend="chap.fonts"/></emphasis>.
+Most programmable editors can change the meaning of the double-quote
+key to insert the correct quotation marks.
+</para>
+
+<para>If you are interested in programming your editor to do this, you can use
+the following
+algorithm to select the correct quotation marks most of the time:  if the
+character to the immediate left of the cursor is a space, opening
+brace, parenthesis, or bracket, insert opening quotes; otherwise, insert
+closing quotes.  As a further enhancement, double quotes should be inserted
+immediately following a backslash.
+</para>
+
+</section>
+<section><title>Matching Braces</title>
+
+<indexterm><primary>braces</primary><secondary>with editor</secondary></indexterm>
+
+<para>Braces, as mentioned in Chapter&nbsp;<xref role="label" linkend="chap.tex"/>, <emphasis><xref role="label" linkend="chap.tex"/></emphasis>, are
+used by &TeX; to delimit sections of text; they appear often in &TeX; documents.  GNU emacs<indexterm><primary>GNU Emacs</primary></indexterm>,
+<application>Multi-Edit<indexterm>
+<primary>Multi-Edit</primary>
+</indexterm></application>, and 
+<command>Brief</command><indexterm><primary sortas="Brief">Brief (program)</primary></indexterm> can all be programmed to
+highlight the matching open brace whenever you type a closing brace.
+</para>
+
+<para>For example, if you have entered the text
+</para>
+
+<screen>
+\footnote{This is {\it not} the only case.}
+</screen>
+
+<para>and the next character that you type is <keycap>}</keycap>, the open
+brace immediately following the word <markup>\footnote</markup> is
+highlighted, or all of the text between that brace and the current
+cursor position is highlighted.  This feature makes it easier to find
+places where you have forgotten to insert a closing brace.
+</para>
+
+<para>If you usually work in <quote>insert</quote> mode, you may also find it convenient to
+have the editor insert braces in pairs and then insert text between them.
+This can be accomplished in almost any editor that can be programmed,
+even one that isn't equipped to handle brace matching.
+</para>
+
+</section>
+<section><title>Inserting Common Control Sequences</title>
+
+<para>Most editors can be programmed to insert arbitrary text when a special
+key is pressed.  This feature can be used to insert common control
+sequences<indexterm><primary>control sequences</primary><secondary>inserting with editor</secondary></indexterm>.  For 
+example, you might have <keycap>Alt-c</keycap> insert the
+<markup>\chapter</markup> control sequence or <keycap>Ctrl-e</keycap> insert
+<markup>\begin{enumerate}</markup>.
+</para>
+
+</section>
+<section><title>Running &TeX; Automatically</title>
+
+<para>One of the nicest features that an editor can provide is the ability
+to run &TeX; automatically<indexterm><primary sortas="running tex">running &TeX;</primary><secondary>automatically</secondary></indexterm> without 
+leaving the editor.  
+This is a feature that programmers demand because it allows them to
+run compilers<indexterm><primary>compilers</primary></indexterm> directly from the editor.  Editors that
+provide this feature usually include some mechanism for programming
+the editor to locate the position of errors reported by the compiler.
+The editor searches for error messages<indexterm><primary>error messages</primary></indexterm> in the output generated by the
+compiler, and it positions the cursor at the location of each error.  This
+speeds up the traditional edit/compile/debug cycle of programming.
+You can take advantage of these features to shorten the edit/typeset/rewrite
+cycle of creating a &TeX; document.  
+</para>
+
+<para>All of the editors discussed in this chapter can easily be adapted to
+run &TeX; in this way.  If you already have a favorite editor and
+want to add this functionality for &TeX;, see the section
+<quote><xref role="label" linkend="sec.texcomp"/></quote> later in this chapter; it describes the process
+at a very general level.
+</para>
+
+</section>
+</section>
+<section><title>GNU Emacs</title>
+
+<para>This section describes the &TeX; modes distributed 
+as part of GNU emacs<indexterm><primary>GNU Emacs</primary></indexterm>.
+Emacs is one of the most popular and most powerful editors around.
+Distributed by the Free Software Foundation (FSF)<indexterm><primary>Free Software Foundation (FSF)</primary></indexterm>, GNU 
+emacs is the de facto
+standard editor in many &unix; environments.  Recently, GNU emacs has been
+ported to many other platforms, including MS-DOS (<command>demacs</command><indexterm><primary>demacs</primary></indexterm>),
+OS/2, Macintosh, VMS, Amiga, and NeXT.
+</para>
+
+<sidebar>
+<para>This section and the following section on &auctex; assume that you are
+familiar with general emacs concepts.  In particular, you should be
+familiar with the concepts of buffers, files, regions, command keys,
+editing modes, and prefix arguments.  If you are unfamiliar with these
+concepts, you can learn about them in the online help, called Info
+pages, for GNU emacs.  Info pages should be available by pressing
+<keycap>Ctrl-H</keycap> <keycap>i</keycap> in emacs.  You can also consult a reference to
+GNU emacs, such as <emphasis>Learning GNU Emacs</emphasis>&nbsp;<xref linkend="or:emacs"/> for more
+information.</para>
+</sidebar>
+
+<para>Customizing some of the features of GNU emacs requires familiarity
+with GNU emacs lisp<indexterm><primary>GNU Emacs</primary><secondary>Lisp</secondary></indexterm>, which is also described in the 
+Info pages.
+</para>
+
+<section><title>Starting &TeX; Mode</title>
+
+<para>GNU emacs<indexterm><primary>GNU Emacs</primary><secondary sortas="tex mode">&TeX; mode</secondary></indexterm> provides 
+two similar &TeX; editing modes: one designed for
+editing Plain &TeX; documents (<emphasis>plain-tex-mode</emphasis>) and the other for
+editing &LaTeX; documents (<emphasis>latex-mode</emphasis>).  The
+<emphasis>latex-mode</emphasis> is a superset of <emphasis>plain-tex-mode</emphasis> that
+provides additional shortcut keys for some &LaTeX; control sequences.
+</para>
+
+<para>There are three ways to start &TeX; mode in GNU emacs:
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+  <entry><command>M-x tex-mode</command></entry>
+  <entry>Attempts to select the correct mode.</entry>
+</row>
+<row>
+  <entry><command>M-x plain-tex-mode</command></entry>
+  <entry>Always selects Plain &TeX; mode.</entry>
+</row>
+<row>
+  <entry><command>M-x latex-mode</command></entry>
+  <entry>Always selects &LaTeX; mode.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>If you use <command>M-x tex-mode</command>, emacs examines the top of the buffer in
+order to select the appropriate mode.  If the control sequences 
+<markup>\documentstyle</markup> or
+<markup>\begin{document}</markup> occur near the top of the buffer, 
+<emphasis>latex-mode</emphasis> is selected; otherwise, the default mode is selected.  The
+default mode is stored in the emacs lisp variable
+<literal>TeX-default-mode</literal>.
+</para>
+
+<para>You can also tell emacs to invoke &TeX; 
+mode automatically whenever
+you edit a file that has a name ending 
+in <filename>.tex</filename><indexterm><primary>tex files</primary></indexterm>.  To do so,
+add the following lines to your 
+emacs startup file<indexterm><primary sortas="emacs startup files">.emacs startup files</primary></indexterm>, 
+usually called
+<filename>.emacs</filename> in your home directory:<footnote>
+<para>On file systems that don't allow filenames to begin with a
+period, the name frequently begins with an underscore instead.</para>
+</footnote>
+</para>
+
+<screen>
+(setq auto-mode-alist (append '(("\\.tex$" . tex-mode))
+                               auto-mode-alist))
+</screen>
+
+</section>
+<section><title>Typing in Emacs</title>
+
+<para>The emacs &TeX; modes change the meaning of several keys to provide
+features useful for 
+editing &TeX; documents.  These 
+special<indexterm><primary>GNU Emacs</primary><secondary>changing key meanings</secondary></indexterm><indexterm><primary>GNU Emacs</primary><secondary>matching braces</secondary></indexterm> key 
+bindings apply only to buffers that you edit while emacs
+is in <emphasis>plain-tex-mode</emphasis> or <emphasis>latex-mode</emphasis>.
+</para>
+
+<para>Automatic quotation, brace balancing in paragraphs, inserting brace
+pairs, skipping over unmatched braces, and closing open environments
+are supported.
+</para>
+
+</section>
+<section><title>Running &TeX; Automatically</title>
+
+<para>When &TeX; typesets your document, it produces processing and error 
+messages.  By<indexterm><primary sortas="running tex">running &TeX;</primary><secondary>automatically</secondary></indexterm><indexterm><primary>GNU Emacs</primary><secondary sortas="running tex automatically">running &TeX; automatically</secondary></indexterm> running 
+&TeX; for you, emacs can
+capture these messages and display them in a window.  You can use this
+feature to help locate and correct errors.
+</para>
+
+<para>Functions that run &TeX; from inside the editor rely on emacs'
+ability to run a subshell<indexterm><primary>subshell</primary></indexterm>.  Some
+implementations of emacs, particularly implementations for MS-DOS,
+which is unable to run concurrent processes, cannot use this
+feature.  &auctex;, a different editing environment for GNU emacs,
+does allow you to use these features with MS-DOS 
+ports<indexterm><primary>GNU Emacs</primary><secondary>MS-DOS</secondary></indexterm> of GNU
+emacs.  (&auctex; is described in the next section.)
+</para>
+
+<para>GNU emacs supports processing of both buffers and regions.  These
+modes don't locate errors for you automatically, but they do place
+the output from &TeX; in an emacs buffer so that you can find them
+yourself.  Chapter&nbsp;<xref role="label" linkend="chap.running"/>, <emphasis><xref role="label" linkend="chap.running"/></emphasis>, describes how to 
+interpret &TeX; output and find the location of errors.
+</para>
+
+</section>
+</section>
+<section><title>&auctex;</title>
+
+<para>This section provides an overview of &auctex;<indexterm><primary sortas="auctex">&auctex;</primary></indexterm>,<indexterm><primary>GNU Emacs</primary><secondary sortas="auctex package">&auctex; package</secondary></indexterm> a powerful emacs macro package
+for editing &LaTeX; documents.
+&auctex; is available on the
+CTAN archives in <filename role="ctan" class="directory">support/auctex</filename>.
+More detailed information about installing and customizing &auctex; can be found in the documentation distributed with the package.
+</para>
+
+<para>&auctex; provides extensive support for editing &TeX; and &LaTeX; documents
+in emacs.  It provides many more features than the ordinary GNU emacs
+&TeX; modes.  Although useful for both Plain &TeX; and &LaTeX; documents,
+&auctex; is designed with the &LaTeX; user in mind.
+</para>
+
+<para>&auctex; is <emphasis>a lot</emphasis> more complex than GNU emacs &TeX; mode.  In fact, it is so complex that it may not be useful if you have
+a relatively slow computer.<footnote>
+<para>That's one of the reasons that the
+regular GNU emacs &TeX; modes are described first.</para></footnote>
+On my
+machine,<footnote><para>A 16MHz 386SX machine with only 8Mb of memory
+struggling to run GNU emacs under OS/2. ;-)</para></footnote>
+&auctex;'s performance 
+leaves a lot to be desired.  On the other hand, &auctex; is extensively
+configurable, and it is possible to streamline it quite a bit.
+</para>
+
+<para>The descriptions that follow are for &auctex; version 8.0.
+The versions
+change frequently as new features are added. Consult the documentation
+which comes with &auctex; for a list of the new features that have been
+added since this book was published.
+</para>
+
+<!-- This section assumes that you are familiar with general emacs concepts. -->
+<!-- In particular, you should be familiar with the concept of buffers, files, -->
+<!-- regions, command keys, editing modes, and prefix arguments.  If you are -->
+<!-- unfamiliar with these concepts, they are explained in the online help, -->
+<!-- called Info pages, for GNU emacs.  Info pages should be available by pressing -->
+<!-- <keycap>Ctrl-H</keycap> <keycap>i</keycap> in emacs.  You can also consult a reference to GNU -->
+<!-- emacs, such as <emphasis>Learning GNU Emacs</emphasis>&nbsp;<xref linkend="or:emacs"/> for more information. -->
+
+<section id="sec.multifile"><title>Starting &auctex;</title>
+
+<para>The instructions provided with each release of &auctex; describe how to build
+and install the software so that &auctex; will 
+automatically be invoked<indexterm><primary sortas="auctex">&auctex;</primary><secondary>starting</secondary></indexterm> when 
+you edit a file with a name ending in <filename>.tex</filename>.
+</para>
+
+<para>If you think &auctex; is already installed on your system (because the
+emacs Info page for it is present, for example), ask your system administrator
+where it is installed.  One common location is 
+<filename>/usr/local/lib/emacs/site-lisp/auctex</filename>.
+</para>
+
+<para>Adding the following line 
+to your emacs startup file<indexterm><primary sortas="emacs startup files">.emacs startup files</primary></indexterm> (typically 
+<filename>.emacs</filename> in your home directory) will load &auctex; each time
+you start emacs:
+</para>
+
+<informalexample>
+<screen>
+  (load-file "<emphasis>/path/for/auctex</emphasis>/tex-site.elc")
+</screen>
+</informalexample>
+
+</section>
+<section><title>Typing in &auctex;</title>
+
+<para>&auctex; provides a large number of typing shortcuts<indexterm><primary sortas="auctex">&auctex;</primary><secondary>keystroke shortcuts</secondary></indexterm>.  Many of the
+keystroke shortcuts are designed specifically to aid in typing
+&LaTeX; documents.
+In addition to command keys, &auctex; provides another typing
+shortcut---command completion<indexterm><primary sortas="auctex">&auctex;</primary><secondary>command completion</secondary></indexterm> for 
+&LaTeX; control sequences with
+<keycap>C-c</keycap> <keycap>TAB</keycap>.
+</para>
+
+<para>If you type a backslash followed by the beginning of a control
+sequence name into a buffer and then type <keycap>C-c</keycap> <keycap>TAB</keycap>, &auctex; completes as much of the control sequence as possible.  Every time
+&auctex; adds another letter to the control sequence name, it compares
+the resulting name to a configurable list of &LaTeX; control sequences.
+If it reaches a point where the control sequence could be continued in
+two different ways, it stops and displays all the possible
+completions.
+For example, there are two control sequences in standard &LaTeX; that
+begin with <markup>\re</markup>: <markup>\renewcommand</markup> and
+<markup>\renewenvironment</markup>.
+</para>
+
+<para>
+If you type:
+</para>
+
+<informalexample>
+<screen>\re <keycap>C-c</keycap> <keycap>TAB</keycap></screen>
+</informalexample>
+
+<para>&auctex; will insert <literal>new</literal> because that much of the control sequence
+name can be deduced from the known possibilities.  This changes the text
+in your document to:
+</para>
+
+<screen>
+\renew
+</screen>
+
+<para>Because &auctex; cannot figure out which of the possibilities you want,
+it displays a list of the &LaTeX; commands that begin with
+<markup>\renew</markup>.  You can complete the command by typing
+<emphasis role="bold">c</emphasis> or <emphasis role="bold">e</emphasis> and pressing <keycap>C-c</keycap> <keycap>TAB</keycap> again.
+If you want the <markup>\renewcommand</markup> function, type:
+</para>
+
+<informalexample>
+  <screen>\renewc<keycap>C-c</keycap> <keycap>TAB</keycap></screen>
+</informalexample>
+
+<para>Now, &auctex; will insert <literal>ommand</literal> and return to normal 
+typing mode with the cursor positioned just after the control sequence
+name:
+</para>
+
+<screen>
+\renewcommand _
+</screen>
+
+<para>&auctex; has special support for &LaTeX; sectioning commands and
+environments, changing fonts, commenting out sections of a document,
+reformatting the input text, and entering mathematics.
+</para>
+
+<para>&TeX; contains a lot of support 
+for typesetting mathematics<indexterm><primary>typesetting</primary><secondary>mathematics</secondary><tertiary sortas="with auctex">with &auctex;</tertiary></indexterm>.  In 
+that spirit,
+&auctex; provides a<indexterm><primary>mathematics</primary><secondary>minor mode</secondary></indexterm> minor mode<footnote>
+<para>A minor mode is a kind of editing environment provided by GNU
+emacs. If you are unfamiliar with minor modes, consult your emacs
+reference.</para></footnote> for entering mathematical formulae.
+</para>
+
+<para>In mathematics minor mode, pressing <keycap>`</keycap> changes the meaning of the
+next character you type.  The next character is interpreted as an
+abbreviation for a mathematical symbol or function.
+For example, in &auctex;, typing
+</para>
+
+<informalexample>
+<para><keycap>$</keycap>
+<keycap>C-c</keycap>
+<keycap>~</keycap>
+<keycap>`</keycap>
+<keycap>a</keycap>
+<keycap>`</keycap>
+<keycap>&lt;</keycap>
+<keycap>`</keycap>
+<keycap>b</keycap>
+<keycap>$</keycap></para>
+</informalexample>
+
+<para>inserts
+</para>
+
+<screen>
+$&alpha; \leq &beta;$
+</screen>
+
+<para>into your document (which is typeset like this: &alpha;&les;&beta;).
+</para>
+
+<para>Table&nbsp;<xref role="label" linkend="tbl.mathops"/> lists all of the abbreviations.
+The first column of the table displays the shortcut keys.
+The second and third columns show the command inserted in your
+document and the typeset symbol, respectively
+<indexterm><primary>mathematics</primary><secondary sortas="auctex operators">&auctex; operators</secondary></indexterm><indexterm><primary sortas="auctex">&auctex;</primary><secondary>mathematics operators</secondary></indexterm>.
+</para>
+
+<table id="tbl.mathops" frame="topbot">
+<title>&auctex; Math Operators in Mathematics Minor-mode</title>
+<tgroup cols="6">
+<colspec colsep="1"/>
+<colspec colsep="1"/>
+<colspec colsep="1"/>
+<colspec colsep="1"/>
+<colspec colsep="1"/>
+<thead>
+<row rowsep="1">
+  <entry>Keys</entry>
+  <entry>Control Sequence</entry>
+  <entry>Symbol</entry>
+  <entry>Keys</entry>
+  <entry>Control Sequence</entry>
+  <entry>Symbol</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry><literal>`a</literal></entry>
+  <entry><literal>\alpha</literal></entry>
+  <entry>$\alpha$</entry>
+  <entry><literal>`C-f</literal></entry>
+  <entry><literal>\rightarrow</literal></entry>
+  <entry>$\rightarrow$</entry>
+</row>
+<row>
+  <entry><literal>`b</literal></entry>
+  <entry><literal>\beta</literal></entry>
+  <entry>$\beta$</entry>
+  <entry><literal>`C-p</literal></entry>
+  <entry><literal>\uparrow</literal></entry>
+  <entry>$\uparrow$</entry>
+</row>
+<row>
+  <entry><literal>`d</literal></entry>
+  <entry><literal>\delta</literal></entry>
+  <entry>$\delta$</entry>
+  <entry><literal>`C-n</literal></entry>
+  <entry><literal>\downarrow</literal></entry>
+  <entry>$\downarrow$</entry>
+</row>
+<row>
+  <entry><literal>`e</literal></entry>
+  <entry><literal>\epsilon</literal></entry>
+  <entry>$\epsilon$</entry>
+  <entry><literal>`&lt;</literal></entry>
+  <entry><literal>\leq</literal></entry>
+  <entry>$\leq$</entry>
+</row>
+<row>
+  <entry><literal>`f</literal></entry>
+  <entry><literal>\phi</literal></entry>
+  <entry>$\phi$</entry>
+  <entry><literal>`&gt;</literal></entry>
+  <entry><literal>\geq</literal></entry>
+  <entry>$\geq$</entry>
+</row>
+<row>
+  <entry><literal>`g</literal></entry>
+  <entry><literal>\gamma</literal></entry>
+  <entry>$\gamma$</entry>
+  <entry><literal>`~</literal></entry>
+  <entry><literal>\tilde</literal></entry>
+  <entry>$\tilde{\phantom{a}}</entry>
+</row>
+<row>
+  <entry><literal>`h</literal></entry>
+  <entry><literal>\eta</literal></entry>
+  <entry>$\eta$</entry>
+  <entry><literal>`I</literal></entry>
+  <entry><literal>\infty</literal></entry>
+  <entry>$\infty$</entry>
+</row>
+<row>
+  <entry><literal>`k</literal></entry>
+  <entry><literal>\kappa</literal></entry>
+  <entry>$\kappa$</entry>
+  <entry><literal>`A</literal></entry>
+  <entry><literal>\forall</literal></entry>
+  <entry>$\forall$</entry>
+</row>
+<row>
+  <entry><literal>`l</literal></entry>
+  <entry><literal>\lambda</literal></entry>
+  <entry>$\lambda$</entry>
+  <entry><literal>`E</literal></entry>
+  <entry><literal>\exists</literal></entry>
+  <entry>$\exists$</entry>
+</row>
+<row>
+  <entry><literal>`m</literal></entry>
+  <entry><literal>\mu</literal></entry>
+  <entry>$\mu$</entry>
+  <entry><literal>`!</literal></entry>
+  <entry><literal>\not</literal></entry>
+  <entry>$\not\phantom{=}$</entry>
+</row>
+<row>
+  <entry><literal>`n</literal></entry>
+  <entry><literal>\nu</literal></entry>
+  <entry>$\nu$</entry>
+  <entry><literal>`i</literal></entry>
+  <entry><literal>\in</literal></entry>
+  <entry>$\in$</entry>
+</row>
+<row>
+  <entry><literal>`o</literal></entry>
+  <entry><literal>\omega</literal></entry>
+  <entry>$\omega$</entry>
+  <entry><literal>`*</literal></entry>
+  <entry><literal>\times</literal></entry>
+  <entry>$\times$</entry>
+</row>
+<row>
+  <entry><literal>`p</literal></entry>
+  <entry><literal>\pi</literal></entry>
+  <entry>$\pi$</entry>
+  <entry><literal>`.</literal></entry>
+  <entry><literal>\cdot</literal></entry>
+  <entry>$\cdot$</entry>
+</row>
+<row>
+  <entry><literal>`q</literal></entry>
+  <entry><literal>\theta</literal></entry>
+  <entry>$\theta$</entry>
+  <entry><literal>`@{</literal></entry>
+  <entry><literal>\subset</literal></entry>
+  <entry>$\subset$</entry>
+</row>
+<row>
+  <entry><literal>`r</literal></entry>
+  <entry><literal>\rho</literal></entry>
+  <entry>$\rho$</entry>
+  <entry><literal>`@}</literal></entry>
+  <entry><literal>\supset</literal></entry>
+  <entry>$\supset$</entry>
+</row>
+<row>
+  <entry><literal>`s</literal></entry>
+  <entry><literal>\sigma</literal></entry>
+  <entry>$\sigma$</entry>
+  <entry><literal>`[</literal></entry>
+  <entry><literal>\subseteq</literal></entry>
+  <entry>$\subseteq$</entry>
+</row>
+<row>
+  <entry><literal>`t</literal></entry>
+  <entry><literal>\tau</literal></entry>
+  <entry>$\tau$</entry>
+  <entry><literal>`]</literal></entry>
+  <entry><literal>\supseteq</literal></entry>
+  <entry>$\supseteq$</entry>
+</row>
+<row>
+  <entry><literal>`v</literal></entry>
+  <entry><literal>\vee</literal></entry>
+  <entry>$\vee$</entry>
+  <entry><literal>`\</literal></entry>
+  <entry><literal>\backslash</literal></entry>
+  <entry>$\backslash$</entry>
+</row>
+<row>
+  <entry><literal>`u</literal></entry>
+  <entry><literal>\upsilon</literal></entry>
+  <entry>$\upsilon$</entry>
+  <entry><literal>`/</literal></entry>
+  <entry><literal>\setminus</literal></entry>
+  <entry>$\setminus$</entry>
+</row>
+<row>
+  <entry><literal>`x</literal></entry>
+  <entry><literal>\chi</literal></entry>
+  <entry>$\chi$</entry>
+  <entry><literal>`+</literal></entry>
+  <entry><literal>\cup</literal></entry>
+  <entry>$\cup$</entry>
+</row>
+<row>
+  <entry><literal>`y</literal></entry>
+  <entry><literal>\psi</literal></entry>
+  <entry>$\psi$</entry>
+  <entry><literal>`-</literal></entry>
+  <entry><literal>\cap</literal></entry>
+  <entry>$\cap$</entry>
+</row>
+<row>
+  <entry><literal>`z</literal></entry>
+  <entry><literal>\zeta</literal></entry>
+  <entry>$\zeta$</entry>
+  <entry><literal>`(</literal></entry>
+  <entry><literal>\langle</literal></entry>
+  <entry>$\langle$</entry>
+</row>
+<row>
+  <entry><literal>`D</literal></entry>
+  <entry><literal>\Delta</literal></entry>
+  <entry>$\Delta$</entry>
+  <entry><literal>`)</literal></entry>
+  <entry><literal>\rangle</literal></entry>
+  <entry>$\rangle$</entry>
+</row>
+<row>
+  <entry><literal>`G</literal></entry>
+  <entry><literal>\Gamma</literal></entry>
+  <entry>$\Gamma$</entry>
+  <entry><literal>`C-e</literal></entry>
+  <entry><literal>\exp</literal></entry>
+  <entry>$\exp$</entry>
+</row>
+<row>
+  <entry><literal>`Q</literal></entry>
+  <entry><literal>\Theta</literal></entry>
+  <entry>$\Theta$</entry>
+  <entry><literal>`C-s</literal></entry>
+  <entry><literal>\sin</literal></entry>
+  <entry>$\sin$</entry>
+</row>
+<row>
+  <entry><literal>`L</literal></entry>
+  <entry><literal>\Lambda</literal></entry>
+  <entry>$\Lambda$</entry>
+  <entry><literal>`C-c</literal></entry>
+  <entry><literal>\cos</literal></entry>
+  <entry>$\cos$</entry>
+</row>
+<row>
+  <entry><literal>`Y</literal></entry>
+  <entry><literal>\Psi</literal></entry>
+  <entry>$\Psi$</entry>
+  <entry><literal>`C-^</literal></entry>
+  <entry><literal>\sup</literal></entry>
+  <entry>$\sup$</entry>
+</row>
+<row>
+  <entry><literal>`P</literal></entry>
+  <entry><literal>\Pi</literal></entry>
+  <entry>$\Pi$</entry>
+  <entry><literal>`C-_</literal></entry>
+  <entry><literal>\inf</literal></entry>
+  <entry>$\inf$</entry>
+</row>
+<row>
+  <entry><literal>`S</literal></entry>
+  <entry><literal>\Sigma</literal></entry>
+  <entry>$\Sigma$</entry>
+  <entry><literal>`C-d</literal></entry>
+  <entry><literal>\det</literal></entry>
+  <entry>$\det$</entry>
+</row>
+<row>
+  <entry><literal>`U</literal></entry>
+  <entry><literal>\Upsilon</literal></entry>
+  <entry>$\Upsilon$</entry>
+  <entry><literal>`C-l</literal></entry>
+  <entry><literal>\lim</literal></entry>
+  <entry>$\lim$</entry>
+</row>
+<row>
+  <entry><literal>`V</literal></entry>
+  <entry><literal>\Phi</literal></entry>
+  <entry>$\Phi$</entry>
+  <entry><literal>`C-t</literal></entry>
+  <entry><literal>\tan</literal></entry>
+  <entry>$\tan$</entry>
+</row>
+<row>
+  <entry><literal>`O</literal></entry>
+  <entry><literal>\Omega</literal></entry>
+  <entry>$\Omega$</entry>
+  <entry><literal>`^</literal></entry>
+  <entry><literal>\hat</literal></entry>
+  <entry>$\hat{\phantom{a}}$</entry>
+</row>
+<row>
+  <entry><literal>`C-b</literal></entry>
+  <entry><literal>\leftarrow</literal></entry>
+  <entry>$\leftarrow$</entry>
+  <entry></entry>
+  <entry></entry>
+  <entry></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>Additional miscellaneous commands in &auctex; provide automatic 
+quotation, completion of <quote>items</quote> in appropriate environments (<literal>itemize</literal>
+and <literal>enumeration</literal> environments, for example),
+and insertion of brace pairs<indexterm><primary sortas="auctex">&auctex;</primary><secondary>matching braces</secondary></indexterm> and 
+skeletal control sequences.
+</para>
+
+</section>
+<section><title>&auctex; Outline Mode</title>
+
+<para>Outline mode<indexterm><primary sortas="auctex">&auctex;</primary><secondary>outline mode</secondary></indexterm> is a 
+convenient way to edit large documents.  In outline
+mode, portions of the document that you are not editing are hidden
+from view.  They aren't removed or deleted.  Emacs indicates hidden text with ellipses.
+</para>
+
+<para>For example, in a large document with many sections, you can use
+outline mode to hide all text except the section headings, and then
+selectively expand just the sections that you wish to edit.
+</para>
+
+</section>
+<section><title>Intelligent Paragraph Reformatting</title>
+
+<para>&auctex; understands the &TeX; constructions for many kinds of environments
+(the list environments, for example) and 
+performs paragraph reformatting<indexterm><primary sortas="auctex">&auctex;</primary><secondary>reformatting paragraphs</secondary></indexterm> within 
+the restrictions of these environments.  &auctex; won't concatenate a 
+whole series of list items together into one huge paragraph, for example.
+</para>
+
+</section>
+<section><title>Multi-file Documents</title>
+
+<para>It is often convenient to edit a large document in small 
+pieces<indexterm><primary sortas="auctex">&auctex;</primary><secondary>handling multi-file documents</secondary></indexterm> rather
+than in one huge file.  For example, when writing a book, it is convenient
+to work on chapters independently and store them in different files.  If
+you are working on a collaborative project, it may be absolutely necessary
+to separate the document into pieces.
+</para>
+
+<para>The &TeX; <markup>\input</markup> command allows you to construct a driver file
+that automatically combines the individual files that make up your
+document when you run &TeX;.  The driver file contains the document
+style options and other setup information for the whole document.
+Each chapter contains just the necessary text.  When &TeX; encounters
+an <markup>\input</markup> command, it typesets all of the
+text in the specified file before continuing with the current document.
+Example&nbsp;<xref role="label" linkend="ex.driver"/> shows an example of a driver file.
+</para>
+
+<example id="ex.driver"><title>A Simple Driver File</title>
+<screen>
+\documentstyle[ora]{book}
+\begin{document}
+   \input{intro}
+   \input{chap1}
+   \input{chap2}
+\end{document}
+</screen>
+</example>
+
+<para>&auctex; provides seamless support for multi-file documents.
+In order to provide this support, &auctex; relies on the <quote>file variables</quote>
+feature of emacs, which allows you to associate editor variables
+with particular buffers.
+An editor variable<indexterm><primary>editors</primary><secondary>variables for</secondary></indexterm><indexterm><primary>variables</primary><secondary>editor</secondary></indexterm> is 
+a named variable that
+is local to the current buffer and accessible by macro packages like
+&auctex; running under emacs.
+Look up file variables in your emacs reference for a more complete
+description.  Example&nbsp;<xref role="label" linkend="ex.localvars"/> shows some common local
+variables in &auctex;.
+</para>
+
+<para>When you run &TeX; on a buffer, &auctex; looks for the editor variable
+<literal>TeX-master</literal>.  If <literal>TeX-master</literal> is set to a filename, 
+&auctex; runs &TeX; on that file instead of running it directly on the file 
+you are editing.
+This is a tremendously useful feature because it means that you do not
+have to put macro definitions, document style options, and other setup
+information at the top of each chapter.  Simply set the <literal>TeX-master</literal>
+variable in each chapter to name the driver file.
+</para>
+
+<para>If you do not set the <literal>TeX-master</literal> variable, &auctex; will prompt
+you for it the first time you run a command. If the
+<markup>\documentstyle</markup> command occurs near the top of your document,
+&auctex; assumes that the current buffer <emphasis>is</emphasis> the master
+(because it contains setup information) and will not
+prompt you for a different master file.
+</para>
+
+<para>Editor variables are defined by a <quote>Local Variables</quote> declaration at
+the bottom of your file.  &auctex; inserts a Local Variables
+declaration automatically if it prompts you for a master file.
+Example&nbsp;<xref role="label" linkend="ex.localvars"/> shows how local variables
+<literal>TeX-master</literal><indexterm><primary sortas="auctex">&auctex;</primary><secondary sortas="TeX-master"><literal>TeX-master</literal></secondary></indexterm>
+and 
+<literal>TeX-command-default</literal><indexterm><primary sortas="auctex">&auctex;</primary><secondary sortas="TeX-command-default"><literal>TeX-command-default</literal></secondary></indexterm>
+can be set to
+<filename>driver.tex</filename> and <literal>LaTeX</literal>, respectively.  Because
+these lines begin with a percent sign, they are considered comments by
+&TeX; and do not appear in the output.  These should be 
+the last lines in the file.
+</para>
+
+<example id="ex.localvars"><title>Local Variables in an Emacs Buffer</title>
+<screen>&percnt; Local Variables:
+% TeX-master: "driver.tex"
+% TeX-command-default: "LaTeX"
+% End:</screen>
+</example>
+
+</section>
+<section id="sec.texcomp"><title>Running &TeX;</title>
+
+<para>Like GNU emacs &TeX; mode, &auctex; allows you to 
+run &TeX;<indexterm><primary sortas="auctex">&auctex;</primary><secondary sortas="running tex automatically">running &TeX; automatically</secondary></indexterm> directly
+from within emacs as a subshell.  Running a program inside emacs
+creates a process<indexterm><primary sortas="process (in auctex)">process (in &auctex;)</primary></indexterm>.  You 
+can have only one active process for
+each document, plus one process for &TeX;ing a region<indexterm><primary>region</primary></indexterm>.  If you 
+try to
+run two processes on the same document, &auctex; will ask for
+permission to kill the first before running the second.  &auctex; supports
+the processing of both the documents and the regions of a document.
+</para>
+
+</section>
+<section><title>Finding Errors</title>
+
+<para>No matter how much experience you have with &TeX;, some of the
+documents that you write will contain 
+errors<indexterm><primary sortas="auctex">&auctex;</primary><secondary>finding errors</secondary></indexterm>.  &auctex; eases the
+burden of correcting these errors by locating them automatically
+in your document.  
+</para>
+
+</section>
+</section>
+<section><title>Multi-Edit</title>
+
+<para><command>Multi-Edit<indexterm><primary>Multi-Edit</primary></indexterm></command><indexterm><primary>MS-DOS</primary><secondary>editors</secondary></indexterm> is an 
+editor for the MS-DOS environment.  This section describes
+the text-based version of <command>Multi-Edit</command>.  A Windows version is in the works, and
+it may exist by the time you read this.
+</para>
+
+<para>Built to be a programmer's editor, <command>Multi-Edit</command> has a number of features
+designed to add language-specific intelligence to the editing environment.
+These features (template editing, a customizable spellchecker, and
+configurable brace matching) can be exploited for &TeX; as readily as for
+any programming language.  For several years, at least since version 5.0,
+<command>Multi-Edit</command> has included support for &TeX;.
+</para>
+
+<section><title>Setting Up &TeX; Support</title>
+
+<para>Support for &TeX;<indexterm><primary>Multi-Edit</primary><secondary sortas="setting up tex support">setting up &TeX; support</secondary></indexterm> is 
+included as a language type in <command>Multi-Edit</command>.
+Language types are selected by filename extension; this means that you
+configure <command>Multi-Edit</command> to provide support for the <quote>&TeX; language</quote> whenever
+you edit files with the 
+extension <filename>.tex</filename><indexterm><primary>tex files</primary></indexterm> (and 
+other extensions if you choose).
+</para>
+
+<para>Selecting the <quote>Other/Install/Filename extensions...</quote> menu displays
+a list of configured extensions.  If TEX is not listed,
+press <keycap>Insert</keycap> to add it.  You will see a screen like the one shown
+in Figure&nbsp;<xref role="label" linkend="fig.meextsetup"/>.
+</para>
+
+<figure id="fig.meextsetup">
+<title>Extension setup in Multi-Edit</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.01.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.01.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+<para>Customize the right margin, tab spacing, indent style, and 
+colors to values that you find comfortable.  The edit mode should 
+be <quote>text,</quote> and the tab settings should be set to <quote>use tab and margin 
+settings, ignore format line.</quote>
+</para>
+
+<para>Select TEX as the language type, and add &TeX; as a
+compiler.  One possible setting for &TeX; as a compiler (for &LaTeX; documents, in this case) is shown in Figure&nbsp;<xref role="label" linkend="fig.melatexcmp"/>.
+</para>
+
+<figure id="fig.melatexcmp">
+<title>&LaTeX; as a compiler in Multi-Edit</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.02.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.02.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+</section>
+<section><title>Typing in Multi-Edit</title>
+
+<para>Brace matching<indexterm><primary>Multi-Edit</primary><secondary>matching braces</secondary></indexterm>  is 
+provided automatically with Multi-Edit's
+template expansion support.  Consult your Multi-Edit reference for
+more information about templates.
+</para>
+
+<para>Multi-Edit language support does not include any &TeX; key bindings by
+default.  However, the macros are provided, and you can install them with
+the <quote>Other/Install/Key mapping...</quote> menu.
+The following macros are available:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> <literal>tex^texquote</literal> inserts the appropriate quotation marks.
+        This macro can be bound to <keycap>"</keycap> to provide smart 
+        quoting<indexterm><primary>Multi-Edit</primary><secondary>quotation marks</secondary></indexterm>.
+  </para>
+</listitem>
+<listitem>
+<para> <literal>tex^texnquote</literal> inserts the literal double quote.
+        It can be bound to <keycap>Alt-"</keycap>, for example.
+  </para>
+</listitem>
+<listitem>
+<para> <literal>tex^texreformat</literal> is a replacement for the reformat macro.
+        If the filename extension is <filename>.tex</filename>, this macro reformats
+        the paragraph with sensitivity to &TeX; macros.  Otherwise it calls
+        the default reformatting macro.
+  </para>
+</listitem>
+</itemizedlist>
+
+</section>
+<section><title>Running &TeX;</title>
+
+<para>Running &TeX; within Multi-Edit is accomplished by specifying a compiler for
+&TeX; or &LaTeX; documents<indexterm><primary>{Multi-Edit</primary><secondary sortas="running tex automatically">running
+&TeX; automatically}</secondary></indexterm>.  In Figure&nbsp;<xref role="label" linkend="fig.melatexcmp"/>, a batch file called
+<filename>TEXIT</filename> is being used as the compiler for documents with the
+extension <filename>.tex</filename>.
+</para>
+
+<para>Automatic compilation and location of errors is provided by Multi-Edit
+language support when you have selected <literal>TEX</literal> as the language-type
+for <filename>.tex</filename> files.
+</para>
+
+</section>
+</section>
+<section><title>Brief</title>
+
+<para><command>Brief</command><indexterm><primary sortas="Brief">Brief (program)</primary></indexterm><indexterm><primary>MS-DOS</primary><secondary>editors</secondary></indexterm><indexterm><primary>OS/2</primary><secondary>editors</secondary></indexterm> is 
+a powerful programmer's editor recently acquired by
+Borland International<indexterm><primary>Borland International</primary></indexterm>.  It is available for both DOS and OS/2 systems.
+Like the other editors discussed in this section, <command>Brief</command> offers
+a strong set of programming features, including the ability to run 
+compilers automatically, and a flexible, C-like macro programming language
+that allows you to customize the editor.
+</para>
+
+<para>There is a &LaTeX; editing environment for <command>Brief</command> in the CTAN archives.
+It includes multiple-language support (currently
+supporting Norwegian) and control-key shortcuts for many common &LaTeX; commands.
+</para>
+
+<para>The installation and setup program includes instructions
+for defining program compilers.  &TeX; can be defined to process 
+files with particular extensions.  Once again, it is a good idea to have
+the editor run a batch file so that the batch file can determine what
+format file to use when processing the document.
+</para>
+
+</section>
+<section><title>MicroEMACS</title>
+
+<para><command>MicroEMACS</command><indexterm><primary>MicroEMACS</primary></indexterm><indexterm><primary>MS-DOS</primary><secondary>editors</secondary></indexterm><indexterm><primary>Microsoft Windows</primary><secondary>editors</secondary></indexterm> is a powerful emacs-like editor for MS-DOS and 
+Microsoft Windows.<footnote>
+<para>There are two versions of the program; the one
+discussed here is the version for Windows.</para></footnote>
+Figure&nbsp;<xref role="label" linkend="fig.editing.mew"/> shows an example of <command>MicroEMACS</command> editing
+a &LaTeX; document.  In this case, the
+&LaTeX; extensions to <command>MicroEMACS</command> have been loaded, and <quote>Help</quote>
+is selected.
+</para>
+
+<figure id="fig.editing.mew">
+<title>Editing a file with <application>MicroEMACS</application></title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.03.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.03.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+<para>The online help for &LaTeX; is shown in Figure&nbsp;<xref role="label" linkend="fig.winhelp"/>.
+This is a Microsoft Windows help file, available independently of
+<command>MicroEMACS</command> (although it is nicely integrated here).
+</para>
+
+<figure id="fig.winhelp">
+<title>Microsoft Windows online help for &LaTeX;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.04.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.04.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+<para>The <command>MicroEMACS</command> environment also has the ability to run other
+programs (including &TeX; to process documents) and process the error 
+output to aid in locating errors.
+</para>
+
+</section>
+<section><title>epm: OS/2's Enhanced Editor</title>
+
+<para><command>epm</command><indexterm><primary>epm</primary></indexterm><indexterm><primary>OS/2</primary><secondary>editors</secondary></indexterm>, the 
+enhanced editor for OS/2, can be used to edit
+&TeX; documents.  The 
+<command>epmtex</command><indexterm><primary>epmtex</primary></indexterm> package adds a &TeX; item to
+the menu bar as shown in Figure&nbsp;<xref role="label" linkend="fig.editing.epm"/>.
+</para>
+
+<figure id="fig.editing.epm">
+<title>Editing a &TeX; document with epm under OS/2</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.05.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.05.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+</section>
+<section><title>Other Tools</title>
+
+<para>There are many other editors that can be effective tools for editing
+&TeX; documents.  Some of the editors that you might want to consider
+are <command>Jove</command><indexterm>
+<primary><command>Jove</command></primary>
+</indexterm>, an emacs-like editor; <command>Xnot</command><indexterm><primary>Xnot</primary></indexterm>, 
+a Windows port
+of emacs; <command>LSedit</command><indexterm><primary>LSedit</primary></indexterm>, the VMS language-sensitive editor; 
+and <command>Alpha</command><indexterm><primary>Alpha</primary></indexterm> and <command>BBedit</command><indexterm><primary>BBEdit</primary></indexterm>, two Macintosh editors described
+in Chapter&nbsp;<xref role="label" linkend="chap.mac"/>, <emphasis><xref role="label" linkend="chap.mac"/></emphasis>.
+</para>
+
+<para>There are also a number of tools designed specifically for editing 
+&TeX; documents.
+<command>Scientific Word</command><indexterm><primary sortas="Scientific Word">Scientific Word (program)</primary></indexterm>, a commercial environment, is described in
+Chapter&nbsp;<xref role="label" linkend="chap.commercialtex"/>, <emphasis><xref role="label" linkend="chap.commercialtex"/></emphasis>.
+Several free tools (<command>MathPad</command><indexterm><primary>MathPad</primary></indexterm>,
+<command>Doc</command>, and <command>X&TeX;Shell</command><indexterm><primary sortas="Xtex{Shell}">X&TeX;Shell</primary></indexterm>, for example) also exist,
+although none
+were available<footnote>
+<para>Or known to me, anyway.</para></footnote> in time for review
+in this edition of <citetitle>Making &TeX; Work</citetitle>.
+</para>
+
+<para>Another helpful tool is <command>LaCheck</command><indexterm><primary>LaCheck</primary></indexterm>, a &LaTeX; syntax checker.
+<command>LaCheck</command> attempts to find and identify problems with your document
+that will cause it to format incorrectly.  It runs much more quickly than
+&TeX; over a long document and may identify some things (like 
+</para>
+
+<para>missing
+italic correction) that are potentially incorrect, even though they are
+not errors that will prevent the document from formatting.
+</para>
+
+</section>
+<section><title>&TeX; as a Compiler</title>
+
+<para>This section discusses how to use &TeX; like 
+a compiler<indexterm><primary>editors</primary><secondary sortas="using tex as a compiler">using &TeX; as a compiler</secondary></indexterm> from within
+your editor, and it is rather technical.  You should read this section
+before you attempt to program your own editor to run &TeX; (if it
+doesn't already include support for &TeX;).  You may
+not be interested in this material if you aren't planning to do that
+programming yourself.
+More details on the types of &TeX; output used in this section can be
+found in Chapter&nbsp;<xref role="label" linkend="chap.running"/>, <emphasis><xref role="label" linkend="chap.running"/></emphasis>.
+</para>
+
+<para>Many editors can run a compiler, capture the error messages that the
+compiler produces, and walk through the source file highlighting each
+error.  Most editors with this functionality can run &TeX; as a
+<quote>compiler</quote> for documents.  
+</para>
+
+<para>The discussion that follows is at a very abstract level.  The details vary
+so much from one editor to the next that presenting more detail only
+confuses the issue further.  To implement this feature, you'll need to
+read your editor reference carefully, and probably experiment on your
+own a little bit.
+</para>
+
+<section><title>Processing a Document</title>
+
+<para>Establish the &TeX; program as a compiler using whatever features your
+editor provides to set up a compiler.  Experiment with your editor until
+you can process an error-free document.
+</para>
+
+<para>After you have everything working, it may be desirable to modify the
+compiler to run a batch file or shell script instead of invoking the
+&TeX; program directly.  This will allow you to program the shell script
+so that it can determine which format file to use.
+</para>
+
+<para>Running &TeX; is only the first step.  Next, you have to interpret the
+error messages<indexterm><primary>error messages</primary><secondary sortas="tex">&TeX;</secondary></indexterm>  that &TeX; produces.  
+As a concrete example,
+Example&nbsp;<xref role="label" linkend="ex.madeuperr"/> shows some contrived output which demonstrates
+an <quote>undefined control sequence</quote> error on line 6 of the file
+<filename>wilma.tex</filename>.
+</para>
+
+<example id="ex.madeuperr"><title>A Contrived Error</title>
+<screen>
+This is TeX version 3.141...
+** (flintstone.tex
+some
+messages [1]
+(fred.tex [2]
+some more
+messages
+[3] ) (wilma.tex [4]
+! Undefined control sequence.
+the dog \dino
+              tipped over the car.
+l.6 the dog \dino tipped over the car.
+</screen>
+</example>
+
+<para>Here are some suggestions for attacking the problem of programming
+your favorite editor to process &TeX; error 
+messages<indexterm><primary>error messages</primary><secondary>programming an editor to process</secondary></indexterm>:
+</para>
+
+<variablelist>
+<varlistentry>
+<term>Using the log file</term>
+<listitem>
+<para>Don't worry about capturing the error messages that &TeX; produces.
+It is much easier to get the 
+information from the log file<indexterm><primary>log files</primary></indexterm>.
+Log files are described in the section called <quote><xref role="label" linkend="sec.logfiles"/></quote>
+in Chapter&nbsp;<xref role="label" linkend="chap.running"/>, <emphasis><xref role="label" linkend="chap.running"/></emphasis>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Finding error messages</term>
+<listitem>
+<para>Any line in the log file that begins with an exclamation point is an
+error message.  In Example&nbsp;<xref role="label" linkend="ex.madeuperr"/>, the line that begins
+</para>
+
+<screen>
+! Undefined control sequence.
+</screen>
+
+<para>is an example of an error message.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Finding the source line</term>
+<listitem>
+<para>Following the error message, &TeX; shows the context in which the error
+occurred.  After that, the line that begins with
+<literal>l.<replaceable>nnn</replaceable></literal> (where
+<literal><replaceable>nnn</replaceable></literal>
+is some decimal number) identifies the line of the input
+file that &TeX; was processing when the error occurred (in
+Example&nbsp;<xref role="label" linkend="ex.madeuperr"/>, &TeX; was on line 6 when the error occurred).
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Finding the source file</term>
+<listitem>
+<para>When processing a document that uses the <markup>\input</markup> command to
+include other files, there is no
+guaranteed method of finding out the name of the file &TeX; was
+processing when the error occurred.
+Whenever &TeX; starts processing a file, it prints an open parenthesis
+followed by the name of the file.  When it finishes processing the
+document, it prints a close parenthesis.<footnote>
+<para>Unfortunately,
+parentheses can occur in the log file for other reasons.</para></footnote>
+So the following algorithm <emphasis>usually</emphasis> identifies
+what file the error occurred in:
+</para>
+
+<para>Beginning at the line in the log file that announces the error message
+(the line beginning with <quote>!</quote>), search backwards for the first
+unmatched open parenthesis.  The word following that open parenthesis
+is probably the name of the file &TeX; was processing when the
+error occurred.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Ignoring errors</term>
+<listitem>
+<para>When you run &TeX; <quote>by hand,</quote> you want &TeX; to stop and report
+errors to you as they occur in your document.  But if your editor is
+going to handle any errors that occur, it is inconvenient to have
+&TeX; stop and ask questions.  In fact, it may not be possible to run
+&TeX; from your editor in a way that makes it even <emphasis>feasible</emphasis>
+for &TeX; to stop and ask questions.  You can use several built-in
+control sequences to control the way &TeX; responds to errors.  They
+are summarized in Table&nbsp;<xref role="label" linkend="tab.modes"/>.
+</para>
+
+<table id="tab.modes">
+<title>&TeX; Modes of Interaction
+    </title>
+<tgroup cols="2">
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>Mode</entry>
+  <entry>&TeX;'s Behavior</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry><markup>\errorstopmode</markup></entry>
+  <entry>Stop on errors (the default behavior)</entry>
+</row>
+<row>
+  <entry><markup>\scrollmode</markup></entry>
+  <entry>Scroll errors, stop on missing files </entry>
+</row>
+<row>
+  <entry><markup>\nonstopmode</markup></entry>
+  <entry>Scroll errors and missing files </entry>
+</row>
+<row>
+  <entry><markup>\batchmode</markup></entry>
+  <entry>Scroll both and don't summarize on screen </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+<para>One common way of invoking &TeX; from an editor to process a document
+is to use the command:
+</para>
+
+<screen>
+tex \nonstopmode \input flintstone
+</screen>
+
+<para>This uses the features discussed in the section
+<quote><xref role="label" linkend="sec.clineopts"/></quote> in Chapter&nbsp;<xref role="label" linkend="chap.running"/>
+to pass a command to &TeX; on
+the command line.  In this case, the command tells &TeX; not to stop
+on any kind of error.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Handling other errors</term>
+<listitem>
+<para>When searching for errors in the log file, you may find it helpful to
+search for lines that begin with the 
+words <quote>Overfull box</quote><indexterm><primary>boxes</primary><secondary>overfull</secondary></indexterm> or
+<quote>Underfull box</quote><indexterm><primary>underfull</primary></indexterm> as well 
+as lines that begin with an exclamation
+point.  Because &TeX; does not print the <literal>l.nnn</literal> form of line-number
+message in this case, you will have to look for the line
+numbers in the warning message.
+</para>
+
+<para>Overfull box messages have the form:
+</para>
+
+<informalexample>
+<screen>
+Overfull <emphasis>box</emphasis> (<emphasis>99.9</emphasis>pt too wide) in paragraph at lines <emphasis>n--m</emphasis>
+</screen>
+</informalexample>
+
+<para>The <literal><replaceable>box</replaceable></literal> will be either <literal>hbox</literal>, indicating that something
+is too wide, or <literal>vbox</literal> indicating that something is too tall
+or too deep.  The distance, <literal><replaceable>99.9</replaceable>pt</literal>, indicates how 
+badly the box is overfull, and <literal><replaceable>n</replaceable></literal> is 
+the first line of the paragraph in which the error
+occurs.  Underfull box messages are the same, except that they begin
+with the word <quote>Underfull.</quote>
+</para>
+
+<para>There are several control sequences that you can use to control how sensitive
+&TeX; is to <quote>bad</quote> boxes.  Any good &TeX; reference will discuss these
+parameters in detail.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</section>
+</section>
+<section><title>Spellchecking</title>
+
+<para>Checking for spelling mistakes<indexterm><primary>spellchecking with editor</primary></indexterm> is an 
+important part of any document
+creation process.  Checking &TeX; documents is difficult because these
+documents contain control sequences that aren't words in the
+traditional sense.
+</para>
+
+<para>Some editors offer ways of customizing the spellchecker.  Multi-Edit, for 
+example, allows you to indicate that any word beginning with a backslash 
+should be ignored for the purpose of spellchecking.  
+Figure&nbsp;<xref role="label" linkend="fig.mespell"/> shows the 
+<quote>Other/Install/Edit Settings...</quote> 
+dialog where word delimiters are controlled.  This simple 
+customization goes a long way towards making spellchecking tolerable.
+</para>
+
+<para>External spellcheckers, such as the ones described here, can also 
+frequently be customized to ignore &TeX; control sequences.  
+</para>
+
+<figure id="fig.mespell">
+<title>Edit settings control word delimiters</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.06.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.06.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+<section><title>ispell</title>
+
+<para><command>ispell</command><indexterm><primary>ispell</primary></indexterm> is 
+a common &unix; spellchecker.  In addition to
+being available from the shell prompt, GNU emacs 
+includes an <emphasis>ispell-mode</emphasis> that handles &TeX; documents intelligently.
+</para>
+
+</section>
+<section><title>amSpell</title>
+
+<para><command>amSpell<indexterm><primary>amSpell</primary></indexterm></command> is an 
+MS-DOS spellchecker that includes special
+support for &TeX; documents.  When spellchecking a &TeX; document,
+<command>amSpell</command> ignores all &TeX; control sequences, as well as
+mathematics and the arguments to reference and citation commands.  The
+standard accent primitives are also recognized, and <command>amSpell</command>
+can identify and correct misspellings in words that use them.
+</para>
+
+<para>An example of <command>amSpell</command> checking a document is shown in
+Figure&nbsp;<xref role="label" linkend="fig.amspell"/>.
+</para>
+
+<figure id="fig.amspell">
+<title>Spellchecking a document with amSpell</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.07.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.07.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+</section>
+</section>
+<section><title>Revision Control</title>
+
+<para>Revision control<indexterm><primary>revision control</primary></indexterm> allows you 
+to track modifications to a file.  
+It is frequently associated with programming where the ability to 
+find and correct bugs relies on being able to recreate a
+problem exactly.  It can be just as useful for writers wishing to keep
+track of changes to an evolving document.  For example, I use
+revision control to keep track of which versions of each chapter
+my editor has seen.
+</para>
+
+<para>One of the most common revision control systems is RCS<indexterm><primary>RCS</primary></indexterm>, which was
+derived from SCCS<indexterm><primary>SCCS</primary></indexterm>, a commercial package.  RCS is freely available under
+the GNU license.  It is possible to use RCS under &unix;, MS-DOS, and
+OS/2.
+</para>
+
+<para>The &TeX; macros shown in Example&nbsp;<xref role="label" linkend="ex.rcsmac"/> can be used to
+include RCS information as marginal notes in a document.  The
+marginal notes in this example are printed only when a draft
+is being produced.
+</para>
+
+<para>These macros are my own, you will find others in the CTAN archives
+in the directory <filename>macros/latex/contrib/misc</filename>.
+</para>
+
+<example id="ex.rcsmac"><title>Revision Control Macros for &TeX;
+Documents Using RCS}</title>
+<screen>%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RCS definitions...
+\newif\ifdraft
+\def\RCSID$#1${
+  \ifdraft{\tolerance=100000
+           \hbadness=100000
+           \raggedright
+           \marginpar{\tiny Draft #1}}
+           \typeout{Draft #1}
+  \else\typeout{Production run #1}\fi
+}
+
+\def\RCSmargid$#1: #2 #3 #4 #5 #6 #7${
+% #1 = <quote>Id</quote>
+% #2 = filename
+% #3 = vers
+% #4 = date
+% #5 = time
+% #6 = author
+% #7 = state [locker]
+  \ifdraft
+    \setbox0=\hbox to 0pt{
+        \tolerance=100000
+        \hbadness=100000
+        \parbox{4in}{
+          \rm\tiny #2\\ #3\\ #4}
+        \hss}
+    \marginpar{\box0}
+    \typeout{Draft Id: #2 #3 #4 #5 #6 #7}
+  \fi
+}</screen>
+</example>
+
+</section>
+<section><title>&TeX; Shells</title>
+
+<para>The iterative nature of &TeX; (edit, &TeX;, &BibTeX;, make indexes, preview,
+repeat) can be tedious to perform by hand.  As a result, several &TeX; <quote>shells</quote><indexterm><primary>shell</primary><secondary sortas="tex">&TeX;</secondary></indexterm> have been 
+developed which provide a more automatic interface
+to many aspects of the &TeX; process.  Several of these packages are
+described below.  In everyday use, they make &TeX; much more user
+friendly.
+</para>
+
+<section><title>&TeXShell;</title>
+
+<para>&TeXShell;<indexterm><primary sortas="texShell">&TeXShell;</primary></indexterm> was designed as an add-on for &emTeX;<indexterm><primary sortas="emTeX">&emTeX;</primary></indexterm> (it 
+installs directly
+into the &emTeX; directory hierarchy).  This character-based interface
+is available for both MS-DOS and OS/2. &TeXShell; provides an editor, 
+a complete help system, and fully
+customizable push-button access to &TeX;. An
+example of the &TeXShell; interface is shown in
+Figure&nbsp;<xref role="label" linkend="fig.texshell"/>.  The default &TeX; menu and help windows
+are shown.
+</para>
+
+<figure id="fig.texshell">
+<title>&TeXShell;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.08.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.08.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+</section>
+<section><title>&TeXPert;</title>
+
+<para>&TeXPert;<indexterm><primary sortas="texPert">&TeXPert;</primary></indexterm> is a character-based 
+shell for &TeX;.  MS-DOS and OS/2 versions of
+&TeXPert; are available in either German or English.  The default 
+configuration files for &TeXPert; are designed to work with &emTeX;, but 
+&TeXPert; does not install directly into the &emTeX; directory heirarchy.
+The &TeXPert; interface is shown in Figure&nbsp;<xref role="label" linkend="fig.texpert"/>.
+</para>
+
+<figure id="fig.texpert">
+<title>&TeXPert;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.09.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.09.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+<para>&TeXPert; provides an editor, an archive tool for speedy access to commonly
+used files, and an interface to <command>grep</command> for quickly scanning files.
+The exact look and feel of &TeXPert; can be customized.
+</para>
+
+</section>
+<section><title>4&TeX;</title>
+
+<para>The &fourTeX;<indexterm><primary sortas="4TeX">&fourTeX;</primary></indexterm> system uses the
+<command>4DOS</command><indexterm><primary>4DOS</primary></indexterm> extended batch language and a number of utilities
+to integrate &emTeX;<indexterm><primary sortas="emTeX">&emTeX;</primary></indexterm> with a wide variety of free,
+shareware, and commercial tools.  The system is well documented in a manual
+that describes installation, setup, use, and customization.
+The &fourTeX; interface is shown in Figure&nbsp;<xref role="label" linkend="fig.fourtex"/>.
+</para>
+
+<figure id="fig.fourtex">
+<title>&fourTeX;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.10.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.10.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+</section>
+<section><title>&PMTeX;</title>
+
+<para>&PMTeX;<indexterm><primary sortas="PMTeX">&PMTeX;</primary></indexterm> is an OS/2 presentation manager program.  Although it does not 
+provide a built-in editor, it can control four independent DOS and OS/2
+sessions, one each for editing, &TeX; processing, previewing, and 
+printing.  The options passed to each program can be controlled from
+the &PMTeX; Options menu.
+</para>
+
+<para>&PMTeX; was designed to work with &emTeX;, but can be configured to use
+any &TeX; system.  &PMTeX; was also designed to support two preprocessors
+for phonetic transcription: 
+the Teu&TeX;-P<indexterm><primary sortas="Teutex-P">Teu&TeX;-P</primary></indexterm> and ALD&TeX;-P<indexterm><primary sortas="ALDtex-P">ALD&TeX;-P</primary></indexterm> scanners.  These
+scanners are useful in dialectology and are available separately from
+&PMTeX;'s author.
+</para>
+
+<para>A example of the &PMTeX; interface is shown in Figure&nbsp;<xref role="label" linkend="fig.pmtex"/>.
+Note that the menu bar is very wide and does not fit in a standard 640x480
+VGA window.
+</para>
+
+<figure id="fig.pmtex">
+<title>&PMTeX;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.11.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.02.11.png"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+</section>
+<section><title>&TeX;it</title>
+
+<para>The &TeX;it<indexterm><primary sortas="tex{}it">&TeX;it</primary></indexterm> shell (which I wrote) is much less ambitious in many ways.
+Written entirely in Perl, &TeX;it does not offer a full screen interface
+or an editor at all.  Instead, it provides a simple menu of choices as
+shown in Figure&nbsp;<xref role="label" linkend="fig.texit"/> (all of the menu choices are completely 
+customizable).
+</para>
+
+<figure id="fig.texit"><title>&TeX;it</title>
+<screen><![CDATA[Processing: ./driver.tex
+Again? [?]status, [T]eX & View, [b]ibtex, [c]leanup, 
+       [e]dit a file, [p]rint, [q]uery printer, [t]ex, 
+       [v]iew, e[x]it: ]]></screen>
+</figure>
+
+<para>One of &TeX;it's strengths is its ability to parse the log file created
+by &TeX; and to determine when additional actions are required.  For example,
+&TeX;it will recognize when a document contains unresolved references
+and citations and can automatically run &BibTeX; and repeatedly run
+&TeX; to resolve the references.  With the addition of a few <quote>user specified</quote>
+rules in the document, &TeX;it can easily handle index construction and
+other more sophisticated relationships.
+</para>
+
+</section>
+</section>
+</chapter>

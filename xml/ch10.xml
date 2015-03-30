@@ -1,0 +1,490 @@
+<chapter id="chap.online">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>Online Documentation</title>
+
+<para>Some common kinds of documentation---for example, manuals for computer 
+programs---present a unique challenge to the author.  In many cases, it 
+would be nice to be able to provide online documentation<indexterm><primary>online documentation</primary></indexterm><indexterm><primary>documentation (online)</primary></indexterm> in addition to a typeset manual.
+</para>
+
+<para>One option is to maintain two different documents: one for publication
+and one for online access.  This is difficult to maintain and is prone
+to error.  As the documentation evolves, it is almost inevitable that
+some changes to one document will not be implemented in the other.
+</para>
+
+<para>Another option is to include only very limited formatting information
+in the document designed for publication so that it is easy
+to <quote>strip out</quote> the formatting commands and produce an online manual.
+The unfortunate side effect of this approach is that the resulting
+typeset documentation doesn't have a very professional appearance.
+</para>
+
+<para>With care, &TeX; can be the basis for a middle-ground approach to this 
+problem.<footnote><para>{Structured
+markup languages like SGML also address this problem, but they introduce
+their own set of difficulties.  Regardless of whatever advantages they
+may hold, I'm not going to discuss them here.}</para></footnote>  
+If you are starting a new documentation project,
+&TeXinfo;<indexterm><primary sortas="texinfo">&TeXinfo;</primary></indexterm> and Lame&TeX;<indexterm><primary sortas="Lametex">Lame&TeX;</primary></indexterm> provide two alternatives for the production of
+typeset and online documentation from the same source.  \LaTeX2HTML<indexterm><primary sortas="latex2HTML">\LaTeX2HTML</primary></indexterm> and
+\LaTeX2hy<indexterm><primary>latex2hy</primary></indexterm> provide alternatives that may be suitable for existing 
+documentation.
+</para>
+
+<para>You'll find that the best results occur when you plan ahead: if you know
+that you need both typeset and ASCII documentation, try to use tools
+that will make the task easier.  But, even if you try to plan ahead,
+it's not uncommon to find out after the fact that you need or want
+ASCII documentation.  If you don't have the &TeX; sources, you'll just
+have to take the best results you can get with one of the tools described
+later in this chapter
+and do whatever hand-editing is required.  
+</para>
+
+<para>If you have the &TeX; sources for a document, 
+here are some guidelines that can help improve the quality of
+the conversion to plain ASCII: 
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Redefine all font commands to use \tt.  This makes &TeX;         work with a fixed-width font.  You will probably get many, many
+        overfull and underfull box messages.  This can't be helped.  Setting
+        \tolerance and \hbadness to large values
+        (10000 with &TeX; 2.x or 100000 with &TeX; 3.x, for example) will
+        reduce the number of warnings.
+</para>
+
+<para>        Similarly, redefine all the commands that change font size to select
+        the same size (probably 10pt or 12pt will work best, but larger
+        values may be better if you have wide margins).
+</para>
+
+<para>  </para>
+</listitem>
+<listitem>
+<para> Don't use any special fonts---no <literal>picture</literal> environments in &LaTeX;,
+        for example.  Take out rules, too.
+</para>
+
+<para>  </para>
+</listitem>
+<listitem>
+<para> Use \raggedright.  There's no point in trying to line
+        up the right margin.
+</para>
+
+<para>  </para>
+</listitem>
+<listitem>
+<para> Remove or redefine all mathematics to avoid the use of math-mode.
+        It won't work; don't ask &TeX; to try.
+</para>
+
+<para>  </para>
+</listitem>
+<listitem>
+<para> Remove all tables (\halign in Plain &TeX;, <literal>tabular</literal>
+        environments in &LaTeX;).
+ 
+  </para>
+</listitem>
+<listitem>
+<para> Remove floating environments; this may help.
+</para>
+</listitem>
+<listitem>
+<para> Depending on your level of expertise and the number of documents
+        that you have to convert, redefine footnotes and other environments
+        to give you more marginal improvements.
+</para>
+</listitem>
+</itemizedlist>
+
+<para>The <filename>ascii.sty</filename> style<indexterm><primary>ascii.sty style files</primary></indexterm> for 
+&LaTeX; encapsulates many of these rules for you.
+</para>
+
+<section><title>Something Is Lost</title>
+
+<para>Many things that can easily be represented
+on paper cannot be represented in plain ASCII.  One reason for this
+is that plain ASCII output is not proportionally spaced.  Also, in ASCII
+you can move up or down only by
+rows, and left or right only by columns; you can't move down <quote>3 points</quote> 
+on a terminal to typeset a subscript, for example.
+</para>
+
+<para>These differences combine to make many things impossible.  For all of
+its marvelous sophistication, &TeX; cannot help you 
+typeset mathematics<indexterm><primary>mathematics</primary><secondary>in ASCII</secondary></indexterm> in 
+plain ASCII.  It just can't be done.  Most tables can't be done in
+plain ASCII either (at least not if you want lines that are only 80 characters
+or so long).
+</para>
+
+<para>The following sections describe tools that may help you achieve the
+goal of online and typeset documentation from the same sources.  Each
+tool has its own advantages and disadvantages. The ones that work best
+for you will depend on the type of documentation you are producing
+and the amount of work you are willing to do.
+</para>
+
+</section>
+<section><title>&TeXinfo;</title>
+
+<para>&TeXinfo;<indexterm><primary sortas="texinfo">&TeXinfo;</primary></indexterm> is the document formatting system adopted by the
+Free Software Foundation (FSF)<indexterm><primary>Free Software Foundation (FSF)</primary></indexterm> and the GNU Project<indexterm><primary>GNU Project</primary></indexterm>.  It is 
+a special &TeX; format
+that is very different from standard &TeX;.<footnote><para>{A &LaTeX; implementation, called &LaTeX;info, is also available.}</para></footnote>  The goal of
+&TeXinfo; is to devise an input format that can be processed by
+&TeX; to produce typeset output and then be processed by another program to
+produce <emphasis>hypertext</emphasis> output.  (The other program in this case is
+<command>MakeInfo</command><indexterm><primary>MakeInfo</primary></indexterm>.)
+</para>
+
+<para>&TeXinfo; supports ordinary text, sectioning commands, itemize and
+enumeration environments, footnotes, cross-references, tables of
+contents, lists of figures and tables, and multiple indexes.
+</para>
+
+<para>The &TeXinfo; example from Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>,
+<emphasis><xref role="label" linkend="chap.macpack"/></emphasis>, is reproduced in Example&nbsp;<xref role="label" linkend="ex.on.infinp"/>
+(the &TeXinfo; input), Figure&nbsp;<xref role="label" linkend="fig.on.infex"/> (the typeset page), 
+and Figure&nbsp;<xref role="label" linkend="fig.on.infinf"/> (the resulting online documentation).
+</para>
+
+<example id="ex.on.infinp">
+<title>&TeX;info Commands</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="perf-inf"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<figure id="fig.on.infex">
+<title>&TeX;info sample page</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-inf.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<figure id="fig.on.infinf">
+<title>Online documentation produced by MakeInfo</title>
+<literallayout>  
+    \FramedVerbInput{perf-inf.inf}
+</literallayout>
+</figure>
+
+<para>The output from <command>MakeInfo</command> is very nearly pure ASCII.  The
+motivation for {hypertext} output is to make cross 
+references dynamic<indexterm><primary>cross references</primary><secondary>dynamic</secondary></indexterm> when 
+the <quote>info</quote> version of the document is used for online
+reference.<footnote><para>{<quote>Info</quote> is the name of both the output format and a
+program for displaying the text in a hypertext fashion.  Another common
+way to access info files is with the GNU emacs online help system.}</para></footnote>  
+The result is close enough to pure ASCII that converting
+it to pure ASCII is not (usually) too difficult.  For example, the
+<emphasis>comp.fonts</emphasis> newsgroup<indexterm><primary>comp.fonts newsgroup</primary></indexterm>'s Frequently Asked Questions list is 
+maintained as a &TeXinfo; document. It is 
+posted as an info version that has been processed
+by a Perl script to <quote>flatten</quote> the hypertext.
+</para>
+
+<para>The &TeXinfo; format is well documented, so a brief description here
+will suffice.  First, the backslash, which is ordinarily
+used to introduce control sequences in &TeX;, is not special.  Instead
+the <quote>@</quote>-sign is used.  Second, a
+&TeXinfo; document is divided into <quote>nodes<indexterm><primary>nodes</primary></indexterm>.</quote>  A node corresponds
+roughly to a chapter or a large section of a chapter.  In the online
+documentation, it is easy to jump between related nodes. 
+</para>
+
+<para>Because the info version of the document is ASCII text, many
+of the special typesetting features of &TeX; aren't applicable.
+To support them in the typeset document, &TeXinfo; allows you to
+specify that some portions of the input should be seen only by &TeX; and some should be seen only by <command>MakeInfo</command>.
+Example&nbsp;<xref role="label" linkend="ex.on.infinp"/> uses this feature to typeset
+mathematics using the best features of both &TeX; and <command>MakeInfo</command>.
+</para>
+
+</section>
+<section><title>\LaTeX2HTML</title>
+
+<para>\LaTeX2HTML<indexterm><primary sortas="latex2HTML">\LaTeX2HTML</primary></indexterm> attempts 
+to convert &LaTeX; documents into HTML<indexterm><primary>HTML</primary></indexterm>, the
+document structuring language used by the World Wide Web (WWW)<indexterm><primary>World Wide Web (WWW)</primary></indexterm> project.
+HTML stands for HyperText Markup 
+Language<indexterm><primary>HyperText Markup Language (HTML)</primary></indexterm>; it is a way of describing
+documents in terms of their structure (headings, paragraphs, lists,
+etc.).  
+SGML<indexterm><primary>SGML</primary></indexterm>, the Standard Generalized Markup Language,
+provides
+a framework for developing structured documentation; HTML is one specific
+SGML document type.
+HTML documents are displayed by special programs called
+browsers<indexterm><primary>browsers</primary></indexterm> that interpret the markup and present the information in a
+consistent manner.  Because an HTML document is described in
+terms of its structure and not its appearance, HTML documents can be
+effectively displayed by browsers in non-graphical environments.
+</para>
+
+<para>
+One of the most important features of HTML documents is the ability to
+form hypertext links<indexterm><primary>links</primary><secondary>hypertext</secondary></indexterm><indexterm><primary>hypertext links</primary></indexterm> between 
+documents.  Hypertext links allow you to
+build dynamic relationships between documents.  For example, selecting
+a marked word or phrase in the current document displays more
+information about the topic, or a list of related topics.  
+</para>
+
+<para>\LaTeX2HTML preserves many of the features of a &LaTeX; document in 
+HTML.  Elements that are too complex to represent in HTML, such
+as mathematical equations and logos like <quote>&TeX;,</quote> are converted into
+graphic images that can be displayed online by graphical browsers.
+All types of cross referencing elements (including footnotes) are preserved as
+hypertext links.
+</para>
+
+<para>When installed, \LaTeX2HTML understands many basic &LaTeX; commands, but
+it can be customized to handle other styles.  \LaTeX2HTML is written in
+<command>Perl</command>.
+</para>
+
+<para>All in all, \LaTeX2HTML is one of the easiest and most effective tools
+for translating typeset documentation into a format suitable for online
+presentation.  In a graphical environment like X11, Microsoft Windows,
+or the Macintosh, HTML documents offer very good support for online
+documentation.
+</para>
+
+</section>
+<section><title>Lame&TeX;</title>
+
+<para>Lame&TeX;<indexterm><primary sortas="Lametex">Lame&TeX;</primary></indexterm> is a PostScript translator<indexterm><primary>PostScript</primary><secondary>translator</secondary></indexterm> for 
+a (very limited) subset of
+&LaTeX;.  One of its original design goals, the inclusion of sophisticated
+PostScript commands directly in a &LaTeX; document, has been superseded
+by the &PSTricks;<indexterm><primary sortas="PSTricks">&PSTricks;</primary></indexterm> package.
+However, one of the side effects of a special-purpose translator for
+&LaTeX; is the ability of that translator to produce different kinds of
+output, including plain ASCII.
+</para>
+
+<para>The primary advantage of this method is that it does not require learning
+an entirely foreign macro package like &TeXinfo;.  The disadvantage
+is that it understands only a very small subset of &LaTeX;.
+This subset includes <emphasis>only</emphasis> the following commands: 
+</para>
+
+<informaltable>
+<tgroup cols="3">
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="left"/>
+<tbody>
+<row>
+  <entry>\#</entry>
+  <entry>\footnotesize</entry>
+  <entry>\ref</entry>
+</row>
+<row>
+  <entry>\$</entry>
+  <entry>\hspace</entry>
+  <entry>\rm</entry>
+</row>
+<row>
+  <entry>\%</entry>
+  <entry>\hspace*</entry>
+  <entry>\sc</entry>
+</row>
+<row>
+  <entry>\&nbsp;</entry>
+  <entry>\huge</entry>
+  <entry>\scriptsize</entry>
+</row>
+<row>
+  <entry>\Huge</entry>
+  <entry>\include</entry>
+  <entry>\section</entry>
+</row>
+<row>
+  <entry>\LARGE</entry>
+  <entry>\input</entry>
+  <entry>\section*</entry>
+</row>
+<row>
+  <entry>\Large</entry>
+  <entry>\it</entry>
+  <entry>\setlength</entry>
+</row>
+<row>
+  <entry>\_</entry>
+  <entry>\item</entry>
+  <entry>\sf</entry>
+</row>
+<row>
+  <entry>\addtolength</entry>
+  <entry>\itemize</entry>
+  <entry>\sl</entry>
+</row>
+<row>
+  <entry>\backslash</entry>
+  <entry>\label</entry>
+  <entry>\small\smallskip</entry>
+</row>
+<row>
+  <entry>\begin</entry>
+  <entry>\large</entry>
+  <entry>\subparagraph</entry>
+</row>
+<row>
+  <entry>\bf</entry>
+  <entry>\ldots</entry>
+  <entry>\subparagraph*</entry>
+</row>
+<row>
+  <entry>\bigskip</entry>
+  <entry>\medskip</entry>
+  <entry>\subsection</entry>
+</row>
+<row>
+  <entry>\center</entry>
+  <entry>\newlength</entry>
+  <entry>\subsection*</entry>
+</row>
+<row>
+  <entry>\chapter</entry>
+  <entry>\newline</entry>
+  <entry>\subsubsection</entry>
+</row>
+<row>
+  <entry>\chapter*</entry>
+  <entry>\normalsize</entry>
+  <entry>\subsubsection*</entry>
+</row>
+<row>
+  <entry>\clearpage</entry>
+  <entry>\par</entry>
+  <entry>\tiny</entry>
+</row>
+<row>
+  <entry>\description</entry>
+  <entry>\paragraph</entry>
+  <entry>\today</entry>
+</row>
+<row>
+  <entry>\document</entry>
+  <entry>\paragraph*</entry>
+  <entry>\tt</entry>
+</row>
+<row>
+  <entry>\documentstyle</entry>
+  <entry>\part</entry>
+  <entry>\verbatim</entry>
+</row>
+<row>
+  <entry>\em</entry>
+  <entry>\part*</entry>
+  <entry>\verbatim*</entry>
+</row>
+<row>
+  <entry>\end</entry>
+  <entry>\quotation</entry>
+  <entry>\verse</entry>
+</row>
+<row>
+  <entry>\enumerate</entry>
+  <entry>\quote</entry>
+  <entry>\vspace</entry>
+</row>
+<row>
+  <entry>\flushleft</entry>
+  <entry>\raggedleft</entry>
+  <entry>\vspace*</entry>
+</row>
+<row>
+  <entry>\flushright</entry>
+  <entry>\raggedright</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>In addition, unlike &LaTeX;, Lame&TeX; doesn't
+understand any Plain &TeX; commands (other than the ones listed).
+</para>
+
+</section>
+<section><title>latex2hy</title>
+
+<para><command>latex2hy</command><indexterm><primary>latex2hy</primary></indexterm> is 
+a &LaTeX;-to-ASCII converter<indexterm><primary sortas="latex">&LaTeX;</primary><secondary>converter to ASCII</secondary></indexterm>.  It has several
+options for controlling the input and output character sets.  In
+addition, <command>latex2hy</command> has a number of options for improving the
+quality of both ASCII and printed documentation.  For example, input
+documents can contain both &TeX; and ASCII representations for complex
+objects (like mathematical formulae).  The printed documentation uses
+the &TeX; version while <command>latex2hy</command> uses the ASCII version.
+Provision is also made for <quote>fixups,</quote> which allow character sequences
+from the input text to be translated into different sequences on
+output.  For example, <quote>$9.81\frac{m}{s^2}$</quote> can be automatically
+translated into <literal>9.81m/s^2</literal>.  By adding specific fixups to each
+document that you translate, you can obtain successively better 
+approximations automatically.
+</para>
+
+<para><command>latex2hy</command> gives particular attention to 
+cross references<indexterm><primary>cross references</primary><secondary>in latex2hy</secondary></indexterm>.
+Cross references are translated into <quote>links<indexterm><primary>links</primary></indexterm></quote>
+between topics in <emphasis>hypertext</emphasis> output formats.  Currently, only the
+<emphasis>TurboVision</emphasis><indexterm><primary>TurboVision</primary></indexterm> hypertext format is supported, although several
+other formats are being considered.
+</para>
+
+</section>
+<section><title>detex</title>
+
+<para><command>detex</command><indexterm><primary>detex</primary></indexterm> is a simple program that does little more than strip
+control sequences and other &TeX;ish character sequences from your document.
+Doing this makes the document more amenable to other kinds of processing (like
+spellchecking) but does a poor job of producing <quote>online documentation.</quote>
+Still, it's an option.
+</para>
+
+</section>
+<section><title>dvispell</title>
+
+<para>The <command>dvispell</command><indexterm><primary>dvispell</primary></indexterm> program produces plain text output from a <filename role="extension">DVI</filename>
+file.  It is not a spellchecker, but it was designed to extract the
+words from a &TeX; document which were then fed to a spellchecking
+program that was unable to ignore &TeX; control sequences.
+</para>
+
+<para>The <command>dvispell</command> program is part of the &emTeX;<indexterm><primary sortas="emTeX">&emTeX;</primary></indexterm> package, and it is
+remarkably sophisticated.  There are many ways in which <command>dvispell</command>
+can be programmed to perform complex manipulations.  One special strength
+of <command>dvispell</command> is its ability to handle conversion of accented 
+characters and Greek symbols.
+</para>
+
+<para><command>dvispell</command> differs from the other programs described here
+because it works with &TeX; output, the <filename role="extension">DVI</filename> file.  On the one
+hand, this provides <command>dvispell</command> with more information
+(character positions, line breaks, floating bodies, etc).  On the
+other hand, all of the formatting commands are missing, so it isn't
+easy to determine what the user had in mind. (It's a bit like
+reverse-engineering a piece of software---without the source code,
+it's not always easy to tell why things look the way they do.)  But
+<command>dvispell</command> gives you access to most of the information that is
+present in the <filename role="extension">DVI</filename> file.
+</para>
+</section>
+</chapter>

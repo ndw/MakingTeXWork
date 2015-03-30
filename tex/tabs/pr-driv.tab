@@ -1,0 +1,34 @@
+\begin{table}
+    \begin{tabular}{l|l|c|l}
+      \bf \dvidriver         & \bf Supplier  &  \bf OS      & \bf Printer(s) \\
+      \hline
+      \program{dvihplj}      & free (\emTeX) &              & 
+      HP LaserJet compatible \\
+      \program{dvidot}       & free (\emTeX) & MS-DOS+OS/2  & 
+      Most dot matrix \\
+      \program{divpcx}       & free (\emTeX) &              & 
+      \ext{PCX} graphic images\\[4pt]
+      \program{dvilj2}       & free (dvi2xx) & most         & 
+      HP LaserJet compatible \\[4pt]
+      \program{dvips}        & free (dvips)  & most         & 
+      PostScript \\[4pt]
+      \program{dvipsone}     & Y\&Y          & MS-DOS       & 
+      PostScript\\[4pt]
+      \program{DVILASER/HP}  & ArborText     & MS-DOS, Unix & 
+      HP LaserJet compatible\\
+      \program{DVILASER/PS}  & ArborText     & MS-DOS, Unix & 
+      PostScript \\[4pt]
+      \program{PTI Laser/HP} & Personal \TeX & MS-DOS       & 
+      HP LaserJet compatible \\
+      \program{PTI Laser/PS} & Personal \TeX & MS-DOS       & 
+      PostScript\\
+      \program{PTI Jet}      & Personal \TeX & MS-DOS       & 
+      HP DeskJet compatible\\
+      \hline
+    \end{tabular}
+    \caption{Common \protect\dvidriver{}s}
+    \label{tab:drivers}
+\end{table}
+
+
+      

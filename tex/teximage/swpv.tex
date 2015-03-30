@@ -1,0 +1,18 @@
+\newbox\swpvbox
+\newdimen\swpvwd
+\font\swpva=swpva at 72.27truept
+\font\swpvb=swpvb at 72.27truept
+\setbox\swpvbox=\vbox{\hbox{%
+\swpva\char0\char1\char2\char3\char4}}
+\swpvwd=\wd\swpvbox
+\setbox\swpvbox=\hbox{\vbox{\hsize=\swpvwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\swpva\char0\char1\char2\char3\char4}
+\hbox{\swpva\char5\char6\char7\char8\char9}
+\hbox{\swpvb\char0\char1\char2\char3\char4}
+\hbox{\swpvb\char5\char6\char7\char8\char9}}}
+\ifx\parbox\undefined
+    \def\setswpv{\box\swpvbox}
+\else
+    \def\setswpv{\parbox{\wd\swpvbox}{\box\swpvbox}}
+\fi

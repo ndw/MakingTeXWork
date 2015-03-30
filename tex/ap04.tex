@@ -1,0 +1,75 @@
+\chapter{Long Examples}
+\RCSID$Id: ap04.tex,v 1.1 2002/08/23 14:58:45 nwalsh Exp $
+\label{app:examples}
+
+This appendix contains the source for several scripts that seemed
+too long to place in the running text.  These scripts are provided
+as examples only, they may not run on your system without some 
+modification.
+
+These examples are available online,
+see the Preface for more information about retrieving online examples.
+
+\bgroup
+\makeatletter
+\def\example@font{\tt\fontsize{8.42}{9.5pt}\selectfont}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The \program{MakeTeXPK.pl} script builds PK files from \MF\ and PostScript
+fonts.
+
+\exampleinput{MakeTeXPK.pl}{ex:maketexpk}{MakeTeXPK.pl}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+The \program{MakeTeXTFM.pl} script builds TFM files from \MF\ and
+PostScript (\ext{AFM} file) fonts.  
+
+\exampleinput{MakeTeXTFM.pl}{ex:maketextfm}{MakeTeXTFM.pl}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+The \program{dvidxx.btm} script is written in \program{4DOS}'s extended
+batch language.  It performs automatic font generation for \MF\
+and PostScript fonts using \emTeX's drivers (version 1.4s).
+
+\exampleinput{dvidxx.btm}{ex:dvidxx}{dvidxx.btm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+The \program{makepk.btm} script is used by \program{dvidxx.btm}, shown
+in Example~\ref{ex:dvidxx} in this appendix.
+
+\exampleinput{makepk.btm}{ex:makepk}{makepk.btm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+The \program{enc-afm.pl} script changes the encoding vector in an
+\ext{AFM} file.
+
+\exampleinput{enc-afm.pl}{ex:encafmpl}{enc-afm.pl}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+The \program{TeXtoXfont} script is a \Unix\ shell script (written in
+\program{bash}) which builds an X11 font from a \MF\ or PostScript
+font. 
+
+\exampleinput{TeXtoXfont}{ex:textoxfont}{TeXtoXfont}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+The \program{PStoXfont} script is used by \program{TeXtoXfont}, shown
+in Example~\ref{ex:textoxfont} in this appendix.  
+
+\exampleinput{PStoXfont}{ex:pstoxfont}{PStoXfont}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+The \program{txt2verb.pl} script translates arbitrary text lines into
+a format suitable for including in \verb|\verbatim| material in \TeX.
+
+\exampleinput{txt2verb.pl}{ex:txt2verb}{txt2verb.pl}
+
+\egroup

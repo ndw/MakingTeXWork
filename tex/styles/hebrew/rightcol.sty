@@ -1,0 +1,19 @@
+% From: Ronald Greenberg <rig@eng.umd.edu>
+
+% This file is RIGHTCOL.STY.  The macro redefinition here is by
+% Graeme McKinstry (graeme%otago.ac.nz@relay.cs.net).
+% Usage:
+%      \documentstyle[twocolumn,rightcol,...]{...}
+% This change puts out the right-hand column first.
+
+\def\@outputdblcol{\if@firstcolumn \global\@firstcolumnfalse
+    \global\setbox\@leftcolumn\box\@outputbox
+  \else \global\@firstcolumntrue
+    \setbox\@outputbox\vbox{\hbox to\textwidth{\hbox to\columnwidth
+      {\box\@outputbox                          %% Right-hand box first
+            \hss}\hfil \vrule width\columnseprule\hfil
+       \hbox to\columnwidth{\box\@leftcolumn    %% Left-hand box second
+            \hss}}}\@combinedblfloats
+       \@outputpage \begingroup \@dblfloatplacement \@startdblcolumn
+       \@whilesw\if@fcolmade \fi{\@outputpage\@startdblcolumn}\endgroup
+    \fi}

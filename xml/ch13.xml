@@ -1,0 +1,1686 @@
+<chapter id="chap.freetex">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>Non-commercial Environments</title>
+
+<para><indexterm><primary sortas="tex">&TeX;</primary><secondary>non-commercial implementations</secondary></indexterm>This chapter 
+offers an overview of several common free and shareware
+&TeX; systems.  If you notice any conflicts between the information in
+this chapter and
+the documentation that comes with the software, please consider the
+documentation to be more accurate and up-to-date.  
+I've attempted to provide hints and practical suggestions, but
+software installation is largely dependent on your system configuration and
+the way you want to use &TeX;.
+</para>
+
+<section id="free.web"><title>Web2C</title>
+
+<para><indexterm><primary>Web2C</primary></indexterm><indexterm><primary sortas="Web">&Web;</primary></indexterm> The official 
+sources for all of the standard &TeX; programs are distributed
+in a format known as \web.<footnote><para>{Hence the spider on the cover, by the
+way.}</para></footnote>  \web is an implementation of a programming style known as <quote>literate
+programming.</quote>  One central tenet of literate programming is that source
+code and documentation should be written in parallel.  Literate programming
+enforces this tenet by combining the two in a single file.  \web source
+files contain a mixture of source code and documentation.  
+</para>
+
+<para>In \web files, the documentation is written in &TeX;, and the source code
+is written in Pascal. (Other literate programming environments use different
+documentation and programming languages.)  To print the documentation,
+a special preprocessor called <command>weave</command><indexterm><primary>weave</primary></indexterm> transforms 
+the \web source into
+a &TeX; document that can be formatted and printed.  Another preprocessor,
+called <command>tangle</command><indexterm><primary>tangle</primary></indexterm>, transforms the \web source into a Pascal program
+that can be compiled and executed.
+</para>
+
+<para>In practice, it is far more likely that you have access to a C compiler than
+to a Pascal compiler.  This is where <command>Web2C</command> comes in.  <command>Web2C</command>
+is a special-purpose Pascal-to-C translator that makes it possible to compile
+and build the &TeX; sources in most &unix; environments (and probably many
+other environments as well).
+</para>
+
+<para>Karl Berry<indexterm><primary>Berry, Karl</primary></indexterm> maintains the 
+<command>Web2C</command> distribution.  You can retrieve it
+from the CTAN archives in the directory <filename role="ctan" class="directory">systems/unix/web2c</filename>.
+</para>
+
+<para>Preparing to build &TeX; with the <command>Web2C</command> distribution is very
+straightforward.  Unpack the archive files, read the file named <filename>README</filename>,
+and follow the instructions in the file named <filename>INSTALL</filename>.   Many people
+have built &TeX; using these sources.  If you have difficulty, readers of the 
+<literal>Info-TeX</literal> mailing list<indexterm><primary sortas="Info-TeX mailing list"><literal>Info-TeX</literal> mailing list</primary></indexterm> or the 
+<literal>comp.text.tex</literal> newsgroup<indexterm><primary sortas="comp.text.tex newsgroup"><literal>comp.text.tex</literal> newsgroup</primary></indexterm> will almost certainly be able to help.
+</para>
+
+<para>In my experience, there are only two parts of the installation that are 
+likely to cause any difficulty: compiling <filename>tangleboot.c</filename> and building
+the X Windows support in &MF;.
+</para>
+
+<para>Because <command>tangle</command> is written in \web, there is an obvious
+bootstrapping problem (how do you <command>tangle</command> <filename>tangle.web</filename>
+in order to compile <command>tangle</command>?).  The <command>Web2C</command>
+distribution includes a small C program called <filename>tangleboot.c</filename><indexterm><primary>tangleboot.c</primary></indexterm>,
+which overcomes this hurdle.  It's possible that getting
+<filename>tangleboot.c</filename> to compile on your machine may require some
+tinkering.  I had this problem on one machine with one release of
+<command>Web2C</command>.  Subsequent releases of <command>Web2C</command> seem to have
+corrected this problem (in my case, at least).
+</para>
+
+<para>Compiling X Window support for &MF; has regularly been a thornier problem.
+If you are not comfortable programming in C, I cannot suggest a simple
+way to correct these difficulties in the general case.  (However, asking for 
+help in the 
+appropriate newsgroups is very likely to produce a solution for any 
+particular problem.)
+</para>
+
+<para>The most common errors that I've encountered in building the X Windows support
+for &MF; are conflicting prototypes and type definitions.  My solution to 
+these problems, inelegant though it may be, has generally been to <quote>correct</quote>
+or remove the offending declarations from the &MF; sources. (Note: the X
+Window support is written directly in C, not \web, so it is considerably
+easier to edit.)  In my experience, this has always been successful, but your
+mileage may vary.
+</para>
+
+</section>
+<section id="sec.emtex.testinstall"><title>&emTeX;</title>
+
+<para><indexterm><primary sortas="emTeX">&emTeX;</primary></indexterm><indexterm><primary>OS/2</primary><secondary sortas="tex implementations">&TeX; implementations</secondary></indexterm>
+The &emTeX; distribution 
+is a very complete, free distribution of &TeX; for MS-DOS and OS/2 systems.  &emTeX; will run on any 80x86 
+processor, although some of the larger, faster executables require at 
+least a 386.
+There is no single right way to
+install &TeX;, so what follows is only one possible installation.  This
+installation uses the default directories and assumes a single-user
+environment.  Installing &emTeX; in a network environment is mentioned
+briefly in <quote><emphasis><xref role="label" linkend="sec.netemtex"/></emphasis>,</quote> later in this chapter.
+Incorporating the more recent, beta test versions of &emTeX; is described
+in the section called
+\linebreak
+</para>
+
+<para><quote><xref role="label" linkend="sec.betaemtex"/>.</quote>
+&emTeX; is available on CTAN in the directory 
+<filename role="ctan" class="directory">systems/msdos/emtex</filename>.
+</para>
+
+<para>On the whole, the installation instructions for &emTeX; are provided in the
+distribution.  Begin by reading the English or German versions of the
+documentation provided.  Additionally, you should read the &dvidriver; documentation at least once. (It's quite long, and you may not remember all of
+it after a single reading, but at least you'll have a feel for what can be
+done.)
+</para>
+
+<para>Table&nbsp;<xref role="label" linkend="tab.emtexfilesum"/> summarizes the files in the distribution.
+The standard &emTeX; distribution occupies six high-density floppy disks.
+A complete installation requires more than 12 megabytes of storage 
+without fonts.  You must also get a set of fonts (available in
+font library format for &emTeX;) or set up automatic font generation.
+</para>
+
+<table id="tab.emtexfilesum">
+<title>Summary of the \protect\emTeX 
+    Distribution</title>
+<tgroup cols="4">
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="right"/>
+<colspec align="right"/>
+<thead>
+<row>
+  <entry></entry>
+  <entry></entry>
+  <entry></entry>
+  <entry>\multicolumn{1}{l}{\bf Expanded} </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry><phrase>\bf File</phrase></entry>
+  <entry>\bf Abbreviated Contents</entry>
+  <entry>\multicolumn{1}{l}{\bf Size}</entry>
+  <entry>\multicolumn{1}{|l}{\bf Size} </entry>
+</row>
+<row>
+  <entry>\it *.eng</entry>
+  <entry>English documentation</entry>
+  <entry>125Kb</entry>
+  <entry>125Kb </entry>
+</row>
+<row>
+  <entry>\it{}*.ger</entry>
+  <entry>German documentation</entry>
+  <entry>140Kb</entry>
+  <entry>140Kb </entry>
+</row>
+<row>
+  <entry>\it{}*.exe</entry>
+  <entry>Delete, remove, pkunzip</entry>
+  <entry>227Kb</entry>
+  <entry>227Kb </entry>
+</row>
+<row>
+  <entry>\it tex1.zip</entry>
+  <entry>&TeX; executables, <filename role="extension">TFM</filename>s, inputs</entry>
+  <entry>368Kb</entry>
+  <entry>645Kb </entry>
+</row>
+<row>
+  <entry>\it tex2.zip</entry>
+  <entry>Plain formats, more <filename role="extension">TFM</filename>s</entry>
+  <entry>262Kb</entry>
+  <entry>403Kb </entry>
+</row>
+<row>
+  <entry>\it blatex.zip</entry>
+  <entry>Big &TeX; &LaTeX; format</entry>
+  <entry>227Kb</entry>
+  <entry>494Kb </entry>
+</row>
+<row>
+  <entry>\it latex1.zip</entry>
+  <entry>Documentation and formats</entry>
+  <entry>243Kb</entry>
+  <entry>393Kb </entry>
+</row>
+<row>
+  <entry>\it latex2.zip</entry>
+  <entry>&LaTeX; styles and <filename role="extension">TFM</filename>s</entry>
+  <entry>233Kb</entry>
+  <entry>705Kb </entry>
+</row>
+<row>
+  <entry>\it latexdoc.zip</entry>
+  <entry>&LaTeX; style documentation</entry>
+  <entry>110Kb</entry>
+  <entry>315Kb </entry>
+</row>
+<row>
+  <entry>\it makeindx.zip</entry>
+  <entry><command>MakeIndex</command></entry>
+  <entry>52Kb</entry>
+  <entry>152Kb </entry>
+</row>
+<row>
+  <entry>\it pictex.zip</entry>
+  <entry>&PiCTeX; macros</entry>
+  <entry>43Kb</entry>
+  <entry>144Kb </entry>
+</row>
+<row>
+  <entry>\it texware.zip</entry>
+  <entry><command>texchk</command>, <command>texconv</command>, <command>maketcp</command>,</entry>
+  <entry>265Kb</entry>
+  <entry>433Kb </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry>&TeX;ware</entry>
+</row>
+<row>
+  <entry>\it dvidrv1.zip</entry>
+  <entry>Driver configuration, batch,</entry>
+  <entry>119Kb</entry>
+  <entry>370Kb </entry>
+</row>
+<row>
+  <entry>\it</entry>
+  <entry>and setup files</entry>
+</row>
+<row>
+  <entry>\it dvidrv2.zip</entry>
+  <entry>Driver executables</entry>
+  <entry>345Kb</entry>
+  <entry>551Kb </entry>
+</row>
+<row>
+  <entry>\it dvidrv3.zip</entry>
+  <entry>Preview executables</entry>
+  <entry>293Kb</entry>
+  <entry>506Kb </entry>
+</row>
+<row>
+  <entry>\it texcad.zip</entry>
+  <entry>&TeX;Cad</entry>
+  <entry>118Kb</entry>
+  <entry>236Kb </entry>
+</row>
+<row>
+  <entry>\it bmf1.zip</entry>
+  <entry>Big &MF;</entry>
+  <entry>261Kb</entry>
+  <entry>472Kb </entry>
+</row>
+<row>
+  <entry>\it mf1.zip</entry>
+  <entry>&MF; executables</entry>
+  <entry>245Kb</entry>
+  <entry>398Kb </entry>
+</row>
+<row>
+  <entry>\it mf2.zip</entry>
+  <entry>&MF; sources,</entry>
+  <entry>337Kb</entry>
+  <entry>613Kb </entry>
+</row>
+<row>
+  <entry>\it</entry>
+  <entry>OS/2 executable</entry>
+</row>
+<row>
+  <entry>\it mf3.zip</entry>
+  <entry>&MF; sources</entry>
+  <entry>273Kb</entry>
+  <entry>768Kb </entry>
+</row>
+<row>
+  <entry>\it mfware1.zip</entry>
+  <entry><filename role="extension">GF</filename> tools, <filename role="extension">PK</filename> tools</entry>
+  <entry>320Kb</entry>
+  <entry>504Kb </entry>
+</row>
+<row>
+  <entry>\it bibtex.zip</entry>
+  <entry>&BibTeX;</entry>
+  <entry>117Kb</entry>
+  <entry>319Kb </entry>
+</row>
+<row>
+  <entry>\it bmf2.zip</entry>
+  <entry>OS/2 executable,</entry>
+  <entry>266Kb</entry>
+  <entry>564Kb </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry>Big &MF; bases</entry>
+</row>
+<row>
+  <entry>\it btex1.zip</entry>
+  <entry>Big &TeX; executables</entry>
+  <entry>259Kb</entry>
+  <entry>447Kb </entry>
+</row>
+<row>
+  <entry>\it btex2.zip</entry>
+  <entry>Big &TeX; Plain format</entry>
+  <entry>269Kb</entry>
+  <entry>533Kb </entry>
+</row>
+<row>
+  <entry>\it emsy.zip</entry>
+  <entry>Special fonts from &emTeX;</entry>
+  <entry>8Kb</entry>
+  <entry>11Kb </entry>
+</row>
+<row>
+  <entry>\it mfware2.zip</entry>
+  <entry><command>MFjob</command>, some more inputs</entry>
+  <entry>138Kb</entry>
+  <entry>230Kb </entry>
+</row>
+<row>
+  <entry>\it misc_mf.zip</entry>
+  <entry>Miscellaneous inputs</entry>
+  <entry>36Kb</entry>
+  <entry>130Kb </entry>
+</row>
+<row>
+  <entry>\it pkedit.zip</entry>
+  <entry><command>PKEdit</command></entry>
+  <entry>51Kb</entry>
+  <entry>97Kb</entry>
+</row>
+<row>
+  <entry>\it dvidrvma.zip</entry>
+  <entry>&dvidriver; manual</entry>
+  <entry>178Kb</entry>
+  <entry>494Kb </entry>
+</row>
+<row>
+  <entry>\it web.zip</entry>
+  <entry>\web tools</entry>
+  <entry>128Kb</entry>
+  <entry>252Kb </entry>
+</row>
+<row>
+  <entry>\it g*.zip</entry>
+  <entry>German versions of &TeX;</entry>
+  <entry>800Kb</entry>
+  <entry>1614Kb </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+<para>For simplicity, the discussion that follows assumes that you have enough
+disk space to install the entire 12Mb distribution.  If you can't get that
+much space (even temporarily), you can perform the steps discussed in the
+section <quote><xref role="label" linkend="sec.emtex.smaller"/></quote> as you install.
+</para>
+
+<section><title>Where to Start</title>
+
+<para>Begin by reading the English (<filename>*.eng</filename>) or German (<filename>*.ger</filename>)
+documentation files on the first disk.  Where there is disagreement
+between this book and those files, believe the files---especially
+if a new version of &emTeX; has been released.
+</para>
+
+</section>
+<section><title>Unpacking the Archives</title>
+
+<para>The &emTeX;<indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>unpacking archives</secondary></indexterm> distribution 
+is a collection of <filename role="extension">ZIP</filename> files spread over
+six disks.  You must install these files into your hard drive.  If you have
+more than one hard disk, you may install &emTeX; on any drive you choose.
+Select one with more than 12Mb
+of free space, at first.  You can copy the
+files onto another drive after you've deleted things that you don't need.
+</para>
+
+<para>All of the &emTeX; files are installed in a subdirectory tree rooted
+at <filename>emtex</filename>.  If you absolutely must use a different
+subdirectory tree, unpack each archive file into a temporary directory
+and then copy the files into the subtree you want to use.  You will have
+to do much more extensive customization of the batch files and
+configuration files before &emTeX; will work.  That sort of 
+customization isn't described here in detail.
+</para>
+
+<para>Make the root directory of the hard disk that you wish to install onto
+the current directory, and then use the <command>pkunzip</command><indexterm><primary>pkunzip</primary></indexterm> 
+<!-- eberhard says this isn't true -->
+<!-- <footnote><para>{The -->
+<!-- version of <command>pkunzip</command> distributed with &emTeX; is quite old.  It -->
+<!-- will not, for example, unpack the beta-test archives which were created -->
+<!-- with a newer version of <command>pkzip</command>.  If you have access to a more -->
+<!-- recent version of an unzipping program, use it.}</para></footnote>  -->
+program
+distributed on the first disk, or any later version of
+<command>pkunzip</command>, to unpack each of the archive files.  You can also
+use the <command>Info-Zip</command><indexterm><primary>Info-Zip</primary></indexterm> version of <command>unzip</command> (version 5.0 or
+later) to unpack the archives.  
+If you do not want the German versions of the &TeX; macro files, do
+not bother to unpack the <filename>lkurz.zip</filename> or <filename>g*.zip</filename>
+files on disk six.
+</para>
+
+<para>After you have unpacked the files, you will have a directory tree rooted
+at <filename>\bs EMTEX</filename> containing about 12Mb of files and the following additional
+directories: <filename>bibinput</filename>, <filename>bmfbases</filename>, <filename>btexfmts</filename>, <filename>doc</filename>,
+<filename>mfbases</filename>, <filename>mfinput</filename>, <filename>MFjob</filename>, <filename>remove</filename>, <filename>texfmts</filename>,
+<filename>texinput</filename>, and <filename>tfm</filename>.
+</para>
+
+</section>
+<section><title>Setting Up the Environment</title>
+
+<indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>setting environment</secondary></indexterm>
+
+<para>A lot of information about where and how things are installed for &emTeX; is
+stored in the \glo{environment}.  If you are unfamiliar with the DOS or OS/2
+environment, consult your operating system reference for more details.  In
+brief, the environment<indexterm><primary>environment</primary><secondary sortas="for emTeX">for &emTeX;</secondary></indexterm> is a collection of named
+strings.  For example, your <envar>PATH</envar> is in the environment.
+</para>
+
+<para>The &emTeX; distribution includes a batch file called
+<filename>set-tex</filename><indexterm><primary>set-tex batch file</primary></indexterm>, which 
+sets all of the environment variables that
+&emTeX; uses.  Edit this file and
+change all references to C: to the drive where you
+installed &emTeX;.  If you installed &emTeX; on drive C:, you needn't
+change anything.  The section <quote><xref role="label" linkend="sec.emtex.basiccust"/></quote>
+later in this chapter
+describes the variables used by &emTeX; in greater detail.
+</para>
+
+<para>If you are using MS-DOS and haven't already made the environment
+larger than its default size, you may need to do so in order to use
+&emTeX;.  Insert the following command, or something like it, in your
+<filename>CONFIG.SYS</filename> file:
+</para>
+
+<screen>
+SHELL=C:\COMMAND.COM /P /E:1024
+</screen>
+
+<para>This is very system-dependent. You will have to use different
+settings if you keep <filename>COMMAND.COM</filename> in a subdirectory or if you
+use a different command processor.
+</para>
+
+</section>
+<section><title>Testing the Installation</title>
+
+<para><indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>testing installation</secondary></indexterm>After you 
+have set up the environment, make the <filename>emtex</filename> directory the
+current directory and test &TeX; by typing:
+</para>
+
+<informalexample>
+<screen>
+C:\ttbackslash{}EMTEX>{\bf tex}
+This is emTeX, Version 3.0 [3a] (no format preloaded)
+**{\bf \ttbackslash{}relax}
+
+*{\bf This is a test}
+
+*{\bf \ttbackslash{}bye}
+[1]
+Output written on texput.dvi (1 page, 224 bytes).
+Transcript written on texput.log.
+</screen>
+</informalexample>
+
+<para>This will produce a small <filename role="extension">DVI</filename> file 
+called <filename>texput.dvi</filename><indexterm><primary>texput.dvi file</primary></indexterm>.  Keep
+this file; you can use it in a few minutes to test the previewer.
+</para>
+
+<para>To test &LaTeX;, enter the command:
+</para>
+
+<screen>
+\$ <emphasis role="bold">tex &amp;lplain testpage</emphasis>
+</screen>
+
+<para>See the section <quote><xref role="label" linkend="sec.runtex.cmdcautions"/></quote> 
+in Chapter&nbsp;<xref role="label" linkend="chap.running"/>, <emphasis><xref role="label" linkend="chap.running"/></emphasis>, 
+for an explanation of some potential problems with
+using the ampersand (&amp;) character on the command line.
+</para>
+
+</section>
+<section id="sec.emtex.smaller"><title>Installing Fonts</title>
+
+<para><indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>installing fonts</secondary></indexterm><indexterm><primary>fonts</primary><secondary sortas="installing for emTeX">installing for &emTeX;</secondary></indexterm>There 
+are several sets of fonts available for &emTeX;.  You should select
+the set that is appropriate for your printer.   They are summarized in
+Table&nbsp;<xref role="label" linkend="tab.emtex.fontlibs"/>.  The CTAN directory
+<filename role="ctan" class="directory">systems/msdos/emtex</filename>
+contains the libraries or disks of libraries.
+</para>
+
+<table id="tab.emtex.fontlibs">
+<title>Fonts Libraries Available for \protect\emTeX on 
+    CTAN</title>
+<tgroup cols="3">
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf CTAN Directory</entry>
+  <entry>\bf Resolution</entry>
+  <entry>\bf Description </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>\it fx_\,fonts</entry>
+  <entry>240x216</entry>
+  <entry>Epson FX series printers, Tandy DMP-130 printer</entry>
+</row>
+<row>
+  <entry>\it fx_med_\,fonts</entry>
+  <entry>240x144</entry>
+  <entry>Epson FX series (for Windows drivers) </entry>
+</row>
+<row>
+  <entry>\it ito_\,fonts</entry>
+  <entry>160x144</entry>
+  <entry>C. ITOH 8510A printers </entry>
+</row>
+<row>
+  <entry>\it lj_\,fonts</entry>
+  <entry>300x300</entry>
+  <entry>300dpi Laser printers </entry>
+</row>
+<row>
+  <entry>\it p6h_\,fonts</entry>
+  <entry>360x360</entry>
+  <entry>Epson LQ series, NEC P6 \</entry>
+  <entry>P7, IBM Proprinter, and Panasonic KX-P1124 printers </entry>
+</row>
+<row>
+  <entry>\it p6m_\,fonts</entry>
+  <entry>360x180</entry>
+  <entry>Epson LQ series, NEC P6 \</entry>
+  <entry>P7, IBM Proprinter, and Panasonic KX-P1124 printers </entry>
+</row>
+<row>
+  <entry>\it p6l_\,fonts</entry>
+  <entry>180x180</entry>
+  <entry>Epson LQ series, NEC P6 \</entry>
+  <entry>P7, IBM Proprinter and Panasonic KX-P1124 printers </entry>
+</row>
+<row>
+  <entry>\it psfonts</entry>
+  <entry>300x300</entry>
+  <entry>Standard 35 PostScript fonts </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>Not every font set is appropriate for every model of the series mentioned.
+If your printer isn't mentioned, use the <command>dvidot</command><indexterm><primary>dvidot</primary></indexterm> program 
+included with
+&emTeX; to generate an appropriate configuration file.  Select
+the font set with the same resolution as your printer.
+</para>
+
+<para>The PostScript fonts included in the <filename>psfonts</filename><indexterm><primary>psfonts</primary></indexterm> libraries 
+are suited
+primarily for previewing.  The quality of many of the fonts is substandard.
+(They were generated from unhinted outlines with <command>Ghostscript</command><indexterm><primary>Ghostscript</primary></indexterm>.)
+A font substitution file is provided for 300dpi, 180dpi, and 360dpi printers.
+</para>
+
+<para>Once you have retrieved the font libraries that you need, unpack them
+(if they are in <filename role="extension">ZIP</filename> archives) and place the <filename role="extension">FLI</filename> files in
+the <filename>\bs TEXFONTS</filename> directory of the drive where you installed
+&emTeX;.  The amount of disk space required depends on the font set
+that you install.  It can be more than 5.5 megabytes.  The section called
+<quote><xref role="label" linkend="sec.emtex.autofont"/>,</quote> later in this chapter, provides an overview 
+of automatic
+font generation under &emTeX;.  This can save a considerable amount of
+disk space.
+</para>
+
+<section><title>Testing font installation</title>
+
+<para>After you have installed a font set, you should be able to preview and
+print &TeX; documents.  If you followed the instructions in
+<quote><xref role="label" linkend="sec.emtex.testinstall"/>,</quote> earlier in this chapter, you have
+two <filename role="extension">DVI</filename> files in your <filename>\bs EMTEX</filename> directory.
+</para>
+
+<para>First, figure out which configuration file is appropriate
+for your installation.  The table near the top of <filename>dvidrv.doc</filename>
+in the &emTeX; documentation directory should help you determine which
+one is appropriate.
+</para>
+
+<para>The default configuration file for previewing is the LaserJet configuration.
+If you installed the LaserJet fonts (<filename>lj\ttunder*.fli</filename>), you do not have to
+change the previewer.  Otherwise, edit the preview batch file (<filename>v.bat</filename>
+for MS-DOS systems and <filename>v.cmd</filename> for OS/2 systems) and change the 
+configuration file.  The preview batch file looks like this:
+</para>
+
+<screen>
+@echo off
+dviscr @lj.cnf /ocr=1 /fl=-1 <!-- 1 %2 %3 %4 %5 %6 %7 %8 %9 -->
+</screen>
+
+<para>The configuration file name is <filename>lj.cnf</filename>.  If, for example, you
+are using the Epson FX series printer fonts, you would change this to
+<filename>fx.cnf</filename>:
+</para>
+
+<screen>
+@echo off
+dviscr @fx.cnf /ocr=1 /fl=-1 <!-- 1 %2 %3 %4 %5 %6 %7 %8 %9 -->
+</screen>
+
+<para>Now type <emphasis role="bold">v texput</emphasis> to preview the test file.  Under OS/2, you 
+should do this from a full-screen session, not a windowed session.  You
+can type <emphasis role="bold">v testpage</emphasis> to preview the &LaTeX; test page, if you
+created it.
+</para>
+
+</section>
+</section>
+<section><title>Making &emTeX; Smaller</title>
+
+<para><indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>making smaller</secondary></indexterm>The complete 
+distribution of &emTeX; is much larger than the
+practical requirements.  This section discusses the pros and cons of
+deleting (or at least archiving) parts of the &emTeX; distribution.
+</para>
+
+<section id="sec.emtex.basiccust"><title>Deleting extra documentation</title>
+
+<para>The <filename>\bs emtex\bs doc</filename> directory contains two complete sets of 
+documentation, one in English and the other in German.  Delete the set that
+you do not need.  This will save about 500Kb.
+</para>
+
+</section>
+<section><title>Deleting extra executables</title>
+
+<para>There are six versions of the &TeX; and &MF; executables in
+the &emTeX; distribution.  You can probably delete at least four from
+each.  Follow these guidelines:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> If you have a 80286 or larger processor, delete the non-286
+        versions: <filename>btex.exe</filename>, <filename>tex.exe</filename>, <filename>bmf.exe</filename>,
+        and <filename>mf.exe</filename>.
+  </para>
+</listitem>
+<listitem>
+<para> If you do not have OS/2, delete the OS/2 versions: 
+        <filename>btexp.exe</filename>, <filename>texp.exe</filename>, <filename>bmfp.exe</filename>,
+        and <filename>mfp.exe</filename>.  Conversely, if you have OS/2 and you are
+        satisfied that you will never want to run &TeX; or &MF; under
+        DOS or Windows, delete the non-OS/2 versions:
+        <filename>btex286.exe</filename>, <filename>tex286.exe</filename>, <filename>bmf286.exe</filename>,
+        <filename>mf286.exe</filename>, and the non-286 versions listed above.  
+        If you need both, you'll have to keep
+        both around, of course.
+  </para>
+</listitem>
+<listitem>
+<para> Finally, if disk space is at a premium and/or you have a fast 
+        computer, you may choose to delete the small versions of &TeX;         and &MF;.  The small versions are faster than the big versions,
+        but large or complex documents and fonts may require the big
+        versions, so don't delete them.  If you want to delete the small
+        versions, delete <filename>tex.exe</filename>, <filename>tex286.exe</filename>,
+        <filename>mf.exe</filename>, <filename>mf286.exe</filename>, <filename>texp.exe</filename>, and 
+        <filename>mfp.exe</filename>.  In this case you must keep at least one of 
+        <filename>btex.exe</filename>, <filename>btex286.exe</filename>, and <filename>btexp.exe</filename>
+        depending on your environment.  Similarly, you must keep at least one
+        of the big \MF{}s.  If you've decided
+        to delete the small versions, you can also delete two directories:
+        <filename>emtex{\bs}mfbases</filename> and <filename>emtex{\bs}texfmts</filename>.  These
+        contain the format files and base files for the small versions
+        of &TeX; and &MF;.</para>
+</listitem>
+</itemizedlist>
+
+<para>Suppose that you have a 80386 computer running MS-DOS (not OS/2) and 
+you are willing to sacrifice the speed of the small versions of &TeX; and &MF;.  You would keep the <filename>btex286.exe</filename> and
+<filename>bmf286.exe</filename> executables and delete the rest plus the
+formats and bases that you don't need, saving 2704Kb.  You can save
+an equivalent amount of space by deleting the big 80286 versions and
+keeping the big non-286 versions, or by deleting all of the non-OS/2
+versions, depending on your environment.
+</para>
+
+<para>Table&nbsp;<xref role="label" linkend="tab.emtexotherex"/> summarizes the other executables in the
+&emTeX; distribution.  This will help you decide which programs you
+need to keep.  Programs that you don't feel you need should probably
+be stored in archive files, possibly on diskettes, in case you change
+your mind.  
+</para>
+
+<table id="tab.emtexotherex">
+<title>Other \protect\emTeX Executables</title>
+<tgroup cols="3">
+<colspec align="left"/>
+<colspec align="right"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf Program</entry>
+  <entry>\multicolumn{1}{|l|}{\bf Size}</entry>
+  <entry>\bf Description</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>\it ask.exe</entry>
+  <entry>6Kb</entry>
+  <entry>Prompts user in batch file, only used by gh.bat</entry>
+</row>
+<row>
+  <entry>\it bibtex.exe</entry>
+  <entry>94Kb</entry>
+  <entry>&BibTeX; </entry>
+</row>
+<row>
+  <entry>\it chtopx.exe</entry>
+  <entry>39Kb</entry>
+  <entry>Obsolete: converts <filename role="extension">CHR</filename> files to <filename role="extension">PXL</filename> format </entry>
+</row>
+<row>
+  <entry>\it pxtoch.exe</entry>
+  <entry>40Kb</entry>
+  <entry>Obsolete: converts <filename role="extension">PXL</filename> files to <filename role="extension">CHR</filename> format </entry>
+</row>
+<row>
+  <entry>\it pxtopk.exe</entry>
+  <entry>49Kb</entry>
+  <entry>Obsolete: converts <filename role="extension">PXL</filename> files to <filename role="extension">PK</filename> format </entry>
+</row>
+<row>
+  <entry>\it dvidot.exe</entry>
+  <entry>129Kb</entry>
+  <entry>Dot matrix printer driver </entry>
+</row>
+<row>
+  <entry>\it dvihplj.exe</entry>
+  <entry>134Kb</entry>
+  <entry>HP LaserJet printer driver </entry>
+</row>
+<row>
+  <entry>\it makedot.exe</entry>
+  <entry>54Kb</entry>
+  <entry>Updates dot matrix printer parameters </entry>
+</row>
+<row>
+  <entry>\it dvimsp.exe</entry>
+  <entry>128Kb</entry>
+  <entry>Converts <filename role="extension">DVI</filename> files into graphic images </entry>
+</row>
+<row>
+  <entry>\it fontlib.exe</entry>
+  <entry>67Kb</entry>
+  <entry>Font library management </entry>
+</row>
+<row>
+  <entry>\it maketcp.exe</entry>
+  <entry>28Kb</entry>
+  <entry>Change the &TeX; code page </entry>
+</row>
+<row>
+  <entry>\it MFjob.exe</entry>
+  <entry>51Kb</entry>
+  <entry>&MF; driver</entry>
+</row>
+<row>
+  <entry>\it pcltomsp.exe</entry>
+  <entry>56Kb</entry>
+  <entry>Converts HP LaserJet graphics into <filename role="extension">MSP</filename> or <filename role="extension">PCX</filename> format </entry>
+</row>
+<row>
+  <entry>\it pkedit.exe</entry>
+  <entry>94Kb</entry>
+  <entry>Edits <filename role="extension">PK</filename> files </entry>
+</row>
+<row>
+  <entry>\it pktopx.exe</entry>
+  <entry>55Kb</entry>
+  <entry>Converts <filename role="extension">PK</filename> files to <filename role="extension">PXL</filename> format</entry>
+</row>
+<row>
+  <entry>\it texcad.exe</entry>
+  <entry>79Kb</entry>
+  <entry>Interactive &LaTeX; drawing tool </entry>
+</row>
+<row>
+  <entry>\it texchk.exe</entry>
+  <entry>49Kb</entry>
+  <entry>Syntax checker for &LaTeX;</entry>
+</row>
+<row>
+  <entry>\it texconv.exe</entry>
+  <entry>27Kb</entry>
+  <entry>Converts input files (see <quote>code pages</quote>) </entry>
+</row>
+<row>
+  <entry>\it dviscr.exe</entry>
+  <entry>215Kb</entry>
+  <entry>Previewer </entry>
+</row>
+<row>
+  <entry>\it dviscrs.exe</entry>
+  <entry>164Kb</entry>
+  <entry>Previewer for small-memory configurations </entry>
+</row>
+<row>
+  <entry>\it dvivik.exe</entry>
+  <entry>142Kb</entry>
+  <entry>Previewer for Viking I displays </entry>
+</row>
+<row>
+  <entry>\it dvitype.exe</entry>
+  <entry>72Kb</entry>
+  <entry>Texware: shows <filename role="extension">DVI</filename> file</entry>
+</row>
+<row>
+  <entry>\it pltotf.exe</entry>
+  <entry>74Kb</entry>
+  <entry>Texware: converts <filename role="extension">PL</filename> files to <filename role="extension">TFM</filename> format </entry>
+</row>
+<row>
+  <entry>\it tftopl.exe</entry>
+  <entry>48Kb</entry>
+  <entry>Texware: converts <filename role="extension">TFM</filename> files to <filename role="extension">PL</filename> format </entry>
+</row>
+<row>
+  <entry>\it gftodvi.exe</entry>
+  <entry>69Kb</entry>
+  <entry>Mfware: makes proof sheets for a font </entry>
+</row>
+<row>
+  <entry>\it gftopk.exe</entry>
+  <entry>53Kb</entry>
+  <entry>Mfware: converts <filename role="extension">GF</filename> files to <filename role="extension">PK</filename> format</entry>
+</row>
+<row>
+  <entry>\it gftopxl.exe</entry>
+  <entry>59Kb</entry>
+  <entry>Mfware: converts <filename role="extension">GF</filename> files to <filename role="extension">PXL</filename> format</entry>
+</row>
+<row>
+  <entry>\it gftype.exe</entry>
+  <entry>61Kb</entry>
+  <entry>Mfware: shows <filename role="extension">GF</filename> file </entry>
+</row>
+<row>
+  <entry>\it mft.exe</entry>
+  <entry>55Kb</entry>
+  <entry>Mfware: pretty-prints <filename role="extension">MF</filename> files</entry>
+</row>
+<row>
+  <entry>\it pktogf.exe</entry>
+  <entry>47Kb</entry>
+  <entry>Mfware: converts <filename role="extension">PK</filename> files to <filename role="extension">GF</filename> format</entry>
+</row>
+<row>
+  <entry>\it pktype.exe</entry>
+  <entry>45Kb</entry>
+  <entry>Mfware: shows <filename role="extension">PK</filename> file </entry>
+</row>
+<row>
+  <entry>\it makeindx.exe</entry>
+  <entry>102Kb</entry>
+  <entry>Builds indices for documents </entry>
+</row>
+<row>
+  <entry>\it pooltype.exe</entry>
+  <entry>31Kb</entry>
+  <entry>Web: shows contents of pool files </entry>
+</row>
+<row>
+  <entry>\it tangle.exe</entry>
+  <entry>52Kb</entry>
+  <entry>Web: creates compilable file </entry>
+</row>
+<row>
+  <entry>\it weave.exe</entry>
+  <entry>72Kb</entry>
+  <entry>Web: creates documentation file </entry>
+</row>
+<row>
+  <entry>\it vftovp.exe</entry>
+  <entry>69Kb</entry>
+  <entry>Virtual fonts: converts <filename role="extension">VF</filename> files to <filename role="extension">VPL</filename> format </entry>
+</row>
+<row>
+  <entry>\it vptovf.exe</entry>
+  <entry>73Kb</entry>
+  <entry>Virtual fonts: converts <filename role="extension">VPL</filename> files to <filename role="extension">VF</filename> format </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>Deciding which programs to remove from the &emTeX; directory depends, to a
+large extent, on how you use &TeX;.  If you haven't been using &TeX; for
+very long, try to keep as many things as you can until you get a better
+feel for what you'll be using.  Save copies of all the programs you delete
+on floppy disks so that they are easy to get back.  Here are some
+suggestions:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Delete the previewer and printer drivers that you don't need.
+  </para>
+</listitem>
+<listitem>
+<para> Delete obsolete programs unless you know you need them.
+  </para>
+</listitem>
+<listitem>
+<para> Delete \web programs if you'll never be compiling &TeX; yourself
+        or reading &TeX; program source code.
+  </para>
+</listitem>
+<listitem>
+<para> Delete <command>Mfware</command> programs if you won't be doing a lot of work with
+        fonts.  Note: keep <command>gftopk.exe</command> if you want to use
+        automatic font generation.
+  </para>
+</listitem>
+<listitem>
+<para> Delete <command>Texware</command> and <command>Virtual</command> font programs if you won't be working
+        with virtual fonts. (You can probably delete <command>dvitype.exe</command>,
+        in any case).
+  </para>
+</listitem>
+<listitem>
+<para> Delete <command>bibtex.exe</command> if you won't be working with 
+        bibliographic databases.
+  </para>
+</listitem>
+<listitem>
+<para> Delete <command>makeindx.exe</command> if you won't be working with indexes.
+  </para>
+</listitem>
+<listitem>
+<para> Delete <command>ask.exe</command> if you won't be using <command>gh.bat</command>.
+  </para>
+</listitem>
+</itemizedlist>
+
+<para>Next, figure out what batch files you'll be using and delete (or archive)
+all the others.  If you aren't using OS/2, this includes all of the
+<filename>*.cmd</filename> files.
+</para>
+
+</section>
+<section><title>Deleting extra printer drivers</title>
+
+<para>Read about the <command>dvidot</command><indexterm><primary>dvidot</primary></indexterm> program for printing to a dot matrix
+printer, if you have one.  When you figure out which of the <filename role="extension">DOT</filename>
+parameter files you need, delete (or archive) the rest.  Follow these
+guidelines:
+</para>
+
+<itemizedlist>
+<listitem>
+<para> If you don't have a Viking I display, delete <command>dvivik.exe</command>.
+</para>
+</listitem>
+<listitem>
+<para> If you don't have a laser printer, delete <command>dvihplj.exe</command>.
+</para>
+</listitem>
+<listitem>
+<para> Delete <command>dviscrs.exe</command> if you have enough memory to use 
+      <command>dviscr</command>
+      instead.  If you are always going to use a Windows or OS/2 previewer,
+      you can delete <command>dviscr.exe</command> as well.
+</para>
+</listitem>
+</itemizedlist>
+
+</section>
+</section>
+<section><title>Basic Customization</title>
+
+<para><indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>customizing</secondary></indexterm>There are 
+two ways to customize &emTeX;.  One way is to customize the
+environment variables that &emTeX; uses; the other is to customize the
+configuration files that &emTeX; uses for previewing and printing
+(configuration files have no effect on &TeX; itself).
+</para>
+
+<section id="sec.betaemtex"><title>Environment variables</title>
+
+<para>There are thirteen environment variables<indexterm><primary>environment variables</primary><secondary sortas="for emTeX">for &emTeX;</secondary></indexterm><indexterm><primary>variables</primary><secondary>environment</secondary><tertiary sortas="for emTeX">for &emTeX;</tertiary></indexterm> that 
+&emTeX; uses.  For
+simplicity in the following discussion, assume that &emTeX; is installed
+on drive C:.  If it is not, change <emphasis>every</emphasis> reference to C:
+to the drive actually in use.
+</para>
+
+<variablelist>
+  <varlistentry>
+<term><envar>EMTEXDRV</envar><indexterm><primary sortas="EMTEXDRV (environment variable)"><envar>EMTEXDRV</envar> (environment variable)</primary></indexterm> (Not set by default)</term>
+<listitem>
+
+<para>  Special note: this variable will become obsolete with the next
+  release of &emTeX;.
+</para>
+
+<para>  This variable tells &emTeX; what drive to use when searching for
+  default paths.  Although I don't recommend it, if you use entirely
+  standard paths for your files, you can rely on the compiled-in
+  defaults in the &emTeX; executables.<footnote><para>{One of the reasons I
+  don't recommend it is that it isn't easy to determine precisely what
+  the compiled-in defaults are, and they may change without notice.}</para></footnote>
+  The <envar>EMTEXDRV</envar> environment variable should be set to the single
+  letter of the drive on which these paths reside.  For example, if
+  you installed &emTeX; on drive C: (in completely standard directories),
+  you could set <literal><envar>EMTEXDRV</envar>=C</literal>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>EMTEXDIR</envar><indexterm><primary sortas="EMTEXDIR (environment variable)"><envar>EMTEXDIR</envar> (environment variable)</primary></indexterm> (Not set by default)</term>
+<listitem>
+
+<para>  Special note: this is a new variable; it will become available with
+  the next release of &emTeX;.  <envar>EMTEXDIR</envar> replaces <envar>EMTEXDRV</envar>.
+</para>
+
+<para>  This variable tells &emTeX; what path to use when searching for
+  default paths.
+  The <envar>EMTEXDIR</envar> environment variable should be set to the root
+  path where &emTeX; is installed (for example, <literal>C:\EMTEX</literal>).
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>TEXINPUT</envar><indexterm><primary sortas="TEXINPUT (environment variable)"><envar>TEXINPUT</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Defines the directories that &emTeX; uses when searching for &TeX;   input files.  You would typically leave <filename>C:{\bs}EMTEX{\bs}TEXINPUT</filename>
+  in this path and extend it with directories of your own in place
+  of <filename>C:{\bs}MYTEX</filename>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>TEXFMT</envar><indexterm><primary sortas="TEXFMT (environment variable)"><envar>TEXFMT</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Specifies where small versions of &TeX; look for format files.  Typically
+  you would leave this set as it is and add new format files to that directory.
+  You do not have to set this variable if you are not using the small
+  versions of &TeX;.
+</para>
+
+<para>
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>BTEXFMT</envar><indexterm><primary sortas="BTEXFMT (environment variable)"><envar>BTEXFMT</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Specifies where large versions of &TeX; look for format files.  You will
+  typically leave this set as it is and add new format files to the
+  directory specified.  If you do not use large versions of &TeX;, you need
+  not set this variable.  
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>TEXTFM</envar><indexterm><primary sortas="TEXTFM (environment variable)"><envar>TEXTFM</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  &TeX; uses the directories stored in this variable when searching for
+  <filename role="extension">TFM</filename> files for fonts used in your documents.  If you install new
+  fonts, you should put the <filename role="extension">TFM</filename> files for these fonts in their
+  own directory and add the name of that directory to the <envar>TEXTFM</envar>
+  path.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>MFINPUT</envar><indexterm><primary sortas="MFINPUT (environment variable)"><envar>MFINPUT</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  The &MF; program looks for input files in this path.  It is analogous
+  to the <envar>TEXINPUT</envar> variable.  If you add new &MF; fonts to your
+  system, for example, the \AmS fonts, place them in a different
+  directory and add that directory to this path.  If you do not use &MF;,
+  you do not need this variable.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>MFBAS</envar><indexterm><primary sortas="MFBAS (environment variable)"><envar>MFBAS</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Analogous to <envar>TEXFMT</envar>.  Specifies where small versions of
+  &MF; look for base files.  If you do not use &MF;, you do not need
+  this variable.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>BMFBAS</envar><indexterm><primary sortas="BMFBAS (environment variable)"><envar>BMFBAS</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Analogous to <envar>BTEXFMT</envar>. Specifies where large versions of
+  &MF; look for base files.  If you do not use &MF;, you do not need
+  this variable.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>MFJOB</envar><indexterm><primary sortas="MFJOB (environment variable)"><envar>MFJOB</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Specifies where <command>MFjob</command> looks for input files.  If you are not
+  using &MF; or <command>MFjob</command> for font generation, you do not need this
+  variable.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>BIBINPUT</envar><indexterm><primary sortas="BIBINPUT (environment variable)"><envar>BIBINPUT</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Specifies where <command>bibtex</command> searches for bibliography database
+  files (<filename role="extension">BIB</filename> files).  Clearly, if you're not using &BibTeX;, you
+  don't need <envar>BIBINPUT</envar>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>DVIDRVINPUT</envar><indexterm><primary sortas="DVIDRVINPUT (environment variable)"><envar>DVIDRVINPUT</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  This tells the &emTeX; &dvidriver;s where to search for <filename role="extension">DVI</filename>
+  files.  In practice, I simply set this to <quote><literal>.</literal></quote> so that only
+  the current directory is used.  If you find it convenient to search
+  for <filename role="extension">DVI</filename> files, by all means set it to an appropriate path.
+  The default path includes <filename>C:{\bs}EMTEX{\bs}DOC</filename> so that it is easy
+  to preview or print the local guide.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>DVIDRVFONTS</envar><indexterm><primary sortas="DVIDRVFONTS (environment variable)"><envar>DVIDRVFONTS</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  This tells the &emTeX; &dvidriver;s where to search for fonts.  The
+  <filename>C:{\bs}TEXFONTS</filename> directory is the default location for font
+  libraries.  If other fonts are installed, it's natural to include them
+  in this path.  For example, preview versions of the PostScript fonts
+  are now available from CTAN in font library format.  If you install
+  those libraries in <filename>C:{\bs}PSFONTS</filename>, you should change the
+  <envar>DVIDRVFONTS</envar> environment variable to include both paths.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>DVIDRVGRAPH</envar><indexterm><primary sortas="DVIDRVGRAPH (environment variable)"><envar>DVIDRVGRAPH</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  The &emTeX; &dvidriver;s can incorporate <filename role="extension">PCX</filename> and <filename role="extension">MSP</filename> graphics
+  with a <markup>\special</markup> command.  The <envar>DVIDRVGRAPH</envar> environment
+  variable tells the drivers where to look for the graphic files.  The
+  <literal>$r</literal> portion of the path is replaced by the resolution of the
+  image required.  For example, I set this to <filename>C:{\bs}TEXGRAPH{\bs}GR\$r</filename>
+  and put 300dpi graphic images in <filename>C:{\bs}TEXGRAPH{\bs}GR300</filename>, 420dpi
+  images in <filename>C:{\bs}TEXGRAPH{\bs}GR420</filename>, etc.  The default value of
+  this variable is set so that the local guide will print properly.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</section>
+<section><title>Setting up configuration files</title>
+
+<para><indexterm><primary>configuration files</primary><secondary sortas="emTeX">&emTeX;</secondary></indexterm>Configuration file 
+options are described completely in the &dvidriver; documentation that accompanies &emTeX;.  Read the English or German
+versions of <filename>dvidrv.doc</filename> carefully.  The <quote>out of the box</quote>
+configuration is sufficient for most uses, but specifying a new configuration
+file is a convenient way to alter the default size of the page in preview
+mode or set up &emTeX; to print pages in <quote>two-up</quote> or <quote>four-up</quote> variations
+(for printing booklets, for example).
+</para>
+
+</section>
+</section>
+<section><title>Installing the Beta Test Versions of &emTeX;</title>
+
+<para>It has been several years since the standard distribution of &emTeX; was
+assembled.  In that time, several other releases have been made.  These
+are beta test releases, but they are as rock-solid as the standard
+distribution.  Personally, I encourage you to install the beta test versions,
+especially because they offer features not found in the standard release.
+</para>
+
+<para>The beta test versions are stored in a series of <filename role="extension">ZIP</filename> files at CTAN
+in the directory <filename role="ctan" class="directory">systems/msdos/emtex/betatest</filename>.
+Table&nbsp;<xref role="label" linkend="tab.emtex.betasummary"/> summarizes the files in the beta test
+distribution.\footnote{As this chapter is being 
+written, Eberhard Mattes\index{Mattes, Eberhard} is 
+working on a new version of \emTeX.  This new version will, at some 
+point, replace the existing beta test files, making this section somewhat
+out of date.  Use the <emphasis>READ.ME</emphasis> files in the actual distribution
+as the definitive source of information.
+</para>
+
+<table id="tab.emtex.betasummary">
+<title>The Beta Test Files for \protect\emTeX</title>
+<tgroup cols="2">
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf File</entry>
+  <entry>\bf Contents </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>\it btexb8.zip</entry>
+  <entry>Big \TeX executables </entry>
+</row>
+<row>
+  <entry>\it dvidrv_1.zip</entry>
+  <entry>New drivers and support files </entry>
+</row>
+<row>
+  <entry>\it dvispell.zip</entry>
+  <entry>\program{dvispell} </entry>
+</row>
+<row>
+  <entry>\it maketcp.zip</entry>
+  <entry>\program{maketcp} </entry>
+</row>
+<row>
+  <entry>\it mfb1.zip</entry>
+  <entry>\MF executables </entry>
+</row>
+<row>
+  <entry>\it MFjob11l.zip</entry>
+  <entry>\program{MFjob} </entry>
+</row>
+<row>
+  <entry>\it mfpm.zip</entry>
+  <entry>OS/2 support for \MF preview</entry>
+</row>
+<row>
+  <entry>\it pkeditpm.zip</entry>
+  <entry>OS/2 PM version of \program{PKEdit}</entry>
+</row>
+<row>
+  <entry>\it tex386b8.zip</entry>
+  <entry>386 version of \TeX</entry>
+</row>
+<row>
+  <entry>\it texb5.zip</entry>
+  <entry>Small \TeX executables </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>To install the beta test versions, simply unpack the archives into your
+<filename>\bs emtex</filename> directory, replacing any existing files with the new versions.
+After you have installed the beta test versions, you can repeat the 
+space-saving steps suggested earlier in this chapter.
+</para>
+
+<para>What are the advantages of the beta test versions?
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Automatic font generation is supported.  This means that you do 
+        not need large font library files.
+  </para>
+</listitem>
+<listitem>
+<para> The beta test versions are &TeX; version 3.141; the standard 
+        distribution is the slightly older version 3.0.
+  </para>
+</listitem>
+<listitem>
+<para> The beta test distribution includes a 386-specific version of &TeX;,
+        which is much faster than other versions.
+  </para>
+</listitem>
+<listitem>
+<para> For OS/2 users, a Presentation Manager <filename role="extension">DVI</filename> previewer is
+        provided.
+  </para>
+</listitem>
+</itemizedlist>
+
+</section>
+<section id="sec.emtex.autofont"><title>Running &emTeX; 386 in Windows</title>
+
+<para><indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>386 processor</secondary></indexterm><indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>for Windows</secondary></indexterm>The 
+386-specific version of &TeX; provided by the beta test distributions
+of &emTeX; has some compelling advantages over the other &TeX; executables:
+it's a big &TeX; and it's fast.  Unfortunately, it does not
+run in Windows (or some other MS-DOS environments).
+</para>
+
+<para>The problem is memory management.  In order to be large and fast, the
+<filename>tex386</filename><indexterm><primary>tex386</primary></indexterm> executable relies on some advanced features of the
+386 (and higher) processors. These features are provided under MS-DOS
+by a <quote>DOS extender.</quote>  The DOS extender<indexterm><primary>MS-DOS</primary><secondary sortas="extender for emTeX">extender for &emTeX;</secondary></indexterm> allows 
+MS-DOS applications to
+use <quote>protected mode,</quote> where they can address more than 640Kb of
+memory.  There are several competing standards for protected mode
+memory management.  <filename>emx</filename><indexterm><primary>emx</primary></indexterm>, the extender implemented in
+&emTeX;, is not compatible with the DPMI standard used by Microsoft
+Windows and some other MS-DOS extenders (for example, MS-DOS
+sessions under OS/2).
+</para>
+
+<para>Luckily, there is a freely available MS-DOS extender, which is
+compatible with both DPMI and &emTeX;, the RSX extender.  Starting with
+version beta-11 of &emTeX;, the<indexterm><primary>RSX extender</primary></indexterm> is very easy to
+use.<footnote><para>{Earlier versions of <filename>tex386.exe</filename> had the
+<filename>emx</filename> extender <quote>bound</quote> into the executable, which made the
+process more complicated.  The <filename>emx</filename> extender had to be
+unbound before the new one could be used.}</para></footnote>
+</para>
+
+<para>There are two versions of the extender: <filename>rsx</filename><indexterm><primary>RSX extender</primary></indexterm>, for use in
+MS-DOS with DPMI extenders<indexterm><primary>DPMI extenders</primary></indexterm>, and <filename>rsxwin</filename><indexterm><primary>rsxwin extenders</primary></indexterm>, for use in
+Windows.  Both versions are available on the CTAN archives in the
+directory <filename>support/msdos/dpmi/rsx</filename>.
+</para>
+
+<para>To use the RSX extender in MS-DOS with <filename>tex386</filename>
+version beta-11 or later, simply put <filename>rsx.exe</filename> somewhere on
+your <literal>PATH</literal>.  When &emTeX; discovers a DPMI extender, it will
+use <filename>rsx</filename> instead of <filename>emx</filename>.
+</para>
+
+<para>
+To use the RSX extender in Windows, you must modify the command line
+that is executed to run <filename>tex386</filename>.  Where you currently use:
+</para>
+
+<screen>
+<emphasis>d:{\bs}path1\bs</emphasis>tex.exe <emphasis>options</emphasis>
+</screen>
+
+<para>you must now use:
+</para>
+
+<screen>
+<emphasis>d:{\bs}path2\bs</emphasis>rsxwin.exe -e <emphasis>d:\bs path1\bs</emphasis>tex386.exe <emphasis>options</emphasis>
+</screen>
+
+<para>The <filename>rsxwin</filename> extender will set up an extender for &emTeX; and then
+run &TeX;.
+</para>
+
+</section>
+<section><title>Automatic Font Generation with &emTeX;</title>
+
+<note>
+<para>
+Automatic font generation<indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>automatic  font generation</secondary></indexterm><indexterm><primary>fonts</primary><secondary>automatic generation</secondary><tertiary sortas="with emTeX">with &emTeX;</tertiary></indexterm> is 
+not supported by the standard distribution
+of &emTeX;.  You must install the beta test versions to use
+automatic font generation.
+</para>
+</note>
+
+<para>The new versions of the &emTeX; &dvidriver;s include a program called
+<command>dvidrv</command><indexterm><primary>dvidrv</primary></indexterm>, which handles automatic font generation.  The
+<command>dvidrv</command> program runs the driver and if the driver indicates
+that fonts are missing, gives you the opportunity to use font substitution
+or build new fonts.   The <command>MFjob</command> program is used to build the
+fonts.  <command>MFjob</command> runs the &MF; and <command>GFtoPK</command> to produce
+and install the necessary fonts.  <command>MFjob</command> installs the <filename role="extension">PK</filename> files
+into the first directory on the font path.
+</para>
+
+<para>The <command>dvidrv</command>
+program can be replaced by a batch file that can select an
+appropriate font-rendering program (something other than &MF;, for example)
+to build the necessary fonts.  This feature is only available in the OS/2 versions of &emTeX; releases 1.4t and later.
+The batch file in Example&nbsp;<xref role="label" linkend="ex.dvidxx"/> in Appendix&nbsp;<xref role="label" linkend="app.examples"/>,
+<emphasis><xref role="label" linkend="app.examples"/></emphasis>, is a replacement for <command>dvidrv</command>.
+It uses <command>ps2pk</command><indexterm><primary>ps2pk</primary></indexterm> to make <filename role="extension">PK</filename> versions of PostScript
+Type&nbsp;1 fonts if an appropriate <filename role="extension">PFB</filename> file can be found.  Otherwise, it
+calls <command>MFjob</command> in the same way that <command>dvidrv</command> does.
+</para>
+
+</section>
+<section id="sec.netemtex"><title>Installing &emTeX; on a Network</title>
+
+<para>Ordinarily, &emTeX; does not require write access to any of its data
+files, so installation on a network<indexterm><primary sortas="emTeX">&emTeX;</primary><secondary>installing  on a network</secondary></indexterm> is not a problem.  The location
+of temporary files that must be writable
+is controlled with environment variables.  If automatic font generation is 
+being used, there are two applicable cautions.
+</para>
+
+<para>First, if you use the batch file approach to automatic font generation
+in order to support different rendering software, be aware that your batch
+file must handle the fact that multiple files may be written to the same
+directory from different users.  Don't let filenames collide.
+</para>
+
+<para>Second, it is ideal if you can provide a single world-writable location 
+for automatically generated fonts.  If multiple users are working
+with similar documents, each will not need private
+copies of the fonts they require.  If your networking software tracks
+the time of last file access, you can determine which files to delete
+from this global font area on a regular basis.
+</para>
+
+</section>
+</section>
+<section><title>texas</title>
+
+<para><command>texas</command><indexterm><primary>texas</primary></indexterm> is a 32-bit 
+MS-DOS version of &TeX;.  It is a big &TeX;.
+Unlike <command>tex386</command>, which comes with &emTeX;, the <command>texas</command>
+executable uses a royalty-free, commercial DOS extender.  The
+advantage of this extender is that it can run under Windows and other
+protected-mode environments such as DESQview.
+</para>
+
+<para>Before you install <command>texas</command>, you should get a complete &TeX; system
+from some other location (&emTeX; or &gTeX;, for example).  The
+<command>texas</command> distribution does not include anything other than
+the &TeX; executable and the MS-DOS extender---no format files, no input files,
+nothing.
+</para>
+
+<para>The <emphasis>-i</emphasis> switch 
+runs <command>texas</command> in ini&TeX;<indexterm><primary sortas="initex">ini&TeX;</primary></indexterm> mode.
+Using the instructions from Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>,
+<emphasis><xref role="label" linkend="chap.macpack"/></emphasis>, you should be able to build new format
+files for use with <command>texas</command> if you have another &TeX; distribution to work from.
+</para>
+
+<para><command>texas</command> uses the following environment 
+<indexterm><primary>environment variables</primary><secondary>for texas</secondary></indexterm><indexterm><primary>variables</primary><secondary>environment</secondary><tertiary>for texas</tertiary></indexterm> variables: 
+</para>
+
+<variablelist>
+  <varlistentry>
+<term><envar>TEXINPUTS</envar></term>
+<listitem>
+
+<para>  <indexterm><primary sortas="TEXINPUT (environment variable)"><envar>TEXINPUT</envar> (environment variable)</primary><secondary sortas="for emTeX">for &emTeX;</secondary></indexterm>Defines the directories 
+  that <command>texas</command> uses when searching for &TeX;   input files.  You would typically leave the defaults in this path
+  and extend it with directories of your own in place of <filename>C:{\bs}MYTEX</filename>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>TEXFORMATS</envar><indexterm><primary sortas="TEXFORMATS (environment variable)"><envar>TEXFORMATS</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Specifies where <command>texas</command> looks for format files.  Typically
+  you would leave this set as is and add new format files to that directory.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>TEXFONTS</envar><indexterm><primary sortas="TEXFONTS (environment variable)"><envar>TEXFONTS</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  &TeX; uses the directories stored in this variable when searching for
+  <filename role="extension">TFM</filename> files for fonts used in your documents.  If you install new
+  fonts, you should put the <filename role="extension">TFM</filename> files in their
+  own directory and add the name of that directory to the <envar>TEXFONTS</envar>
+  path.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>TEXPOOL</envar><indexterm><primary sortas="TEXPOOL (environment variable)"><envar>TEXPOOL</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Specifies where <command>texas</command> looks for its pool file.  Unless you have
+  installed <command>texas</command> in an unusual way, you will not have to change
+  this setting.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>DOS4GVM</envar><indexterm><primary sortas="DOS4GVM (environment variable)"><envar>DOS4GVM</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  <command>texas</command> uses a DOS extender<indexterm><primary>MS-DOS</primary><secondary>extender for texas</secondary></indexterm>
+  to overcome memory limitations under
+  MS-DOS.  If the extender runs out of memory, it writes parts of the
+  memory-image that it is maintaining out to disk.  This environment
+  variable specifies where that information should be written.  You do not
+  usually need to change this setting.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</section>
+<section><title>&sbTeX;</title>
+
+<para>&sbTeX;<indexterm><primary sortas="sbTeX">&sbTeX;</primary></indexterm> is another MS-DOS implementation of &TeX;.  The
+<filename>sb38tex</filename><indexterm><primary>sb38tex</primary></indexterm> distribution includes &TeX; and ini&TeX; executables,
+<filename role="extension">TFM</filename> files for the Computer Modern Roman fonts, and &TeX; sources for the
+Plain &TeX; format.  This is &TeX; version 3.141.  You will have to get
+&dvidriver;s and other &TeX; tools from a different package.
+</para>
+
+<para>The <filename>sb32xet</filename><indexterm><primary>sb32xet</primary></indexterm> distribution is \XeT version 3.1.<footnote><para>{\XeT is a variant of &TeX; that can typeset in both left-to-right and right-to-left
+modes.}</para></footnote>  The source files for the \XeT <filename>nailp</filename> format are included,
+as well as the supporting files for Hebrew.
+</para>
+
+<para>The <filename>sbmf13</filename><indexterm><primary>sbmf13</primary></indexterm> distribution is &MF; version 2.71.  Only the
+sources for the Plain &MF; base file are provided.  Like the &sbTeX; distribution, this is a very minimal set of files.  Only the
+<command>GFtoPK</command><indexterm><primary>GFtoPK</primary></indexterm> utility is included; all of the other &MF; programs you need will have to be obtained from another package.
+</para>
+
+<para>The default directories for &sbTeX; are <filename>\bs TEX\bs INPUTS</filename> for input
+files, <filename>\bs TEX\bs FORMATS</filename> for format files, and <filename>{\bs
+TEX\bs FONTTFMS}</filename> for <filename role="extension">TFM</filename> files.  The default drive is C:, but that can
+be changed with the <command>sb38set</command> program.
+</para>
+
+<para>You can also modify these paths by setting the <envar>TEXINPUTS</envar> environment
+variable<indexterm><primary>environment variables</primary><secondary sortas="for sbTeX">for &sbTeX;</secondary></indexterm><indexterm><primary>variables</primary><secondary>environment</secondary><tertiary sortas="for sbTeX">for &sbTeX;</tertiary></indexterm> for 
+input files, the <envar>FMTSB</envar> environment variable for format
+files, and the <envar>FONTTFMS</envar> environment variable for <filename role="extension">TFM</filename> files.
+Additionally, &sbTeX; uses the <envar>SBFTMP</envar> environment variable to 
+determine where temporary files should be located if font caching is
+performed. Here is a more complete description of sb&TeX;'s environment
+variables:
+</para>
+
+<variablelist>
+  <varlistentry>
+<term><envar>TEXINPUTS</envar></term>
+<listitem>
+
+<para>  <indexterm><primary sortas="TEXINPUT (environment variable)"><envar>TEXINPUT</envar> (environment variable)</primary><secondary sortas="for sbTeX">for &sbTeX;</secondary></indexterm>Defines the 
+  directories that &sbTeX; uses when searching for &TeX;   input files.  You would typically leave the defaults in this path
+  and extend it with directories of your own in place of <filename>C:{\bs}MYTEX</filename>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>FMTSB</envar><indexterm><primary sortas="FMTSB (environment variable)"><envar>FMTSB</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  Specifies where &sbTeX; looks for format files.  Typically
+  you would leave this set as it is and add new format files to that 
+  directory.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>FONTTFMS</envar><indexterm><primary sortas="FONTTFMS (environment variable)"><envar>FONTTFMS</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  &TeX; uses the directories stored in this variable when searching for
+  <filename role="extension">TFM</filename> files for fonts used in your documents.  If you install new
+  fonts, you should put the <filename role="extension">TFM</filename> files for these fonts in their
+  own directory and add the name of that directory to the <envar>FONTTFMS</envar>
+  path.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><envar>SBFTMP</envar><indexterm><primary sortas="SBFTMP (environment variable)"><envar>SBFTMP</envar> (environment variable)</primary></indexterm></term>
+<listitem>
+
+<para>  When font-caching is enabled, &sbTeX; writes cached information to disk when
+  it runs out of memory.  This environment variable specifies where that
+  information should be written.  You do not usually need to change this
+  setting.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</section>
+<section><title>&gTeX;</title>
+
+<para>The &gTeX;<indexterm><primary sortas="gTeX">g&TeX;</primary></indexterm> package is distributed in two ways.  One way is intended to
+supplement (actually, replace part of) the &emTeX; distribution.  The
+advantage of &gTeX; executables over &emTeX; is that they will run
+under Windows.  The 386 versions of &emTeX; executables will not run
+under Windows.  On the other hand, although &gTeX; will
+run in an MS-DOS session under OS/2, only the &emTeX; executables will actually run in a native OS/2 session.
+The other distribution is a complete set of <filename role="extension">TFM</filename> files, source, and
+input files for Plain &TeX;, &LaTeX;, and &AMSTeX;.
+In either distribution, you must get &dvidriver;s and some ancillary
+programs from another complete package (like &emTeX;).
+</para>
+
+<para>The following programs are included in the &gTeX; distribution:
+</para>
+
+<screen><![CDATA[
+\begin{tabular}{lll}
+&BibTeX; & <command>GFtoPK</command> & <command>VFtoVP</command> \\
+<command>DVItype</command> & <command>MFT</command> & <command>VPtoVF</command> \\
+<command>DVIcopy</command> & <command>PKtoGF</command> \   & <command>MakeIndx</command> \\
+<command>GFtoDVI</command> \   & <command>PKtype</command> & &MF; \\[2pt]
+\multicolumn{3}{l}{\program{amSpell}  (a third party spell-checker, not traditionally part of \TeX)}\\[2pt]
+\multicolumn{3}{l}{\program{MEwin}  (an Emacs-like editor for Windows, also not traditionally part of \TeX)}\\
+\end{tabular}
+]]></screen>
+
+<para>The &gTeX; executables use the same environment 
+variables<indexterm><primary>environment variables</primary><secondary sortas="for gTeX">for &gTeX;</secondary></indexterm><indexterm><primary>variables</primary><secondary>environment</secondary><tertiary sortas="for gTeX">for &gTeX;</tertiary></indexterm> as &emTeX;.
+</para>
+
+</section>
+</chapter>

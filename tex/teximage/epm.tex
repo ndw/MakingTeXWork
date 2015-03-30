@@ -1,0 +1,17 @@
+\newbox\epmbox
+\newdimen\epmwd
+\font\epma=epma at 72.27truept
+\font\epmb=epmb at 72.27truept
+\setbox\epmbox=\vbox{\hbox{%
+\epma\char0\char1\char2\char3}}
+\epmwd=\wd\epmbox
+\setbox\epmbox=\hbox{\vbox{\hsize=\epmwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\epma\char0\char1\char2\char3}
+\hbox{\epma\char4\char5\char6\epmb\char0}
+\hbox{\epmb\char1\char2\char3\char4}}}
+\ifx\parbox\undefined
+    \def\setepm{\box\epmbox}
+\else
+    \def\setepm{\parbox{\wd\epmbox}{\box\epmbox}}
+\fi

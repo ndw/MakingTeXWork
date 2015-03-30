@@ -1,0 +1,11 @@
+\documentstyle[musictex]{article}
+
+\pagestyle{empty}
+
+\begin{document}
+
+% The two first bars of the sonata in C-major K545 by Mozart:
+
+\input{mozart.tex}
+
+\end{document}

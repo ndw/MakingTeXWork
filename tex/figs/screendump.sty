@@ -1,0 +1,34 @@
+\font\screenfont=ncrr-ibm at 7pt % use any IBM OEM encoded fixed width font!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% These macros are derived from The TeXbook pg 380-381
+\def\uncatcodespecials{\def\do##1{\catcode`##1=12 }\dospecials}
+\def\setupverbatim{\screenfont%
+  \def\par{\leavevmode\endgraf\relax}%
+  \obeylines\uncatcodespecials%
+  \catcode`\\=0\catcode`\{=1\catcode`\}=2\obeyspaces}
+{\obeyspaces\global\let =\ } % let active space be a control space
+\def\screenlisting#1{\par\begingroup%
+  \def\c##1{\char##1}\setupverbatim\input{#1}%
+  \endgroup}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\screenbox#1{%
+  \vbox{\offinterlineskip%
+    \parskip=0pt\parindent=0pt%
+    \screenlisting{#1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Input converted file '#1' and set it inside a box with '#2' padding
+% space around the image.
+\def\screendump#1#2{%
+  \hbox{\vrule%
+    \vbox{\hrule%
+      \hbox{\hskip#2%
+        \vbox{\vskip#2%
+	  \def\twentyxs{xxxxxxxxxxxxxxxxxxxx}%
+	  \setbox0=\hbox{\screenfont\twentyxs\twentyxs\twentyxs\twentyxs}%
+	  \hbox to \wd0{\screenbox{#1}\hss}%
+	\vskip#2}%
+      \hskip#2}%
+    \hrule}%
+  \vrule\hss}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

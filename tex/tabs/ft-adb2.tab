@@ -1,0 +1,24 @@
+\colcount=128
+\begin{xtable}{r|c|c|c|c|c|c|c|c|}
+  \caption[The Adobe Standard Font Encoding, part 2]{Part 2 of the Adobe Standard 
+    Encoding, (characters 128 to 255).  Part 1 appears in 
+    Table~\protect\ref{tab:adbstdencode}.\label{tab:font:adb2}}\\
+             & \bf 0 & \bf 1 & \bf 2 & \bf 3 & \bf 4 & \bf 5 & \bf 6 & \bf 7\strut \\ \hline
+  \colnum{8} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{9} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{A} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{B} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{C} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{D} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{E} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{F} & \row \\ \cline{2-9}
+             & \row \\ \hline
+             & \bf 8 & \bf 9 & \bf A & \bf B & \bf C & \bf D & \bf E & \bf F\strut \\ 
+\end{xtable}

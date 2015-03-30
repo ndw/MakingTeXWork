@@ -1,0 +1,15 @@
+These are the complete (I believe) sources for _Making TeX Work_
+
+_Making TeX Work_ was last published in 1994 using LaTeX 2.09.
+
+I have not, and probably never will, update these files to use
+LaTeX2e, so they are effectively unTeXable at this point.
+
+They are provided so that readers can peruse the source for ideas
+and examples.
+
+If you're interested in a more publishable, readable version,
+see ../xml/
+
+--Norm
+23 Aug 2002

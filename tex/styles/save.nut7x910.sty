@@ -1,0 +1,579 @@
+% 7x9 3/16 Nutshell book style
+%    for LaTeX version 2.09
+% Copyright (C) 1993 by Norman Walsh
+% Based on `book.sty', copyright (C) 1992 by Leslie Lamport
+%
+% $Id: save.nut7x910.sty,v 1.1 2002/08/23 14:59:16 nwalsh Exp $
+% 
+\def\nuttenversion{1.0.0}
+
+\lineskip 1pt
+\normallineskip 1pt
+\def\baselinestretch{1}
+
+% Setting \topsep to 0pt, because I thought that lists shouldn't get extra
+% space above and below, turned out to be a real problem.  I'll find some
+% other solution to the extra-space problem, if/when necessary...
+\topsep=1sp
+\parsep=4pt
+\itemsep=0pt
+
+\input{orafonts}
+
+\def\@normalsize{\@setsize\normalsize{13pt}\xpt\@xpt
+\abovedisplayskip 10\p@ plus2\p@ minus5\p@
+\belowdisplayskip \abovedisplayskip
+\abovedisplayshortskip  \z@ plus3\p@
+\belowdisplayshortskip  6\p@ plus3\p@ minus3\p@
+\let\@listi\@listI}
+
+\def\small{\@setsize\small{11pt}\ixpt\@ixpt
+\abovedisplayskip 8.5\p@ plus3\p@ minus4\p@
+\belowdisplayskip \abovedisplayskip
+\abovedisplayshortskip \z@ plus2\p@
+\belowdisplayshortskip 4\p@ plus2\p@ minus2\p@
+\def\@listi{\leftmargin\leftmargini}}
+
+\def\footnotesize{\@setsize\footnotesize{9pt}\viiipt\@viiipt
+\abovedisplayskip 6\p@ plus2\p@ minus4\p@
+\belowdisplayskip \abovedisplayskip
+\abovedisplayshortskip \z@ plus\p@
+\belowdisplayshortskip 3\p@ plus\p@ minus2\p@
+\def\@listi{\leftmargin\leftmargini}}
+
+\def\scriptsize{\@setsize\scriptsize{8pt}\viipt\@viipt}
+\def\tiny{\fontsize{8}{10pt}\selectfont}
+\def\large{\fontsize{14}{16pt}\selectfont}
+\def\Large{\fontsize{18}{22pt}\selectfont}
+\def\LARGE{\fontsize{18}{22pt}\selectfont} % same as \Large...
+\def\huge{\fontsize{24}{30pt}\selectfont}
+\def\Huge{\fontsize{96}{100pt}\selectfont}
+
+\fontfamily{garamond}
+\fontshape{n}
+\normalsize
+
+% Special tabular environment---save the default so we can use it here...
+\let\defaulttabular=\tabular
+\let\enddefaulttabular=\endtabular
+
+%% Want hlines to be seperated by more whitespace.  Make it automatic
+%% with \tablerule instead of \hline
+%\def\tablerule{%
+%  \noalign{\hbox{\vrule height2pt depth0pt width0pt}\ifnum0=`}\fi%
+%  \hrule \@height \arrayrulewidth \futurelet \@tempa\@xhline%
+%  \noalign{\hrule \@height 0pt \@width 0pt \@depth 2pt}}
+
+\oddsidemargin  =  0.0in % Don't shift odd pages over at all
+\evensidemargin =  2.2in % Shift even pages over so that they line up
+
+\oddsidemargin = .875in
+\evensidemargin = .875in
+
+% hack up the marginal notes a little bit
+\marginparwidth = 1.25in  % Width...
+\marginparsep   = 0.25in % Distance from text...
+\marginparpush  = 10pt   % Vertical seperation...
+
+\topmargin      =  0.625in % 
+\headheight     = 13pt   % Make taller to accomodate text + hrule
+\headsep        =  1pc   % Dist from header rule
+\topskip        = 10pt   % ???
+
+\advance\topmargin-\headheight % make distance from top to rule = 0.5in
+
+\footskip 23pt
+
+\textwidth      =  5.25in   % Width of the printed area on a page
+\textheight     =  7.4375in % Height of printed area (not including headers and
+                            %   footers)
+
+\columnsep 10pt
+\columnseprule 0pt
+
+\footnotesep 6.65pt
+
+\skip\footins 14pt plus 4pt minus 2pt
+
+\floatsep 12pt plus 2pt minus 2pt
+
+\textfloatsep 20pt plus 2pt minus 4pt
+
+\intextsep 12pt plus 2pt minus 2pt
+
+\@maxsep 20pt
+
+\dblfloatsep 12pt plus 2pt minus 2pt
+
+\dbltextfloatsep 20pt plus 2pt minus 4pt
+
+\@dblmaxsep 20pt
+
+\@fptop 0pt plus 1fil
+
+\@fpsep 8pt plus 2fil
+\@fpbot 0pt plus 1fil
+
+\@dblfptop 0pt plus 1fil
+
+\@dblfpsep 8pt plus 2fil
+\@dblfpbot 0pt plus 1fil
+
+\parindent      =  0.0pt % Paragraphs are not indented
+\parskip        =  6.0pt % Extra space between paragraphs
+
+\partopsep=0pt
+
+\@lowpenalty   51
+\@medpenalty  151
+\@highpenalty 301
+
+\@beginparpenalty -\@lowpenalty
+
+\@endparpenalty   -\@lowpenalty
+
+\@itempenalty     -\@lowpenalty
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This is where I've done the most work.  The ORA style has section names
+% next to the chapter number at the start of each chapter.  In order to
+% support that, I needed to capture the name of each section.  So I've made
+% changes to the sectioning macros (now they need to be called using the
+% syntax ``\section{args}'' rather than ``\section args'' which is
+% (apparently) acceptable to LaTeX.).  The section names are stored in the
+% AUX file with an encoded \csname...
+%
+% The tabular environment and the chapter name are captured in boxes and 
+% laid next to each other.  The text starts below the largest of the two 
+% boxes.
+%
+% ----------------------------------------------------------------------
+%
+% Place holders for the ``box'' that contains the list of section names,
+% the chapter title, etc.
+\newbox\secfilesummary     % holds the file section summary table
+\newif\ifsecfilesummary    % does this chapter have any sections?
+\newbox\chaptitle          % holds the chapter title (plus number)
+\newdimen\secfileboxlen    % length of said box
+\newdimen\chaptitleboxlen  % length again
+\newdimen\chapnumspace     % Space between bottom of chapter number
+                           % and top of first line of chapter title (it's
+                           % adjusted to make the baseline-to-baseline
+                           % distance exactly .75in
+\newdimen\disttofirstline  % distance from top of the page to the top of
+                           % the first line of the chapter text
+%
+% Note: we use our own counter for the chapter number (strictly sequential)
+% so that the \appendix command doesn't screw us up (it redefines the
+% chapter counter to print as a capital letter and we can't use that
+% because it's got a control seqeuence embeded in it).
+%
+\newcount\secfilenum\secfilenum=0   % number of the chapter
+\newcount\secfileapp\secfileapp=0   %   offset for appendixes
+\newcount\secnumcount\secnumcount=1 % number of section in chapter
+\newcount\testnum                   % loop counter for chap summary box
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\@titlecr{\@centercr\vrule height\f@size pt depth0pt width0pt}
+\def\flushtitle{\bgroup%
+    \let\save@centercr=\@centercr%
+    \def\@centercr{\save@centercr\vrule height\f@size pt depth0pt width0pt}%
+    \begin{flushright}}
+\def\endflushtitle{\end{flushright}\egroup}
+
+\def\@part[#1]#2{%
+  \leavevmode\vskip-\lastskip\vskip-29pt\leavevmode%
+% We are now back up at the top rule of the page in lr-mode
+%
+  \ifnum \c@secnumdepth >-2\relax%
+    \refstepcounter{part}%
+    \addcontentsline{toc}{part}{\thepart.\space#1}%
+  \else%
+    \addcontentsline{toc}{part}{#1}%
+  \fi%
+  \partmark{#1}%
+%
+\setbox0=\hbox{\vtop{\parskip=0pt%
+    \rm\fontsize{30}{36pt}\selectfont%
+    \begin{flushtitle}%
+      \it\bf #2%
+    \end{flushtitle}%
+    }%
+  }%
+\dimen0=\dp0
+%
+\hbox{\vbox{%
+    \hrule width\textwidth height0.25pt depth0pt\relax%
+    \hbox to \textwidth{\hss%
+      \hbox{\vbox to 1in{\vfill%
+          \hbox{\vbox to 0pt{\vss\hbox{\rm\Huge\thepart}}}
+          }}%
+      }%
+    \hbox to 0pt{\hss\vbox to 24pt{\vfill}}%
+    \box0%
+    }%
+  }%
+\vskip94pt\vskip-\dimen0%
+}
+
+\def\boxit#1{\hbox{\vrule\vbox{\hrule\hbox{#1}\hrule}\vrule}}
+\def\@makechapterhead#1{%
+  \leavevmode\vskip-\lastskip\vskip-48pt\leavevmode%
+% We are now back up at the top rule of the page in lr-mode
+%
+\setbox0=\hbox{\vtop{\parskip=0pt%
+    \rm\fontsize{24}{26pt}\selectfont%
+    \begin{flushtitle}%
+      \it\bf #1%
+    \end{flushtitle}%
+    }%
+  }%
+\dimen0=\dp0
+%
+\ifsecfilesummary%
+    \setbox1=\hbox to 0pt{\vbox{%
+        \nointerlineskip%
+        \psframebox*[fillcolor=nutshellgray,boxsep=false,framesep=0pt]{%
+          \hbox to 1.5in{\vbox{\vskip4pt\box\secfilesummary\vskip4pt}\hss}}%
+        }%
+      \hss}%
+    \secfileboxlen=\ht1%
+    \advance\secfileboxlen by \dp1%
+    \setbox\secfilesummary=\hbox{\vbox to 1in{\vskip12pt\box1\vss}}%
+\else%
+    \secfileboxlen=1in%
+    \setbox\secfilesummary=\hbox{\vbox to 1in{\vss}}%
+\fi%
+%
+\hbox{\vbox{%
+    \hrule width\textwidth height.25pt depth0pt\relax%
+    \hbox to \textwidth{\box\secfilesummary\hss%
+      \hbox{\vbox to 1in{\vfill%
+          \hbox{\vbox to 0pt{\vss\hbox{\rm\Huge\thechapter}}}
+          }}%
+      }%
+    \hbox to .5\textwidth{\hss\vbox to 30pt{\vfill}}%
+    \hbox{\box0}%
+    }%
+  }%
+\ifdim\secfileboxlen>138pt\relax%
+  \vskip\secfileboxlen\vskip-109pt%
+\else%
+  \vskip94pt\vskip-\dimen0%
+\fi%
+}
+
+% \@makeschapterhead is called for the bibliography, indicies, and other
+% un-numbered sections...
+\def\@makeschapterhead#1{%
+  \leavevmode\vskip-\lastskip\vskip-48pt\leavevmode%
+% We are now back up at the top rule of the page in lr-mode
+%
+\setbox0=\hbox{\vtop{\parskip=0pt%
+    \rm\fontsize{24}{26pt}\selectfont%
+    \begin{flushtitle}%
+      \it\bf #1%
+    \end{flushtitle}%
+    }%
+  }%
+\dimen0=\dp0
+%
+\secfileboxlen=1in%
+\setbox\secfilesummary=\hbox{\vbox to 1in{\vss}}%
+%
+\hbox{\vbox{%
+    \hrule width\textwidth height.25pt depth0pt\relax%
+    \hbox to \textwidth{\box\secfilesummary\hss%
+      \hbox{\vbox to 1in{\vfill%
+          \hbox{\vbox to 0pt{\vss\hbox{\rm\Huge\ }}}
+          }}%
+      }%
+    \hbox to .5\textwidth{\hss\vbox to 30pt{\vfill}}%
+    \hbox{\box0}%
+    }%
+  }%
+\ifdim\secfileboxlen>138pt\relax%
+  \vskip\secfileboxlen\vskip-109pt%
+\else%
+  \vskip94pt\vskip-\dimen0%
+\fi%
+}
+
+% Each item in the chapter summary box has a bullet followed by a section
+% name that is at most 1.2" wide, ragged right.
+% \def\tblpar#1{\parbox[t]{1.2in}{\raggedright #1\vrule width0pt depth4.5pt}}
+
+\def\chapter{\cleardoublepage
+   \pagestyle{fancy}%
+   \thispagestyle{plain}%
+   \global\@topnum\z@
+
+   \secfilenum=\value{chapter} % set it to be the chapter number
+   \advance\secfilenum by 1 % the \refsetcounter{chapter} occurs later...
+   \advance\secfilenum by \secfileapp % offset for apps
+
+   % Now save the table of section names in the \secfilesummary box
+   \secfilesummarytrue % assume there are sections...
+   \setbox\secfilesummary=\vbox{%
+     \advance\baselineskip by 4pt
+     \raggedright\hbadness=100000\tolerance=100000%
+     \fontfamily{garamond}\it\normalsize\selectfont%
+%
+     \secnumcount=1              % reset the section numbers...
+     \testnum=1                  % start the loop...
+%
+     % are there any sections defined in this chapter at all?
+     \expandafter\ifx%
+       \csname @chsum\number\secfilenum.\number\secnumcount\endcsname\relax%
+       \secfilesummaryfalse% nope, there aren't any...
+     \else
+       \@whilenum\testnum>0\do             % loop through them all
+       {% this is the body of the loop
+%
+         % if this is the first time through, start the table...
+         \ifnum\secnumcount=1%
+           \begin{defaulttabular}{c@{\hskip0.056in}l}%
+             \multicolumn{2}{l}{\bf In this chapter:}%
+         \fi%
+%
+         % print the current table entry
+         \\ $\bullet$ & %
+            \parbox[t]{1.2in}{\raggedright\bf%
+             \csname @chsum\number\secfilenum.\number\secnumcount\endcsname%
+             \vrule width0pt depth4.5pt}%
+%
+         % advance the section counter
+         \global\advance\secnumcount by 1\relax
+%
+         % is the _next_ section defined?
+         \expandafter\ifx
+           \csname @chsum\number\secfilenum.\number\secnumcount\endcsname%
+           \relax
+             % no, end the table and arrange to end the loop
+             \end{defaulttabular}
+             \testnum=0\relax
+         \fi
+%
+        } % this is the end of the body of the loop
+     \fi
+}
+%
+   \secnumcount=1              % reset the section numbers...
+   \@afterindentfalse
+   \secdef\@chapter\@schapter}%
+
+\def\@chapter[#1]#2{\vbox{}% something to vskip up to...
+  \ifnum \c@secnumdepth >\m@ne
+        \refstepcounter{chapter}%
+        \typeout{\@chapapp\space\thechapter.}%
+        \addcontentsline{toc}{chapter}{\protect
+        \numberline{\thechapter}#1}\else
+      \addcontentsline{toc}{chapter}{#1}\fi
+   \chaptermark{#1}%
+   \addtocontents{lof}%
+      {\protect\addvspace{10\p@}}% Adds between-chapter space to
+   \addtocontents{lot}%
+      {\protect\addvspace{10\p@}}%lists of figs & tables.
+   \if@twocolumn
+           \@topnewpage[\@makechapterhead{#2}]%
+     \else \@makechapterhead{#2}%
+           \@afterheading
+     \fi}
+
+\def\@schapter#1{\vbox{}%
+  \if@twocolumn \@topnewpage[\@makeschapterhead{#1}]%
+        \else \@makeschapterhead{#1}%
+              \@afterheading\fi}
+
+% 5pt in the above-skip place makes total skip = .25in (baselineskip+5pt)
+\def\section#1{%
+  {\def\protect##1{\string##1\string{\string}}
+    \immediate\write\@auxout{%
+      \string\expandafter\string\gdef\string\csname\space
+        @chsum\number\secfilenum.\number\secnumcount\string\endcsname%
+        \string{#1\string}}}
+  \global\advance\secnumcount by 1
+  \@startsection {section}{1}{\z@}{5pt}{6pt}{\reset@font\Large\bf\it}{#1}%
+  \nointerlineskip}
+
+% If you're going to have a section head _immediately_ after a chapter
+% heading, without any intervening text, you have to use \firstsection
+% so that extra space isn't inserted above the heading...
+\def\firstsection#1{%
+  {\def\protect##1{\string##1\string{\string}}
+    \immediate\write\@auxout{%
+      \string\expandafter\string\gdef\string\csname\space
+        @chsum\number\secfilenum.\number\secnumcount\string\endcsname%
+        \string{#1\string}}}
+  \global\advance\secnumcount by 1
+  \@startsection {section}{1}{\z@}{0pt}{6pt}{\reset@font\Large\bf\it}{#1}%
+  \nointerlineskip}
+
+\def\subsection#1{%
+   \@startsection{subsection}{2}{\z@}{5pt}{2pt}{\reset@font\large\bf\it}{#1}%
+   \nointerlineskip}
+
+\def\subsubsection#1{%
+   \@startsection{subsubsection}{3}{\z@}{0pt}{1sp}{\reset@font\normalsize\bf\it}{#1}%
+   \nointerlineskip}
+
+\def\paragraph{\@startsection
+    {paragraph}{4}{\z@}{3.25ex plus1ex minus.2ex}{-1em}{\reset@font
+    \normalsize\bf}}
+\def\subparagraph{\@startsection
+    {subparagraph}{4}{\parindent}{3.25ex plus1ex minus
+     .2ex}{-1em}{\reset@font\normalsize\bf}}
+
+\def\chaptermark#1{}
+
+\setcounter{secnumdepth}{0}
+
+\def\appendix{\par
+  \setcounter{chapter}{0}%
+  \setcounter{section}{0}%
+  \secfileapp=100\relax%
+  \def\@chapapp{\appendixname}%
+  \def\thechapter{\Alph{chapter}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Modify the list environments.  Set \partopsep and \topsep to zero
+% and then modify all of the @list* environments so that they don't
+% keep resetting the \topsep value...
+%
+% Set all the indentations to .25in and set the labelsep so that 
+% bulleted lists will line up just right.  We'll fiddle with 
+% enumerated lists later, if necessary.
+%
+
+\leftmargini=.25in
+\leftmarginii=.25in
+\leftmarginiii=.25in
+\leftmarginiv=.25in
+\leftmarginv=.25in
+\leftmarginvi=.25in
+
+\leftmargin\leftmargini
+
+\labelsep=0pt
+
+\labelwidth\leftmargini\advance\labelwidth-\labelsep
+
+\def\@listI{%
+  \leftmargin\leftmargini          % All the leftmargins are .25in
+  \parsep 4\p@ plus\p@ minus\p@    % parsep in lists is 4pt
+  \itemsep 0\p@ plus\p@ minus\p@}  % since parsep is 4pt, nothing extra here
+
+\let\@listi\@listI
+\@listi
+
+\def\@listii{\leftmargin\leftmarginii
+   \labelwidth\leftmarginii\advance\labelwidth-\labelsep}
+
+\def\@listiii{\leftmargin\leftmarginiii
+    \labelwidth\leftmarginiii\advance\labelwidth-\labelsep}
+
+\def\@listiv{\leftmargin\leftmarginiv
+     \labelwidth\leftmarginiv\advance\labelwidth-\labelsep}
+
+\def\@listv{\leftmargin\leftmarginv
+     \labelwidth\leftmarginv\advance\labelwidth-\labelsep}
+
+\def\@listvi{\leftmargin\leftmarginvi
+     \labelwidth\leftmarginvi\advance\labelwidth-\labelsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% An IP list is a configurable ``description'' like environment.  The
+% width of the first column is set by a parameter.
+%
+\def\ipindent{0pt}
+\newenvironment{iplist}[1]{\begiplist{#1}}{\endiplist}%
+\def\begiplist#1{\list {}% no default label
+  \global\def\ipindent{#1}%
+  {\def\makelabel##1{\hspace\labelsep \bf #1}
+%  {\def\makelabel##1{\hss\llap{%
+%  \hbox to #1{##1\hss}}}
+  \labelwidth#1 \labelsep5pt
+  \leftmargin\labelwidth \addtolength\leftmargin{\labelsep}%
+}}
+\def\endiplist{\endlist}
+
+\def\ipitem[#1]{%
+  \item[\textbf{#1}]%
+  \setbox0=\hbox{#1}%
+  \dimen0=\ipindent\relax
+  \ifdim\wd0>\dimen0\leavevmode\par\fi%
+}
+
+\def\wrapipitem[#1]{%
+  \item[\textbf{#1}]%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The 'conventions' environment is a special IP list...
+%
+\newenvironment{conventions}{\begiplist{1.5in}}{\endiplist}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sidebar environment
+%
+\newbox\sidebarbox
+
+\def\sidebartitle[#1]{\par\bgroup%
+    \fontsize{10}{12pt}%
+    \beginsbox{\sidebarbox}%
+    \begin{minipage}{\interiorwidth}%
+      \begin{center}
+        \rm\it\fontsize{14}{16pt}\selectfont #1
+      \end{center}
+      \parskip=6pt%
+      }
+
+\def\sidebarnotitle{\par\bgroup%
+    \fontsize{10}{12pt}%
+    \beginsbox{\sidebarbox}%
+    \begin{minipage}{\interiorwidth}%
+      \parskip=6pt%
+      }
+
+\def\sidebar{\@ifnextchar [{\sidebartitle}{\sidebarnotitle}}
+
+\def\endsidebar{\end{minipage}\endsbox%
+   \vskip-\parskip\vskip.25in
+   \fbox{\usebox{\sidebarbox}}
+   \vskip.25in\vskip-\parskip\par
+   \egroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Note environment
+%
+\def\note#1{\par\bgroup%
+    \dimen0=\textwidth
+    \advance\dimen0 by -.5in
+    \beginsbox{\sidebarbox}%
+    \begin{minipage}{\dimen0}%
+      \begin{center}
+        \rm\fontsize{12}{13pt}\selectfont \uppercase{#1}
+      \end{center}
+      \parskip=6pt%
+      }
+
+\def\endnote{\end{minipage}\endsbox%
+   \vskip-\parskip\vskip6pt\vskip1pc
+   \begin{center}\usebox{\sidebarbox}\end{center}
+   \vskip6pt\par
+   \egroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Setup additional styles...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{verbatim.sty} % Load the Mainze verbatim.sty file...
+\every@verbatim{\par\vskip\baselineskip} % setup the verbatim env...
+
+\setuppstricks%       call the hook function to setup pstricks...
+\setupfootnpag%       footnpag...
+\setupfancybox%       fancybox... and 
+\setupfancyheadings%  fancyheadings...
+
+\endinput

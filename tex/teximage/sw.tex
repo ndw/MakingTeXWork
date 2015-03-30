@@ -1,0 +1,18 @@
+\newbox\swbox
+\newdimen\swwd
+\font\swa=swa at 72.27truept
+\font\swb=swb at 72.27truept
+\setbox\swbox=\vbox{\hbox{%
+\swa\char0\char1\char2\char3\char4}}
+\swwd=\wd\swbox
+\setbox\swbox=\hbox{\vbox{\hsize=\swwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\swa\char0\char1\char2\char3\char4}
+\hbox{\swa\char5\char6\swb\char0\char1\char2}
+\hbox{\swb\char3\char4\char5\char6\char7}
+\hbox{\swb\char8\char9\char10\char11\char12}}}
+\ifx\parbox\undefined
+    \def\setsw{\box\swbox}
+\else
+    \def\setsw{\parbox{\wd\swbox}{\box\swbox}}
+\fi

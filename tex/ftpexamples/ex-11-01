@@ -1,0 +1,19 @@
+mode_setup;
+u# := 2mm#;
+define_pixels(u);
+
+beginchar("A", 8u#, 9u#, 5u#);
+  z1 = ( 0u,  0u);
+  z2 = ( 8u,  0u);
+  z3 = ( 1u,  8u);
+  z4 = ( 7u,  8u);
+  pickup pencircle scaled 1u#;
+  draw z4 ..  z1 .. z2 ..  z3 .. cycle;
+  pickup pencircle scaled 3u#;
+  drawdot z1;
+  drawdot z2;
+  drawdot z3;
+  drawdot z4;
+endchar;
+
+\end

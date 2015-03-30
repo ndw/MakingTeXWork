@@ -1,0 +1,542 @@
+<chapter id="chap.mac">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>&TeX; on the Macintosh</title>
+
+<para><indexterm><primary>Macintosh</primary><secondary sortas="TeX implementations">&TeX; implementations</secondary></indexterm>For the 
+most part, using &TeX; on the Macintosh is like using &TeX; on 
+any other system.  Certainly, the &TeX; documents that you edit are
+the same, and the output (on paper) is the same as the output from
+any other version of &TeX;.
+</para>
+
+<para>However, because they are immersed in a
+consistent graphical environment, Macintosh tools have a substantially different
+appearance from their non-graphical counterparts.<footnote><para>{I'm not going
+to argue about the relative merits of graphical and non-graphical
+environments or particular implementations of graphical environments.
+When all is said and done, the Mac <emphasis>is</emphasis> different.  At least today.}</para></footnote>
+</para>
+
+<para>There are four implementations of &TeX; available for the Macintosh.
+Of these four, one is commercial, two are shareware, and one is (mostly)
+free.  The following sections present an overview of each implementation,
+in alphabetical order.  
+</para>
+
+<section id="sec.Excalibur"><title>CMac&TeX;</title>
+
+<para>The &cmactex;<indexterm><primary sortas="cmactex">&cmactex;</primary></indexterm> package includes the most recent 
+versions of &TeX; and
+&MF; and all of the standard tools.  A port of \dvips\index{dvips!for Macintosh} is also included,
+as well as a <filename role="extension">DVI</filename> previewer and a <command>PrintPS<indexterm><primary>PrintPS</primary></indexterm></command> tool for
+printing PostScript files directly to a LaserWriter printer over AppleTalk.
+</para>
+
+<para>Each utility is a straightforward port of its &unix; counterpart.
+Command-line options have been replaced by standard
+Mac dialog boxes and menus where appropriate.  &TeX; has been extended to include a
+built-in editor, although it is not necessary to use that editor if
+you have another favorite.
+</para>
+
+<para>By design, &cmactex; is a very modular package.  This makes it easy to
+substitute different tools, or different ports of the same tools, where
+it is advantageous to do so.  For example, you can use 
+<command>MacGS<indexterm><primary>MacGS</primary></indexterm></command><indexterm><primary>Ghostscript</primary><secondary>for Macintosh</secondary></indexterm> (a 
+Macintosh version of <command>Ghostscript</command>) as a
+previewer if you like.
+</para>
+
+<para>Small versions of &TeX;, ini&TeX;, &MF;, and <command>iniMF</command> are provided
+in the free distribution of &cmactex;.  Big versions are 
+available only in a commercial distribution purchased directly from the
+author.  At the time of this writing, 
+the commercial distribution is
+available on diskettes and via email.
+The commercial version also provides
+fully automated font generation (see <quote><xref role="label" linkend="sec.autofont"/></quote> in
+Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>, <emphasis><xref role="label" linkend="chap.fonts"/></emphasis>) and faster versions of
+&TeX; and &MF;.
+</para>
+
+<para>The configuration files<indexterm><primary>configuration files</primary><secondary>for Macintosh</secondary></indexterm> used 
+by &cmactex; resemble the environment
+variables used by implementations of &TeX; on other systems.  You can
+set up multiple search folders for input files and fonts, for example,
+by providing a list of folder names separated by colons.
+</para>
+
+<para>Table&nbsp;<xref role="label" linkend="tab.mac.cmacdist"/> summarizes the &cmactex; version 2.1
+distribution available on the CTAN archives (in
+<filename role="ctan" class="directory">systems/mac/cmactex</filename>) as of July, 1993.  The top-level folders and
+their contents are presented, not a list of the archive files that
+form the distribution.
+</para>
+
+<table id="tab.mac.cmacdist">
+<title>Summary of the \protect\cmactex Distribution at 
+    CTAN</title>
+<tgroup cols="2">
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf Folder</entry>
+  <entry>\bf Description </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>\it TeX</entry>
+  <entry>Small versions of &TeX; </entry>
+</row>
+<row>
+  <entry>\it Metafont</entry>
+  <entry>Small versions of &MF; </entry>
+</row>
+<row>
+  <entry>\it view\</entry>
+  <entry>print</entry>
+  <entry><filename role="extension">DVI</filename> previewer and <command>PrintPS</command> </entry>
+</row>
+<row>
+  <entry>\it dvips5516</entry>
+  <entry>Complete distribution of \dvips, version 5.516. </entry>
+</row>
+<row>
+  <entry>\it Utilities</entry>
+  <entry>All of the standard \texware and \mfware utilities </entry>
+</row>
+<row>
+  <entry>\it ams</entry>
+  <entry>Versions of &AMSTeX; and &AMSLaTeX; </entry>
+</row>
+<row>
+  <entry>\it ams-pk</entry>
+  <entry>\AmS-fonts in <filename role="extension">PK</filename> format </entry>
+</row>
+<row>
+  <entry>\it ams-tfm</entry>
+  <entry><filename role="extension">TFM</filename> files for the \AmS-fonts </entry>
+</row>
+<row>
+  <entry>\it amsfonts</entry>
+  <entry>&MF; sources for version 2.0 of the \AmS-fonts </entry>
+</row>
+<row>
+  <entry>\it tfms</entry>
+  <entry><filename role="extension">TFM</filename> files for the CMR and &LaTeX; fonts </entry>
+</row>
+<row>
+  <entry>\it cmpk300</entry>
+  <entry>The CMR fonts in <filename role="extension">PK</filename> format</entry>
+</row>
+<row>
+  <entry>\it lpk300</entry>
+  <entry>The &LaTeX; extensions to CMR in <filename role="extension">PK</filename> format </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+<para>The installation instructions for &cmactex; are easy to understand, but
+you will have to configure &cmactex; before you try to use it.  
+Unfortunately, the default configuration files do not reflect the layout
+of folders that results directly from unpacking the archive files.
+</para>
+
+<para>&cmactex; includes a prebuilt format file for Plain &TeX;, but if you 
+want to use &LaTeX;, you will have to build the format file with ini&TeX; first.
+</para>
+
+</section>
+<section><title>&directex;</title>
+
+<para>&directex;<indexterm><primary sortas="directex">&directex;</primary></indexterm>
+<indexterm><primary>Macintosh</primary><secondary sortas="TeX MPW implementation">&TeX; MPW implementation</secondary></indexterm> 
+is a Macintosh Programmer's Workshop (MPW)<indexterm><primary>Macintosh</primary><secondary>Programmer's Workshop (MPW)</secondary></indexterm> based &TeX; package.  It is distributed in archive files containing
+eight disk images.  You will have to copy each disk image onto a diskette
+(using a tool provided) before you can install &directex;.
+</para>
+
+<para>Because I don't have access to a Mac with MPW installed, there is very 
+little that I can say about &directex; at this point.
+</para>
+
+</section>
+<section><title>&oztex;</title>
+
+<para>&oztex;<indexterm><primary sortas="oztex">&oztex;</primary></indexterm> is a complete &TeX; package that includes an integrated <filename role="extension">DVI</filename>
+previewer.  &oztex; can print &TeX; <filename role="extension">DVI</filename> files directly to any printer 
+selected by the <command>Chooser<indexterm><primary>Chooser</primary></indexterm></command>.  Because &oztex; does not include &MF;,
+you may need to get from some other source <filename role="extension">PK</filename> files at a resolution 
+appropiate for your
+printer.  The standard &oztex; distribution includes
+a complete set of
+<filename role="extension">PK</filename> files<indexterm><primary sortas="PK files"><filename role="extension">PK</filename> files</primary></indexterm> for 300dpi and 360dpi printers.
+</para>
+
+<para>A default configuration file and a selection of specialized
+configuration files for different printers and environments are
+provided with &oztex;.  The distinction between big and small
+implementations of &TeX; has been replaced by configurable memory
+limits<indexterm><primary>configurable memory limits</primary><secondary sortas="for oztex">for &oztex;</secondary></indexterm>.  With enough 
+RAM and appropriate configuration, you
+should be able to get &oztex; to process any &TeX; file you
+give it.
+</para>
+
+<para>&oztex; includes a simple text editor called <command>$\Sigma$Edit<indexterm><primary>$\Sigma$Edit</primary></indexterm></command>,
+but you can replace it with any editor you choose.
+Table&nbsp;<xref role="label" linkend="tab.mac.oztexdist"/> summarizes the &oztex; version 1.5
+distribution available on the CTAN archives (in
+<filename role="ctan" class="directory">systems/mac/oztex</filename>) as of July, 1993.  The top-level folders and
+their contents are given, not a list of the archive files that
+form the distribution.
+</para>
+
+<table id="tab.mac.oztexdist">
+<title>Summary of the \protect\oztex Distribution at 
+    CTAN</title>
+<tgroup cols="2">
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf Folder</entry>
+  <entry>\bf Contents </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>\it Configs</entry>
+  <entry>Configuration files </entry>
+</row>
+<row>
+  <entry>\it TeX-formats</entry>
+  <entry>Format files for Plain &TeX; and &LaTeX;</entry>
+</row>
+<row>
+  <entry>\it TeX-fonts</entry>
+  <entry><filename role="extension">TFM</filename> files for CMR, &LaTeX;, and PostScript fonts</entry>
+</row>
+<row>
+  <entry>\it Help-files</entry>
+  <entry>Online help files</entry>
+</row>
+<row>
+  <entry>\it PS-files</entry>
+  <entry>PostScript sources for &oztex;'s PostScript built-in driver</entry>
+</row>
+<row>
+  <entry>\it TeX-docs</entry>
+  <entry>Example &TeX; files</entry>
+</row>
+<row>
+  <entry>\it LaTeX-docs</entry>
+  <entry>&LaTeX; sources for a 26 page User's Guide to &oztex;</entry>
+</row>
+<row>
+  <entry>\it $\Sigma$Edit</entry>
+  <entry>A simple text editor desk accessory</entry>
+</row>
+<row>
+  <entry>\it TeX-inputs</entry>
+  <entry>Input files for Plain &TeX; and &LaTeX;</entry>
+</row>
+<row>
+  <entry>\it PK-files</entry>
+  <entry>A set of <filename role="extension">PK</filename> files for 300dpi and 360dpi printers</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>The &oztex; <filename role="extension">DVI</filename> printer recognizes <markup>\special</markup> commands for
+inserting PICT<indexterm><primary>PICT file format</primary></indexterm>, 
+PNTG<indexterm><primary>PNTG file format</primary></indexterm> (<command>MacPaint</command>), and 
+EPSF<indexterm><primary>EPS (Encapsulated PostScript) file format</primary></indexterm> images
+into your documents.  Provision is also made for including raw PostScript
+code if the selected printer is a PostScript<indexterm><primary>PostScript</primary></indexterm> printer.
+</para>
+
+<para>&oztex; is a shareware program.  If you continue to use it after a 
+reasonable trial period, you are expected to purchase it.
+</para>
+
+</section>
+<section><title>Textures</title>
+
+<para><command>Textures<indexterm><primary>Textures</primary></indexterm></command> is a commercial implementation of &TeX; 
+from Blue Sky Research<indexterm><primary>Blue Sky Research</primary></indexterm>. It has a number of features that make it unique in the
+&TeX; market. It is supported by a complete 
+user's guide and access to telephone and email product support.
+</para>
+
+<para>&Textures; supports an interactive preview mode called 
+        <emphasis>Lightning</emphasis> &Textures;<indexterm><primary>Lightning Textures</primary></indexterm><indexterm><primary>previewing</primary><secondary>for Macintosh Textures</secondary></indexterm>.  It is 
+        this feature that really sets 
+        &Textures; apart
+        from other implementations.  In this mode, changes to your document
+        are reflected immediately in the preview window.  In an environment
+        with sufficient resources (memory and processing speed), the result
+        is striking.  Constructing complex items like tables and mathematical
+        formulae is much easier, especially for the &TeX;         novice, than using the conventional edit, &TeX;, preview, debug
+        cycle.  Because the log file is also visible, it's easy to see
+        when you've written erroneous &TeX; code.
+</para>
+
+<para>        Note that <emphasis>Lightning Textures</emphasis> is not really a WYSIWYG
+        environment (like <command>Scientific Word</command>, for example) because
+        you still enter regular &TeX; commands in a purely textual
+        fashion.  You get immediate feedback in a different window.
+</para>
+
+<para>&Textures; is fast.  Extensive instrumentation and hand-tuning
+        of the program has produced an executable that is
+        several (maybe many) times faster than other &TeX; executables
+        on similar hardware.
+</para>
+
+<para>A complete set of Computer Modern Roman fonts is provided 
+        in Adobe Type&nbsp;1 format.  This means that any font can
+        be rendered at any size without loss of quality.
+PostScript versions of the \AmS-fonts are also available.  The
+        fonts can be purchased separately in either Macintosh or
+        Adobe <filename role="extension">PFB</filename> formats.
+</para>
+
+<para>&Textures; is a very integrated environment.  This can hardly be
+labelled a disadvantage considering how well it works, but it does
+mean that some extra effort is required if you want access to your
+document in a less integrated fashion.  Using another editor to
+compose your document is possible, but it prevents you from using
+<emphasis>Lighting</emphasis> &Textures;.  Starting with version 1.6, the
+&Textures; editor includes a macro programming language, so you can
+customize it with features that you find useful.  Blue Sky Research
+provides the tools you need to incorporate other fonts into
+&TeX; or extract &TeX; files (like <filename role="extension">DVI</filename> files) that are normally
+hidden from view by &Textures;.
+</para>
+
+<para>Figure&nbsp;<xref role="label" linkend="fig.mac.textures"/> shows an example of a &Textures; session.  The
+preview quality in this image is less than optimal because the Macintosh
+that &Textures; is running on does not have Adobe Type Manager.
+</para>
+
+<figure id="fig.mac.textures">
+<title>Editing, previewing, and typesetting in Textures</title>
+<screen>FIXME:</screen>
+</figure>
+
+<para>Because the Computer Modern Roman fonts are included in Adobe Type&nbsp;1
+format, &MF; is not provided in the &Textures; package.  Recently, BSR
+made their version of &MF; freely available.
+BSR's &MF; 
+was designed to work with &Textures;, and creates output files that are
+suitable for &Textures;, but not necessarily the standard <filename role="extension">GF</filename> and
+<filename role="extension">TFM</filename> files you might expect.  Those files can be obtained elsewhere, of course.
+</para>
+
+<para>The &Textures; package includes implementations of many auxiliary &TeX; programs including &BibTeX;<indexterm><primary sortas="bibtex">&BibTeX;</primary></indexterm>, <command>MakeIndex<indexterm><primary>MakeIndex</primary></indexterm></command>, 
+the <command>Excalibur<indexterm><primary>Excalibur</primary></indexterm></command>
+spellchecker (see the <quote><xref role="label" linkend="sec.Excalibur"/></quote> section later in
+this chapter), a <command>DVITool<indexterm><primary>DVITool</primary></indexterm></command>
+for importing and exporting <filename role="extension">DVI</filename> files, and font tools for importing
+and exporting fonts. (Because &Textures; doesn't use <filename role="extension">PK</filename> files directly,
+the standard \mfware tools are not provided.)  The &Textures; font tools
+are freely available from Blue Sky Research; see the <quote><xref role="label" linkend="sec.bsrtools"/></quote>
+section later in this chapter.  &Textures; also supports virtual fonts.
+</para>
+
+<para>&Textures; includes the Eplain<indexterm><primary>Eplain</primary></indexterm> and Midnight<indexterm><primary>Midnight</primary></indexterm> macro
+packages in addition to Plain &TeX; and &LaTeX;.  ini&TeX; is built into
+&Textures;, so you can make additional format files as described in
+Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>, <emphasis><xref role="label" linkend="chap.macpack"/></emphasis>.  Making format files
+with &Textures; requires a Macintosh Plus or other system with at least
+1Mb of memory.
+</para>
+
+<para>The &Textures; previewer and printing operations understand bitmap or
+scalable (EPSF) pictures inserted into your document with
+<markup>\special</markup> commands.  Although not visible on the previewer, raw
+PostScript can also be inserted for documents printed on PostScript
+devices.
+</para>
+
+</section>
+<section><title>Other Tools</title>
+
+<para>The following sections describe Macintosh versions of other common
+tools.  Some of these programs are unique to the Mac, while others
+are ports of tools from other systems.
+</para>
+
+<section><title>Alpha</title>
+
+<para><command>Alpha<indexterm><primary>Alpha</primary></indexterm></command> is a sophisticated shareware editor for text files.
+<command>Alpha</command> uses <command>Tcl<indexterm><primary>Tcl</primary></indexterm></command>, an interpreted C-like
+language, as a macro programming language for extending the editor.
+&LaTeX; support, which is written in <command>Tcl</command>, is very complete.  
+An example of the <command>Alpha</command> editor is shown in 
+Figure&nbsp;<xref role="label" linkend="fig.mac.alpha"/>.
+</para>
+
+<figure id="fig.mac.alpha">
+<title><application>Alpha</application> editing the fonts chapter 
+  from this book</title>
+<screen>FIXME:</screen>
+</figure>
+
+</section>
+<section><title>BBEdit</title>
+
+<para><command>BBEdit<indexterm><primary>BBEdit</primary></indexterm></command> is another shareware editor.  Like <command>Alpha</command>,
+it has a wide range of features including a &LaTeX;-aware editing
+mode.
+An example of the <command>BBEdit</command> editor is shown in 
+Figure&nbsp;<xref role="label" linkend="fig.mac.bbedit"/>.
+</para>
+
+<figure id="fig.mac.bbedit">
+<title>\program{BBEdit} editing the fonts chapter 
+  from this book</title>
+<screen>FIXME:</screen>
+</figure>
+
+</section>
+<section id="sec.bsrtools"><title>BSR Font Tools</title>
+
+<para>The Macintosh Programmer's Workshop (MPW)<indexterm><primary>Macintosh</primary><secondary>Programmer's Workshop (MPW)</secondary></indexterm> is
+required to use the Blue Sky Research Font Tools.  
+These tools were written for &Textures; users so that they could make
+other fonts, like those created with &MF;, for example, usable in &Textures;.  In
+practice however, they create standard Macintosh font resources, so
+the resulting fonts can be used by any Mac application.
+Table&nbsp;<xref role="label" linkend="tab.mac.bsrtools"/> describes the tools included in the
+<command>BSR Font Tools<indexterm><primary>BSR Font Tools</primary></indexterm></command> package.
+</para>
+
+<table id="tab.mac.bsrtools">
+<title>Font Tools in the BSR package</title>
+<tgroup cols="2">
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf Tool</entry>
+  <entry>\bf Description </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>\it GFtoPK</entry>
+  <entry>Converts &MF; <filename role="extension">GF</filename> files into standard <filename role="extension">PK</filename> format </entry>
+</row>
+<row>
+  <entry>\it PKtoFOND</entry>
+  <entry>Creates Mac FOND resource from <filename role="extension">PK</filename> and <filename role="extension">TFM</filename> files</entry>
+</row>
+<row>
+  <entry>\it TFMtoSuit</entry>
+  <entry>Creates a font metrics suitcase </entry>
+</row>
+<row>
+  <entry>\it NFNTcon</entry>
+  <entry>Finds NFNT resource numbering conflicts</entry>
+</row>
+<row>
+  <entry>\it TFtoPL</entry>
+  <entry>Converts <filename role="extension">TFM</filename> files into <filename role="extension">PL</filename> files </entry>
+</row>
+<row>
+  <entry>\it PLtoTF</entry>
+  <entry>Translates <filename role="extension">PL</filename> files (back) into <filename role="extension">TFM</filename> files</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+</section>
+<section><title>Excalibur</title>
+
+<para><command>Excalibur<indexterm><primary>Excalibur</primary></indexterm></command> is a spellchecker designed to work
+with &LaTeX; documents.
+An example of <command>Excalibur</command> is shown in 
+Figure&nbsp;<xref role="label" linkend="fig.mac.Excalibur"/>.
+</para>
+
+<figure id="fig.mac.Excalibur">
+<title>\program{Excalibur} spellchecking
+the fonts chapter from this book</title>
+<screen>FIXME:</screen>
+</figure>
+
+</section>
+<section><title>Hyper&BibTeX;</title>
+
+<para><indexterm><primary sortas="HyperBibTeX">Hyper&BibTeX;</primary></indexterm>This is a hypercard stack 
+for maintaining bibliographic databases
+<indexterm><primary>bibliographies</primary><secondary>hypercard stack</secondary></indexterm>
+<indexterm><primary>bibliographies</primary><secondary>for Macintosh</secondary></indexterm> suitable 
+for 
+use with &BibTeX;<indexterm><primary sortas="bibtex">&BibTeX;</primary></indexterm>.  &BibTeX; 
+is described in Chapter&nbsp;<xref role="label" linkend="chap.bibtex"/>, <emphasis><xref role="label" linkend="chap.bibtex"/></emphasis>.
+An example of Hyper&BibTeX; is shown in 
+Figure&nbsp;<xref role="label" linkend="fig.mac.hyperbib"/>.
+</para>
+
+<figure id="fig.mac.hyperbib">
+<title>The \program{Hyper\BibTeX} view of
+a bibliographic database</title>
+<screen>FIXME:</screen>
+</figure>
+
+</section>
+<section><title>MacGS</title>
+
+<para><command>MacGS<indexterm><primary>MacGS</primary></indexterm></command> is a Macintosh port 
+of GNU <command>Ghostscript</command><indexterm><primary>Ghostscript</primary><secondary>for Macintosh</secondary></indexterm>, described in
+Chapter&nbsp;<xref role="label" linkend="chap.preview"/>, <emphasis><xref role="label" linkend="chap.preview"/></emphasis>.
+</para>
+
+</section>
+<section><title>dvidvi</title>
+
+<para><command>dvidvi<indexterm><primary>dvidvi</primary></indexterm></command> is a Macintosh port of the <command>dvidvi</command> utility for 
+rearranging pages in a <filename role="extension">DVI</filename> file.  
+</para>
+
+</section>
+<section><title>MacDVIcopy</title>
+
+<para><command>MacDVIcopy<indexterm><primary>MacDVIcopy</primary></indexterm></command> is a port of the <command>DVICOPY<indexterm><primary>DVICOPY</primary></indexterm></command> utility,
+which transforms virtual font references in a <filename role="extension">DVI</filename>
+file into the appropriate non-virtual fonts or commands.  This allows
+&dvidriver;s and previewers that lack support for virtual fonts to
+preview documents that use them.
+</para>
+
+</section>
+<section><title>Mac&BibTeX;</title>
+
+<para>Mac&BibTeX;<indexterm><primary>Mac&BibTeX;</primary></indexterm> is a port of the standard &BibTeX; utility for 
+accessing bibliographic databases in a document.  &BibTeX; is described
+in Chapter&nbsp;<xref role="label" linkend="chap.bibtex"/>.
+</para>
+
+</section>
+<section><title>MacMakeIndex</title>
+
+<para><command>MacMakeIndex<indexterm><primary>MacMakeIndex</primary></indexterm></command> is a port of the standard <command>MakeIndex</command>
+for creating sorted, multilevel indexes in a document.
+<command>MakeIndex</command> is described in Chapter&nbsp;<xref role="label" linkend="chap.bibtex"/>.
+</para>
+
+</section>
+</section>
+</chapter>

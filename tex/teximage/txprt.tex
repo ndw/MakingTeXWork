@@ -1,0 +1,17 @@
+\newbox\txprtbox
+\newdimen\txprtwd
+\font\txprta=txprta at 72.27truept
+\font\txprtb=txprtb at 72.27truept
+\setbox\txprtbox=\vbox{\hbox{%
+\txprta\char0\char1\char2\char3}}
+\txprtwd=\wd\txprtbox
+\setbox\txprtbox=\hbox{\vbox{\hsize=\txprtwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\txprta\char0\char1\char2\char3}
+\hbox{\txprta\char4\char5\txprtb\char0\char1}
+\hbox{\txprtb\char2\char3\char4\char5}}}
+\ifx\parbox\undefined
+    \def\settxprt{\box\txprtbox}
+\else
+    \def\settxprt{\parbox{\wd\txprtbox}{\box\txprtbox}}
+\fi

@@ -1,0 +1,40 @@
+#! perl
+#
+# Usage: gs-eps epsfile <outputfile> <resolution> <device>
+#
+# Where: epsfile is the encapsulated postscript file
+#        outputfile is the output file (the default name
+#          is <basename epsfile>.<device>)
+#        resolution is the output resolution (default=300)
+#        device is the GS driver to use (default=pbm)
+
+($epsfile,$outputfile,$res,$device) = @ARGV;
+
+if (! $epsfile) {
+  printf "Usage: gs-eps epsfile <outputfile> <resolution>";
+  printf " <gsdriver>\n";
+  printf "Note: parameters are positional.  To specify a";
+  printf " driver, you\n";
+  printf "must also specify an outputfile and resolution.\n";
+  exit 1;
+  }
+    
+$epsfile =~ tr/\\/\//; # translate \foo\bar -> /foo/bar
+
+if (! -r $epsfile) {
+  printf "Cannot read file: $epsfile\n";
+  exit 1;
+  }
+
+if (! $res)         { $res = 300 }
+if (! $device)      { $device = "pbm" }
+
+if (! $outputfile ) {
+  @pathname = split(/\//,$epsfile);
+  $outputfile = $pathname[$#pathname];
+  $outputfile =~ s/.eps$//;
+  $outputfile = join(".", $outputfile, $device);
+  }
+
+printf "Converting $epsfile to $outputfile at ${res}dpi...\n";
+

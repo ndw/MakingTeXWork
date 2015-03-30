@@ -1,0 +1,38 @@
+\input texinfo  @c -*- TeXinfo -*-
+@setfilename perf-inf.inf
+@ifinfo
+  @paragraphindent 0
+@end ifinfo
+@iftex
+  @defaultparindent=0pt @parindent=0pt
+@end iftex
+
+@node    Top, , (dir), (dir)
+@chapter Unsolved Problems
+@section Odd Perfect Numbers
+
+A number is said to be @i{perfect} if it is
+the sum of its divisors.  For example, 6 is 
+perfect because
+@tex $1+2+3 = 6$,
+@end tex
+@ifinfo
+1+2+3 = 6,
+@end ifinfo
+and 1, 2, and 3 are the only numbers that divide 
+evenly into 6 (apart from 6 itself).
+
+It has been shown that all even perfect numbers
+have the form 
+@tex $$2^{p-1}(2^{p}-1)$$ where $p$ and $2^{p}-1$
+@end tex
+@ifinfo
+@center 2^(p-1) (2^p - 1)
+
+where p and 2^p - 1
+@end ifinfo
+are both prime.
+
+The existence of @i{odd} perfect numbers is an
+open question.
+@bye

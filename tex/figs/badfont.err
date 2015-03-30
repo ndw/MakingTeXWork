@@ -1,0 +1,24 @@
+This is emTeX (tex386), Version 3.141 [3c-beta8]
+**&lplain badfont
+(badfont.tex
+LaTeX Version 2.09 <25 March 1992>
+(d:\tex\latex\sty\article.sty
+Standard Document Style `article' <14 Jan 92>.
+(d:\tex\latex\sty\art10.sty)) (badfont.aux)
+! Font cmr/m/n/18 not found.
+extract@fontinfo ...@name space not found}
+                                          fi 
+extract@font ...fontinfo font@info 3<@nil 
+                                          csna...
+define@newfont ... endcsname extract@font 
+                                          fi e...
+pickup@font ...@name relax define@newfont 
+                                          fi 
+p@selectfont ...ze endcsname }pickup@font 
+                                          font...
+<argument> reset@font Large 
+                            bf 
+...
+l.21 \section{First Section}
+                            
+? 

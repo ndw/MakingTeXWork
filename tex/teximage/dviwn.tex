@@ -1,0 +1,18 @@
+\newbox\dviwnbox
+\newdimen\dviwnwd
+\font\dviwna=dviwna at 72.27truept
+\font\dviwnb=dviwnb at 72.27truept
+\setbox\dviwnbox=\vbox{\hbox{%
+\dviwna\char0\char1\char2\char3\char4}}
+\dviwnwd=\wd\dviwnbox
+\setbox\dviwnbox=\hbox{\vbox{\hsize=\dviwnwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\dviwna\char0\char1\char2\char3\char4}
+\hbox{\dviwna\char5\char6\char7\char8\char9}
+\hbox{\dviwnb\char0\char1\char2\char3\char4}
+\hbox{\dviwnb\char5\char6\char7\char8\char9}}}
+\ifx\parbox\undefined
+    \def\setdviwn{\box\dviwnbox}
+\else
+    \def\setdviwn{\parbox{\wd\dviwnbox}{\box\dviwnbox}}
+\fi

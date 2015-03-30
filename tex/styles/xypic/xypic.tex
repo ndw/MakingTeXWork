@@ -1,0 +1,1040 @@
+%% xypic.tex derived from $Id: xypic.tex,v 1.1 2002/08/23 14:59:18 nwalsh Exp $
+%%
+%% XY-pic: drawing graphs with AMS-TeX (or without).
+%% Copyright (c) 1991,1992  Kristoffer H. Rose <kris@diku.dk>
+%%
+%% This file is part of the XY-pic macro package.
+%% See the companion README file for further information.
+%%
+%% The XY-pic macro package is free software; you can redistribute it and/or
+%% modify it under the terms of the GNU General Public License as published by
+%% the Free Software Foundation; either version 2 of the License, or (at your
+%% option) any later version.
+%%
+%% The XY-pic macro package is distributed in the hope that it will be
+%% useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+%% Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public License along
+%% with this macro package; if not, write to the Free Software Foundation,
+%% Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+%%
+
+\ifx\xypicloaded\relax \message{[not reloaded]}\endinput \fi
+\input xyamstex
+\edef\xypicloaded{\catcode`\noexpand\@=\the\catcode`\@
+ \let\noexpand\xypicloaded\relax \noexpand\endinput}\catcode`\@=11 %
+\define\XY{\leavevmode\hbox{X\kern-.3em\lower.4ex\hbox{Y\kern-.15em}}}
+\newdimen\cX \newdimen\cY
+\newdimen\oX \newdimen\oY
+\newdimen\dX \newdimen\dY
+\newdimen\cH \newdimen\cD \newdimen\cL \newdimen\cR
+\newdimen\oH \newdimen\oD \newdimen\oL \newdimen\oR
+\newcount\Direction
+\newbox\Object@
+\newcount\K@ \K@=1024
+\newcount\KK@ \KK@=32
+\newdimen\Xmin@ \newdimen\Ymin@
+\newdimen\Xmax@ \newdimen\Ymax@
+\newdimen\baseX@ \newdimen\baseY@
+\newdimen\XbaseX@ \newdimen\XbaseY@
+\newdimen\YbaseX@ \newdimen\YbaseY@
+\newdimen\X@ \newdimen\Y@
+\newdimen\QXY@ \newdimen\QYX@
+\newdimen\R@
+\newdimen\omargin@ \omargin@=.2pc
+\newdimen\owidth@ \owidth@=\z@
+\newdimen\tradius@ \tradius@=8pt
+\font@\xylinefont=xyline10
+\font@\xyatipfont=xyatip10
+\font@\xybtipfont=xybtip10
+\font@\xymiscfont=xymisc10
+\font@\xyqcfont=xyqc10
+\newdimen\xysegl@ \xysegl@=5pt
+\newdimen\xysegw@ \xysegw@=\fontdimen8\xylinefont
+\newcount\csp@ \csp@=\z@
+\define\enter@#1{\global\advance\csp@\@ne
+ \expandafter\xdef\csname c@\number\csp@\endcsname{#1}}
+\define\return@{%
+ \expandafter\return@@\csname c@\number\csp@\endcsname}
+\define\return@@{\global\advance\csp@\m@ne}
+\define\xytracing{%
+ \gdef\xy@##1##2{\xy@@{TRACE}{\relax \xytrace@{##1}##2}}}
+\define\xytrace@#1{%
+ \W@{ . = <\the\cX,\the\cY>; \the\cH+\the\cD\space x \the\cL+\the\cR}%
+ \W@{ o = <\the\oX,\the\oY>; \the\oH+\the\oD\space x \the\oL+\the\oR}%
+ \W@{ base: <\the\baseX@,\the\baseY@>
+	+ X.<\the\XbaseX@,\the\XbaseY@> + Y.<\the\YbaseX@,\the\YbaseY@>}%
+ \W@{#1}}
+\define\xy@#1#2{\xyerr@{XY-commands require
+	\string\diagram...\string\enddiagram\space or
+	\string\xy...\string\endxy}}
+\define\quotient@#1#2#3{%
+ \dimen8=#3\relax \divide\dimen8\KK@
+ \dimen6=#2\relax \multiply\dimen6\KK@ \divide\dimen6\dimen8 %
+ \dimen8=\p@ \divide\dimen8\K@ \multiply\dimen6\dimen8 %
+ \edef#1{\expandafter\noPT@\the\dimen6}}
+{\catcode`p=12 \catcode`t=12 \gdef\noPT@#1pt{#1}}
+\newhelp\xyhelp@{See the XY-pic manual for further information.}
+\define\xyerr@#1{\errhelp\xyhelp@\errmessage{XY-pic error: #1}}
+
+\define\xy{\hbox\bgroup
+ \def\xy@@##1##2{\relax##2}\let\xy@=\xy@@
+ \setboxz@h\bgroup
+  \cX=\z@ \cY=\z@ \cH=\z@ \cD=\z@ \cL=\z@ \cR=\z@
+  \oX=\z@ \oY=\z@ \oH=\z@ \oD=\z@ \oL=\z@ \oR=\z@
+  \dX=\z@ \dY=\z@
+  \XbaseX@=1mm \XbaseY@=\z@ \YbaseX@=\z@ \YbaseY@=1mm %
+  \Xmin@=\hsize \Xmax@=-\hsize \Ymin@=\hsize \Ymax@=-\hsize
+  \none}
+\define\endxy{\relax
+  \dimen@=\the\Xmax@ \advance\dimen@-\the\Xmin@
+  \ifdim\dimen@<\z@ \dimen@=\z@ \Ymin@=\z@ \Ymax@=\z@ \fi
+  \edef\tmp@{\egroup
+    \global\setbox\Object@=\hbox{\kern-\the\Xmin@\boxz@}%
+    \ht\Object@=\the\Ymax@ \dp\Object@=-\the\Ymin@ \wd\Object@=\the\dimen@
+    \copy\Object@ \egroup
+   \cH=\the\Ymax@ \cD=-\the\Ymin@ \cL=-\the\Xmin@ \cR=\the\Xmax@}%
+  \tmp@}
+
+\define\go{\go@{}{%
+  \oX=\the\cX \oY=\the\cY \oH=\the\cH \oD=\the\cD \oL=\the\cL \oR=\the\cR
+  \dX=\cX \advance\dX-\oX \dY=\cY \advance\dY-\oY}{}}
+\define\aftergo#1{\go@{}{%
+  \oX=\the\cX \oY=\the\cY \oH=\the\cH \oD=\the\cD \oL=\the\cL \oR=\the\cR
+  \dX=\cX \advance\dX-\oX \dY=\cY \advance\dY-\oY}{#1}}
+\define\go@#1#2#3{%
+ \xy@{go}{\enter@{#2}\enter@{}#1}\def\afterxpos@@{#3}\FN@\xpos@}
+\define\stdxpos@{%
+ \ifx \space@\next \expandafter\DN@\space{\FN@\xpos@}%
+ \else\ifx <\next
+  \DN@<##1,##2>{\xy@{<##1,##2>}{\cX=##1\relax\cY=##2\relax
+     \cH=\z@ \cD=\z@ \cL=\z@ \cR=\z@ \return@}%
+   \FN@\xpos@@}%
+ \else\ifx \bgroup\next
+  \DN@##1{\xy@{[}{\save@}%
+   ##1\relax
+   \xy@{]}{\edef\tmp@{\cX=\the\cX \cY=\the\cY
+     \cH=\the\cH \cD=\the\cD \cL=\the\cL \cR=\the\cR}\return@\tmp@\return@}%
+   \FN@\xpos@@}%
+ \else\ifx (\next %%)
+  \DN@(##1,##2){\xy@{(##1,##2)}{\cX=\baseX@ \cY=\baseY@
+     \advance\cX##1\XbaseX@ \advance\cY##1\XbaseY@
+     \advance\cX##2\YbaseX@ \advance\cY##2\YbaseY@
+     \cH=\z@ \cD=\z@ \cL=\z@ \cR=\z@ \return@}%
+   \FN@\xpos@@}%
+ \else\ifx "\next
+  \DN@"##1"{\xy@{"##1"}{\expandafter\ifx\csname"##1"\endcsname\relax
+   \xyerr@{position "##1" not defined}%
+   \else\csname"##1"\endcsname\fi \return@}\FN@\xpos@@}%
+  %%\DN@"##1"{\xy@{"##1"}{\csname"##1"\endcsname \return@}\FN@\xpos@@}%
+ \else
+  \DN@{\xy@{()}{\return@}\FN@\xpos@@}%
+ \fi\fi\fi\fi\fi \next@}
+\let\xpos@=\stdxpos@
+\define\stdxpos@@{%
+ \ifx \space@\next \expandafter\DN@\space{\FN@\xpos@@}%
+ \else\ifx +\next
+  \DN@+{\xy@{+}{\X@=\cX \Y@=\cY
+    \enter@{\advance\cX\X@ \advance\cY\Y@}}\FN@\xpos@}%
+ \else\ifx !\next
+  \DN@!{\xy@{!}{\X@=\cX \Y@=\cY
+    \enter@{\cH=\the\cH \advance\cH-\cY \cD=\the\cD \advance\cD\cY
+      \cL=\the\cL \advance\cL\cX \cR=\the\cR \advance\cR-\cX
+      \advance\cX\X@ \advance\cY\Y@}}\FN@\xpos@}%
+ \else\ifx ;\next
+  \DN@;{\xy@{;}{\baseX@=\cX \baseY@=\cY \enter@\relax}\FN@\xpos@}%
+ \else\ifx :\next
+  \DN@:{\xy@{:}{%
+    \XbaseX@=\cX \advance\XbaseX@-\baseX@
+    \XbaseY@=\cY \advance\XbaseY@-\baseY@
+    \YbaseX@=-\XbaseY@ \YbaseY@=\XbaseX@
+    \enter@\relax}\FN@\xpos@}%
+ \else\ifx *\next
+  \DN@*{\xy@{*}{%
+    \XbaseX@=\cX \advance\XbaseX@-\baseX@ \XbaseY@=\z@
+    \YbaseX@=\z@ \YbaseY@=\cY \advance\YbaseY@-\baseY@
+    \enter@\relax}\FN@\xpos@}%
+ \else\ifx =\next
+  \DN@=##1"##2"{\xy@{="##2"}{\expandafter\edef\csname"##2"\endcsname
+     {\cX=\the\cX\cY=\the\cY\cH=\the\cH\cD=\the\cD\cL=\the\cL\cR=\the\cR}}%
+   \FN@\xpos@@}%
+ \else\ifx ,\next
+  \DN@,{\xy@{,}{\enter@\relax}\FN@\xpos@}%
+ \else
+  \DN@{\xy@{}{\return@}\afterxpos@@}%
+ \fi\fi\fi\fi\fi\fi\fi\fi \next@}
+\let\xpos@@=\stdxpos@@
+\define\swap{\xy@{swap}{\swap@}\ignorespaces}
+\define\swap@{%
+ \dimen@=\cX \cX=\oX \oX=\dimen@ \dX=-\dX
+ \dimen@=\cL \cL=\oL \oL=\dimen@ \dimen@=\cR \cR=\oR \oR=\dimen@
+ \dimen@=\cY \cY=\oY \oY=\dimen@ \dY=-\dY
+ \dimen@=\cH \cH=\oH \oH=\dimen@ \dimen@=\cD \cD=\oD \oD=\dimen@}
+\define\save{\xy@{save}{\save@}\ignorespaces}
+\define\save@{\enter@{\relax
+  \cX=\the\cX \cY=\the\cY \cH=\the\cH \cD=\the\cD \cL=\the\cL \cR=\the\cR
+  \oX=\the\oX \oY=\the\oY \oH=\the\oH \oD=\the\oD \oL=\the\oL \oR=\the\oR
+  \dX=\the\dX \dY=\the\dY
+  \baseX@=\the\baseX@ \baseY@=\the\baseY@
+  \XbaseX@=\the\XbaseX@ \XbaseY@=\the\XbaseY@
+  \YbaseX@=\the\YbaseX@ \YbaseY@=\the\YbaseY@}}
+\define\restore{\xy@{restore}{\return@}}
+\define\none{\xy@{none}{}\ignorespaces}
+
+\define\drop#1#{\drop@\makeobject@{#1}}
+\define\Drop#1#{\drop@\makeObject@{#1}}
+\let\objectstyle=\textstyle
+\define\makeobject@#1{$\m@th\objectstyle{#1}$}
+\define\makeObject@#1{{%
+  \setboxz@h{$\m@th\objectstyle{#1}$}%
+  \ifdim\wdz@<\owidth@\dimen@=\owidth@\else\dimen@=\wdz@\fi
+  \advance\dimen@2\omargin@ \setboxz@h to\dimen@{\hss\boxz@\hss}%
+  \dimen@=\ht\z@ \advance\dimen@\omargin@ \ht\z@=\dimen@
+  \dimen@=\dp\z@ \advance\dimen@\omargin@ \dp\z@=\dimen@
+  \boxz@}}
+\define\drop@#1#2#3{\xy@{drop}{\drop@@#1{#2}{#3}}\ignorespaces}
+\define\drop@@#1#2#3{%
+ \cH=\z@ \cD=\z@ \cL=\z@ \cR=\z@ \let\makeit@=#1\DN@{#2}%
+ \ifx\next@\empty \setbox\z@=\ccobject{#3}%
+ \else \setbox\z@=\next@{#3}\fi
+ \X@=\cX \advance\X@ \cR \ifdim\X@>\Xmax@ \Xmax@=\X@ \fi
+ \X@=\cX \advance\X@-\cL \ifdim\X@<\Xmin@ \Xmin@=\X@ \fi
+ \Y@=\cY \advance\Y@ \cH \ifdim\Y@>\Ymax@ \Ymax@=\Y@ \fi
+ \Y@=\cY \advance\Y@-\cD \ifdim\Y@<\Ymin@ \Ymin@=\Y@ \fi
+ \setboxz@h{\kern\X@\raise\cY\boxz@}%
+ \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@}
+\define\hvobject@#1#2#3#4#5{%
+ \hbox{\setboxz@h#3{#4{#5}}%
+  \dimen@=\ht\z@ \advance\dimen@-#2\ht\z@ \advance\dimen@-#2\dp\z@
+  \global\setbox\Object@=\hbox{\lower\dimen@\boxz@}\copy\Object@}%
+ \cR=\wd\Object@ \cL=#1\cR \advance\cR-\cL \def\mkleft@{\edef\left@{#1}}%
+ \cH=\ht\Object@ \cD=\dp\Object@ \def\mkup@{\edef\up@{#2}}%
+ \ignorespaces}
+\define\hvobject#1#2#3#{\hvobject@{#1}{#2}{#3}\makeit@}
+\define\luobject#1#{\hvobject@11{#1}\makeit@}
+\define\lcobject#1#{\hvobject@1{.5}{#1}\makeit@}
+\define\ldobject#1#{\hvobject@10{#1}\makeit@}
+\define\cuobject#1#{\hvobject@{.5}1{#1}\makeit@}
+\define\ccobject#1#{\hvobject@{.5}{.5}{#1}\makeit@}
+\define\cdobject#1#{\hvobject@{.5}0{#1}\makeit@}
+\define\ruobject#1#{\hvobject@01{#1}\makeit@}
+\define\rcobject#1#{\hvobject@0{.5}{#1}\makeit@}
+\define\rdobject#1#{\hvobject@00{#1}\makeit@}
+\define\hobject@#1#2#3#4{%
+ \hbox{\global\setbox\Object@=#2{#3{#4}}\copy\Object@}%
+ \cR=\wd\Object@ \cL=#1\cR \advance\cR-\cL \def\mkleft@{\edef\left@{#1}}%
+ \cH=\ht\Object@ \cD=\dp\Object@ \let\mkup@=\up@@
+ \ignorespaces}
+\define\lobject#1#{\hobject@1{\hbox#1}\makeit@}
+\define\cobject#1#{\hobject@{.5}{\hbox#1}\makeit@}
+\define\robject#1#{\hobject@0{\hbox#1}\makeit@}
+\define\boxobject#1#{\hobject@0{#1}{}}
+\define\left@@{\dimen@=\cL \advance\dimen@\cR \quotient@\left@\cL\dimen@}
+\define\up@@{\dimen@=\cH \advance\dimen@\cD \quotient@\up@\cH\dimen@}
+\define\xyobject#1{\xy#1\endxy
+ \let\mkup@\up@@ \let\mkleft@\left@@ \ignorespaces}
+\define\merge{\xy@{merge}{\merge@}\ignorespaces}
+\define\merge@{%
+ \dimen@=\oX \advance\dimen@-\oL \dimen@ii=\cX \advance\dimen@ii-\cL
+ \ifdim\dimen@<\dimen@ii \X@=\dimen@ \else \X@=\dimen@ii \fi
+ \dimen@=\oX \advance\dimen@\oR \dimen@ii=\cX \advance\dimen@ii\cR
+ \ifdim\dimen@>\dimen@ii \Y@=\dimen@ \else \Y@=\dimen@ii \fi
+ \cL=\cX \advance\cL-\X@ \cR=\Y@ \advance\cR-\cX
+ \dimen@=\oY \advance\dimen@-\oD \dimen@ii=\cY \advance\dimen@ii-\cD
+ \ifdim\dimen@<\dimen@ii \X@=\dimen@ \else \X@=\dimen@ii \fi
+ \dimen@=\oY \advance\dimen@\oH \dimen@ii=\cY \advance\dimen@ii\cH
+ \ifdim\dimen@>\dimen@ii \Y@=\dimen@ \else \Y@=\dimen@ii \fi
+ \cH=\Y@ \advance\cH-\cY \cD=\cY \advance\cD-\X@}
+
+\define\setupDirection{\xy@{setupDirection}{\setupDirection@}\ignorespaces}
+\define\setupDirection@{%
+ \dX=\cX \advance\dX-\oX \dY=\cY \advance\dY-\oY
+ \QXY@=\dX \multiply\QXY@\KK@ \QYX@=\dY \multiply\QYX@\KK@
+ \ifdim\z@=\dY\else \dimen@=\dY \divide\dimen@\KK@ \divide\QXY@\dimen@ \fi
+ \ifdim\z@=\dX\else \dimen@=\dX \divide\dimen@\KK@ \divide\QYX@\dimen@ \fi
+ \ifdim\dX<\z@ \def\sX@{-1}\else
+  \ifdim\dX>\z@ \def\sX@{+1}\else \def\sX@{0}\fi\fi
+ \ifdim\dY<\z@ \def\sY@{-1}\else
+  \ifdim\dY>\z@ \def\sY@{+1}\else \def\sY@{0}\fi\fi
+ \ifnum -\K@>\QXY@\else \ifnum \K@<\QXY@\else
+   \ifdim \dY<\z@
+    \Direction=\K@ \advance\Direction-\QXY@
+    \def\tmp@{1}%
+    \count@=\Direction \advance\count@-\K@ \quotient@\tmp@@{1\count@}{1\K@}%
+   \else\ifdim\dY>\z@
+    \Direction=\K@ \multiply\Direction-\thr@@ \advance\Direction-\QXY@
+    \def\tmp@{-1}%
+    \count@=-\K@ \multiply\count@\thr@@ \advance\count@-\Direction
+    \quotient@\tmp@@{1\count@}{1\K@}%
+ \fi\fi\fi\fi
+ \ifnum -\K@<\QYX@ \ifnum \K@>\QYX@
+   \ifdim \dX<\z@
+    \Direction=-\K@ \advance\Direction\QYX@
+    \count@=\Direction \advance\count@\K@ \quotient@\tmp@{1\count@}{1\K@}%
+    \def\tmp@@{-1}%
+   \else\ifdim\dX>\z@
+    \Direction=\K@ \multiply\Direction\thr@@ \advance\Direction\QYX@
+    \count@=\K@ \multiply\count@\thr@@ \advance\count@-\Direction
+    \quotient@\tmp@{1\count@}{1\K@}%
+    \def\tmp@@{1}%
+ \fi\fi\fi\fi
+ \edef\Sideways@##1{\dimen@=##1\relax
+  \advance\cX\tmp@\dimen@ \advance\cY\tmp@@\dimen@}}
+\define\Sideways#1{\xy@{Sideways}{\Sideways@{#1}}\ignorespaces}
+\define\removeoverlap@{%
+ \ifdim\dY<-\p@	\removeoverlapi@
+ \else\ifdim\dY<\p@ \removeoverlapii@
+ \else \removeoverlapiii@
+ \fi\fi
+ \cH=\z@ \cD=\z@ \cR=\z@ \cL=\z@
+ \dX=\cX \advance\dX-\oX \dY=\cY \advance\dY-\oY}
+\define\removeoverlapi@{%
+ \ifdim\dX<-\p@ \settomin@\cX+\cR\cH\QXY@ \settomin@\cY+\cH\cR\QYX@
+ \else\ifdim\dX<\p@ \advance\cY\cH
+ \else \settomin@\cX-\cL\cH\QXY@ \settomin@\cY+\cH\cL\QYX@ \fi\fi}
+\define\removeoverlapii@{%
+ \ifdim\dX<-\p@ \advance\cX\cR
+ \else\ifdim\dX<\p@
+ \else \advance\cX-\cL \fi\fi}
+\define\removeoverlapiii@{%
+ \ifdim\dX<-\p@ \settomin@\cX+\cR\cD\QXY@ \settomin@\cY-\cD\cR\QYX@
+ \else\ifdim\dX<\p@ \advance\cY-\cD
+ \else \settomin@\cX-\cL\cD\QXY@ \settomin@\cY-\cD\cL\QYX@ \fi\fi}
+\define\settomin@#1#2#3#4#5{%
+ \dimen@=#5\divide\dimen@\KK@ \multiply\dimen@#4%
+ \ifdim\z@<\dimen@ \divide\dimen@\KK@ \else \divide\dimen@-\KK@ \fi
+ \ifdim#3<\dimen@ \dimen@=#3\fi \advance#1#2\dimen@}
+
+\newbox\Filler@
+\newdimen\Up@
+\newdimen\Right@
+\let\ifjusthvtest@=\ifdim
+\define\solid{\xy@{solid}{\solid@}\ignorespaces}
+\define\solid@{%
+ \def\setupfiller@{\def\Density{1}%
+  \ifjusthvtest@\dX=\z@ \setupvrule@
+  \else\ifjusthvtest@\dY=\z@ \setuphrule@
+  \else \setupline@ \fi\fi}%
+ \connect@}
+\define\dashed{\xy@{dashed}{%
+  \def\setupfiller@{\setupline@\def\Density{.5}}%
+  \connect@}\ignorespaces}
+\define\setupvrule@{\dimen@=\xysegw@
+ \setbox\Filler@=\hbox{\kern-.5\dimen@
+  \ifdim\dY<\z@ \vrule width\dimen@ height\z@ depth-\dY
+  \else \vrule width\dimen@ height\z@ depth\dY \fi}%
+ \cL=.5\wd\Filler@ \cR=.5\wd\Filler@ \cH=\ht\Filler@ \cD=\dp\Filler@
+ \let\Extra=\z@ \let\Ignore=\z@
+ \let\mkleft@\relax \def\left@{.5}\let\mkup@\relax \def\up@{0}}
+\define\setuphrule@{%
+ \setbox\Filler@=\hbox{\dimen@=.5\xysegw@
+  \ifdim\dX<\z@ \vrule width-\dX height\dimen@ depth\dimen@
+  \else \vrule width\dX height\dimen@ depth\dimen@ \fi}%
+ \cL=\z@ \cR=\wd\Filler@ \cH=\ht\Filler@ \cD=\dp\Filler@
+ \let\Extra=\z@ \let\Ignore=\z@
+ \let\mkleft@\relax \def\left@{0}\let\mkup@\relax \def\up@{0}}
+\define\setupline@{%
+ \count@=\Direction
+ \ifnum\count@<\z@ \advance\count@-\sixt@@n \divide\count@\KK@
+ \else \advance\count@\sixt@@n \divide\count@\KK@ \fi
+ \ifnum\count@>\z@ \advance\count@\m@ne \else \advance\count@127 \fi
+ \ifnum\count@<\z@\count@=\z@ \else\ifnum\count@>127 \count@=\z@ \fi\fi
+ \setbox\Filler@=\hbox{\xylinefont\char\count@}%
+ \ifdim\wd\Filler@=\xysegl@
+  \quotient@\tmp@\QYX@{1\K@}\dimen@=\tmp@\wd\Filler@
+  \ifdim\z@<\dimen@ \ht\Filler@=\dimen@ \else \dp\Filler@=-\dimen@ \fi
+ \fi
+ \cL=\z@ \cR=\wd\Filler@ \cH=\ht\Filler@ \cD=\dp\Filler@
+ \let\Extra=\@ne \let\Ignore=\@ne
+ \let\mkleft@\relax \def\left@{0}\let\mkup@\relax
+ \ifdim\cH>\z@ \def\up@{1}\else \def\up@{0}\fi}
+\define\dotted{\xy@{dotted}{%
+  \let\setupfiller@=\setupdotted@\connect@}\ignorespaces}
+\define\setupdotted@{%
+ \dimen@=2\p@ \cL=.5\dimen@ \cR=\cL
+ \setbox\Filler@=\hbox to\dimen@{\hss\xymiscfont\char\z@\hss}%
+ \cH=.5\dimen@ \cD=\cH \ht\Filler@=\cH \dp\Filler@=\cD
+ \def\Density{1}\let\Extra=\@ne \let\Ignore=\@ne
+ \let\mkleft@\relax \def\left@{.5}\let\mkup@\relax \def\up@{.5}}
+\define\dottedwith#1{\xy@{dottedwith{#1}}{%
+  \def\setupfiller@{\let\makeit@=\makeobject@ \setbox\Filler@=\ccobject{#1}%
+   \def\Density{1}\let\Extra=\@ne \let\Ignore=\@ne}\connect@}%
+ \ignorespaces}
+\let\ctail@=\relax
+\let\chead@=\relax
+\define\connect@{\save@
+ \count@=\K@ \multiply\count@\tw@
+ \ifnum \Direction>\z@ \swap@
+  \let\chead@@\chead@ \let\ctail@@\ctail@
+  \ifnum \Direction>\count@ \let\connect@@=\connecth@
+  \else \let\connect@@=\connectv@ \fi
+ \else
+  \let\chead@@\ctail@ \let\ctail@@\chead@
+  \ifnum \Direction>-\count@ \let\connect@@=\connecth@
+  \else \let\connect@@=\connectv@ \fi
+ \fi
+ \removeoverlap@ \swap@ \removeoverlap@
+ \setupfiller@
+ \connect@@}
+\define\connectv@{\ifdim\dY=\z@ \dY=.5\p@ \fi
+ \dimen@=-\dY \dimen@=\Density\dimen@
+ \dimen@ii=\cH \advance\dimen@ii\cD
+ \ifdim \dimen@ii=\z@ \count@@=-\m@ne
+ \else \divide\dimen@\dimen@ii \count@@=\dimen@ \advance\count@@\m@ne \fi
+ \advance\count@@\Extra
+ \ifnum\count@@<\Ignore \count@@=\m@ne\fi
+ \Up@=\dY
+ \ifnum\count@@>\z@ \advance\Up@\dimen@ii \divide\Up@\count@@ \fi
+ \Right@=\Up@ \divide\Right@\KK@ \multiply\Right@\QXY@ \divide\Right@\KK@
+ \setbox\z@=\vtop{\kern-\oY
+  \setboxz@h{\ctail@@}\ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@
+  \nointerlineskip \moveright\oX\boxz@ \nointerlineskip
+  \ht\Filler@=\z@ \dp\Filler@=-\Up@
+  \kern\cH
+  \ifdim\Right@<\z@ \advance\oX-\cR \fi
+  \ifdim\Right@>\z@ \advance\oX\cL \fi
+  \count@=\m@ne \loop\ifnum\count@<\count@@\advance\count@\@ne
+   \nointerlineskip \moveright\oX\copy\Filler@ \advance\oX\Right@
+  \repeat
+  \nointerlineskip
+  \ifnum\count@@<\z@ \oX=\cX
+  \else \advance\oX-\Right@
+   \ifdim\Right@<\z@ \advance\oX-\cL \fi
+   \ifdim\Right@>\z@ \advance\oX\cR \fi
+   \dimen@=-\dp\Filler@ \advance\dimen@\cD \kern\dimen@
+  \fi
+  \moveright\oX\hbox{\chead@@}%
+ }%
+ \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@
+ \global\let\chead@=\relax
+ \global\let\ctail@=\relax
+ \return@}
+\define\connecth@{\ifdim\dX=\z@ \dX=.5\p@ \fi
+ \dimen@=\dX \dimen@=\Density\dimen@
+ \dimen@ii=\cL \advance\dimen@ii\cR
+ \ifdim \dimen@ii=\z@ \count@@=-\tw@
+ \else \divide\dimen@\dimen@ii \count@@=\dimen@ \advance\count@@\m@ne \fi
+ \advance\count@@\Extra
+ \ifnum\count@@<\Ignore \count@@=\m@ne\fi
+ \Right@=\dX
+ \ifnum\count@@>\z@ \advance\Right@-\dimen@ii \divide\Right@\count@@ \fi
+ \Up@=\Right@ \divide\Up@\KK@ \multiply\Up@\QYX@ \divide\Up@\KK@
+ \setboxz@h{\mkleft@
+  \kern\oX \advance\oY\left@\Up@
+  \ifnum\count@@<\z@ \dimen@ii=\z@ \else \dimen@ii=\wd\Filler@ \fi
+  \wd\Filler@\Right@
+  \raise\oY\hbox{\ctail@@}%
+  \count@=\m@ne \loop\ifnum\count@<\count@@\advance\count@\@ne
+   \raise\oY\copy\Filler@ \advance\oY\Up@
+  \repeat
+  \ifnum\count@@<\z@ \oY=\cY \Right@=-\dX
+  \else
+   \advance\oY-\Up@
+   \advance\oY\ht\Filler@ \advance\oY-\dp\Filler@
+  \fi
+  \raise\oY\hbox{%
+   \dimen@=-\Right@ \advance\dimen@\dimen@ii \kern\dimen@\chead@@}}%
+ \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@
+ \global\let\chead@=\relax
+ \global\let\ctail@=\relax
+ \return@}
+\define\Solid{\xy@{Solid}{%
+  \def\setupfiller@{\setupline@\def\Density{1}}\Connect@}\ignorespaces}
+\define\Dashed{\xy@{Dashed}{%
+  \def\setupfiller@{\setupline@\def\Density{.5}}\Connect@}\ignorespaces}
+\define\Connect@{\save@
+ \count@=\K@ \multiply\count@\tw@
+ \ifnum \Direction>\z@ \swap@
+  \let\chead@@\chead@ \let\ctail@@\ctail@
+  \ifnum \Direction<\count@ \let\connect@@=\connectv@
+  \else \let\connect@@=\connecth@ \fi
+ \else
+  \let\chead@@\ctail@ \let\ctail@@\chead@
+  \ifnum \Direction<-\count@ \let\connect@@=\connectv@
+  \else \let\connect@@=\connecth@ \fi
+ \fi
+ \removeoverlap@ \swap@ \removeoverlap@ \setupfiller@
+ \save@ \swap@ \Sideways@\ex@ \swap@ \Sideways@{-\ex@}\connect@@
+ \swap@ \Sideways@{-\ex@}\swap@ \Sideways@\ex@ \connect@@}
+\define\Ssolid{\xy@{Ssolid}{%
+  \def\setupfiller@{\setupline@\def\Density{1}}\Cconnect@}\ignorespaces}
+\define\Ddashed{\xy@{Ddashed}{%
+  \def\setupfiller@{\setupline@\def\Density{.5}}\Cconnect@}\ignorespaces}
+\define\Cconnect@{\save@
+ \count@=\K@ \multiply\count@\tw@
+ \ifnum \Direction>\z@ \swap@
+  \let\chead@@\chead@ \let\ctail@@\ctail@
+  \ifnum \Direction<\count@ \let\connect@@=\connectv@
+  \else \let\connect@@=\connecth@ \fi
+ \else
+  \let\chead@@\ctail@ \let\ctail@@\chead@
+  \ifnum \Direction<-\count@ \let\connect@@=\connectv@
+  \else \let\connect@@=\connecth@ \fi
+ \fi
+ \removeoverlap@ \swap@ \removeoverlap@ \setupfiller@
+ \save@ \swap@ \Sideways@{1.7\ex@}\swap@ \Sideways@{-1.7\ex@}\connect@@
+ \save@\connect@@
+ \swap@ \Sideways@{-1.7\ex@}\swap@ \Sideways@{1.7\ex@}\connect@@}
+
+\define\uturn#1{\xy@{uturn}{\R@=\tradius@ \S@=\z@ \uturn@}#1\ignorespaces}
+\define\dturn#1{\xy@{dturn}{\R@=\tradius@ \S@=\z@ \dturn@}#1\ignorespaces}
+\define\rturn#1{\xy@{rturn}{\R@=\tradius@ \S@=\z@ \rturn@}#1\ignorespaces}
+\define\lturn#1{\xy@{lturn}{\R@=\tradius@ \S@=\z@ \lturn@}#1\ignorespaces}
+\define\cturn#1{\xy@{cturn}{\R@=\tradius@ \S@=\z@ \cturn@}#1\ignorespaces}
+\define\uturn@{\dX=\cX \advance\dX-\oX \dY=\cY \advance\dY-\oY
+ \Direction=\K@ \multiply\Direction-\thr@@
+ \def\sX@{0}\def\sY@{+1}\QXY@=\z@ \QYX@=1\K@
+ \def\Sideways@##1{\advance\cX-##1\relax}%
+ \turn@@  +\dY\oH\cY\oY
+ \dY=\cY \advance\dY-\oY
+ \cX=\oX \turn@@@ \dX\lturn@\rturn@34\z@\S@
+ \dX=\z@}
+\define\dturn@{\dX=\cX \advance\dX-\oX \dY=\cY \advance\dY-\oY
+ \Direction=\K@
+ \def\sX@{0}\def\sY@{-1}\QXY@=\z@ \QYX@=-1\K@
+ \def\Sideways@##1{\advance\cX##1\relax}%
+ \turn@@  -\dY\oD\cY\oY
+ \dY=\cY \advance\dY-\oY
+ \cX=\oX \turn@@@ {-\dX}\rturn@\lturn@12\z@{-\S@}%
+ \dX=\z@}
+\define\rturn@{\dX=\cX \advance\dX-\oX \dY=\cY \advance\dY-\oY
+ \Direction=\K@ \multiply\Direction\thr@@
+ \def\sX@{+1}\def\sY@{0}\QXY@=1\K@ \QYX@=\z@
+ \def\Sideways@##1{\advance\cY##1\relax}%
+ \turn@@  +\dX\oR\cX\oX
+ \dX=\cX \advance\dX-\oX
+ \cY=\oY \turn@@@ \dY\dturn@\uturn@32\S@\z@
+ \dY=\z@}
+\define\lturn@{\dX=\cX \advance\dX-\oX \dY=\cY \advance\dY-\oY
+ \Direction=-\K@
+ \def\sX@{-1}\def\sY@{0}\QXY@=-1\K@ \QYX@=\z@
+ \def\Sideways@##1{\advance\cY-##1\relax}%
+ \turn@@  -\dX\oL\cX\oX
+ \dX=\cX \advance\dX-\oX
+ \cY=\oY \turn@@@ {-\dY}\uturn@\dturn@14{-\S@}\z@
+ \dY=\z@}
+\define\turn@@#1#2#3#4#5{%
+ \dimen@=#3\relax \ifdim\dimen@<\R@ \dimen@=\R@ \fi \advance\dimen@1.2\R@
+ \ifdim#1#2<\dimen@ #4=#5\relax \advance#4by#1\dimen@ \fi}
+\define\turn@@@#1#2#3#4#5#6#7{%
+ \ifdim#1<\z@
+  \global\let\cturn@=#2\relax \dimen@=\R@ \advance\dimen@\S@
+  \advance\cX#6\advance\cY#7\relax \drop@@\hbox{\qc@#4}\dimen@
+ \else
+  \global\let\cturn@=#3\relax \dimen@=\R@ \advance\dimen@-\S@
+  \advance\cX-#6\advance\cY-#7\relax \drop@@\hbox{\qc@#5}\dimen@
+ \fi}
+\define\TurnRadius#1{\tradius@=\R@}
+\define\qc{%
+ \DN@{\ifx <\next \DN@<####1>####2{\qc@{####1}{####2}}%
+  \else \DN@####1{\qc@{####1}\xysegl@}\fi\next@}\FN@\next@}
+\define\qc@#1#2{\hbox{\dimen@=#2\relax \count@=\dimen@
+  \divide\count@\p@ \ifnum11>\count@
+   \multiply\count@4
+  \else
+   \divide\count@2 \ifnum16>\count@
+    \multiply\count@4 \advance\count@20\relax
+   \else
+    \count@=100\relax
+  \fi\fi
+  \advance\count@#1\relax \advance\count@\m@ne
+  \setboxz@h{\xymiscfont\char\count@}%
+  \ht\z@=.5\wdz@ \dp\z@=\ht\z@ \boxz@}%
+ \cH=\ht\z@ \cD=\dp\z@ \cL=.5\wdz@ \cR=\cL
+ \let\mkup@\relax \def\up@{.5}\let\mkleft@\relax \def\left@{.5}%
+ \ignorespaces}
+
+\define\headis#1{\xy@{headis}{\gdef\chead@{#1}}\ignorespaces}
+\define\tailis#1{\xy@{tailis}{\gdef\ctail@{#1}}\ignorespaces}
+\define\tip@{%
+ \count@=\Direction
+ \ifnum\count@<\z@ \advance\count@-\KK@ \else \advance\count@\KK@ \fi
+ \divide\count@64 %
+ \ifnum\count@>\z@ \advance\count@\m@ne \else \advance\count@127 \fi
+ \ifnum\count@<\z@\count@=\z@ \else\ifnum\count@>127 \count@=\z@ \fi\fi}
+\define\tip{\hbox{\tip@\xyatipfont\char\count@\xybtipfont\char\count@}}
+\define\atip{\hbox{\tip@\xyatipfont\char\count@}}
+\define\btip{\hbox{\tip@\xybtipfont\char\count@}}
+\define\aturn{{\tip@\aturn@}}
+\define\aturnqcw@{\advance\count@-32 \ifnum\count@<\z@ \advance\count@128 \fi}
+\define\aturnhalf@{\advance\count@64 \ifnum\count@>127 \advance\count@-128 \fi}
+\define\aturnqccw@{\advance\count@32 \ifnum\count@>127 \advance\count@-128 \fi}
+\define\aturn@{%
+ \ifnum\count@>63 \llap{\xyqcfont\char\count@}%
+ \else\rlap{\xyqcfont\char\count@}\fi}
+\define\aturnkernraise@#1{%
+ \ifnum \count@<32 %
+  \setboxz@h{\xyqcfont\char\count@}\kern\wdz@
+  \setboxz@h{\advance\count@32 \xyqcfont\char\count@}\dimen@=-\wdz@
+ \else\ifnum \count@<64 %
+  \setboxz@h{\xyqcfont\char\count@}\kern\wdz@
+  \setboxz@h{\advance\count@-32 \xyqcfont\char\count@}\dimen@=\wdz@
+ \else\ifnum \count@<96 %
+  \setboxz@h{\xyqcfont\char\count@}\kern-\wdz@
+  \setboxz@h{\advance\count@-32 \xyqcfont\char\count@}\dimen@=\wdz@
+ \else
+  \setboxz@h{\xyqcfont\char\count@}\kern-\wdz@
+  \setboxz@h{\advance\count@-32 \xyqcfont\char\count@}\dimen@=-\wdz@
+ \fi\fi\fi \raise\dimen@\hbox{#1}}
+\define\bturn{{\setboxz@h{\tip@\aturnqcw@\aturnkernraise@{\aturnhalf@\aturn@}}%
+ \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@}}
+\define\ahook{{%
+  \setboxz@h{\tip@\aturnqccw@
+   \aturnkernraise@{\aturnhalf@\aturn@\aturnqccw@
+    \aturnkernraise@{\aturnhalf@\aturn@}}}%
+  \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@}}
+\define\bhook{{%
+  \setboxz@h{\tip@\aturnhalf@\aturn@\aturnkernraise@{\aturnqccw@\aturn@}}%
+  \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@}}
+\define\stop@{\hbox{%
+  \count@=\Direction
+  \ifnum\count@<\z@ \advance\count@-\sixt@@n \divide\count@\KK@
+  \else \advance\count@\sixt@@n \divide\count@\KK@ \fi
+  \ifnum\count@>\z@ \advance\count@\m@ne \else \advance\count@127 \fi
+  \ifnum\count@<64 \advance\count@64 \else \advance\count@-64 \fi
+  \xylinefont\char\count@}}
+\define\stop{\setbox\z@=\stop@
+ \setboxz@h{\kern-.5\wdz@
+  \dimen@=.5\dp\z@ \advance\dimen@-.5\ht\z@ \raise\dimen@\boxz@}%
+ \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@}
+\define\stoplu@{\setboxz@h{\kern-\wdz@ \dimen@=\dp\z@ \raise\dimen@\boxz@}}
+\define\stopld@{\setboxz@h{\kern-\wdz@ \dimen@=\ht\z@ \lower\dimen@\boxz@}}
+\define\astop{\setbox\z@=\stop@
+ \dimen@=-1\K@ \advance\dimen@-1\sixt@@n \ifnum\dimen@<\Direction\else
+  \dimen@=3\K@ \advance\dimen@-1\sixt@@n \ifnum\dimen@<\Direction
+   \dimen@=1\K@ \advance\dimen@-1\sixt@@n \ifnum\dimen@<\Direction
+    \stopld@ \else \stoplu@ \fi\fi\fi
+ \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@}
+\define\bstop{\setbox\z@=\stop@
+ \dimen@=-3\K@ \advance\dimen@-1\sixt@@n \ifnum\dimen@>\Direction
+  \dimen@=-1\K@ \advance\dimen@-1\sixt@@n \ifnum\dimen@<\Direction \stoplu@
+  \else \dimen@=3\K@ \advance\dimen@-1\sixt@@n \ifnum\dimen@<\Direction
+   \else \stopld@ \fi\fi
+ \else \stopld@ \fi
+ \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@}
+\define\rotate{%
+ \DN@{\ifx (\next
+   \DN@(####1){\rotate@{####1}}\else\DN@{\rotate@2}\fi\next@}\FN@\next@}
+\define\rotate@#1#2{{%
+  \dimen@=2\K@ \dimen@=#1\dimen@ \advance\Direction-\dimen@
+  \count@=\K@ \multiply\count@ by 4\relax
+  \ifnum\Direction>\count@
+   \advance\Direction-\count@ \advance\Direction-\count@
+  \else \ifnum\Direction>-\count@
+  \else \advance\Direction\count@ \advance\Direction\count@ \fi\fi
+  #2}}
+\define\Tip{\hbox to5pt{\hss\vrule height2.5pt depth2.5pt width\z@
+  \rotate@{.13}{\tip@\xyatipfont\char\count@}%
+  \rotate@{-.13}{\tip@\xybtipfont\char\count@}\hss}}
+\define\aTip{\hbox to5pt{\hss\vrule height2.5pt depth2.5pt width\z@
+  \rotate@{.13}{\tip@\xyatipfont\char\count@}\hss}}
+\define\bTip{\hbox to5pt{\hss\vrule height2.5pt depth2.5pt width\z@
+  \rotate@{-.13}{\tip@\xybtipfont\char\count@}\hss}}
+\let\notip=\relax
+
+\define\labeled{\xy@{labeled}{\save@}\DNii@{\setlabel@\makelabel@}\labeled@}
+\define\Labeled{\xy@{Labeled}{\save@}\DNii@{\setlabel@\makeLabel@}\labeled@}
+\let\labelstyle=\scriptstyle
+\define\makelabel@#1{$\m@th\labelstyle{#1}$}
+\define\makeLabel@#1{{%
+  \setboxz@h{\kern2\ex@$\m@th\labelstyle{#1}$\kern2\ex@}%
+  \dimen@=\ht\z@ \advance\dimen@2\ex@ \ht\z@=\dimen@
+  \dimen@=\dp\z@ \advance\dimen@2\ex@ \dp\z@=\dimen@ \boxz@}}
+\define\labeled@{%
+ \def\nextiii@{{\advance\oX.5\dX \advance\oY.5\dY}}\FN@\labeled@@}
+\define\labeled@@{%
+ \ifx \space@\next \expandafter\DN@\space{\FN@\labeled@@}%
+ \else\ifx <\next
+  \def\nextiii@{{}}%
+  \DN@<{\xy@{<}{\swap@\removelabeloverlap@\swap@}\FN@\labeled@@}%
+ \else\ifx >\next
+  \def\nextiii@{{\advance\oX\dX \advance\oY\dY}}%
+  \DN@>{\xy@{>}{\removelabeloverlap@}\FN@\labeled@@}%
+ \else\ifx (\next
+  \DN@(##1){\nextii@{\advance\oX##1\dX \advance\oY##1\dY}}%
+ \else
+  \DN@{\expandafter\nextii@\nextiii@}%
+ \fi\fi\fi\fi
+ \next@}
+\define\removelabeloverlap@{\removeoverlap@
+ \cH=3\ex@ \cD=3\ex@ \cL=3\ex@ \cR=3\ex@}
+\define\setlabel@#1#2#3#{%
+ \DN@##1{\xy@{}{\setlabel@@{#1}{#2}{#3}{##1}}}\next@}
+\define\setlabel@@#1#2#3#4{%
+ \count@@@=\Direction\DN@{#3}#2\relax
+ \ifx\next@\empty\else \dimen@=\next@\K@
+  \advance\count@@@\dimen@ \count@=\z@ \count@@=\K@ \multiply\count@@4 %
+  \ifnum\count@@@>\count@@ \count@=-\K@
+  \else \ifnum\count@@@>-\count@@ \else \count@=\K@ \fi\fi
+  \multiply\count@8 \advance\count@@@\count@ \fi
+ \dimen@=1\count@@@
+ \count@=\K@ \multiply\count@\tw@
+ \ifnum \count@@@>\count@
+  \DN@{\DN@{0}%
+       \advance\dimen@-2\K@ \quotient@\nextii@{\dimen@}{2\K@}}%
+ \else\ifnum \count@@@>\z@
+  \DN@{\dimen@=-\dimen@ \advance\dimen@2\K@ \quotient@\next@{\dimen@}{2\K@}%
+       \DNii@{0}}%
+ \else\ifnum \count@@@>-\count@
+  \DN@{\DN@{1}%
+       \quotient@\nextii@{-\dimen@}{2\K@}}%
+ \else
+  \DN@{\advance\dimen@4\K@ \quotient@\next@{\dimen@}{2\K@}%
+       \DNii@{1}}%
+ \fi\fi\fi \next@
+ \setbox\z@=\hvobject@{\next@}{\nextii@}{}{#1}{#4}%
+ \X@=\oX \advance\X@ \cR \ifdim\X@>\Xmax@ \Xmax@=\X@ \fi
+ \X@=\oX \advance\X@-\cL \ifdim\X@<\Xmin@ \Xmin@=\X@ \fi
+ \Y@=\oY \advance\Y@ \cH \ifdim\Y@>\Ymax@ \Ymax@=\Y@ \fi
+ \Y@=\oY \advance\Y@-\cD \ifdim\Y@<\Ymin@ \Ymin@=\Y@ \fi
+ \setboxz@h{\kern\X@\raise\oY\boxz@}%
+ \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@
+ \return@}
+
+\define\framed{\DN@{%
+  \ifx <\next \DN@<####1>{\xy@{framed<####1>}{\framed@{####1}}\ignorespaces}%
+  \else \DN@{\xy@{framed}{\framed@\z@}\ignorespaces}%
+  \fi\next@}\FN@\next@}
+\define\framed@{\def\Density{1}%
+ \def\connecthfill@{\xleaders\hrule height\Y@ depth\Y@\hfill}%
+ \def\connectvfill@{\xleaders\vrule width2\Y@\vfill}\framed@@}
+\define\framed@@#1{\setboxz@h{\R@=#1\relax
+  \X@=\cX \advance\X@-\cL \Y@=\cY \advance\Y@-\cD
+  \kern\X@ \raise\Y@\vbox{%
+   \dimen@=\cL \advance\dimen@\cR
+   \ifdim\R@>.5\dimen@ \R@=.5\dimen@ \fi
+   \dimen@ii=\cH \advance\dimen@ii\cD
+   \ifdim\R@>.5\dimen@ii \R@=.5\dimen@ii \fi
+   \setboxz@h{\qc@4\R@}\X@=-.5\wdz@ \Y@=.5\xysegw@ \advance\dimen@ii2\X@
+   \hbox to\dimen@{\kern\X@
+    \boxz@ \connecthfill@ \qc@3\R@ \kern\X@}%
+   \nointerlineskip
+   \hbox to\dimen@{\kern-\Y@
+    \vbox to\dimen@ii{\connectvfill@}\advance\dimen@-2\Y@\kern\dimen@
+    \vbox to\dimen@ii{\connectvfill@}\kern-\Y@}%
+   \nointerlineskip
+   \hbox to\dimen@{\kern\X@
+    \qc@1\R@ \connecthfill@ \qc@2\R@ \kern\X@}}}%
+ \ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@}
+\define\Framed{\DN@{%
+  \ifx <\next \DN@<####1>{\xy@{Framed<####1>}{\dimen@=####1\framed@\dimen@
+     {\advance\cL-2\ex@ \advance\cR-2\ex@ \advance\cH-2\ex@ \advance\cD-2\ex@
+      \advance\dimen@-2\ex@ \framed@\dimen@}}\ignorespaces}%
+  \else \DN@{\xy@{Framed}{\R@=\z@ \framed@\z@
+     {\advance\cL-2\ex@ \advance\cR-2\ex@ \advance\cH-2\ex@ \advance\cD-2\ex@
+      \framed@\z@}}\ignorespaces}%
+  \fi\next@}\FN@\next@}
+\define\circled{\DN@{%
+  \ifx <\next
+   \DN@<####1>{\xy@{circled<####1>}{\circled@{####1}}\ignorespaces}%
+  \else
+   \DN@{\xy@{circled}{\dimen@=.5\cL \advance\dimen@.5\cR \circled@\dimen@}%
+    \ignorespaces}%
+  \fi\next@}\FN@\next@}
+\define\Circled{\DN@{%
+  \ifx <\next
+   \DN@<####1>{\xy@{Circled<####1>}{\dimen@=####1 \circled@\dimen@
+     \advance\dimen@-2\ex@ \circled@\dimen@}\ignorespaces}%
+  \else
+   \DN@{\xy@{Circled}{\dimen@=.5\cL \advance\dimen@.5\cR \circled@\dimen@
+     \advance\dimen@-2\ex@ \circled@\dimen@}\ignorespaces}%
+  \fi\next@}\FN@\next@}
+\define\circled@#1{\setboxz@h{\R@=#1\relax
+  \setboxz@h{\vbox{\hbox{\qc@4\R@ \qc@3\R@}%
+    \nointerlineskip\hbox{\qc@1\R@ \qc@2\R@}}}%
+  \X@=\cX \advance\X@-.5\wd\z@
+  \Y@=\cY \advance\Y@-.5\ht\z@ \advance\Y@.5\dp\z@
+  \kern\X@ \raise\Y@\boxz@}\ht\z@=\z@ \dp\z@=\z@ \wd\z@=\z@ \boxz@}
+
+\newcount\row \newcount\col
+\newcount\maxrow@ \newcount\maxcol@
+\newdimen\rowskip \rowskip=2pc
+\newdimen\colskip \colskip=2pc
+\newdimen\S@
+\newtoks\queue@ \newtoks\queue@@ \newtoks\queue@@@
+\newcount\qcount@ \newcount\qcount@@
+\define\addq@#1#2{%
+ \ifnum\qcount@@<\qcount@
+  \def\addq@@##1\addq@@##2{\global\queue@@={##1##2}}%
+  \global\advance\qcount@@\@ne
+ \else
+  \def\addq@@##1\addq@@##2{%
+   \global\queue@=\expandafter{\the\queue@##1##2}%
+   \global\advance\qcount@\@ne \global\qcount@@\z@ \global\queue@@={}}%
+ \fi
+ \expandafter\addq@@\the\queue@@\addq@@{#2}\ignorespaces}
+\define\QDN@#1{\edef\next@##1{{#1\relax##1}}}
+\define\QXP@#1{\expandafter#1\expandafter}
+\newif\ifNoisyDiagrams@
+\define\NoisyDiagrams{\NoisyDiagrams@true}
+
+\define\diagram#1\enddiagram{\diagram@{#1}}
+\define\cell@@{\relax
+ \ifnum\row=\z@ \else
+  \ifnum\col>\maxcol@ \global\maxcol@=\col \fi
+  \expandafter\xdef\csname maxcol@\the\row\endcsname{\the\col}\fi
+ \global\advance\row\@ne \global\col=\z@}%
+\define\cell@#1{\relax\global\advance\col\@ne
+ \edef\therowcol@{"\the\row,\the\col"}\expandafter\go\therowcol@
+ \hfil \let\makeit@=\makeObject@ \ccobject{#1}\hfil
+ \expandafter\xdef\csname ext@\therowcol@\endcsname
+  {\cH=\the\cH \cD=\the\cD \cL=\the\cL \cR=\the\cR}}
+\define\diagram@#1{\ifNoisyDiagrams@\message{[diagram}\fi
+\ifmmode\expandafter\vcenter\fi{%
+ \toks@=\queue@ \toks@@=\queue@@
+ \edef\tmp@{\global\row=\the\row \global\col=\the\col
+  \global\qcount@=\the\qcount@ \global\qcount@@=\the\qcount@@}%
+ \xy \let\xy@@=\addq@ \let\xy@=\xy@@
+  \global\queue@{}\global\queue@@{}\global\qcount@=\@ne\global\qcount@@=\z@
+  \global\row=\z@ \global\col=\z@
+  \global\maxcol@=\z@ \global\maxrow@=\z@
+  \let\xpos@=\diagramxpos@
+  \setbox8=\vtop{\everycr{}\let\\=\cr
+    \tabskip=\colskip \lineskiplimit=\maxdimen \lineskip=\rowskip
+    \halign{\cell@@\cell@{##}&&\cell@{##}\cr\none#1\crcr}}\cell@@
+  \global\advance\row\m@ne \global\maxrow@=\row
+  \queue@@@=\queue@@ \global\queue@@={\cY=\z@}%
+  \setbox6=\vbox{%
+   \global\row=\maxrow@ \unvcopy8
+   \loop \dimen@=\lastskip\unskip
+    \QDN@{\advance\cY-\the\dimen@ \cX=\z@}%
+    \global\queue@@=\QXP@\next@{\the\queue@@}%
+   \ifnum\row>\z@
+    \setbox2=\lastbox
+    \QDN@{\advance\cY-\the\dp2}%
+    \global\queue@@=\QXP@\next@{\the\queue@@}%
+    \setbox6=\hbox{\col=\csname maxcol@\the\row\endcsname \unhcopy2 %
+     \loop \ifnum\col>\z@
+      \dimen@ii=\lastskip\unskip
+      \QDN@{\advance\cX\the\dimen@ii}%
+      \global\queue@@=\QXP@\next@{\the\queue@@}%
+      \setbox4=\lastbox \dimen@ii=.5\wd4 \QDN@{\advance\cX\the\dimen@ii}%
+      \global\queue@@=\QXP@\next@{\the\queue@@}%
+      {\QDN@{\noexpand\expandafter\noexpand\xdef
+	 \noexpand\csname"\the\row,\the\col"\noexpand\endcsname
+	{\cX=\noexpand\the\cX \cY=\noexpand\the\cY
+	  \noexpand\csname ext@"\the\row,\the\col"\noexpand\endcsname}}%
+       \global\queue@@=\QXP@\next@{\the\queue@@}}%
+      \global\queue@@=\QXP@\next@{\the\queue@@}%
+      \advance\col\m@ne
+     \repeat
+    }%
+    \ifnum\row>\@ne
+     \QDN@{\advance\cY-\the\ht2}%
+     \global\queue@@=\QXP@\next@{\the\queue@@}\fi
+    \advance\row\m@ne
+   \repeat
+  }%
+  \drop@@\hbox{\boxobject\hbox}{%
+   \kern-\colskip\box8\leavevmode\kern-\colskip}%
+  \ifNoisyDiagrams@\message{:}\fi
+  \the\queue@@\the\queue@\the\queue@@@
+  \ifNoisyDiagrams@\message{\number\qcount@]}\fi
+ \endxy \global\queue@=\toks@ \global\queue@@=\toks@@ \tmp@}}
+\define\diagramxpos@{%
+ \ifx [\next
+  \DN@[##1,##2]{%
+   \count@=\row \advance\count@##1\relax
+   \count@@=\col \advance\count@@##2\relax
+   \DN@####1{\xy@{[##1,##2]}{%
+     \expandafter\ifx\csname"####1"\endcsname\relax
+      \xyerr@{No entry [##1,##2] (= "####1")}%
+     \else \csname"####1"\endcsname\fi \return@}\FN@\xpos@@}%
+   \edef\nextii@{{\the\count@,\the\count@@}}%
+   \expandafter\next@\nextii@}%
+ \else
+  \let\next@=\stdxpos@
+ \fi \next@}
+\define\objectmargin#1{\omargin@=#1\ignorespaces}
+\define\objectwidth#1{\owidth@=#1\ignorespaces}
+\define\spreaddiagramrows#1{\advance\rowskip#1\ignorespaces}
+\define\spreaddiagramcolumns#1{\advance\colskip#1\ignorespaces}
+
+\define\morphism#1#2#3{\xy@{morphism}{\save@ \S@=\z@ \R@=\tradius@}%
+ \def\mconnection@{#1}\def\mtip@{\headis{#2}}\tailis{#3}\let\mfinish@@=\empty
+ \let\msideways@@=\msideways@\FN@\morphism@}
+\define\morphism@{%
+ \ifx \space@\next \expandafter\DN@\space{\FN@\morphism@}%
+ \else\ifx '\next
+  \def\mbefore@{\setupDirection\msideways@@\headis\notip}%
+  \def\mafter@{\munsideways@\tailis\notip}%
+  \let\mcontinue@=\morphism@
+  \DN@'{\aftergo{\FN@\morphism@@}}%
+ \else\ifx `\next
+  \def\mbefore@{\xy@{}{\save@\global\let\chead@=\notip\cturn@}}%
+  \def\mafter@{\xy@{}{\edef\mtmp@{\cX=\the\cX \cY=\the\cY
+    \cH=\the\cH \cD=\the\cD \cL=\the\cL \cR=\the\cR}\return@\mtmp@}%
+   \tailis\notip}%
+  \let\mcontinue@=\morphism@
+  \DN@`{%
+   \DN@{\ifx u\next \DN@ u{\xy@{u}{\let\cturn@=\uturn@}\FN@\nextii@}%
+    \else\ifx d\next \DN@ d{\xy@{d}{\let\cturn@=\dturn@}\FN@\nextii@}%
+    \else\ifx r\next \DN@ r{\xy@{r}{\let\cturn@=\rturn@}\FN@\nextii@}%
+    \else\ifx l\next \DN@ l{\xy@{l}{\let\cturn@=\lturn@}\FN@\nextii@}%
+    \else \DN@{\FN@\nextii@}\fi\fi\fi\fi \next@}%
+   \DNii@{\ifx /\next
+     \DN@/{\DN@{\edef\next@{\noexpand\xy@{/}{\R@=\the\R@}}\next@
+	\aftergo{\FN@\morphism@@}}\afterassignment\next@\R@=}%
+    \else \DN@{\aftergo{\FN@\morphism@@}}\fi \next@}%
+   \let\msideways@@=\relax\FN@\next@}%
+ \else\ifx ~\next
+  \DN@~##1{\def\mfinish@@{##1}\FN@\morphism@}%
+ \else\ifx\mfinish@@\empty
+  \def\mbefore@{\setupDirection\msideways@@\expandafter\mtip@}%
+  \def\mafter@{\munsideways@\tailis\notip}%
+  \let\mcontinue@=\morphism@@@@
+  \DN@{\aftergo{\FN@\morphism@@}}%
+ \else
+  \DN@{\expandafter\mfinish@\mfinish@@}%
+ \fi\fi\fi\fi\fi \next@}
+\define\mfinish@{\let\mfinish@@=\empty \FN@\morphism@}
+\define\msideways@{%
+ \xy@{}{\ifdim\S@=\z@\else\Sideways@\S@\swap@\Sideways@\S@\swap@\fi}}
+\define\munsideways@{%
+ \xy@{}{\ifdim\S@=\z@\else\Sideways@{-\S@}\swap@\Sideways@{-\S@}\swap@\fi}}
+\define\morphism@@{%
+ \ifx <\next
+  \DN@<##1>{\xy@{<##1>}{\S@=##1\relax}\mbefore@
+   \FN@\morphism@@@}%
+ \else
+  \DN@{\mbefore@\FN@\morphism@@@}%
+ \fi
+ \next@}
+\define\morphism@@@{%
+ \ifx \space@\next \expandafter\DN@\space{\FN@\morphism@@@}%
+ \else \ifx ^\next
+  \DN@^{\xy@{^}{\save@}%
+   \DNii@####1####2{\xy@{}{\setlabel@@\makeLabel@{####1}{2}{####2}}%
+    \FN@\morphism@@@}%
+   \labeled@}%
+ \else \ifx _\next
+  \DN@_{\xy@{_}{\save@}%
+   \DNii@####1####2{\xy@{}{\setlabel@@\makeLabel@{####1}{-2}{####2}}%
+    \FN@\morphism@@@}%
+   \labeled@}%
+ \else \ifx |\next
+  \DN@|{\xy@{|}{\save@}%
+   \DNii@####1####2{%
+    \xy@{}{%
+     \cX=\oX \cY=\oY \cH=\oH \cD=\oD \cL=\oL \cR=\oR ####1\swap@
+     \drop@@\makelabel@\ccobject{####2}\setupDirection@
+     \let\tchead@=\chead@ \global\let\chead@=\notip}%
+    \mconnection@
+    \xy@{}{%
+     \edef\mtmp@{\oX=\the\cX \oY=\the\cY
+      \oH=\the\cH \oD=\the\cD \oL=\the\cL \oR=\the\cR}%
+     \global\let\chead@=\tchead@ \global\let\ctail@=\notip \return@\mtmp@}%
+    \FN@\morphism@@@}%
+   \labeled@}%
+ \else
+  \DN@{\setupDirection\mconnection@\mafter@ \FN@\mcontinue@}%
+ \fi\fi\fi\fi
+ \next@}
+\define\morphism@@@@{\restore \ignorespaces}
+
+\define\definemorphism#1#2#3#4{%
+ \expandafter\def\csname x#1\endcsname{\morphism{#2}{#3}{#4}}%
+ \expandafter\def\csname u#1\endcsname{\morphism{#2}{#3}{#4}[-1,0]}%
+ \expandafter\def\csname d#1\endcsname{\morphism{#2}{#3}{#4}[1,0]}%
+ \expandafter\def\csname l#1\endcsname{\morphism{#2}{#3}{#4}[0,-1]}%
+ \expandafter\def\csname r#1\endcsname{\morphism{#2}{#3}{#4}[0,1]}%
+ \expandafter\def\csname uu#1\endcsname{\morphism{#2}{#3}{#4}[-2,0]}%
+ \expandafter\def\csname dd#1\endcsname{\morphism{#2}{#3}{#4}[2,0]}%
+ \expandafter\def\csname ll#1\endcsname{\morphism{#2}{#3}{#4}[0,-2]}%
+ \expandafter\def\csname rr#1\endcsname{\morphism{#2}{#3}{#4}[0,2]}%
+ \expandafter\def\csname ur#1\endcsname{\morphism{#2}{#3}{#4}[-1,1]}%
+ \expandafter\def\csname ul#1\endcsname{\morphism{#2}{#3}{#4}[-1,-1]}%
+ \expandafter\def\csname dr#1\endcsname{\morphism{#2}{#3}{#4}[1,1]}%
+ \expandafter\def\csname dl#1\endcsname{\morphism{#2}{#3}{#4}[1,-1]}%
+ \expandafter\def\csname uul#1\endcsname{\morphism{#2}{#3}{#4}[-2,-1]}%
+ \expandafter\def\csname uur#1\endcsname{\morphism{#2}{#3}{#4}[-2,1]}%
+ \expandafter\def\csname ull#1\endcsname{\morphism{#2}{#3}{#4}[-1,-2]}%
+ \expandafter\def\csname urr#1\endcsname{\morphism{#2}{#3}{#4}[-1,2]}%
+ \expandafter\def\csname ddl#1\endcsname{\morphism{#2}{#3}{#4}[2,-1]}%
+ \expandafter\def\csname ddr#1\endcsname{\morphism{#2}{#3}{#4}[2,1]}%
+ \expandafter\def\csname dll#1\endcsname{\morphism{#2}{#3}{#4}[1,-2]}%
+ \expandafter\def\csname drr#1\endcsname{\morphism{#2}{#3}{#4}[1,2]}%
+ \expandafter\def\csname uull#1\endcsname{\morphism{#2}{#3}{#4}[-2,-2]}%
+ \expandafter\def\csname uurr#1\endcsname{\morphism{#2}{#3}{#4}[-2,2]}%
+ \expandafter\def\csname ddll#1\endcsname{\morphism{#2}{#3}{#4}[2,-2]}%
+ \expandafter\def\csname ddrr#1\endcsname{\morphism{#2}{#3}{#4}[2,2]}}
+\definemorphism{to}\solid\tip\notip
+\definemorphism{line}\solid\notip\notip
+\definemorphism{dashed}\dashed\notip\notip
+\definemorphism{dotted}\dotted\notip\notip
+\definemorphism{double}\Solid\notip\notip
+\define\uutol{\xto~{[-2,0]}`l+<-\cL,\z@>+<-.44\colskip,1ex>`[-2,0]}
+\define\uutor{\xto~{[-2,0]}`r+<\cR,\z@>+<.44\colskip,1ex>`[-2,0]}
+\define\ddtol{\xto~{[2,0]}`l+<-\cL,\z@>+<-.44\colskip,-1ex>`[2,0]}
+\define\ddtor{\xto~{[2,0]}`r+<\cR,\z@>+<.44\colskip,-1ex>`[2,0]}
+\define\lltou{\xto~{[0,-2]}`u+<\z@,\cH>+<-1ex,.44\rowskip>`[0,-2]}
+\define\lltod{\xto~{[0,-2]}`d+<\z@,-\cD>+<-1ex,-.44\rowskip>`[0,-2]}
+\define\rrtou{\xto~{[0,2]}`u+<\z@,\cH>+<1ex,.44\rowskip>`[0,2]}
+\define\rrtod{\xto~{[0,2]}`d+<\z@,-\cD>+<1ex,-.44\rowskip>`[0,2]}
+\define\toul{\xto~{`[0,0][0,0]}`u+<-\R@,\z@>`[0,0]+<-\cL,\z@>+<-1.2\R@,\z@>}
+\define\todl{\xto~{`[0,0][0,0]}`d+<-\R@,\z@>`[0,0]+<-\cL,\z@>+<-1.2\R@,\z@>}
+\define\tour{\xto~{`[0,0][0,0]}`u+<\R@,\z@>`[0,0]+<\cR,\z@>+<1.2\R@,\z@>}
+\define\todr{\xto~{`[0,0][0,0]}`d+<\R@,\z@>`[0,0]+<\cR,\z@>+<1.2\R@,\z@>}
+\define\tolu{\xto~{`[0,0][0,0]}`l+<\z@,\R@>`[0,0]+<\z@,\cH>+<\z@,1.2\R@>}
+\define\toru{\xto~{`[0,0][0,0]}`r+<\z@,\R@>`[0,0]+<\z@,\cH>+<\z@,1.2\R@>}
+\define\told{\xto~{`[0,0][0,0]}`l+<\z@,-\R@>`[0,0]+<\z@,-\cD>+<\z@,-1.2\R@>}
+\define\tord{\xto~{`[0,0][0,0]}`r+<\z@,-\R@>`[0,0]+<\z@,-\cD>+<\z@,-1.2\R@>}
+
+\define\squash#1{%
+ \ifmmode\setboxz@h{\m@th${\mathstrut}#1{\mathstrut}$}\else\setboxz@h{#1}\fi
+ \setboxz@h{\kern-.5\wdz@ \dimen@=.5\ht\z@ \advance\dimen@-.5\dp\z@
+  \lower\dimen@\boxz@}%
+ \wdz@=\z@ \ht\z@=\z@ \dp\z@=\z@ \boxz@}
+\define\grow{%
+ \DN@{\ifx <\next \DN@<####1>{\dimen@=####1\grow@\empty}%
+  \else \DN@{\dimen@=2\ex@ \grow@\empty}\fi\next@}\FN@\next@}
+\define\grow@#1#{\grow@@{#1}}
+\define\grow@@#1#2{\relax
+ \ifmmode \setboxz@h{\kern\dimen@ \m@th$#2$\kern\dimen@}%
+ \else    \setboxz@h{\kern\dimen@ {#2}\kern\dimen@}\fi
+ \dimen@ii=\ht\z@ \advance\dimen@ii\dimen@ \ht\z@=\dimen@ii
+ \dimen@ii=\dp\z@ \advance\dimen@ii\dimen@ \dp\z@=\dimen@ii \boxz@}
+\define\squarify{%
+ \DN@{\ifx <\next \DN@<####1>{\dimen@=####1\squarify@\empty}%
+  \else \DN@{\dimen@=\z@ \squarify@\empty}\fi\next@}\FN@\next@}
+\define\squarify@#1#{\squarify@@{#1}}
+\define\squarify@@#1#2{\relax
+ \ifmmode \setboxz@h{\m@th${#2}$}\else \setboxz@h{#2}\fi
+ \ifdim\dimen@>\wdz@
+  \setboxz@h{\advance\dimen@-\wdz@ \kern.5\dimen@ \boxz@ \kern.5\dimen@}\fi
+ \dimen@=\ht\z@ \advance\dimen@\dp\z@ \advance\dimen@-\wdz@
+ \ifdim\dimen@<\z@ \dimen@=-.5\dimen@
+  \dimen@ii=\ht\z@ \advance\dimen@ii\dimen@ \ht\z@=\dimen@ii
+  \dimen@ii=\dp\z@ \advance\dimen@ii\dimen@ \dp\z@=\dimen@ii
+ \else \setboxz@h{\kern.5\dimen@\boxz@\kern.5\dimen@}\fi
+ \boxz@}
+\define\Text{%
+ \DN@{\ifx <\next \DN@<####1>{\dimen@ii=####1\relax\Text@}%
+  \else \DN@{\dimen@ii=\maxdimen \Text@}\fi\next@}\FN@\next@}
+\define\Text@#1#{\Text@@{#1}}
+\define\Text@@#1#2{\relax
+ \ifmmode\mathchoice
+   {\Text@@@{#1}{#2}{\the\textfont0}}%
+   {\Text@@@{#1}{#2}{\the\textfont0}}%
+   {\Text@@@{#1}{#2}{\the\scriptfont0}}%
+   {\Text@@@{#1}{#2}{\the\scriptscriptfont0}}%
+ \else{$\Text@@@{#1}{#2}{\the\textfont0}$}\fi
+ \ignorespaces}
+\define\Text@@@#1#2#3{\vcenter{\let\\=\cr
+  #3\lineskip.1em \baselineskip1.1em \lineskiplimit\z@skip
+ \tabskip=\z@skip \halign{\relax\hfil\Textbox@{#1}{##}{#3}\hfil\cr#2\crcr}}}
+\define\Textbox@#1#2#3{\relax\setboxz@h{#3\ignorespaces #2\unskip}%
+ \ifdim\wdz@>\dimen@ii \setboxz@h{\hsize=\dimen@ii
+   \leftskip=0pt plus4em \rightskip=\leftskip
+   \parfillskip=0pt \parindent=0pt %
+   \spaceskip=.3333em \xspaceskip=.5em %
+   \pretolerance=9999 \tolerance=9999 %
+   \hyphenpenalty=9999 \exhyphenpenalty=9999 %
+   \vbox{\unhbox\z@}}\fi
+ \boxz@}
+\define\hole{\hbox to2\omargin@{\hfil
+  \vrule height\omargin@ depth\omargin@ width\z@}}
+
+\xypicloaded

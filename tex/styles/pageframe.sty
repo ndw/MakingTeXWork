@@ -1,0 +1,249 @@
+%% Save file as: PAGEFRAME.STY                  Source: FILESERV@SHSU.BITNET
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  pageframe.sty  by Cameron Smith
+%%  18 Sept 1990, 16 Oct 1990, 21 Nov 1990, 14 Nov 1991
+%%
+%%  By default, draws a frame around the text area to represent
+%%  the edge of the paper -- useful when pages for a book of size
+%%  7x9 inches (for example) is being proofed on 8 1/2 x 11 inch
+%%  paper.  If \pageframefalse is executed, the part of the frame
+%%  beside the text is removed, leaving only the corner marks
+%%  to use for checking registration and for cropping.
+%%  The full frame can be restored by executing \pageframetrue.
+%%
+%%  This shows the results of
+%%
+%%       \pageframetrue  and   \pageframefalse
+%%
+%%        _|__________|_       _|          |_
+%%         |          |
+%%         |          |
+%%         |          |
+%%         |          |
+%%         |          |
+%%         |          |
+%%        _|__________|_       _            _
+%%         |          |         |          |
+%%
+%%
+%%  This style option also prints (outside the page area) a timestamp,
+%%  a job ID, and the page number and a sequence number on each page.
+%%  The sequence number advances throughout the document, so even if
+%%  there is a page (i) and several pages 1, only the first page
+%%  will have sequence number 1.
+%%
+%%  An oversight in the original version sometimes caused the tag line
+%%  to be printed in an unusual font (if that was the last-used font
+%%  on the preceding page).  The current version explicitly sets the
+%%  font for the tag line so that this won't happen.  The default is
+%%  to use cmr10, since it's highly unlikely that there are any TeX
+%%  sites that don't have this font available, but the \pffont macro
+%%  is provided in case another font is desired.
+%%
+%%  Two more features have been added: an "inner skeleton", consisting
+%%  of rules that demarcate the header, footer, and text area, and a
+%%  "text grid" that can be placed inside the text area.  Use
+%%  "\innerskeltrue" or "\innerskelfalse" to control the skeleton
+%%  and "\textgridtrue" or "\textgridfalse" to control the text grid.
+%%  Use (for example) "\gridsize{10pt}{12pt}" to make a grid whose
+%%  squares have width 10pt and height 12pt.
+%%
+%%  To use this style option, include pageframe as an optional argument
+%%  in the \documentstyle command, e.g.
+%%
+%%                 \documentstyle[pageframe]{book}
+%%
+%%  Also you must tell LaTeX the height of the paper you are using
+%%  (it can deduce the width for itself).  You do this by including
+%%  a declaration such as
+%%                         \paperheight{9in}
+%%
+%%  in the preamble of your document.  This *must* appear before
+%%  the first page of output, because the new output routine
+%%  uses this value.  (If you forget to specify it, then two
+%%  things will happen: the vertical rules at the sides of the
+%%  text will disappear, because LaTeX thinks they have height 0pt,
+%%  and the rule that represents the bottom of the paper will be
+%%  flush against the bottom of the footer.)
+%%
+%%  Since this style file modifies (a part of) LaTeX's output routine,
+%%  it is exceedingly unlikely to be compatible with any other style
+%%  option that also modifies the output routine.
+%%
+%%  Please direct comments and bug reports by electronic mail
+%%  to  CAMERON@MIDD.BITNET  or  cameron@midd.cs.middlebury.edu
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  This is the timestamp
+%%
+\@tempcnta\time\@tempcntb\@tempcnta
+\divide\@tempcntb by 60\multiply\@tempcntb by 60\advance\@tempcnta-\@tempcntb
+\divide\@tempcntb by 60
+\edef\@@@timestamp{\vrule height.4in depth .3in width 0pt%
+           \hskip.5in\today\space\space
+           \ifnum\@tempcntb<10 0\fi
+           \number\@tempcntb:\ifnum\@tempcnta<10 0\fi\number\@tempcnta
+           \space\space\space\space\space\space\jobname
+           \space\space\space\space\space\space
+}
+%%
+%%  \pffont lets us specify the font to use for the tag line
+%%  By default we use whatever font is current when this file is
+%%  being loaded.  This will normally be cmr10; in any case we're
+%%  selecting a font which is (a) certainly available on the system
+%%  were running on and (b) probably suitable for this purpose
+%%  (normal-sized roman text).
+%%
+\def\pffont#1{\global\font\@@@pffont=#1\relax}
+\def\@@@pffont{\global\let\@@@pffont}
+\expandafter\@@@pffont\the\font
+%%
+\newcount\@@@sheetcount
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% This is the code that makes the "inner skeleton".
+%%
+\newif\ifinnerskel
+\newif\iftextgrid
+\textgridtrue
+\newdimen\@@@gridwd\newdimen\@@@gridht
+\def\gridsize#1#2{\global\@@@gridwd#1\global\@@@gridht#2}
+\@@@gridwd 10pt \@@@gridht 10pt
+%%
+\def\@@@innerskel{\vbox to 0pt{%
+\vskip \topmargin
+\vbox to 0pt{\vss\hrule width\textwidth}%
+\vskip \headheight
+\vbox to 0pt{\vss\hrule width\textwidth}%
+\vskip \headsep
+\vbox to 0pt{\vss\hrule width\textwidth}%
+\iftextgrid
+\vbox to 0pt{\vbox to \textheight{%
+\leaders\vbox to \@@@gridht{\vss\hrule width\textwidth}\vfil
+}\vss}%
+\fi
+\hbox to \textwidth{\llap{\vrule height\textheight}%
+\iftextgrid\leaders\hbox to\@@@gridwd{\hfil\vrule height\textheight}\fi\hfil
+\vrule height\textheight}%
+\vbox to 0pt{\vss\hrule width\textwidth}%
+\vskip \footskip
+\vbox to 0pt{\vss\hrule width\textwidth}%
+\vskip -\footheight
+\vbox to 0pt{\vss\hrule width\textwidth}%
+\vss
+}}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  The paper width can be deduced from the text width and margins,
+%%  but the paper height must be specified.
+%%
+\newdimen\@@@pageheight
+\def\paperheight#1{\global\@@@pageheight#1}
+\newdimen\@@@pagewidth
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  The part of the output routine that puts the frame on the
+%%  page to represent the edge of the paper is surrounded by
+%%  \ifpageframe...\fi so that it can be suppressed.
+%%
+\newif\ifpageframe
+\pageframetrue
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  \@@@cropmark should be followed by two letters, the first of which
+%%  is t or b (for top or bottom) and the second l or r (left or right).
+%%  It makes a box of height, width, and depth 0pt, but with a
+%%  crop mark extending above or below and left or right of the base point.
+%%
+%%  The arms of the crop mark do not quite meet, but are positioned
+%%  so that if they were extended to meet, the meeting point would be
+%%  the corner of the paper.  This is to allow a little leeway for
+%%  positioning and cutting the paper.
+%%
+\def\@@@cropmark#1#2{%
+\csname#2lap\endcsname{%
+\vbox to 0pt{%
+\if#1t\vss\else
+\hbox to .5in{\if#2r\hfil\fi
+\vrule width .45in height .4pt depth 0pt\if#2l\hfil\fi}%
+\vglue.05in\fi%
+\hbox to .5in{\if#2l\hfil\fi\vrule height .45in depth 0pt\if#2r\hfil\fi}%
+\if#1b\vss\else
+\vglue.05in%
+\hbox to .5in{\if#2r\hfil\fi
+\vrule width .45in height .4pt depth 0pt\if#2l\hfil\fi}%
+\fi%
+}}%
+}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\let\@theothermargin\@themargin
+%%
+\def\@outputpage{\begingroup\catcode`\ =10
+     \let\-\@dischyph \let\'\@acci \let\`\@accii \let\=\@acciii
+    \if@specialpage
+     \global\@specialpagefalse\@nameuse{ps@\@specialstyle}\fi
+     \if@twoside
+       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+            \let\@themargin\oddsidemargin
+            \let\@theothermargin\evensidemargin
+          \else \let\@thehead\@evenhead
+          \let\@thefoot\@evenfoot \let\@themargin\evensidemargin
+          \let\@theothermargin\oddsidemargin
+     \fi\fi
+     \global\advance\@@@sheetcount by1%
+     \shipout
+     \vbox{\normalsize \baselineskip\z@ \lineskip\z@
+           \let\par\@@par %% 15 Sep 87
+           \vbox to 0pt{\vss
+           \hbox{\@@@pffont\@@@timestamp
+                Sheet number \number\@@@sheetcount
+                \space\space Page number \thepage
+           }
+           \hrule height 0pt depth 0pt
+           }
+           \@@@pagewidth\@themargin\advance\@@@pagewidth\textwidth
+           \advance\@@@pagewidth\@theothermargin
+           \hbox{\@@@cropmark tl\hskip\@@@pagewidth\@@@cropmark tr}
+           \ifpageframe\vbox to0pt{\vss\hrule width\@@@pagewidth}\fi
+           \hbox{%
+           \ifpageframe\llap{\vrule height0pt depth\@@@pageheight}\else
+           \vrule height0pt depth\@@@pageheight width0pt\fi
+           \hskip\@themargin
+           \vtop{\ifinnerskel\@@@innerskel\fi
+                 \vskip \topmargin
+                 \setbox\@tempboxa
+                   \vbox to\headheight{\vfil \hbox to\textwidth
+                                       {\let\label\@gobble \let\index\@gobble
+                                         \@thehead}} %% 22 Feb 87
+                 \dp\@tempboxa\z@
+                 \box\@tempboxa
+                 \vskip \headsep
+                 \box\@outputbox
+                 \baselineskip\footskip
+                 \hbox to\textwidth{\let\label\@gobble
+                           \let\index\@gobble  %% 22 Feb 87
+                           \@thefoot}%
+           }%
+           \ifpageframe
+           \hskip\@theothermargin
+           \rlap{\vrule height0pt depth\@@@pageheight}\fi
+           }
+           \ifpageframe\vbox to0pt{\hrule width\@@@pagewidth\vss}\fi
+           \hbox{\@@@cropmark bl\hskip\@@@pagewidth\@@@cropmark br}
+           }
+           \global\@colht\textheight
+           \endgroup\stepcounter{page}\let\firstmark\botmark}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  End of "pageframe.sty"
+%%

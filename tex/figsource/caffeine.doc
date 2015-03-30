@@ -1,0 +1,13 @@
+\documentstyle[11pt,chemtex]{article}
+
+% Caffeine
+
+\pagestyle{empty}
+
+\begin{document}
+
+\hbadness 10001
+
+\input{caffeine.tex} 
+
+\end{document}

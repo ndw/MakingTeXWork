@@ -1,0 +1,41 @@
+open (EPSFILE,$epsfile);
+
+undef $bbox;
+undef $showpg;
+while (<EPSFILE>) {
+  $bbox = $_ if /\%\%\s*BoundingBox:\s*\d+\s+\d+\s+\d+\s+\d+/;
+  $showpage = $_ if /showpage/;
+  last if ($bbox && $showpage);
+  }
+
+if (! $bbox) {
+  printf "Cannot find a bounding box in $epsfile";
+  exit 1;
+  }
+
+$bbox =~ s/\D*//;   # remove everything preceding the digits
+
+($llx,$lly,$urx,$ury) = split(/\s/,$bbox);
+
+$xsize = sprintf("%d", (($urx - $llx) * $res / 72) + 0.5);
+$ysize = sprintf("%d", (($ury - $lly) * $res / 72) + 0.5);
+
+printf "$llx neg $lly neg translate .gt. gs-eps-a.$$\n";
+printf "quit .gt. gs-eps-b.$$\n";
+
+if (! $showpg) {
+  printf "showpage .gt. gs-eps-b.$$\n";
+  printf "quit .gtgt. gs-eps-b.$$\n";
+  }
+
+# join sillyness to keep the length of lines in the
+# script small enough to print in the book.
+$gscmd = join(" ", "gs -sDEVICE=$device",
+                   "-q -sOutputFile=$outputfile",
+                   "-g${xsize}x${ysize} -r$res",
+	 	   "gs-eps-a.$$ $epsfile -",
+		   ".lt. gs-eps-b.$$");
+
+printf "$gscmd\n";
+
+printf "rm -f gs-eps-a.$$ gs-eps-b.$$\n";

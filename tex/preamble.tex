@@ -1,0 +1,64 @@
+\def\booktitle{Making \TeX\ Work}
+\frenchspacing
+
+\makeatletter
+% Examples are set in 9/10pt but since we use Courier @@ 95%, we ask
+% for 9.47/10pt =aprox= 9/10pt!
+\def\example@font{\tt\fontsize{9.47}{10pt}\selectfont}
+\example@indent=.25in
+\shortexample@indent=.25in
+
+% for crop marks...
+\@ifundefined{paperheight}{%
+  % do nothing
+}{%
+  \paperheight{9in}
+  \pageframefalse
+}
+
+\@ifundefined{cbstart}{%
+  \gdef\SetupChangeBars{}
+  \gdef\AddBegin{}
+  \gdef\AddEnd{}
+  \gdef\ChangeBegin{}
+  \gdef\ChangeEnd{}
+  \gdef\DeletionChange{}
+}{%
+  \gdef\SetupChangeBars{\outerbarstrue\driver{dvips}\typeout{Using Changebars!}}
+  \gdef\AddBegin{\cbstart}
+  \gdef\AddEnd{\cbend}
+  \gdef\ChangeBegin{\cbstart}
+  \gdef\ChangeEnd{\cbend}
+  \gdef\DeletionChange{\cbdelete}
+}
+\makeatother
+\SetupChangeBars
+
+\newif\iftoc  \ifdraft\tocfalse\else\toctrue\fi
+\newif\ifidx  \ifdraft\idxfalse\else\idxtrue\fi
+\newif\ifbbl  \ifdraft\bblfalse\else\bbltrue\fi
+
+\makeindex
+\shortindexingoff
+\proofmodefalse
+\indexproofstyle{\footnotesize}
+
+\cornersize*{4pt}
+
+% If PSTricks is loaded, load the node-connection stuff
+\newif\ifPSTricks
+\PSTricksfalse
+\makeatletter
+\@ifundefined{PSTricksLoaded}{}{\PSTrickstrue\input pst-node.tex}
+\makeatother
+
+\ifdraft
+  \def\editorial#1{{\hbadness=100000\tolerance=100000\marginpar{\tiny #1}}}
+\else
+  \def\editorial#1{}%
+\fi
+
+\def\nullline{} % what the hell is this from???
+
+\newcolumntype{.}{D{.}{.}{-1}} % for dcolumn...
+

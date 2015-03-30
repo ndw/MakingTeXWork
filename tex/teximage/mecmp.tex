@@ -1,0 +1,18 @@
+\newbox\mecmpbox
+\newdimen\mecmpwd
+\font\mecmpa=mecmpa at 72.27truept
+\font\mecmpb=mecmpb at 72.27truept
+\setbox\mecmpbox=\vbox{\hbox{%
+\mecmpa\char0\char1\char2\char3\char4}}
+\mecmpwd=\wd\mecmpbox
+\setbox\mecmpbox=\hbox{\vbox{\hsize=\mecmpwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\mecmpa\char0\char1\char2\char3\char4}
+\hbox{\mecmpa\char5\mecmpb\char0\char1\char2\char3}
+\hbox{\mecmpb\char4\char5\char6\char7\char8}
+\hbox{\mecmpb\char9\char10\char11\char12\char13}}}
+\ifx\parbox\undefined
+    \def\setmecmp{\box\mecmpbox}
+\else
+    \def\setmecmp{\parbox{\wd\mecmpbox}{\box\mecmpbox}}
+\fi

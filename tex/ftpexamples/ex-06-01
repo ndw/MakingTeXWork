@@ -1,0 +1,12 @@
+\newdimen\unitlength 
+\unitlength=1cm
+
+\def\plot(#1,#2){%
+  \rlap{\kern#1\unitlength\raise#2\unitlength%
+        \hbox{$\scriptstyle\bullet\;(#1,#2)$}}}
+
+\centerline{%
+  \hbox{\plot(0,0)
+        \plot(1,1)
+        \plot(-3,2)}%
+}

@@ -1,0 +1,31 @@
+\begin{table}
+  \colcount=128
+  \begin{center}
+    \begin{tabular}{|r|c|c|c|c|c|c|c|c|}
+      \hline
+                 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7\strut \\ \hline
+      \colnum{8} & \row \\ \cline{2-9}
+                 & \row \\ \hline
+      \colnum{9} & \row \\ \cline{2-9}
+                 & \row \\ \hline
+      \colnum{A} & \row \\ \cline{2-9}
+                 & \row \\ \hline
+      \colnum{B} & \row \\ \cline{2-9}
+                 & \row \\ \hline
+      \colnum{C} & \row \\ \cline{2-9}
+                 & \row \\ \hline
+      \colnum{D} & \row \\ \cline{2-9}
+                 & \row \\ \hline
+      \colnum{E} & \row \\ \cline{2-9}
+                 & \row \\ \hline
+      \colnum{F} & \row \\ \cline{2-9}
+                 & \row \\ \hline
+                 & 8 & 9 & A & B & C & D & E & F\strut \\ 
+      \hline
+    \end{tabular}
+    \caption[The Windows 3.1 ANSI Font Encoding, part 2]%
+            {Part 2 of the Windows 3.1 ANSI Encoding (characters 128 to 255).
+             Part 1 appears in Table~\protect\ref{tab:font:ansi1}.}
+    \label{tab:font:ansi2}
+  \end{center}
+\end{table}

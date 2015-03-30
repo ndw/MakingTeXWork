@@ -1,0 +1,564 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Macropaket STRUCTURE
+%   chem. Structurformeln mit TeX
+%
+%   Autor: Dr. Michael Ramek
+%          Institut fuer Physikal. und Theoret. Chemie
+%          Technische Universitaet Graz
+%
+%   Version 1.0
+%   November 1987
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+\def\atom#1{\sAve{#1}\adjustAtom}
+\def\phantatom#1{\sAve{#1}\phAntbox\adjustAtom}
+\def\adjustAtom{\advance\dimen0 by-\dimen6\ifnum\count23=1 \halfbAck\else
+\ifnum\count23=2 \fullbAck\fi\fi\raise\dimen1\box0\ifdim\dimen0<\dimen3 %
+\dimen3=\dimen0\fi\advance\dimen0 by\dimen6\dimen42=\baselineskip
+\dimen52=\count33sp\advance\dimen42 by\dimen1\advance\dimen52 by-\dimen1
+\vrule width0em height\dimen42 depth\dimen52\count23=0}
+ 
+\def\epin#1{\setbox0=\hbox{#1}\ifnum\count13=0 \phAntbox\fi
+\raise\dimen1\copy0\kern-\wd0\advance\dimen0 by\wd0
+\ifdim\dimen0>\dimen2 \dimen2=\dimen0\fi\advance\dimen0 by-\wd0}
+\def\wpin#1{\kern-\dimen6\setbox0=\hbox{#1}\ifnum\count13=0 \phAntbox\fi
+\kern-\wd0\advance\dimen0 by-\wd0\advance\dimen0 by-\dimen6
+\ifdim\dimen0<\dimen3 \dimen3=\dimen0\fi\advance\dimen0 by\dimen6
+\advance\dimen0 by\wd0\raise\dimen1\box0\kern\dimen6}
+\def\spin#1{\kern-0.5\dimen6\setbox0=\hbox{#1}\ifnum\count13=0 \phAntbox
+\fi\kern-0.5\wd0\advance\dimen1 by-\ht0\advance\dimen1 by-\dp0
+\advance\dimen1 by-0.2em\raise\dimen1\copy0\advance\dimen1 by\ht0
+\advance\dimen1 by\dp0\advance\dimen1 by0.2em\kern-0.5\wd0
+\kern0.5\dimen6}
+\def\npin#1{\kern-0.5\dimen6\setbox0=\hbox{#1}\ifnum\count13=0 \phAntbox
+\fi\kern-0.5\wd0\advance\dimen1 by\ht0\advance\dimen1 by\dp0
+\advance\dimen1 by0.2em\raise\dimen1\copy0\advance\dimen1 by-\ht0
+\advance\dimen1 by-\dp0\advance\dimen1 by-0.2em\kern-0.5\wd0
+\kern0.5\dimen6}
+ 
+\def\sAve#1{\setbox0=\hbox{#1}\dimen5=\ht0\advance\dimen5 by\dp0
+\dimen6=\wd0\advance\dimen4 by\wd0\advance\dimen0 by\wd0
+\ifdim\dimen0>\dimen2 \dimen2=\dimen0\fi\ifnum\count13=0 \phAntbox\fi}
+\def\phAntbox{\dimen12=\ht0\advance\dimen12 by-\dp0
+\dimen13=-\ht0\advance\dimen13 by\dimen12
+\dimen12=-\dimen12\advance\dimen12 by-\dp0
+\setbox0=\hbox{\vrule width\dimen6 height\dimen12 depth\dimen13}}
+ 
+\def\side#1{\ifnum\count11>20 %
+\message{Max. nesting of side chains exceeded!}\else
+\advance\count11 by1 \count21=\count11\multiply\count21 by10
+\count31=\count21\advance\count31 by10
+\loop\count41=\count31\advance\count41 by-10
+\ifnum\count41>0 \dimen\count31=\dimen\count41\advance\count31 by-1
+\repeat\count31=\count21\advance\count31 by20
+\loop\count41=\count31\advance\count41 by-10
+\ifnum\count41>10 \count\count31=\count\count41\advance\count31 by-10
+\repeat\dimen4=0em\count20=0 #1\kern-\dimen4\advance\dimen0 by-\dimen4
+\dimen1=\dimen11\count31=4\advance\count21 by1
+\loop\count41=\count31\advance\count41 by10
+\ifnum\count31<\count21 \dimen\count31=\dimen\count41\advance\count31 by1
+\repeat\advance\count21 by20\count31=20\ifnum\count20>0 %
+\message{Incomplete aromatic system in side chain ignored!}%
+\fi\loop\count41=\count31\advance\count41 by10
+\ifnum\count41<\count21 \count\count31=\count\count41
+\advance\count31 by10\repeat\advance\count11 by-1\fi}
+ 
+ 
+\def\fullbAck{\advance\dimen4 by-\dimen6\advance\dimen0 by-\dimen6
+\kern-\dimen6}
+\def\halfbAck{\advance\dimen4 by-0.5\dimen6\advance\dimen0 by-0.5\dimen6
+\kern-0.5\dimen6}
+\def\hstrIch{\hbox to 0.784em
+{\hss\vrule width0.6em height0.36em depth-0.32em\hss}}
+\def\nestrIch{\ifnum\count83=0 \setbox83=\hbox{\count12=0\dimen12=0.65em
+\kern0.09em\loop\dimen13=\dimen12\advance\dimen13 by-0.06em
+\vrule height\dimen12 depth-\dimen13 width0.012em
+\advance\dimen12 by0.0083em\advance\count12 by1 \ifnum\count12<50 \repeat
+\kern0.09em}\count83=1\fi\sAve{\copy83}}
+\def\nwstrIch{\ifnum\count93=0 \setbox93=\hbox{\count12=0\dimen12=0.65em
+\kern0.09em\loop\dimen13=\dimen12\advance\dimen13 by-0.06em
+\vrule height\dimen12 depth-\dimen13 width0.012em
+\advance\dimen12 by-0.0083em\advance\count12 by1 \ifnum\count12<50 %
+\repeat\kern0.09em}\count93=1\fi\sAve{\copy93}}
+\def\dotbackslAsh{\setbox1=\hbox{.}\raise0.650em\copy1
+\kern-0.15em\raise0.425em\copy1\kern-0.15em\raise0.200em\copy1
+\kern-0.15em\lower0.025em\copy1\kern-0.15em\lower0.250em\box1\kern0.08em}
+\def\dotslAsh{\setbox1=\hbox{.}\lower0.250em\copy1
+\kern-0.15em\lower0.025em\copy1\kern-0.15em\raise0.200em\copy1
+\kern-0.15em\raise0.425em\copy1\kern-0.15em\raise0.650em\box1\kern0.08em}
+\def\nnepfEil{\ifnum\count13=0 \sAve{\vrule height0em width0.377838em}%
+\else\sAve{\kern0.09em\dimen12=0.546em\dimen13=-0.541em\loop
+\ifdim\dimen13<0.554em \vrule width0.004em depth\dimen12 height\dimen13
+\advance\dimen12 by-0.015em\advance\dimen13 by0.05em\repeat
+\loop\ifdim\dimen13>-\dimen12 \vrule width0.004em depth\dimen12 %
+height\dimen13\advance\dimen12 by-0.015em\advance\dimen13 by-0.0005em
+\repeat}\fi}
+\def\enepfEil{\ifnum\count63=0 \setbox63=\hbox{\dimen12=0.086em
+\dimen13=-\dimen12\kern0.1em\loop\advance\dimen12 by-0.003em
+\advance\dimen13 by0.011em\ifdim\dimen13<0.2em %
+\vrule width0.025em depth\dimen12 height\dimen13\repeat
+\vrule width0.025em depth\dimen12 height0.1em\kern0.07em}\count63=1 \fi
+\sAve{\copy63}}
+\def\esepfEil{\ifnum\count43=0 \setbox43=\hbox{\dimen12=-0.086em
+\dimen13=-\dimen12\kern0.1em\loop\advance\dimen12 by0.003em
+\advance\dimen13 by-0.011em\ifdim\dimen13>-0.2em %
+\vrule width0.025em depth-\dimen13 height-\dimen12\repeat
+\vrule width0.025em height-\dimen12 depth0.1em\kern0.07em}\count43=1 \fi
+\sAve{\copy43}}
+\def\ssepfEil{\ifnum\count13=0 \sAve{\vrule height0em width0.377838em}
+\else\sAve{\kern0.09em\dimen12=0.546em\dimen13=-0.541em\loop
+\ifdim\dimen13<0.554em \vrule width0.004em height\dimen12 depth\dimen13
+\advance\dimen12 by-0.015em\advance\dimen13 by0.05em\repeat\loop
+\ifdim\dimen13>-\dimen12 \vrule width0.004em height\dimen12 depth\dimen13
+\advance\dimen12 by-0.015em\advance\dimen13 by-0.0005em\repeat}\fi}
+\def\sswpfEil{\ifnum\count13=0 \sAve{\vrule height0em width0.377838em}
+\else\sAve{\dimen12=-0.5em\dimen13=0.53em\loop\ifdim\dimen13<0.554em %
+\vrule width0.004em height\dimen12 depth\dimen13
+\advance\dimen12 by0.015em\advance\dimen13 by0.0005em\repeat
+\loop\ifdim\dimen12<0.546em %
+\vrule width0.004em height\dimen12 depth\dimen13
+\advance\dimen13 by-0.05em\advance\dimen12 by0.015em\repeat\kern0.05em}%
+\fi}
+\def\wswpfEil{\ifnum\count53=0 \setbox53=\hbox{\dimen12=0em\kern0.07em
+\vrule width0.025em depth0.1em height0em\advance\dimen12 by0.003em
+\dimen13=0.2em\loop\ifdim\dimen12>-\dimen13 %
+\vrule width0.025em depth\dimen13 height\dimen12
+\advance\dimen12 by0.003em\advance\dimen13 by-0.011em\repeat\kern0.1em}%
+\count53=1 \fi\sAve{\copy53}}
+\def\wnwpfEil{\ifnum\count73=0 \setbox73=\hbox{\dimen12=0em\kern0.07em
+\vrule width0.025em depth0em height0.1em\advance\dimen12 by0.003em
+\dimen13=0.2em\loop\ifdim\dimen12>-\dimen13 %
+\vrule width0.025em depth\dimen12 height\dimen13
+\advance\dimen12 by0.003em\advance\dimen13 by-0.011em\repeat\kern0.1em}%
+\count73=1 \fi\sAve{\copy73}}
+\def\nnwpfEil{\ifnum\count13=0 \sAve{\vrule height0em width0.377838em}
+\else\sAve{\dimen12=-0.5em\dimen13=0.53em\loop\ifdim\dimen13<0.554em %
+\vrule width0.004em depth\dimen12 height\dimen13
+\advance\dimen12 by0.015em\advance\dimen13 by0.0005em\repeat\loop
+\ifdim\dimen12<0.546em \vrule width0.004em depth\dimen12 height\dimen13
+\advance\dimen12 by0.015em\advance\dimen13 by-0.05em\repeat\kern0.05em}%
+\fi}
+ 
+\def\nphantom{\adjUstn\postadjUstn}
+\def\nsingle{\adjUstn\raise\dimen1\nstrIch\postadjUstn}
+\def\ndouble{\adjUstn\kern0.1em\raise\dimen1\nstrIch\kern-0.2em
+\raise\dimen1\nstrIch\kern0.1em\postadjUstn}
+\def\ntriple{\adjUstn\kern-0.2em\raise\dimen1\nstrIch\kern0.2em
+\raise\dimen1\nstrIch\kern0.2em\raise\dimen1\nstrIch\kern-0.2em
+\postadjUstn}
+\def\adjUstn{\advance\dimen1 by1.111111\dimen5\halfbAck}
+\def\postadjUstn{\advance\dimen1 by1.352em\count23=1}
+\def\nstrIch{\ifnum\count13=0 %
+\hbox{\vrule width0em height1.19em depth-0.1em}\else
+\hbox{\vrule width0.04em height1.19em depth-0.1em}\kern-0.04em\fi}
+ 
+\def\nneabove{\advance\dimen1 by2.05\dimen5\halfbAck\nnepfEil
+\raise\dimen1\box0\kern0.17\dimen6\advance\dimen4 by0.17\dimen6
+\advance\dimen0 by0.17\dimen6\advance\dimen1 by0.803em\count23=1}
+\def\nneevoba{\advance\dimen1 by2.05\dimen5\halfbAck\sswpfEil
+\raise\dimen1\box0\kern0.34\dimen6\advance\dimen4 by0.34\dimen6
+\advance\dimen0 by0.34\dimen6\advance\dimen1 by0.803em\count23=1}
+\def\nnebelow{\advance\dimen1 by2.05\dimen5\halfbAck
+\sAve{\setbox1=\hbox{.}\lower0.555em\copy1\kern-0.23em
+\lower0.310em\copy1\kern-0.23em\lower0.065em\copy1\kern-0.23em
+\raise0.180em\copy1\kern-0.23em\raise0.425em\box1}\raise\dimen1\box0
+\kern-0.05\dimen6\advance\dimen4 by-0.05\dimen6
+\advance\dimen0 by-0.05\dimen6\advance\dimen1 by0.803em\count23=1}
+\def\nnephantom{\halfbAck\sAve{/}\phAntbox\adjUstnne\raise\dimen1\box0
+\postadjUstnne}
+\def\nnesingle{\halfbAck\sAve{/}\adjUstnne\raise\dimen1\box0
+\postadjUstnne}
+\def\nnedouble{\halfbAck\sAve{/}\adjUstnne\advance\dimen1 by0.031em
+\kern-0.093em\raise\dimen1\copy0\advance\dimen1 by-0.062em\kern-\wd0
+\kern0.186em\raise\dimen1\box0\kern-0.093em\advance\dimen1 by0.031em
+\postadjUstnne}
+\def\nnetriple{\halfbAck\sAve{/}\adjUstnne\advance\dimen1 by0.062em
+\kern-0.186em\raise\dimen1\copy0\advance\dimen1 by-0.062em\kern-\wd0
+\kern0.186em\raise\dimen1\copy0\advance\dimen1 by-0.062em\kern-\wd0
+\kern0.186em\raise\dimen1\box0\kern-0.186em\advance\dimen1 by0.062em
+\postadjUstnne}
+\def\adjUstnne{\advance\dimen1 by1.111111\dimen5\kern0.37\dimen6
+\advance\dimen4 by0.37\dimen6\advance\dimen0 by0.37\dimen6}
+\def\postadjUstnne{\advance\dimen1 by\dimen5\kern0.13\dimen6
+\advance\dimen4 by0.13\dimen6\advance\dimen0 by0.13\dimen6
+\ifdim\dimen0>\dimen2 \dimen2=\dimen0\fi\count23=1}
+ 
+\def\nebelow{\halfbAck\sAve{\dotslAsh}\adjUstnne\raise\dimen1\box0
+\postadjUstnne}
+\def\nephantom{\nestrIch\phAntbox\raise\dimen1\box0
+\advance\dimen1 by1.055em}
+\def\nesingle{\nestrIch\raise\dimen1\box0\advance\dimen1 by1.055em}
+\def\nedouble{\nestrIch\advance\dimen1 by0.0707em\kern-0.0707em
+\raise\dimen1\copy0\kern-\wd0\kern0.1414em\advance\dimen1 by-0.1414em
+\raise\dimen1\box0\kern-0.0707em\advance\dimen1 by1.1257em}
+\def\netriple{\nestrIch\raise\dimen1\copy0\kern-\wd0\kern-0.1414em
+\advance\dimen1 by0.1414em\raise\dimen1\copy0\kern-\wd0\kern0.2828em
+\advance\dimen1 by-0.2828em\raise\dimen1\box0\kern-0.1414em
+\advance\dimen1 by1.1964em}
+ 
+\def\eneabove{\advance\dimen1 by0.49em\enepfEil\raise\dimen1\box0
+\advance\dimen1 by-0.09em}
+\def\eneevoba{\advance\dimen1 by0.585em\wswpfEil\raise\dimen1\box0
+\advance\dimen1 by-0.185em}
+\def\enebelow{\advance\dimen1 by0.51em\sAve{\setbox1=\hbox{.}\kern0.01em
+\lower0.125em\copy1\lower0.025em\copy1\raise0.075em\box1}%
+\raise\dimen1\box0\advance\dimen1 by-0.11em}
+ 
+\def\ephantom{\sAve{\hstrIch}\phAntbox\raise\dimen1\box0}
+\def\esingle{\sAve{\hstrIch}\raise\dimen1\box0}
+\def\edouble{\sAve{\hstrIch}\advance\dimen1 by0.1em\raise\dimen1\copy0
+\kern-\wd0\advance\dimen1 by-0.2em\raise\dimen1\box0
+\advance\dimen1 by0.1em}
+\def\etriple{\sAve{\hstrIch}\advance\dimen1 by0.2em\raise\dimen1\copy0
+\kern-\wd0\advance\dimen1 by-0.2em\raise\dimen1\copy0
+\advance\dimen1 by-0.2em\kern-\wd0\raise\dimen1\box0
+\advance\dimen1 by0.2em}
+ 
+\def\eseabove{\advance\dimen1 by0.19em\esepfEil\raise\dimen1\box0
+\advance\dimen1 by-0.59em}
+\def\eseevoba{\advance\dimen1 by0.09em\wnwpfEil\raise\dimen1\box0
+\advance\dimen1 by-0.49em}
+\def\esebelow{\advance\dimen1 by0.17em\sAve{\setbox1=\hbox{.}\kern0.01em
+\raise0.025em\copy1\lower0.075em\copy1\lower0.175em\box1\kern0.01em}%
+\raise\dimen1\box0\advance\dimen1 by-0.57em}
+ 
+\def\sebelow{\ssegenerAl{\dotbackslAsh}}
+\def\sephantom{\nwstrIch\phAntbox\advance\dimen1 by-0.628em
+\raise\dimen1\box0\advance\dimen1 by-0.428em}
+\def\sesingle{\nwstrIch\advance\dimen1 by-0.628em\raise\dimen1\box0
+\advance\dimen1 by-0.428em}
+\def\sedouble{\nwstrIch\advance\dimen1 by-0.6987em\kern-0.0707em
+\raise\dimen1\copy0\kern-\wd0\kern0.1414em\advance\dimen1 by0.1414em
+\raise\dimen1\box0\kern-0.0707em\advance\dimen1 by-0.4987em}
+\def\setriple{\nwstrIch\advance\dimen1 by-0.628em\raise\dimen1\copy0
+\kern-\wd0\kern-0.1414em\advance\dimen1 by-0.1414em\raise\dimen1\copy0
+\kern-\wd0\kern0.2828em\advance\dimen1 by0.2828em\raise\dimen1\box0
+\kern-0.1414em\advance\dimen1 by-0.5694em}
+ 
+\def\sseabove{\advance\dimen1 by-1.222222\dimen5\halfbAck\ssepfEil
+\raise\dimen1\box0\kern-0.06\dimen6\advance\dimen4 by-0.06\dimen6
+\advance\dimen0 by-0.06\dimen6\advance\dimen1 by-1.366666em\count23=1}
+\def\sseevoba{\advance\dimen1 by-1.222222\dimen5\halfbAck\nnwpfEil
+\raise\dimen1\box0\kern0.06\dimen6\advance\dimen4 by0.06\dimen6
+\advance\dimen0 by0.06\dimen6\advance\dimen1 by-1.366666em\count23=1}
+\def\ssebelow{\advance\dimen1 by-1.222222\dimen5\halfbAck
+\sAve{\setbox1=\hbox{.}\raise.455em\copy1\kern-.23em\raise.210em\copy1
+\kern-.23em\lower.035em\copy1\kern-.23em\lower.280em\copy1\kern-.23em
+\lower.525em\box1}\kern-0.08\dimen6\raise\dimen1\box0\kern-0.17\dimen6
+\advance\dimen4 by-0.25\dimen6\advance\dimen0 by-0.25\dimen6
+\advance\dimen1 by-1.366666em\count23=1}
+\def\ssephantom{\halfbAck\sAve{$\backslash$}\phAntbox\adjUstsse
+\raise\dimen1\box0\postadjUstsse}
+\def\ssesingle{\ssegenerAl{$\backslash$}}
+\def\ssedouble{\halfbAck\sAve{$\backslash$}\adjUstsse
+\advance\dimen1 by0.031em\kern0.093em\raise\dimen1\copy0
+\advance\dimen1 by-0.062em\kern-\wd0\kern-0.186em\raise\dimen1\box0
+\kern0.093em\advance\dimen1 by0.031em\postadjUstsse}
+\def\ssetriple{\halfbAck\sAve{$\backslash$}\adjUstsse
+\advance\dimen1 by0.062em\kern0.186em\raise\dimen1\copy0
+\advance\dimen1 by-0.062em\kern-\wd0\kern-0.186em\raise\dimen1\copy0
+\advance\dimen1 by-0.062em\kern-\wd0\kern-0.186em\raise\dimen1\box0
+\kern0.186em\advance\dimen1 by0.062em\postadjUstsse}
+\def\ssegenerAl#1{\halfbAck\sAve{#1}\adjUstsse\raise\dimen1\box0
+\postadjUstsse}
+\def\adjUstsse{\kern0.23\dimen6\advance\dimen4 by0.23\dimen6
+\advance\dimen0 by0.23\dimen6\advance\dimen1 by-\dimen5}
+\def\postadjUstsse{\advance\dimen1 by-1.111111\dimen5\kern0.27\dimen6
+\advance\dimen4 by0.27\dimen6\advance\dimen0 by0.27\dimen6
+\ifdim\dimen0>\dimen2 \dimen2=\dimen0\fi\count23=1}
+ 
+\def\sphantom{\adjUsts\postadjUsts}
+\def\ssingle{\adjUsts\raise\dimen1\sstrIch\postadjUsts}
+\def\sdouble{\adjUsts\kern0.1em\raise\dimen1\sstrIch\kern-0.2em
+\raise\dimen1\sstrIch\kern0.1em\postadjUsts}
+\def\striple{\adjUsts\kern-0.2em\raise\dimen1\sstrIch\kern0.2em
+\raise\dimen1\sstrIch\kern0.2em\raise\dimen1\sstrIch\kern-0.2em
+\postadjUsts}
+\def\adjUsts{\advance\dimen1 by-1.111111\dimen5\halfbAck}
+\def\postadjUsts{\advance\dimen1 by-1.352em\count23=1}
+\def\sstrIch{\ifnum\count13=0 %
+\hbox{\vrule width0em height0.54em depth0.55em}\else
+\hbox{\vrule width0.04em height0.54em depth0.55em}\kern-0.04em\fi}
+ 
+\def\sswabove{\advance\dimen1 by-1.222222\dimen5\halfbAck\sswpfEil
+\kern-1.25\dimen6\raise\dimen1\box0\kern-0.81\dimen6
+\advance\dimen4 by-2.06\dimen6\advance\dimen0 by-2.06\dimen6
+\advance\dimen1 by-1.366666em\count23=1}
+\def\sswevoba{\advance\dimen1 by-1.222222\dimen5\halfbAck\nnepfEil
+\kern-1.1\dimen6\raise\dimen1\box0\kern-0.83\dimen6
+\advance\dimen4 by-1.93\dimen6\advance\dimen0 by-1.93\dimen6
+\advance\dimen1 by-1.366666em\count23=1}
+\def\sswbelow{\advance\dimen1 by-1.222222\dimen5\halfbAck
+\sAve{\setbox1=\hbox{.}\lower0.505em\copy1\kern-0.23em\lower0.260em\copy1
+\kern-0.23em\lower0.015em\copy1\kern-0.23em\raise0.230em\copy1
+\kern-0.23em\raise0.475em\box1}\kern-0.9\dimen6\raise\dimen1\box0
+\kern-0.85\dimen6\advance\dimen4 by-1.75\dimen6
+\advance\dimen0 by-1.75\dimen6\advance\dimen1 by-1.366666em\count23=1}
+\def\sswphantom{\halfbAck\sAve{/}\phAntbox\adjUstssw\raise\dimen1\box0
+\postadjUstssw}
+\def\sswsingle{\sswgenerAl{/}}
+\def\sswdouble{\halfbAck\sAve{/}\adjUstssw\advance\dimen1 by0.031em
+\kern-0.093em\raise\dimen1\copy0\advance\dimen1 by-0.062em\kern-\wd0
+\kern0.186em\raise\dimen1\box0\kern-0.093em\advance\dimen1 by0.031em
+\postadjUstssw}
+\def\sswtriple{\halfbAck\sAve{/}\adjUstssw\advance\dimen1 by0.062em
+\kern-0.186em\raise\dimen1\copy0\advance\dimen1 by-0.062em\kern-\wd0
+\kern0.186em\raise\dimen1\copy0\advance\dimen1 by-0.062em\kern-\wd0
+\kern0.186em\raise\dimen1\box0\kern-0.186em\advance\dimen1 by0.062em
+\postadjUstssw}
+\def\sswgenerAl#1{\halfbAck\sAve{#1}\adjUstssw\raise\dimen1\box0
+\postadjUstssw}
+\def\adjUstssw{\kern-1.1\dimen6\advance\dimen1 by-\dimen5
+\advance\dimen4 by-1.1\dimen6\advance\dimen0 by-1.1\dimen6}
+\def\postadjUstssw{\advance\dimen1 by-1.111111\dimen5\kern-1.4\dimen6
+\advance\dimen0 by-1.4\dimen6\advance\dimen4 by-1.4\dimen6\count23=1}
+ 
+\def\swbelow{\sswgenerAl{\dotslAsh}}
+\def\swphantom{\fullbAck\nestrIch\phAntbox\advance\dimen1 by-1.054em
+\fullbAck\raise\dimen1\box0\fullbAck\count23=2}
+\def\swsingle{\fullbAck\nestrIch\advance\dimen1 by-1.054em\fullbAck
+\raise\dimen1\box0\fullbAck\count23=2}
+\def\swdouble{\fullbAck\nestrIch\advance\dimen1 by-1.1247em\fullbAck
+\kern0.0707em\raise\dimen1\copy0\kern-\wd0\kern-0.1414em
+\advance\dimen1 by0.1414em\raise\dimen1\box0\kern0.0707em
+\fullbAck\advance\dimen1 by-0.0707em\count23=2}
+\def\swtriple{\fullbAck\nestrIch\advance\dimen1 by-1.054em\fullbAck
+\raise\dimen1\copy0\kern-\wd0\kern-0.1414em\advance\dimen1 by0.1414em
+\raise\dimen1\copy0\kern-\wd0\kern0.2828em\advance\dimen1 by-0.2828em
+\raise\dimen1\box0\kern-0.1414em\fullbAck\advance\dimen1 by0.1414em
+\count23=2}
+ 
+\def\wswabove{\advance\dimen1 by0.19em\fullbAck\wswpfEil\fullbAck
+\raise\dimen1\box0\advance\dimen1 by-0.59em\fullbAck\count23=2}
+\def\wswevoba{\advance\dimen1 by0.09em\fullbAck\enepfEil\fullbAck
+\raise\dimen1\box0\advance\dimen1 by-0.49em\fullbAck\count23=2}
+\def\wswbelow{\advance\dimen1 by0.12em\fullbAck\sAve{\setbox1=\hbox{.}%
+\kern0.01em\lower0.125em\copy1\lower0.025em\copy1\raise0.075em\box1}%
+\fullbAck\raise\dimen1\box0\advance\dimen1 by-0.52em\fullbAck\count23=2}
+ 
+\def\wphantom{\adjUstw\advance\dimen0 by-\dimen6
+\advance\dimen4 by-\dimen6\count23=2}
+\def\wsingle{\adjUstw\raise\dimen1\box0\fullbAck\count23=2}
+\def\wdouble{\adjUstw\advance\dimen1 by0.1em
+\raise\dimen1\copy0\kern-\wd0\advance\dimen1 by-0.2em\raise\dimen1\box0
+\advance\dimen1 by0.1em\fullbAck\count23=2}
+\def\wtriple{\adjUstw\advance\dimen1 by0.2em\raise\dimen1\copy0\kern-\wd0
+\advance\dimen1 by-0.2em\raise\dimen1\copy0\kern-\wd0
+\advance\dimen1 by-0.2em\raise\dimen1\box0\advance\dimen1 by0.2em
+\fullbAck\count23=2}
+\def\adjUstw{\fullbAck\sAve{\hstrIch}\fullbAck
+\ifdim\dimen0<\dimen3 \dimen3=\dimen0\fi}
+ 
+\def\wnwabove{\advance\dimen1 by0.49em\fullbAck\wnwpfEil\fullbAck
+\raise\dimen1\box0\advance\dimen1 by-0.09em\fullbAck\count23=2}
+\def\wnwevoba{\advance\dimen1 by0.59em\fullbAck\esepfEil\fullbAck
+\raise\dimen1\box0\advance\dimen1 by-0.19em\fullbAck\count23=2}
+\def\wnwbelow{\advance\dimen1 by0.56em\fullbAck\sAve{\setbox1=\hbox{.}%
+\kern0.01em\raise0.025em\copy1\lower0.075em\copy1\lower0.175em\box1
+\kern0.01em}\fullbAck\raise\dimen1\box0\advance\dimen1 by-0.16em
+\fullbAck\count23=2}
+ 
+\def\nwbelow{\nnwgenerAl{\dotbackslAsh}}
+\def\nwphantom{\fullbAck\nwstrIch\phAntbox\fullbAck
+\advance\dimen1 by0.42em\raise\dimen1\box0\fullbAck
+\advance\dimen1 by0.635em\count23=2}
+\def\nwsingle{\fullbAck\nwstrIch\fullbAck\advance\dimen1 by0.42em
+\raise\dimen1\box0\fullbAck\advance\dimen1 by0.635em\count23=2}
+\def\nwdouble{\fullbAck\nwstrIch\fullbAck\kern-0.0707em
+\advance\dimen1 by0.3493em\raise\dimen1\copy0\kern-\wd0\kern0.1414em
+\advance\dimen1 by0.1414em\raise\dimen1\box0\kern-0.0707em
+\advance\dimen1 by0.5643em\fullbAck\count23=2}
+\def\nwtriple{\fullbAck\nwstrIch\fullbAck\advance\dimen1 by0.42em
+\raise\dimen1\copy0\kern-\wd0\kern-0.1414em\advance\dimen1 by-0.1414em
+\raise\dimen1\copy0\kern-\wd0\kern0.2828em\advance\dimen1 by0.2828em
+\raise\dimen1\box0\kern-0.1414em\fullbAck\advance\dimen1 by0.4936em
+\count23=2}
+ 
+\def\nnwabove{\advance\dimen1 by2.05\dimen5\halfbAck\nnwpfEil
+\kern-1.14\dimen6\raise\dimen1\box0\advance\dimen1 by0.803em
+\kern-1.20\dimen6\advance\dimen4 by-2.34\dimen6
+\advance\dimen0 by-2.34\dimen6\count23=1}
+\def\nnwevoba{\advance\dimen1 by2.05\dimen5\halfbAck\ssepfEil
+\kern-1.06\dimen6\raise\dimen1\box0\advance\dimen1 by0.803em
+\kern-1.11\dimen6\advance\dimen4 by-2.17\dimen6
+\advance\dimen0 by-2.17\dimen6\count23=1}
+\def\nnwbelow{\advance\dimen1 by2.05\dimen5\halfbAck
+\sAve{\setbox1=\hbox{.}\raise0.435em\copy1\kern-0.23em\raise0.190em\copy1
+\kern-0.23em\lower0.075em\copy1\kern-0.23em\lower0.3em\copy1
+\kern-0.23em\lower0.545em\box1}\kern-0.9\dimen6\raise\dimen1\box0
+\kern-1.05\dimen6\advance\dimen4 by-1.95\dimen6
+\advance\dimen0 by-1.95\dimen6\advance\dimen1 by0.803em\count23=1}
+\def\nnwphantom{\halfbAck\sAve{$\backslash$}\phAntbox\adjUstnnw
+\raise\dimen1\box0\postadjUstnnw}
+\def\nnwsingle{\nnwgenerAl{$\backslash$}}
+\def\nnwdouble{\halfbAck\sAve{$\backslash$}\adjUstnnw
+\advance\dimen1 by0.031em\kern0.093em\raise\dimen1\copy0
+\advance\dimen1 by-0.062em\kern-\wd0\kern-0.186em\raise\dimen1\box0
+\kern0.093em\advance\dimen1 by0.031em\postadjUstnnw}
+\def\nnwtriple{\halfbAck\sAve{$\backslash$}\adjUstnnw
+\advance\dimen1 by0.062em\kern0.186em\raise\dimen1\copy0
+\advance\dimen1 by-0.062em\kern-\wd0\kern-0.186em\raise\dimen1\copy0
+\advance\dimen1 by-0.062em\kern-\wd0\kern-0.186em\raise\dimen1\box0
+\kern0.186em\advance\dimen1 by0.062em\postadjUstnnw}
+\def\nnwgenerAl#1{\halfbAck\sAve{#1}\adjUstnnw\raise\dimen1\box0
+\postadjUstnnw}
+\def\adjUstnnw{\advance\dimen1 by1.111111\dimen5\kern-1.15\dimen6
+\advance\dimen4 by-1.15\dimen6\advance\dimen0 by-1.15\dimen6}
+\def\postadjUstnnw{\kern-1.35\dimen6\advance\dimen4 by-1.35\dimen6
+\advance\dimen0 by-1.35\dimen6\advance\dimen1 by\dimen5\count23=1}
+ 
+\def\nmostaromatatom#1{\atom{#1}\dimen8=\dimen1\advance\dimen8 by-0.4em
+\aromAtincr}
+\def\smostaromatatom#1{\atom{#1}\dimen10=\dimen1
+\advance\dimen10 by\dimen5\advance\dimen10 by0.3em\advance\count20 by1
+\aromAtincr}
+\def\wmostaromatatom#1{\atom{#1}\dimen7=\dimen0\advance\count20 by2
+\advance\dimen7 by0.36em\aromAtincr}
+\def\emostaromatatom#1{\atom{#1}\dimen9=\dimen0\advance\dimen9 by-\dimen6
+\advance\count20 by3 \advance\dimen9 by-0.24em\aromAtincr}
+\def\aromAtincr{\advance\count20 by1\count42=\count20\ifnum\count20=10 %
+\aromAtsymbol\fi}
+\def\wUrzel{% Here \count42=sqrt(\count52) is calculated by a recursion
+% formula. Since \wUrzel is called from inside a loop, and TeX cannot
+% handle loops within loops, this has to be done the hard way.
+\count42=\count52\divide\count42 by4\count62=\count52
+\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\count62=\count52\divide\count62 by\count42\advance\count62 by\count42
+\count72=\count62\divide\count72 by2\advance\count72 by5
+\ifnum\count42>\count72 \count42=\count62\divide\count42 by2
+\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi}
+\def\aromAtsymbol{\count20=0\ifnum\count13>0 \advance\dimen8 by-\dimen10
+\dimen8=0.5\dimen8\advance\dimen7 by-\dimen9\dimen7=-0.5\dimen7
+\setbox1=\hbox{\vrule width0.04em height0.04em}\dimen22=0.4\wd1
+\count32=7100\count22=\dimen22\divide\count22 by60\dimen22=0.0001\dimen7
+\dimen23=0.0001\dimen8\setbox0=\hbox{\loop\advance\count32 by-\count22
+\count62=\count32\multiply\count62 by\count32\count52=100000000
+\advance\count52 by-\count62\wUrzel\kern\count42\dimen22
+\lower\count32\dimen23\copy1\kern-\wd1\raise\count32\dimen23\copy1
+\kern-\wd1\count72=-\count42\kern\count72\dimen22\kern\count72\dimen22
+\lower\count32\dimen23\copy1\kern-\wd1\raise\count32\dimen23\copy1
+\kern-\wd1\kern\count42\dimen22\kern\count32\dimen22
+\lower\count42\dimen23\copy1\kern-\wd1\raise\count42\dimen23\copy1
+\kern-\wd1\count72=-\count32\kern\count72\dimen22\kern\count72\dimen22
+\lower\count42\dimen23\copy1\kern-\wd1\raise\count42\dimen23\copy1
+\kern-\wd1\kern\count32\dimen22\ifnum\count32>\count22 \repeat
+\kern-10000\dimen22\copy1\kern-\wd1\kern20000\dimen22\copy1\kern-\wd1}%
+\advance\dimen9 by-\dimen0\kern\dimen9\kern-10000\dimen22
+\dimen13=\dimen10\advance\dimen13 by\dimen8\raise\dimen13\box0
+\kern-\dimen9\fi}
+ 
+\def\firstbicycloatom#1{\atom{#1}\ifnum\count13>0 \ifnum\count20>0 %
+\count20=0\message{Bicyclo definition ignored!}\else\dimen7=\dimen0
+\advance\dimen7 by-0.5\dimen6\count20=100\dimen8=\dimen1
+\advance\dimen8 by0.4\dimen5\dimen9=\dimen6\fi\fi}
+\def\secondbicycloatom#1{\atom{#1}\ifnum\count13>0 \ifnum\count20=100 %
+\dimen12=\dimen0\advance\dimen12 by-0.5\dimen6
+\dimen13=\dimen1\advance\dimen13 by0.4\dimen5
+\ifdim\dimen9<\dimen6 \dimen9=\dimen6\fi\ifdim\dimen9<\dimen5 %
+\dimen9=\dimen5\fi\setbox1=\hbox{\vrule width0.04em height0.04em}%
+\kern-0.5\dimen6\dimen22=\dimen7\advance\dimen22 by-\dimen12
+\divide\dimen22 by10000\dimen23=\dimen8\advance\dimen23 by-\dimen13
+\divide\dimen23 by10000\count42=\dimen22\multiply\count42 by\dimen22
+\count52=\dimen23\multiply\count52 by\dimen23\advance\count52 by\count42
+\wUrzel\divide\dimen9 by100\multiply\dimen9 by85\count32=\dimen9
+\divide\count32 by\count42\count52=10000\advance\count52 by-\count32
+\count72=\wd1%\multiply\count72 by4\divide\count72 by10
+\divide\count72 by2
+\divide\count72 by\count42\loop\dimen32=0em
+\advance\dimen32 by\count32\dimen22\dimen33=\dimen13
+\advance\dimen33 by\count32\dimen23\kern\dimen32\raise\dimen33\copy1
+\kern-\wd1\kern-\dimen32\advance\count32 by\count72
+\ifnum\count32<\count52 \repeat\kern0.5\dimen6\else
+\message{Bicyclo definition ignored!}\fi\fi\count20=0}
+ 
+\def\nopositioncheck{\count13=1}
+ 
+\def\structure#1{\hbox{\begingroup\rm\catcode`\ =9\catcode`\^^M=9
+\dimen252=\fontdimen2\tenrm\fontdimen2\tenrm=0pt
+\dimen253=\fontdimen3\tenrm\fontdimen3\tenrm=0pt
+\dimen254=\fontdimen4\tenrm\fontdimen4\tenrm=0pt
+\dimen255=\fontdimen7\tenrm\fontdimen7\tenrm=0pt
+\count11=0%  side chain nesting
+\count20=0%  definition counter of aromatatoms and bicycloatoms
+\count13=0%  disable printing
+\count23=0%  fullback/halfback/noback flag
+\dimen0=\baselineskip\advance\dimen0 by-0.7em
+\advance\baselineskip by-0.3em
+\count33=\dimen0 % amount of depth to be added
+\count43=0%  marker for eseabove- and wnwevoba-bonds
+\count53=0%  marker for wswabove- and eneevoba-bonds
+\count63=0%  marker for eneabove- and wswevoba-bonds
+\count73=0%  marker for wnwabove- and eseevoba-bonds
+\count83=0%  marker for in-plane ne- and swbonds
+\count93=0%  marker for in-plane nw- and sebonds
+\dimen0=0em% actual horizontal position
+\dimen1=0em% actual vertical position
+\dimen2=0em% maximum horizontal position
+\dimen3=0em% minimum horizontal position
+\dimen4=0em% horizontal side chain correction
+\dimen5=0em% last height + depth
+\dimen6=0em% last width
+\dimen7=0em%
+\dimen8=0em%
+\dimen9=0em%
+\dimen10=0em%
+#1\ifnum\count13=0 \kern-\dimen0\kern-\dimen3\dimen0=0em\dimen1=0em
+\dimen2=0em\count13=1 #1\fi\kern-\dimen0\kern\dimen2\ifnum\count20>0 %
+\message{Incomplete aromatic system ignored!}\fi
+\advance\baselineskip by0.3em\fontdimen2\tenrm=\dimen252 %
+\fontdimen3\tenrm=\dimen253 \fontdimen4\tenrm=\dimen254 %
+\fontdimen7\tenrm=\dimen255 \endgroup}}
+ 
+\endinput

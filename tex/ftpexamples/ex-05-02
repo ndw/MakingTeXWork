@@ -1,0 +1,5 @@
+\DeclareFontShape{OT1}{logo}{m}{n}{%
+  <-8>sub * cmr/m/n%
+  <8-9>logo8%
+  <9-10>logo9%
+  <10->logo10}{}

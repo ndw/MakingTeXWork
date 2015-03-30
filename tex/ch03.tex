@@ -1,0 +1,1180 @@
+\chapter{Running \protect\TeX} 
+\RCSID$Id: ch03.tex,v 1.1 2002/08/23 14:58:46 nwalsh Exp $
+\label{chap:running}
+
+\ifincludechapter\else\endinput\fi
+
+The heart of processing a document with \TeX\ is 
+running\index{tex@\TeX!running}\index{running tex@running \TeX} the \TeX\ program.
+In this chapter, you'll learn what happens between the time you first start
+the \TeX\ program and the time it finishes.
+You'll also learn what files \TeX\ really needs (in addition to
+your document) and what to do when \TeX\ finds things in your document that
+it doesn't understand.
+
+\section{What Do You Run?}
+
+The first thing you have to know is what program to run.
+Unfortunately, the actual file you have to execute varies between
+platforms and implementations. If you have built and/or installed
+\TeX\ yourself, you probably already know what program to run.  
+You'll have to ask your system administrator for help if you can't
+figure out what the name of the \TeX\ executable is on your computer.
+The rest of this chapter assumes that the command \filename{tex}
+runs \TeX.  You should substitute the name of the executable
+program on your own system for \filename{tex}\index{tex command} in 
+the examples that follow.
+
+\label{sec:bigandsmall}
+
+Most implementations of \TeX\ have some hard-coded \idx{memory limits}.
+These limitations may cause problems if you are trying to run a very
+complex document through \TeX.
+To combat this problem, some distributions include two versions
+of the \TeX\ executable.  One version is 
+a ``small'' \TeX\index{small tex@small \TeX}\index{tex@\TeX!small} that generally runs
+faster but has less memory available to process your
+documents.  The other
+version, a ``big'' \TeX\index{big tex@big \TeX}\index{tex@\TeX!big}, 
+can process more complex documents
+but may run more slowly.  If you get a ``\TeX\ capacity exceeded''
+error, and you have a big \TeX\ available on your system, try
+processing your document with the big \TeX.
+
+If you still get an error, you have a document that is simply too
+complex for your implementation of \TeX\ to handle, or you have an
+error in one of the macros in your document.  By examining the error
+log, described later in this chapter in the section 
+``\nameref{sec:logfiles},'' you can determine what macro \TeX\ is
+interpreting when the error occurs.  If the error occurs in a macro
+that you wrote, check to make sure the macro functions the way
+you intended by using it in a small test document.
+
+\section{What Files Does \protect\TeX\ Need?}
+
+Naturally, \TeX\ needs your input file in order to process it.
+However, \TeX\ must be able to find several
+other files\index{files for tex@files for \TeX}\index{tex@\TeX!file requirements} as 
+well.  The files that \TeX\ needs are normally created
+during the installation process.  Here is a common directory layout for
+\TeX\ on a \Unix\ system:
+
+\begin{exindent}
+\begin{tabbing}
+\filename{/usr/local/lib/tex/formats}\ \ \ \ \ \ \= Format files \kill
+\filename{/usr/local/lib/tex/pool}      \> Pool files \\[2pt]
+\filename{/usr/local/lib/tex/formats}   \> Format files \\[2pt]
+\filename{/usr/local/lib/tex/inputs}    \> ``System'' input files \\
+\filename{/usr/local/lib/tex/macros}    \>\ \ \  (styles, macros, and miscellaneous\\
+\filename{/usr/local/lib/tex/lib}       \>\ \ \   files distributed with \TeX)\\[2pt]
+\filename{/usr/local/lib/tex/ps}        \> PostScript support files \\[2pt]
+\filename{/usr/local/lib/tex/fonts/pk}  \> \ext{PK} fonts\\[2pt]
+\filename{/usr/local/lib/tex/fonts/vf}  \> Virtual fonts\\[2pt]
+\filename{/usr/local/lib/tex/fonts/tfm} \> \ext{TFM} metrics\\
+\end{tabbing}
+\end{exindent}
+
+\vspace{-6pt}
+A similar layout is frequently used on other operating systems,
+except that the \TeX\ files are often stored in a top-level
+directory (for example, \filename{C:$\backslash$TEX} under MS-DOS).  Because \TeX\ is
+very flexible and has many different implementations, the exact directory structure varies.  Pool files are sometimes
+placed in the format file directory (which is sometimes called
+\filename{fmt} or \filename{fmts}, rather than \filename{formats}).
+Input files may occur in one or more of the standard places listed above
+% in Figure~\ref{fig:run:dirlayout} 
+(\filename{inputs},
+\filename{macros}, and \filename{lib}) as well as a number of other
+places (\filename{texinputs} is another common name).
+
+The files under the \TeX\ tree usually come from outside distributions,
+so you don't have to change them often. (You definitely \emph{shouldn't}
+put your personal macro files in that tree, even if you do have access
+to it.)
+
+The following sections describe, in more detail, each of the files that \TeX\ needs.
+
+\subsection{Pool Files}
+
+Pool files contain string constants used by \TeX\ at runtime.
+Each time \TeX\ is compiled, it creates a \ixx{pool file}{pool files} unique
+to the version being compiled.  The pool file from one version of \TeX\ will
+not work with a different version.
+
+In contrast to format files (discussed in the next section),
+if you don't have a pool file, there's nothing you can do about it.
+If you obtained precompiled programs (from the Internet, from a friend,
+or commercially) and you don't have a pool file, you received an
+incomplete distribution.
+
+If you did not install \TeX\ yourself, but find that the pool file is
+missing, contact the system administrator who performed the
+installation.  He or she did something wrong.
+
+\subsection{Format Files}
+\label{run:sec:formatfiles}
+
+As mentioned in the section ``\nameref{sec:tex:controlsequences}'' in
+Chapter~\ref{chap:tex}, \textit{\nameref{chap:tex}}, all of the control
+sequences and macros that your document uses must be defined
+somewhere.  One way to do this is to use the \cs{input} command to
+load all of the definitions at the beginning of each document.
+However, with large macro packages like \LaTeX, this process can be very time
+consuming.  \ixx{Format files}{format files} are a way of predefining control
+sequences and macros so they don't have to be interpreted by \TeX\
+every time they're used.  If \TeX\ didn't use format files, you'd
+have to wait for \TeX\ to interpret all of \LaTeX\ every time you
+processed a document that used \LaTeX.
+
+\label{run:sec:initexintro}
+Format files are created by a special version of \TeX, usually called
+\ixx{ini\TeX}{initex@ini\TeX}.  Some implementations combine \TeX\ and ini\TeX\ into
+one program.  In this case, you must select ini\TeX\ with a special
+option when you run \TeX.  Ini\TeX\ interprets all the control
+sequences in a macro package and builds the in-memory data structures
+that the \TeX\ program needs.  After loading the whole macro package,
+ini\TeX\ writes the memory image it has constructed to a format
+file.  When \TeX\ later loads the format file, it simply copies it
+into memory; no interpretation is necessary.  This is why loading a
+format file is such a fast way to define control 
+sequences\index{control sequences!loading through format files}.  This is
+also why format files are not usually portable from one system to
+another,\footnote{The exception occurs in some \Unix\ versions of \TeX\
+where provisions are made for different architectures to share the
+same format files.  The exact same version of \TeX\ must be running on
+both architectures for this to work.} or even between different
+versions of \TeX\ on the same system.  Different versions of \TeX\
+are stored differently 
+in memory, and this difference in loading makes the
+format files incompatible.  For this reason, you need a ``big''
+ini\TeX\ to make format files for a big \TeX\ and a ``small'' ini\TeX\ for
+a small \TeX.
+
+%\begin{sidebar}[Help, I Need a Format File]
+You will find a complete discussion of macro packages and 
+instructions for building format files for many of the common macro 
+packages in Chapter~\ref{chap:macpack},
+\textit{\nameref{chap:macpack}}.
+%\end{sidebar}
+
+\subsection{User Files}
+\label{sec:userfiles}
+
+When you run \TeX\index{user files}, you have to tell it what file to process.
+If you specify a complete pathname, \TeX\ will load the specific file that you
+request.  For example, I could process the document \filename{myreport.tex} in
+the directory \filename{/home/norm/tex/} by running:
+
+\begin{ttindent}
+\$ \textbf{tex /home/norm/tex/myreport}
+\end{ttindent}
+
+This example applies to both \Unix\ and PC implementations of \TeX.
+Even though MS-DOS and OS/2 typically use the backslash to separate
+directory names, {\em always\/} use a forward slash when entering filenames
+for \TeX.
+
+\newpage
+If you specify a simple filename without a path, \TeX\ looks for
+the file in several user-defined and, possibly, system-defined locations.
+In the following example, \TeX\ will attempt to locate the file 
+\filename{myreport.tex} in order to process it:
+
+\begin{ttindent}
+\$ \textbf{tex myreport}
+\end{ttindent}
+
+If the file \filename{myreport.tex} exists in several directories, \TeX\
+will process the first file it finds without looking for any others.
+\TeX\ always prints the complete name of the file it processes both
+on the display and in the log file, so you can always tell what file was
+really processed.
+
+The most common way to specify user-defined locations is by setting the
+\envvar{TEXINPUTS}
+environment variable\footnote{The exact name of the
+\ixx{environment variable}{environment variables!format}\index{variables!environment!format} differs between
+implementations.}  to a list of subdirectories where \TeX\ documents are kept.
+Setting \envvar{TEXINPUTS} specifies where \TeX\ should look for
+\emph{documents} (files that you input with \cs{input} or some other
+construct, style files, and macros).  To change where \TeX\ looks for other
+kinds of files (fonts, formats, pool files, etc.), setting different
+environment variables or performing some other customization is required.  The
+format of the environment variable differs according to the platform you use.
+On \Unix\ systems, it is a list of directory names separated by colons.  Here
+is a typical example:
+
+\begin{shortexample}
+.:/usr/local/lib/tex/inputs:/home/norm/tex/inputs
+\end{shortexample}
+
+On MS-DOS and OS/2 systems, it is a list of directory names separated by
+semicolons.  A typical example looks like this:\footnote{You will notice
+that I've used backslashes\index{bs (backslash)@\bs (backslash)|nn}
+to separate directory components in the
+path.  Environment variables are handled by the system-dependent portions of
+\TeX, so it's okay to use backslashes here.  You can also use forward slashes,
+but I use backslashes because that is more typical of MS-DOS and OS/2
+environments.}
+
+\begin{shortexample}
+.;\tex\inputs;\tex\styles;\tex\macros
+\end{shortexample}
+
+Consult the documentation for your particular implementation of \TeX\
+for more information about system-defined locations
+where \TeX\ looks for input files.  Unfortunately, this is not always
+well documented.  For example, an undocumented
+feature of version 1.4s of \emTeX\
+always searches in the directory \filename{\\emtex\\texinputs} even if
+it does not occur in the \envvar{TEXINPUTS} path.  In fact, there is
+no way to tell it {\em not\/} to look there, short of renaming the
+directory (which is what I did).
+
+If \TeX\ cannot find a file you specify, for example
+\filename{rpt-data.tex}, it displays a prompt like this one:
+
+\begin{shortexample}
+! I can't find file `rpt-data.tex'.
+<*> \input rpt-data
+
+Please type another input filename:
+\end{shortexample}
+
+The general form of \TeX\ error messages is discussed in
+the section called ``\nameref{sec:errors}'' later in this chapter.  \TeX\ 
+announces an error by printing the error message on a line that begins with 
+an exclamation mark.  Below the error, \TeX\ provides the context in which 
+the error occurred. In the example above, \TeX\ encountered the command 
+\cs{input rpt-data} and tried to find the file 
+\filename{rpt-data.tex} which
+it could not locate.
+
+Notice that \TeX\ automatically added the 
+extension \filename{.tex}\index{tex files} to
+the name of the file it was looking for.  In any context where you
+specify a filename, \TeX\ will append \filename{.tex} unless you
+specify an alternate extension.
+
+\TeX\ responds to a ``can't find file'' error by asking you to type
+the name of a different file.  Some implementations of \TeX\ allow you
+to abort by typing Ctrl-C or Ctrl-D at this point,\footnote{MS-DOS and
+OS/2 implementations of \TeX\ may use Ctrl-Z (possibly followed by
+a carriage return) instead of Ctrl-C or Ctrl-D.} but other
+implementations insist that you enter a filename.  In this case,
+you'll find it convenient to create an empty file called
+\filename{nul.tex}\index{nultex files@nul.tex files} in 
+a directory in your \envvar{TEXINPUTS} path so
+you can get around this requirement by supplying a dummy answer to
+the prompt.  \filename{nul.tex} is part of many standard distributions.
+
+\section{The Command Line}
+\label{sec:clineopts}
+
+Except for the name of a document, \TeX\ has very few command-line
+options\index{command line!options}.  The only 
+option that is regularly used is the name of a
+format file, but the use of this option is frequently buried inside
+a batch file or shell script.
+
+It is helpful to think of \TeX, \LaTeX, \SliTeX, etc.~as
+different text processors (they aren't really; they're all \TeX\ with
+different format files).  This illusion is easy to provide with shell
+scripts or batch files.  For example, on an MS-DOS system, you could
+easily have three batch files called \filename{tex.bat}, \filename{latex.bat},
+and \filename{slitex.bat}:
+
+\begin{itemize}
+  \item The \filename{tex.bat} file runs the \TeX\ executable
+        with the \filename{plain}
+        format file specified as an option.
+  \item The \filename{latex.bat} file runs \TeX\ with the \filename{lplain}
+        format file.
+  \item The \filename{slitex.bat} file runs \TeX\ with the \filename{splain}
+        format file.
+\end{itemize}
+
+Now typing \textbf{tex\ \textit{filename}} processes Plain \TeX\ documents;
+typing \textbf{latex\ \textit{filename}} processes \LaTeX\ documents; and
+typing \textbf{slitex\ \textit{filename}} processes \SliTeX\ 
+documents.\footnote{On \Unix\ systems, the same effect is often achieved 
+with symbolic links.  Most \Unix\ implementations look for different 
+standard format files based upon the name of the executable that starts 
+them.}  The role of format files and macro packages is described
+fully in Chapter~\ref{chap:macpack}, \textit{\nameref{chap:macpack}}.
+
+\subsection{Command-line Options}
+
+A formal specification of the \TeX\ command 
+line\index{command line!options} looks like this:
+
+\begin{exindent}
+\begin{alltt}
+\$ tex <\textit{switches}> <&\textit{format}> <|\textit{document}> <\textit{tex-commands}>
+\end{alltt}
+\end{exindent}
+
+If this looks confusing, have no fear. I'll explain what it means in
+English.
+
+After the name of the \TeX\ program (or batch file), the first things
+that can go on the command line are implementation-dependent switches
+and options.  For example, implementations of \TeX\ that combine
+ini\TeX\ and \TeX\ into a single program may use
+\textbf{/I} as the switch to specify that ini\TeX\ 
+processing\index{initex@ini\TeX!requesting on command line} is 
+desired (ini\TeX,
+you may remember, was described in the section
+``\nameref{run:sec:formatfiles},''
+earlier in this chapter).  There are
+no system-independent switches for \TeX.  Consult the documentation
+that comes with your implementation for more information about
+system-dependent switches.
+
+After any system-dependent switches, the first thing that you can put
+on the \TeX\ command line is the name of
+the \ixx{format file}{format files!requesting on command line} to use.  If
+you specify this option, you must include it before any other options,
+and you must put an ampersand (\&)\index{ampersand}
+in front of the format file name.
+If you do not specify a format file, \TeX\ will use a default format,
+usually Plain \TeX.
+
+After the format, \TeX\ looks for the name of a document to process.
+If \TeX\ finds a filename on the command line, it will process the
+document\index{documents!tex@\TeX!specifying on command line} contained 
+in that file before looking at any other options
+that may follow.
+
+Finally, you can insert arbitrary \TeX\ commands on the command line
+by typing them just as you would in a document.  The section
+``\nameref{sec:texcomp}'' in Chapter~\ref{chap:writing},
+\textit{\nameref{chap:writing}}, describes one particular instance where
+this is very useful, but it isn't something that you are likely to do
+very often.
+
+\subsection{Command-line Cautions}
+\label{sec:runtex:cmdcautions}
+
+There are some special restrictions on file names used on the command
+line and on the way \TeX\ interprets the command line.  These
+restrictions are summarized here.
+
+\subsubsection{Misinterpretation of the command line}
+\label{run:sec:misinterpret}
+
+Command lines that are typed at the operating system prompt are
+actually seen by your operating system's ``command processor'' before
+they are seen by \TeX.  You must be aware of special processing that
+might be performed by the command processor.  Under \Unix, for example,
+the backslash\index{bs (backslash)@\bs (backslash)!special meaning for} is frequently interpreted 
+as a \textit{shell escape}
+character\index{shell!escape character}, and 
+the ampersand\index{ampersand} has another special 
+meaning related to
+\idx{job control}.  The ampersand is also special under some MS-DOS and OS/2
+command processors where it is the default command separation
+character and will not be passed to \TeX\ as you would expect.
+
+To insert these troublesome characters literally, you must enclose the
+relevant sections of the command line 
+in \ixx{quotation marks}{quotation marks!use with special characters} or 
+use some
+form of shell escape mechanism.  Under \Unix, place the name of the
+format file, including the ampersand, in double or
+\linebreak
+\newpage
+single quotes and
+use two backslashes in a row if you include \TeX\ control sequences on
+the command line.  For example, type:
+
+\begin{exindent}
+\begin{alltt}
+\$ \textbf{tex '&lplain' \bs{\bs}nonstopmode \bs{\bs}input doc1}
+\end{alltt}
+\end{exindent}
+
+instead of
+
+\begin{exindent}
+\begin{alltt}
+\$ \textbf{tex &lplain {\bs}nonstopmode {\bs}input doc1}
+\end{alltt}
+\end{exindent}
+
+When using OS/2, place a \caret\ in front of an ampersand
+to prevent it from being interpreted as a command separator.
+
+\subsubsection{Filenames and \protect\TeX}
+
+\index{filenames}\index{running tex@running \TeX!understanding filenames}%
+\index{command line!specifying filenames}%
+It 
+is easy for \TeX\ to recognize the presence of a format file on the
+command line; it must be the first option and it must begin with an
+ampersand.\footnote{In the unlikely event that you have a \TeX\ document
+stored in a file with a name beginning with an ampersand, use the following
+trick to process that file: instead of running \textit{tex \textnormal{\&}file}, run
+\textit{tex {\bs}input \textnormal{\&}file} (or even 
+\textit{tex \textnormal{\&}format {\bs}input \textnormal{\&}file}).}
+After the format file,
+\TeX\ determines whether the next option is a file name by looking at
+the first character of the option.  If the first character is not a
+backslash, it is a filename; otherwise it is a \TeX\ command, and \TeX\
+assumes that no filename is present.
+
+On some systems, notably MS-DOS and OS/2, the 
+backslash\index{bs (backslash)@\bs (backslash)!in MS-DOS and OS/2}
+is
+used to delimit the subdirectory components of a file name.  On other
+systems, a forward slash is used.  Regardless of the system you use,
+filenames passed to \TeX\ {\em must\/} use forward slashes to
+delimit filenames.
+
+For example, \TeX\ will not process the file \filename{letter.tex}
+in the \filename{{\bs}tex{\bs}docs} directory of the current drive if
+you execute the following command line on an MS-DOS system:
+
+\begin{exindent}
+\begin{alltt}
+\$ \textbf{tex {\bs}tex{\bs}docs{\bs}letter}
+\end{alltt}
+\end{exindent}
+
+Instead, you must type the following, regardless of the operating system
+you're using:
+
+\begin{exindent}
+\begin{alltt}
+\$ \textbf{tex /tex/docs/letter}
+\end{alltt}
+\end{exindent}
+
+If you don't, \TeX\ will complain that the control sequence
+\cs{tex} is undefined.  Even more confusing errors may result
+if the first subdirectory happens to be a valid control sequence.
+
+Unfortunately, filenames containing forward slashes are not always
+recognized by operating systems that use backslashes to delimit
+filenames.  For example, under MS-DOS, \verb|IF EXIST C:/CONFIG.SYS|
+returns false,\index{forward slash in MS-DOS and OS/2}
+even when a file called \filename{config.sys} exists in
+the root directory of drive C:.  Therefore, it is most convenient to
+use filenames with backslashes when other commands will be used (for
+example in a batch file).  Filenames in batch files must have any
+backslashes translated into forward slashes before being passed to
+\TeX.  MS-DOS's command processor isn't really powerful enough, but
+the task is quite doable with \idx{JP Software}'s \program{4DOS} command
+processor.  \program{4DOS}\index{4DOS!use in translating  backslashes} is a replacement for MS-DOS's normal
+command processor; it offers many advantages over the normal
+processor.  You can get a shareware version of \program{4DOS} from
+many large MS-DOS archive sites on the Internet\footnote{For example,
+{\tt oak.oakland.edu} in the directory \filename{/pub/msdos/4DOS}.} as well
+as most large bulletin board systems.  The following lines, 
+written in \ixx{\program{4DOS}}{4DOS}'s
+extended batch language, will translate all backslashes in the
+environment variable \envvar{TEXFN} to forward slashes:
+
+\begin{shortexample}
+:FixBacks
+  Set Count=%@Index[%TexFn,\]
+  If "%Count" eq "-1" Goto FixDone
+  Set Place=%@Eval[%Count+1]
+  Set TexFn=%@SubStr[%TexFn,0,%Count]/%@SubStr[%TexFn,%Place]
+  Goto FixBacks
+:FixDone
+\end{shortexample}
+
+These lines also work under OS/2 with JP Software's \program{4OS2}
+command processor (akin to \program{4DOS};
+shareware versions of \program{4OS2} are also available).  
+The same task can be completed in a single line
+with \ixx{\program{REXX}}{REXX} under OS/2:
+
+\begin{shortexample}
+TEXFN = TRANSLATE(TEXFN, '\', '/')
+\end{shortexample}
+
+\program{REXX} is an interpreted systems-programming language distributed
+with OS/2.  \program{REXX} runs under many other IBM operating systems
+in addition to OS/2.  Several versions of \program{REXX} are available for
+MS-DOS and \Unix\ systems, too.
+
+\subsubsection{Multiple documents}
+
+Keep in mind\index{running tex@running \TeX!multiple documents} that \TeX\ 
+interprets only the first option after the
+format file name as a document name.  If you type the command line:
+
+\begin{exindent}
+\begin{alltt}
+\$ \textbf{tex doc1 doc2}
+\end{alltt}
+\end{exindent}
+
+\TeX\ will process only \filename{doc1.tex} as a document.  The result
+of the above 
+command line\index{command line!specifying multiple documents} will 
+be exactly as if you had typed the
+literal word ``doc2'' at the very end of the file \filename{doc1.tex}.
+
+To get \TeX\ to process both \filename{doc1} and \filename{doc2} as documents,
+type a command like the following:
+
+\begin{exindent}
+\begin{alltt}
+\$ \textbf{tex doc1 {\bs}input doc2}
+\end{alltt}
+\end{exindent}
+
+or, for complete clarity,
+
+\begin{exindent}
+\begin{alltt}
+\$ \textbf{tex {\bs}input doc1 {\bs}input doc2}
+\end{alltt}
+\end{exindent}
+
+In either case, the structure of your document files must allow them
+to be concatenated together.  \TeX\ does not process \filename{doc1} and then
+process \filename{doc2} separately.  Instead, it processes all of \filename{doc1} and
+appends the text in the file \filename{doc2} directly onto the end of
+\filename{doc1}.
+
+\section{\protect\TeX\ Without Options}
+\label{sec:runtex:texwoopts}
+
+If you run \TeX\ without specifying any 
+options\index{running tex@running \TeX!without options} at all, it prints out some
+introductory information, then produces a \ixx{\texttt{**} prompt}{** prompt@\texttt{**} prompt} and stops.  
+Here's what \emTeX's \filename{tex386} produces:
+
+\begin{shortexample}
+This is emTeX (tex386), Version 3.141 [3c-beta8]
+**
+\end{shortexample}
+
+This is the only situation where the \verb|**| prompt occurs.  \TeX\
+now expects you to enter text.  \TeX\ will interpret anything you type
+after the \verb|**| prompt {\em exactly\/} as if you had typed it on
+the command line.  All of the rules regarding slashes (described
+in ``\nameref{run:sec:misinterpret}'' earlier) apply to commands that
+you type at the \verb|**| prompt.  Remember, however, that input entered at the
+\verb|**| prompt is not seen by the operating system, 
+so don't use quotation marks or doubled backslashes.
+
+%%%%this is not universally true.
+%If you do enter options on the command line, \TeX\ prints
+%the \verb|**| prompt followed by the options that it saw and then continues
+%processing without waiting for input.  This is an
+%easy way to tell if the operating system got in your way by
+%interpreting part of the command line that you intended for \TeX.
+
+The last line of a document is usually a command telling \TeX\ that the
+document is finished.  \TeX\ responds by writing the last page of
+the document and ending (returning control to the operating system).
+If a document doesn't end with such a command,
+\TeX\ will wait for more input.  When \TeX\ runs out of input, it
+displays the \ixx{\texttt{*} prompt}{* prompt@\texttt{*} prompt} (single asterisk).  Anything
+you type at the \verb|*| prompt is interpreted exactly as if it
+occurred in the document that \TeX\ was processing.  You cannot specify
+an alternate format or name a document at the \verb|*| prompt.  You
+can, however, use \cs{input} to insert another file.
+
+If \emTeX\ processes a document called \filename{unended.tex}:
+
+\begin{shortexample}
+% This is UNENDED.TEX
+Now is the time for all good men
+to come to the aid of their country.
+% Note: there's no \bye command to end 
+% TeX's processing...
+\end{shortexample}
+
+the following output appears on
+the terminal:
+
+\begin{shortexample}
+This is emTeX (tex386), Version 3.141 [3c-beta8]
+**unended
+(unended.tex)
+*
+\end{shortexample}
+
+You can exit from the \TeX\ program at the \verb|*| prompt by telling
+\TeX\ that it should stop processing the current document.  Exactly how
+you get out depends on the format file you use. The following table shows
+the stop commands for some \TeX\ macro 
+packages\index{Plain tex@Plain \TeX!stop command}\index{latex@\LaTeX!stop command}\index{SliTeX@\SliTeX!stop command}\index{Lollipop!stop command}\index{tex{}info stop command@\TeX{}info stop command}.
+
+\vspace{-4pt}
+\begin{xtable}{l|l}
+  \bf Package & \bf Command \\
+  \hline
+  \tstrut
+  Plain \TeX  & \cs{bye} \\
+  \LaTeX      & \verb|\end{document}|\index{end@\protect \texttt {\protect \bs end}!document} \\
+  \SliTeX     & \verb|\end{document}| \\
+  Lollipop    & \cs{Stop} \\
+  \TeX{}info  & \verb|@bye| \\
+  \hline
+\end{xtable}
+
+If you do not know which format is in use, you can almost always get out with
+the following steps:\footnote{Typing the break character (\,\key{Ctrl-C}
+or \key{Ctrl-Break}\,, for example) sometimes works as well, but some 
+implementations of \TeX\ don't respond to the break character at every
+prompt.  On \Unix\ systems, use \key{Ctrl-D}.  Em\TeX{} responds to
+\key{Ctrl-Z} followed by \key{Return}.} 
+
+\begin{enumerate}
+  \item Type a control sequence that \TeX\ will not recognize
+        (control sequences \cs{undefined} and 
+        \cs{gobbledygook} will work).
+        \TeX\ will respond with the 
+        question mark prompt.
+
+  \item Enter \textbf{x} at the prompt.
+        The question mark prompt is discussed fully in the section
+        ``\nameref{sec:qprompt},'' later in this chapter.
+\end{enumerate}
+
+To continue the above example, if I type \cs{undefined} at
+the \verb|*| prompt, \TeX\ will respond:
+
+\begin{ttindent}
+This is emTeX (tex386), Version 3.141 [3c-beta8]
+**unended
+(unended.tex)
+*\textbf{{\bs}undefined}
+! Undefined control sequence.
+<*> {\bs}undefined
+
+?
+\end{ttindent}
+
+If I enter \textbf{x} at the question mark prompt, \TeX\ will print
+several informative messages and then end, returning control to the
+operating system.
+
+\begin{ttindent}
+This is emTeX (tex386), Version 3.141 [3c-beta8]
+**unended
+(unended.tex)
+*{\bs}undefined
+! Undefined control sequence.
+<*> {\bs}undefined
+
+? \textbf{x}
+No pages of output.
+Transcript written on unended.log.
+\end{ttindent}
+
+One word of caution: some macro packages redefine the meaning of the
+backslash (\bs)\index{bs (backslash)@\bs (backslash)!redefining} character so that it doesn't 
+function as the
+beginning of a control sequence (for example, the \TeX{}info format
+uses the at-sign, ``@'').  In this case, you must precede the
+undefined control sequence by the escape character, even if it
+isn't the backslash.
+
+\section{What About Errors?}
+\label{sec:errors}
+
+When you write \TeX\ documents, you will occasionally make 
+mistakes\index{tex@\TeX!errors}\index{errors in tex@errors in \TeX}\index{error messages} and 
+as a result, \TeX\ won't be able to process your document.
+There are six broad classes of mistakes you're likely to make:
+
+\begin{enumerate}
+  \item Naming documents or files that \TeX\ cannot find.
+  \item Misspelling the name of a \TeX\ control sequence.
+  \item Failing to close an environment or forgetting to insert a
+        closing brace after an opening brace.
+  \item Using math operators outside of math mode or forgetting to close
+        an opened math environment.
+  \item Requesting a font that \TeX\ cannot find.
+  \item Everything else.
+\end{enumerate}
+
+\TeX\ is legitimately criticized for having error messages that are
+very difficult to understand.  \TeX\ frequently provides far more
+information than you really need or want, and the excess information
+often obscures the actual cause of the error.
+
+Nevertheless, understanding what \TeX\ does when it encounters an error will
+help make error messages easier to understand.  Let's begin with an example.
+Example~\ref{ex:badfonttex} shows a simple \LaTeX\ document using the New Font
+Selection Scheme (NFSS), which contains an error.\footnote{The details of
+\LaTeX\ and the NFSS are discussed in Chapter~\ref{chap:macpack}, {\it
+\nameref{chap:macpack}}.  It is simply convenient to use a concrete example
+in this case.  Do not be concerned if you do not use \LaTeX\ or the NFSS.}
+The error is that the control sequence \cs{Large}, which has been redefined
+to request a 17pt font, contains a typo: \cs[fontsize]{fontsiz} should be
+\cs{fontsize}.\footnote{In practice, redefining a control sequence like
+$\backslash$\texttt{Large} in a document is a bad idea.  I've done it here
+only to provide an example of an error that occurs inside another macro.}
+
+\begin{example}{ex:badfonttex}{The Document BADFONT.TEX}
+\documentstyle{article}
+% The following definition changes the font that LaTeX 
+% uses for the 'Large' font.  I have introduced a typo
+% into the definition, ``\fontsiz'' should be ``\fontsize''.
+%
+% The  first time a \Large font is requested, an error will occur.
+%
+\renewcommand{\Large}{\fontsiz{17}{20pt}\selectfont}
+\begin{document}
+
+This text precedes the first section header.
+
+% Note: LaTeX uses the \Large font in section
+% headers...this will fail in a confusing way
+% because the error is deep within the definition
+% of \section where \Large is used...
+%
+\section{First Section}
+
+This is the first and only sentence of the first section.
+
+\end{document}
+\end{example}
+
+\newpage
+When \TeX\ processes this file, using \LaTeX\ with the New Font
+Selection Scheme, it produces these error messages:
+
+\begin{shortexample}
+This is TeX, Version 3.1415 (C version 6.1)
+LaTeX Version 2.09 <25 March 1992> with NFSS2
+(badfont.tex (/work/nutshell/texguide/styles/latex/article.sty
+Standard Document Style `article' <14 Jan 92>.
+(/work/nutshell/texguide/styles/latex/art10.sty)) (badfont.aux)
+(/usr/local/lib/tex/inputs/nfss2/T1cmr.fd)
+! Undefined control sequence.
+\Large ->\fontsiz 
+                  {17}{20pt}\selectfont 
+<argument> \reset@font \Large 
+                              \bf 
+\@sect ...x \ifdim \@tempskipa >\z@ \begingroup #6
+                                      \relax \@hangfrom {\hskip ...
+l.21 \section{First Section}
+                            
+? 
+\end{shortexample}
+
+These messages exemplify
+the kind of confusing error messages that \TeX\ produces.  Remember
+the following rule:
+Always look at the first and last line of the \TeX\
+error message when trying to figure out what went wrong
+and where it went wrong.  In this case, the first line is:
+
+\begin{shortexample}
+! Undefined control sequence.
+\end{shortexample}
+
+and the last line is:
+
+\begin{shortexample}
+l.21 \section{First Section}
+\end{shortexample}
+
+The error is that the control sequence \cs[fontsize]{fontsiz} is not defined and
+\TeX\ was processing line 21 of the file when it occurred.
+
+\subsection{Log Files}
+\label{sec:logfiles}
+
+You don't have to remember or write down the error messages that \TeX\
+produces.  When \TeX\ processes a document, it produces 
+a transcript\index{log files} of 
+everything that occurs; you can refer to this transcript later if
+you need to recall what errors occurred when you processed your
+document.  \TeX\ stores this transcript in a file which has the same
+name as the document and the extension \filename{.log}.  
+For example,
+if you process \filename{main.tex}, \TeX\ produces a
+transcript in \filename{main.log}.
+
+\begin{note}{NOTE}
+Log files go in the current directory.
+\TeX\ always places the log file in the current directory, even if
+you specify a path when you format your document.  
+For example,
+if you process \filename{lectures/main.tex}, \TeX\ produces a
+transcript in \filename{main.log}, not in \filename{lectures/main.log}
+as you might expect.
+\end{note}
+
+\subsection{Interpreting \protect\TeX\ Error Messages}
+
+The first line of a \TeX\ error message begins with an exclamation
+point followed by the text of the 
+message\index{error messages!interpreting}.  The lines that
+follow it show the context in which the error occurred.\footnote{The number 
+of lines of context shown in the error message is determined by the value of the
+built-in parameter $\backslash$\texttt{errorcontextlines}.}  In
+the previous example, the error message indicates an
+\verb|Undefined control sequence|.  This means that \TeX\
+encountered a control sequence which was not previously defined.
+
+The final line, which says \verb|l.21 \section{First Section}|, occurs right above the question mark prompt.  
+It identifies the line in your document that \TeX\
+was processing when it encountered the error.  The error occurred when \TeX\
+was at line 21 of the file, and that line began with 
+\verb|\section{First Section}|.
+
+Between the first and last lines, \TeX\ prints a detailed description
+of how the error occurred.  This is necessary because the error may have
+occurred inside the replacement text of a macro that you used.  When
+\TeX\ encounters a control sequence, like \cs{section}, it has to
+look up the definition to figure out how to
+typeset your document.  The definition of a control sequence may
+contain other control sequences which also have to be interpreted.  It
+is possible for \TeX\ to be several levels deep, as it was in this
+case, when an error occurs.  To give the person who wrote the
+definition of the control sequence an opportunity to figure out what
+went wrong, \TeX\ prints out a \ixx{\textit{trace back}}{trace back} of what happened
+before the error.  As you gain experience with a particular macro
+package, you'll find the intervening lines more
+meaningful.
+
+Correcting an error depends entirely on the nature of the error.  In
+this case, all you need to do is correct the typo.
+
+As stated above, there are six general classes of errors you might encounter
+when you run \TeX.  The following sections briefly describe each class.
+
+\subsection{Naming a File \protect\TeX\ Cannot Find}
+
+Missing documents are discussed in the section called
+``\nameref{sec:userfiles},''
+earlier in this chapter.
+
+If you request a \ixx{format file}{format files!missing} that 
+cannot be found, \TeX\ issues the
+following warning message:
+
+\begin{shortexample}
+Sorry, I can't find that format; will try the default
+\end{shortexample}
+
+\TeX\ then attempts to typeset your document with Plain \TeX.\footnote{It
+is possible to make other formats the default, but in practice I've never
+seen it done.}  To correct this problem, run \TeX\ with the correct
+format file name.  If the format file isn't available, you will have
+to build it.  Chapter~\ref{chap:macpack}, {\it\nameref{chap:macpack}},
+describes how to build format files for several common macro packages.
+
+\subsection{Misspelling a Control Sequence Name}
+
+Misspelling 
+a \ixx{control sequence name}{control sequences!misspelling names of} is 
+one of the most common errors.  
+For example, you might type
+\verb|\ipnut{chap1}| in your document instead of
+\verb|\input{chap1}|.  The solution is straightforward and usually
+easy to identify.  In many cases, you can simply proceed after
+encountering this error.  Although \TeX\ may not typeset your document
+correctly, you can continue to look for other errors.  The section called
+``\nameref{sec:qprompt},'' later in this chapter, describes how to
+continue after an error.
+
+In some cases, \TeX\ may become badly confused by a misspelled control
+sequence name, in which case you should give up and fix the spelling error
+before trying to process your document further.  This may happen if
+you misspell a \LaTeX\ environment name (\verb|\begin{itemze}| instead of
+\verb|\begin{itemize}|, for example),\ff{Technically, \LaTeX\
+environment names are not a control sequence names, but they behave in very
+much the same way in \LaTeX.} which will make \LaTeX\ misinterpret
+many of the control sequences which follow.
+
+Sometimes \TeX\ will complain that a control sequence is undefined
+when you {\em know\/} that the control sequence is spelled correctly.
+When this occurs, make sure that you are using the correct format file
+(see the section ``\nameref{sec:clineopts}'' earlier in this chapter),
+loading the correct macro files, and using
+the correct style options.
+
+\subsection{Failure to Close an Environment}
+
+Failure to close an environment\index{environment!failing to close} is 
+another very common error.  There
+are several distinct errors in this category:
+
+\begin{itemize}
+  \item Failure to insert a closing brace (\verb|}|) for each opening
+        brace may cause a ``\TeX\ capacity exceeded'' error when \TeX\ 
+        processes
+        your document.  This happens because sometimes \TeX\ tries to read 
+        everything
+        between braces into memory.  If the closing brace is absent, \TeX\
+        may run out of memory.
+
+        If the braces are supposed to enclose the argument to a macro,
+        you may also get this error:\index{braces!forgetting a closing brace}
+
+\begin{ttindent}
+! Paragraph ended before \textit{macro} was complete.
+\end{ttindent}
+
+        In order to help detect errors of this type, \TeX\ doesn't ordinarily
+        allow the argument of a macro to consist of more than one paragraph,
+        so the first blank line after the place where you failed to type
+        the closing brace may produce this error.
+
+  \item Failure to close a begin/end environment pair
+        causes \LaTeX\ to complain about a mismatch when it encounters
+        the next \verb|\end{|\texttt{\textit{environment}}\verb|}|
+        command.\index{end@\protect \texttt {\protect \bs end}!environment}
+
+  \item If your document ends with an open environment, \TeX\ will warn
+        you that:
+
+\begin{ttindent}
+! ({\bs}end occurs inside a group at level \textit{n})
+\end{ttindent}
+
+        where \texttt{\textit{n}} is the number of open groups, usually 1.
+
+  \item Failure to close a mathematics environment will result in the
+        error: 
+        
+        \begin{shortexample}
+! Missing $ inserted
+        \end{shortexample}
+
+        when \TeX\
+        reaches a macro that does not make sense in mathematics mode
+        (like \cs{section}) or when a surrounding group ends.
+\end{itemize}
+
+\subsection{Math Outside of Math Mode}
+
+\TeX\ has a lot of operators for special treatment of mathematical
+formulas.  These operators must occur 
+inside \ixx{\emph{mathematics mode}}{mathematics mode},\index{mathematics!operators}
+which is usually delimited by dollar signs in your 
+document.\index{mathematics!minor mode!using math operators outside}
+
+If you attempt to use math operators, superscripts, subscripts, or other
+math-mode control sequences outside of mathematics mode, the following
+error will occur:\index{\$@\protect \texttt {\protect \bs \$}}
+
+\begin{shortexample}
+! Missing $ inserted 
+\end{shortexample}
+
+This is your clue that
+a mathematics environment has not been closed properly or that you failed
+to open one before using a math-mode operator. 
+
+For example, the underscore character is usually defined to be a
+math-mode operator which starts a subscript, in other words
+\verb|H${}_2$O| produces ``H${}_2$O'' in your document.\footnote{The empty curly
+braces are necessary in this example because otherwise there wouldn't
+be anything in front of the subscript command for \TeX\ to subscript
+below.  Typically, another digit or symbol would come in front of the
+subscript command.  In this case, I didn't want the ``H'' and ``O'' in the
+math environment because letters are printed in math-italics in math 
+mode.}  If you use the underscore outside of mathematics mode, such
+as in regular text:
+
+\begin{shortexample}
+The file ``test_one'' contains the ...
+\end{shortexample}
+
+\TeX\ will respond:
+
+\begin{shortexample}
+! Missing $ inserted
+<inserted text>
+                $
+<to be read again>
+                  _
+The file ``test_
+                one'' contains the ...
+?
+\end{shortexample}
+
+In \LaTeX, the easiest way around this problem is to enclose the offending
+text in a ``verbatim'' macro, like this:
+
+\begin{shortexample}
+  The file ``\verb+test_one+'' contains the ...
+\end{shortexample}
+
+Note that the argument to the \cs{verb} macro is delimited by any two
+identical characters (in this case, two ``\verb|+|'' signs).
+
+In Plain \TeX\ or another format, the problem can be circumvented in
+similar ways; consult the reference for the format you are using.
+Also consult Table~\ref{tab:acttype} in 
+Chapter~\ref{chap:tex}, \textit{\nameref{chap:tex}},
+for a list of special characters and how to type them in your documents.
+
+\subsection{Missing Fonts}
+
+The first\index{fonts!missing} time that 
+you use each font, \TeX\ loads font metric
+information about the font.  The font metric information, stored in a
+\ext{TFM} file, includes information about the sizes of each character
+as well as kerning and ligature information.  These topics are
+discussed fully in Chapter~\ref{chap:fonts}, {\it\nameref{chap:fonts}}.
+
+If you request a font that does not exist, for example
+\filename{crm10} (a misspelling of \filename{cmr10}), 
+\TeX\ cannot find a \ext{TFM} file for the font and
+therefore displays:
+
+\begin{shortexample}
+Font \myfont=crm10 not loadable: Metric (TFM) file not found
+\end{shortexample}
+
+This means that \TeX\ attempted to associate the font described by the
+\ext{TFM} file \filename{crm10.tfm} with the control sequence
+\cs{myfont}, but the \ext{TFM} file didn't exist.  You
+must have a \ext{TFM} file for every font that you use.
+
+A second kind of error---actually, a warning---occurs when you are
+using the New Font Selection Scheme 
+(NFSS)\index{New Font Selection Scheme!version 1 (NFSS)!errors}.  The NFSS performs font
+substitution, if possible, when an unknown font is requested.  The
+NFSS is described in Chapter~\ref{chap:macpack},
+{\it \nameref{chap:macpack}}, in the ``\nameref{sec:latex}'' section.
+
+\subsection{Everything Else}
+
+There are, unfortunately, lots of other errors that can occur.  Some
+of the errors are directly related to \TeX\ while others are warning and
+error messages associated with particular macro packages.  There is
+no way to catalog every one of them or suggest what can be done in every
+case.  
+
+The best advice I can offer is to isolate the problem
+in as small a document as possible, consult the references you have available
+very carefully, and, if all else fails, forward your problem to one of the
+electronic forums that deal with \TeX\ 
+(the \ixx{\texttt{Info-TeX} mailing list}{Info-TeX mailing list@\texttt{Info-TeX} mailing list}
+and the \ixx{\texttt{comp.text.tex} newsgroup}{comp.text.tex newsgroup@\texttt{comp.text.tex} newsgroup}, for example).
+
+\section{The Question Mark Prompt}
+\label{sec:qprompt}
+\index{? (question mark) prompt}
+
+When \TeX\ encounters an error, it displays an error message and a
+summary of the error, as described in the section called
+``\nameref{sec:errors}'' earlier in this chapter.  Following the
+error, \TeX\ normally stops and displays the question mark prompt.
+
+\newpage
+If you type a question mark of your own at the prompt, \TeX\ displays
+the actions available to you:
+
+\begin{ttindent}
+? ?
+Type <return> to proceed,
+S to scroll future error messages,
+R to run without stopping, Q to run quietly,
+I to insert something, E to edit your file,
+1 or ... or 9 to ignore the next 1 to 9 tokens
+of input, H for help, X to quit.
+?
+\end{ttindent}
+%    \caption{The \protect\TeX\ Question Mark Prompt}
+%    \label{fig:qprompt}
+%  \end{center}
+%\end{figure}
+
+You can type any of the following responses at the question mark
+prompt:\index{? (question mark) prompt}
+\begin{itemize}
+
+\item{Type \key{Return} to proceed.}
+
+Simply typing Return will cause \TeX\ to ignore the error and proceed.
+Depending on the nature of the error, this may cause more errors
+immediately or later on.
+
+\item{Type \key{S} to scroll future error messages.}
+
+Typing \key{S} tells \TeX\ to continue and not to stop for most future errors.
+\TeX\ will continue to print the error messages, both to the terminal
+and to the log file, but it will not display the question mark prompt
+again.
+
+\TeX\ will still stop and ask about missing files.
+
+\item{Type \key{R} to run without stopping.}
+
+The \key{R} option is just like \key{S} except that it tells \TeX\ to ignore
+missing files as well.  \TeX\ will proceed blindly forward as best as it
+can.  You will still see all of the error messages scroll by as \TeX\
+proceeds.
+
+\item{Type \key{Q} to run quietly.}
+
+This option is just like \key{R} except that error messages are not
+displayed on the screen.  The messages are saved in the log
+file, however, even though they are not displayed.
+
+\item{Type \key{I} to insert something.}
+
+If you notice a simple typo, you can correct it with the \key{I} command.
+For example, suppose that \TeX\ complains of an undefined control
+sequence: \verb|\cte{kn:art1}|.
+You recognize that this should have 
+been \verb|\cite{kn:art1}|.
+You can insert the correct control sequence by responding
+\verb|i\cite| to the question mark prompt.  \TeX\ will ignore the
+misspelled control sequence and insert the (correct) sequence \cs{cite}
+in its place.
+
+Inserting words or commands at the question mark prompt \emph{does not}
+change your input file.  It simply instructs \TeX\ to \emph{pretend} that your
+file contained a different sequence of words and commands.  You must change
+the input file with an editor, or the same error will occur the next time
+you format the document.
+
+\newpage
+\item{Type \key{E} to edit your file.}
+
+This option terminates \TeX.  If your system is configured appropriately,
+an editor will be loaded automatically, and the cursor will be placed
+at the offending line in your input file.  This is not possible in
+all environments.  
+
+\item{Type \key{{\em n}}\,, where {\em n} is a number between 1 and 9.}
+
+This option tells \TeX\ to ignore some of the input.  After skipping
+over the number of \textit{tokens} you request, \TeX\ returns to the
+question mark prompt so that you can delete more tokens.  
+
+What's a \idx{token}?  When \TeX\ reads an input file, it breaks each
+line down into the smallest, indivisible chunks that have meaning.
+These are called tokens.  For the most part, tokens are individual characters.
+The exceptions are control sequences\index{control sequences!as tokens}, which are single tokens, and white
+spaces which are also single tokens.  There {\em are\/} other exceptions
+(and more technical definitions of ``token''), but that's the gist of it.
+
+\item{Type \key{H} for help.}
+
+Typing \key{H} displays a slightly more verbose description of the error
+that occurred and, usually, suggests the nature of the corrective action
+that you might take.
+
+\item{Type \key{X} to quit.}
+
+Typing \key{X} tells \TeX\ to stop immediately and ends the \TeX\ program.
+If there are any completed pages (pages processed before the error,
+in other words), they are written to the \ext{DVI} file before \TeX\
+ends.
+
+\end{itemize}
+
+% Local Variables:
+% mode: latex
+% TeX-master: "driver"
+% End:
+

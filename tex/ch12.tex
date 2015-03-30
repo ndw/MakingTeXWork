@@ -1,0 +1,808 @@
+\chapter[Bibliographies, Indexes, and Glossaries]%
+        {Bibliographies,\\ Indexes, and\\Glossaries} 
+\RCSID$Id: ch12.tex,v 1.1 2002/08/23 14:58:46 nwalsh Exp $
+\label{chap:bibtex}
+
+\ifincludechapter\else\endinput\fi
+
+Bibliographies\index{bibliographies}\index{tex@\TeX!bibliographies} and 
+indexes\index{indexes}\index{tex@\TeX!indexes} are typically difficult to 
+incorporate into
+a document.  Bibliographies have 
+stringent, but varying, presentation requirements (the MLA wants
+bibliographies to look one way, the Association of Computing Machinery
+wants them another, etc.).
+Indexes don't vary that much, but they are tedious to put together.
+
+\BibTeX\ provides a powerful mechanism for handling bibliographies
+and citations.  \program{Tib} is another bibliography package for \TeX. 
+The \program{MakeIndex} program helps manage the construction
+of one or more indexes for a document.  Glossaries are also constructed
+with the \program{MakeIndex} 
+program\index{glossaries}\index{tex@\TeX!glossaries}.
+
+\section{\protect\BibTeX}
+
+\index{bibtex@\BibTeX}What's wrong with doing 
+bibliographies by hand?  Two things.  First,
+it is tedious to typeset each bibliography entry according to the strict
+requirements of the publisher.  Chances are, you'll have to look up the
+requirements each time, and you're bound to make mistakes.  Second, no 
+matter what field you work in, it's likely that you'll cite some of the
+same articles and books in more than one publication.   Computers are 
+supposed to reduce effort, not replicate it.
+
+\BibTeX\ provides a powerful mechanism for dealing with bibliographies
+in a mechanical way, considerably reducing effort on your part.  Rather
+than formatting each bibliography entry, you build a database of 
+bibliography information\index{database (bibliographic)}.  Each 
+time you want to make a citation, you
+simply use \BibTeX\ to build the bibliography from your database
+into your document.  That's easy to
+do, as you'll see in a few minutes.
+
+The idea of a bibliography database is introduced in Appendix~B of
+\textit{\LaTeX: A Document Preparation System}~\cite{ll:latexbook} and
+is described in more detail in \textit{\BibTeX{}ing}~\cite{op:btxdoc} 
+and \textit{Designing \BibTeX\ Styles}~\cite{op:btxhak}.  
+The purpose of this chapter is to
+familiarize you with the concepts of a bibliography database and to describe
+many of the freely available tools for manipulating databases.  It is
+not intended to replace any of the preceding documents.
+
+\subsection{How \protect\BibTeX\ Works}
+
+The \LaTeX\ command \verb|\cite| inserts 
+citations\index{citations!in BibTeX@in \BibTeX} into your
+document.\footnote{For Plain \TeX\ and other formats derived from Plain,
+the \filename{btxmac.tex} macros provide these commands.}  
+You use a short \textit{key}\index{key for bibliographic document} to 
+identify the publication
+you cite.  For example, in this book, when I want to
+cite \textit{The \TeX{}book}~\cite{kn:texbook}, I use the command
+\verb|\cite{kn:texbook}|.  The string \verb|kn:texbook| is the
+key.  When you build your bibliography database, you assign a key
+to each document in the database.  
+
+When \LaTeX\ processes your document, it stores information about the
+documents that you cite (including the key for each document) in
+the \ext{AUX} file\index{aux files@.aux files}.  The following commands
+identify how the bibliography should be formatted and what bibliography
+databases contain the publications you cite.  \LaTeX\ also
+writes this information to the \ext{AUX} file:
+
+\begin{shortexample}
+\bibliographystyle{abbrv}
+\bibliography{texpubs}
+\end{shortexample}
+
+\BibTeX\ examines the \ext{AUX} file and extracts
+the appropriate entries from the bibliography database.  It then formats
+those entries according to the {\em bibliography style\/} that you specify.
+The bibliography style (stored in a plain text file with the extension
+\ext{BST})\index{bst files@.bst files} tells \BibTeX\ exactly 
+how each entry should be formatted.
+After formatting the entries, \BibTeX\ writes 
+a \ext{BBL} file\index{bbl files@.bbl files} that
+\LaTeX\ incorporates into your document (at the place where the 
+\verb|\bibliography| command occurs) the next time 
+you process it.
+
+Sometimes it seems confusing to use \LaTeX\ to create a bibliography.
+If \LaTeX\ keeps warning you about ``unknown citations'' for documents
+that you {\em know\/} are in the database, try the following: run
+\LaTeX, then \BibTeX, then \LaTeX, and then \LaTeX\ again.
+
+The first time you run \LaTeX, it writes the citation keys to the 
+\ext{AUX} file (but it doesn't know what publications they refer to).
+\BibTeX\ writes the \ext{BBL} file, which includes the printable,
+formatted bibliography and information about
+what publication corresponds to each citation.  The second time
+you run \LaTeX, it still doesn't know what publication
+each citation refers to because it hasn't seen the \ext{BBL} file
+yet (bibliographies are usually at the end of a document).  During
+the second pass, \LaTeX\ writes the citation referents to the \ext{AUX}
+file.  Finally, on the third \LaTeX\ pass, it knows what
+each citation refers to, so it can typeset the citations as well
+as the bibliography!
+\vfill
+
+\subsection{Building a Bibliography Database}
+
+A bibliography 
+database\index{database (bibliographic)}\index{bibliographies!building  a database} is 
+a plain text file that contains information
+about a collection of publications.  Bibliography databases generally
+have the extension \filename{.bib}.  Example~\ref{ex:bib:bibexample}
+is an example of a single database entry.  This entry is from a database
+of \TeX-related publications that I put together while writing this book.
+
+\begin{example}{ex:bib:bibexample}{A Sample \protect\BibTeX\ entry}
+@book{kn:texbook,
+  author =  "Donald E. Knuth",
+  title =   "The {\TeX}book",
+  publisher =   "Addison-Wesley",
+  year =  1989,
+  edition =   "Fifteenth",
+}
+\end{example}
+
+The entry in Example~\ref{ex:bib:bibexample} describes {\it The {\TeX}book\/}
+by \ixx{Donald Knuth}{Knuth, Donald}.  The key for 
+this entry is \verb|kn:texbook|.
+
+\begin{note}{NOTE}
+All of the keys in a \BibTeX\ database must be unique.  If you use
+multiple databases for a single document, all of the keys in all of the
+databases must be unique.
+\end{note}
+
+In database jargon, the bibliography database contains a collection
+of records describing publications.  There may be several
+types of records in the same database.  Each record contains
+several fields, some of which are required and some optional.  The
+required fields vary according to the type of record.  
+
+In English, this means that each entry in the database describes a
+specific type of publication (book, article, technical report,
+etc.).  Every publication is described by its characteristics.  For
+example, books have a title, an author or editor, a publisher, and a
+year of publication.  Some books also have a publisher's address, a
+volume or number, a series, edition, or month of publication (or some
+combination of these elements).  These characteristics are called
+\textit{fields}, and they are identified by their name.
+
+\subsubsection{Database entries}
+
+This is the general 
+structure\index{database (bibliographic)!structure}\index{bibliographies!entries} of 
+an entry in a bibliography database:
+
+\begin{ttindent}
+\verb|@|\textit{type}\verb|{|\textit{key},
+    \textit{field1} = "\textit{value1}",
+    \textit{field2} = "\textit{value2}",
+    . . .
+    \textit{fieldn} = "\textit{valuen}"
+\verb|}|
+\end{ttindent}
+
+\newpage
+Always enter complete bibliography information in mixed
+case.  Never abbreviate or set field values in all upper or all lowercase, 
+even if the bibliography style that you most frequently use
+specifies, for example, that book titles appear in uppercase or that only
+the author's first initial should appear.  \BibTeX\ will take care
+of formatting the entry according to the style.  If you store incomplete
+information in the database, \BibTeX\ can't work correctly if you change
+styles.
+
+\subsubsection{Entry types}
+
+Table~\ref{tab:bib:entries} shows the required and optional fields for
+article and book entries.  Similar lists exist for the other standard
+entry types: booklet, conference, inbook, incollection, inproceedings,
+manual, mastersthesis, phdthesis, proceedings, techreport, unpublished,
+and a catch-all miscellaneous type.
+
+\begin{xtable}{l|l|l}
+  \caption{Types of Entries with Required and Optional 
+    Fields\label{tab:bib:entries}}\\
+  \bf Type  & \bf Required Fields & \bf Optional Fields \\[2pt]
+  \hline
+  \tstrut
+  article      & author          & month \\
+                   & journal         & number \\
+                   & title           & pages \\
+                   & year            & volume \\
+                   &                 & note \\[4pt]
+  book         & author or editor & address \\
+                   & publisher        & edition \\
+                   & title            & month \\
+                   & year             & volume or number \\
+                   &                  & series \\
+                   &                  & note \\
+  \hline
+\end{xtable}
+
+Fields that are neither required nor optional are ignored.  Therefore,
+you can and should associate arbitrary information about a
+publication in its entry.  Abstracts and
+keywords, for example, are two additional pieces of information that
+you might keep for some publications.  They can be stored in 
+\verb|abstract| and \verb|keyword| fields in each entry, even
+though it is unlikely that they will ever occur in a bibliography.
+
+\begin{note}{NOTE}
+The types of records that are valid, and the required and optional
+fields they contain are determined solely by the bibliography
+style.  There is nothing in the \BibTeX\ program that makes 
+\textit{book} and \textit{article} entries more legitimate than
+\textit{reptile} or \textit{cartoon} entries.  
+\end{note}
+
+\newpage
+\subsubsection{Abbreviations}
+
+\index{abbreviations in bibliographic databases}The 
+database entry structure that I've shown isn't entirely accurate.  
+In my example, every field has a quoted string value.  The truth is, every
+value is either a quoted string or an abbreviation or a number.  An
+abbreviation is created with the \verb|@string| command.  Typically,
+\verb|@string| commands are placed at the top of the bibliography
+database.  For
+example, the following command defines \verb|ora| to be an 
+abbreviation for O'Reilly \& Associates.
+
+\begin{ttindent}
+\verb|@string{ora = "O'Reilly & Associates, Inc."}|
+\end{ttindent}
+
+The months of the year should always be specified with abbreviations
+so that bibliography styles can redefine how they appear in the
+bibliography (for this reason, three-letter abbreviations
+for the months are defined in the standard styles---you don't have to
+define them yourself).  The names of journals that you cite frequently are
+also obvious candidates for abbreviation.
+
+\subsubsection{Preamble}
+
+\index{preambles!in bibliographic databases}Sometimes 
+it is helpful to define \TeX\ control sequences in a
+bibliography database.  \BibTeX\ provides a \verb|@preamble| entry for
+this purpose.
+
+Consider the following example, paraphrased
+from \textit{\BibTeX{}ing}~\cite{op:btxdoc}: You have a database which contains entries
+for each volume of a two-volume set by the same author.  It happens that
+Volume One has been reprinted, so it has a more recent date than Volume Two.
+The standard styles sort by author and then date, so as it stands, the
+bibliography would list Volume Two before Volume One.
+
+To correct this problem, you could specify the dates for Volume One as:
+
+\begin{shortexample}
+year = "{\noopsort{1990a}}1992"
+\end{shortexample}
+
+and for Volume Two:
+
+\begin{shortexample}
+year = "{\noopsort{1990b}}1990"
+\end{shortexample}
+
+\BibTeX\ will sort ``1990a'' before ``1990b,'' so they
+will appear in the correct order, and the following definition for
+\verb|\noopsort| will simply discard its argument, so nothing extra
+will appear in the bibliography:\footnote{This example uses Plain \TeX\
+syntax rather than a \LaTeX\ \texttt{\bs newcommand}, because \BibTeX\
+databases can be used from Plain \TeX\ as well as \LaTeX.}
+
+\begin{shortexample}
+\def\noopsort#1{}
+\end{shortexample}
+
+The best place to put this definition is in the database that uses it
+(so that it will always be present when that database is used).  The
+\texttt{@preamble} command simply copies its argument to the top of the
+\ext{BBL} file, so this definition at the top of the database will
+do exactly what we want:
+
+\begin{shortexample}
+@preamble{"\def\noopsort#1{}"}
+\end{shortexample}
+
+\newpage
+\subsubsection{Comments}
+
+\index{comments!in bibliographic databases}Anything that 
+does not appear inside a \verb|@|\texttt{\textit{type}}\verb|{}|
+command is a comment. However, many programs that manipulate
+bibliography databases will misplace comments appearing before or
+after an entry if the entries are reordered.
+
+\BibTeX\ includes a \verb|@comment| entry for backwards compatibility
+with older systems.
+Unlike \TeX, the percent sign (\%) is {\em not} a
+comment character in \BibTeX.
+
+\subsubsection{Special characters}
+
+Inserting \TeX\ control sequences\index{characters!special!in bibliographic databases}\index{special characters!in bibliographic databases}\index{control sequences!in bibliographic databases} (to 
+form accented characters, for example)
+into a bibliography entry requires special care.  Some styles specify
+that entries should be shifted to upper or lowercase, and shifting
+the case control sequence names would make them different.
+
+\BibTeX\ is aware of the case sensitivity of \TeX\ control sequence names
+and will not change them.  To specify accents or other special characters,
+always enclose them in \verb|{| and \verb|}| braces.  The same
+treatment should be given to portions of an author's name that should
+remain in lowercase even if the rest of the name is shifted to uppercase.
+
+\subsection{Bibliography Styles}
+
+\BibTeX\ styles\index{bibliographies!styles} are really 
+programs written in a simple but powerful
+stack-based language and interpreted by \BibTeX.\footnote{A complete
+description of \BibTeX's programming language can be found in
+\textit{Designing \BibTeX\ Styles}~\cite{op:btxhak}.}  Don't confuse
+bibliography styles (\ext{BST} files)\index{bst files@.bst files} 
+with \LaTeX\ styles (\ext{STY} files\index{STY files}); they are unrelated.  
+Although a complete description of the \BibTeX\ language is not presented
+here, a short example will help give you a sense of
+the language.  
+
+Each \ext{BST} file defines a number of functions. The highest
+level functions determine how each entry is formatted: when \BibTeX\
+needs to format a ``book'' entry, it executes the \verb|book| function,
+which must be defined by the \ext{BST} file in use or an error will
+result.
+
+Let's consider part of the task of formatting a book entry.  These code
+fragments are from the standard bibliography style \filename{plain.bst}.
+When the \verb|book| function is ready to output the book title, it calls
+the \verb|format.btitle| function, shown here:
+
+\begin{shortexample}
+FUNCTION {format.btitle}
+{ title emphasize
+}
+\end{shortexample}
+
+This function places the \textit{title} field on
+top of the stack and calls \verb|emphasize|:
+
+\begin{shortexample}
+FUNCTION {emphasize}
+{ duplicate$ empty$
+    { pop$ "" }
+    { "{\em " swap$ * "}" * }
+  if$
+}
+\end{shortexample}
+
+\newpage
+This is what \verb|emphasize| will do when the \textit{title}
+is not an empty field:
+
+\begin{enumerate}
+  \item Duplicate what is on the top of the stack.
+  \item Test the value on the top of the stack.  The \verb|empty$| function
+        removes the top value from the stack and places a boolean ``true'' 
+        value there if what it removed was an empty field, 
+        and a ``false'' value otherwise.
+  \item Push \verb|{ pop$ "" }| onto the stack.
+  \item Push \verb|{ "{\em " swap$ * "}" * }| onto the stack.
+  \item Test the condition.  The \verb|if$| function takes three values
+        from the stack: a boolean value, something to do if that value
+        is true, and something to do if that value is false.  In this
+        case, the title is not an empty field, so the value is false.
+        The \verb|{ pop$ "" }| value is discarded, and 
+        \verb|{ "{\em " swap$ * "}" * }| is evaluated.
+  \item Push \verb|{\em|\ttspace\ onto the top of the stack.
+  \item Swap the top two items on the stack.  Now \verb|\em|\ttspace\ is
+        below the book title on the stack.
+  \item Concatenate the top two items on the stack.  Now the top of the
+        stack holds the value \texttt{\bs em\ttspace\textit{book title}}.
+  \item Push \verb|}| onto the top of the stack.
+  \item Concatenate the top two items on the stack.  Now the top of the
+        stack holds the value \texttt{\ttopenbrace\bs em\ttspace\textit{book
+        title}\ttclosebrace}.
+\end{enumerate}
+
+The resulting value left on top of the stack when \verb|emphasize| 
+is finished is the \TeX\ code required to print the book title with
+emphasis.
+
+\subsubsection{Special-purpose styles}
+
+A number of styles\index{bibliographies!special-purpose styles} have 
+been written to allow you to develop special-purpose
+bibliographies.  A few of them are listed here:
+
+\begin{itemize}
+  \item \filename{bibunits} supports multiple bibliographies in 
+          different sections of a single document.
+  \item \filename{chapterbib} supports separate bibliographies 
+          in each chapter of a single document.
+  \item \filename{makebst} asks a number of 
+          questions about the bibliography style you need and constructs an
+          appropriate \BibTeX\ style.
+\end{itemize}
+
+\subsection{Bibliography Database Tools}
+
+\index{bibliographies!database tools}\index{database (bibliographic)!tools}There 
+are a lot of programs designed to help you extract information
+from bibliography databases, sort the entries,
+build subset-bibliographies that contain only some of the entries
+from a larger bibliography, and enter or edit information in an existing
+or new database.
+A lot of these programs are written in \Unix\ shell\index{shell!UNIX} script 
+languages and
+rely on existing text-processing tools like \program{awk},
+\program{sed}, \program{sort}, and \program{grep}.  Of
+course, many of these text-processing tools have been ported to other
+operating systems.  Most of the utilities written in shell script
+languages can be modified to work in other environments by an
+ambitious individual.
+
+\subsubsection{bibsort}
+
+The \ixx{\program{bibsort}}{bibsort} shell script reorders the 
+entries in a bibliography
+database into alphabetical order by entry key name.  \texttt{@string} commands
+are reordered by macro name.
+This program cannot deal correctly with
+comments that appear outside of an entry.  These comments are always
+associated with the preceding entry, which is frequently incorrect.
+
+Consider carefully before you reorder the entries in a database.  \BibTeX\
+places some restrictions on the available orderings.  Cross references,
+for example, must appear before the entry to which they refer.
+
+\subsubsection{biblook}
+
+\ixx{\program{biblook}}{biblook} is an interactive program that
+searches rapidly through a bibliography database for key words in specified
+fields.  Compound conditions (using ``and'' and ``or'') can be specified.
+The entries located by a search can be saved into a separate file.
+
+To use \program{biblook}, you must preprocess the database
+with \ixx{\program{bibindex}}{bibindex}, which builds a binary index of
+the entries.  Differences in case are removed, \TeX\
+control sequences are stripped out, and non-alphanumeric characters
+are removed.  This increases the likelihood of correct matches.
+
+\subsubsection{bibclean}
+
+\ixx{\program{bibclean}}{bibclean} is a syntax checker for bibliography
+databases.  Running \program{bibclean} before using \program{bibsort},
+\program{biblook}, or any other programs described here can eliminate a lot of
+the problems these programs may encounter.  Although bibliography databases
+are plain text files with a very loose structure, some tools are more easily
+confused than others.
+
+\program{bibclean} identifies possible problems in the database and
+pretty-prints it in a standard way.  The following formatting changes
+are made by \program{bibclean}:
+
+\begin{itemize}
+  \item The structure of each database entry is made consistent with 
+        respect to the following criteria: the ``@'' sign that begins
+        the entry type is moved into column 1; each line in the entry
+        is changed to contain exactly one ``field = value'' pair; and
+        the closing right brace is placed in column 1 on a line of
+        its own.  Additionally, outer parentheses are converted into
+        braces; tabs are expanded into blanks; hyphens in a sequence
+        of pages are converted into en-dashes; and month names are converted
+        into standard abbreviations.
+
+  \item Long string values are split at a blank and continued on the following
+        line.  The continuation lines are indented.
+
+  \item Individual names in the author and editor fields are 
+        normalized.  A single space is placed after periods that separate
+        initials, and all entries are converted into ``first-name middle-name
+        last-name'' form (instead of ``last-name, first-name'' form, for 
+        example).
+
+  \item The checksums of ISBN and ISSN numbers are verified.
+
+\newpage
+  \item Uppercase letters that appear outside of braces are enclosed in
+        braces to prevent them from being erroneously shifted to lowercase
+        by some bibliography styles.
+
+  \item Text outside of entries is not changed.  Entries are separated by
+        a single blank line.
+\end{itemize}
+
+\subsubsection{citetags}
+
+\index{citetags}When 
+documents must be transmitted in ``source'' form (meaning that the 
+actual \TeX\ files will be shipped around), it's generally
+unnecessary to include entire bibliography databases.  In these
+cases, it would be more convenient to send only the bibliography
+entries that are actually used.
+
+The \program{citetags} program extracts the citations from an \ext{AUX}
+file.  This list of citations can be passed to the \program{citefind}
+program to build a small bibliography database of just the required entries.
+
+\subsubsection{citefind}
+
+\ixx{\program{citefind}}{citefind} processes a list of citations and a list of
+bibliography databases and writes out a new database containing just the
+entries required to match the citations present.  This provides a minimal
+database that can be shipped with the document if the \TeX\ files must be
+processed on another computer.
+
+\subsubsection{bibextract}
+\index{bibextract}
+
+Given a list of fields and values (specified as regular expressions),
+\program{bibextract} creates a new database containing only the entries
+that match one or more of the specified values in one or more of the
+specified fields.  The necessary \verb|@string| and \verb|@preamble| commands
+are also included in the new database.
+
+\subsubsection{lookbibtex}
+
+\ixx{\program{lookbibtex}}{lookbibtex} offers the same features as
+\program{bibextract}.  However, \program{lookbibtex} is written in
+\program{Perl} rather than a shell script language.
+
+\subsubsection{bibdestringify}
+
+As the name implies, \ixx{\program{bibdestringify}}{bibdestringify} replaces
+all \verb|@string| macros in a database by their textual expansions.
+
+\subsubsection{edb}
+
+\ixx{\program{edb}}{edb}, or the ``Emacs Database'' is a powerful database
+programming system built on top of \ixx{GNU Emacs Lisp}{GNU Emacs!List for bibliographies}.  \program{edb} has been used to write a database-editing mode
+for \BibTeX\ databases.  It can be extended to handle new entry types.
+
+\subsubsection{Emacs \protect\BibTeX\ mode}
+
+\BibTeX\ mode\index{bibtex@\BibTeX!mode in GNU Emacs}\index{GNU Emacs!BibTeX mode@\BibTeX\ mode} is a 
+mode for editing \BibTeX\ databases in emacs.  It provides some template
+expansion and alignment features, but is essentially a text-editing mode
+(as opposed to \program{edb}, which is specifically a database-entry editor).
+
+\newpage
+\subsubsection{bibview}
+
+\program{bibview}\index{bibview} is an X Window-based program for editing
+bibliography databases.  Figure~\ref{fig:bib:bibview} shows an example of
+\program{bibview} editing a database entry.
+
+\epsimage{fig:bib:bibview}{Editing an article entry with \protect\program{bibview}}%
+      
+Unlike the \program{xbibtex} program, \program{bibview} can handle optional
+and ignored fields in bibliography entries.
+It does not handle new entry types.
+
+\subsubsection{xbibtex}
+
+\ixx{\program{xbibtex}}{xbibtex} is an X Window-based program for creating
+bibliography databases.  Figure~\ref{fig:bib:xbibtex} shows an example of
+\program{xbibtex} creating a bibliography entry.
+
+\epsimage{fig:bib:xbibtex}{Editing an article entry with \protect\program{xbibtex}}
+
+It does not appear that \program{xbibtex} can edit existing entries.
+It also does not handle unexpected fields or
+new entry types.
+
+\subsubsection{bibdb}
+
+The \ixx{\program{bibdb}}{bibdb} program is an MS-DOS-based bibliography
+database editor.  The screen capture in Figure~\ref{fig:bib:bibdb} shows an
+example of \program{bibdb} editing a bibliography entry.  \program{bibdb}
+displays only fields that have values.
+
+\epsimage{fig:bib:bibdb}{Editing an article entry with \protect\program{bibdb}}
+
+Although it does not handle arbitrary fields, \program{bibdb} has a large
+selection of optional fields.
+It does not handle new entry types.
+
+\section{Tib}
+
+\ixx{\program{Tib}}{Tib} is another tool for maintaining bibliography databases.  The
+format of a \program{Tib} database is the same as the format for the
+\program{troff} \program{refer}
+processor.\footnote{\textit{refer} databases can reportedly be
+converted to and from \BibTeX\ format.}  An example entry for
+\textit{The \TeX{}book} is shown in Example~\ref{ex:tibdb}.
+
+\begin{example}{ex:tibdb}{A Tib style database entry}
+%A Donald E. Knuth
+%T The \TeX{}book
+%I Addison-Wesley
+%D 1989
+\end{example}
+
+Unlike \BibTeX, which relies on the citation macros to 
+format citations correctly, \program{Tib} actually replaces the 
+citations\index{citations!in Tib@in \Tib} with 
+the appropriate information.  In other words, \program{Tib}-style citations
+are not control sequences; they are just text strings.  The \program{Tib} 
+processor creates an entirely new document file that should be passed
+to \TeX.
+
+The general format of a \program{Tib} citation is
+\verb|[.|\texttt{\textit{citation key(s)}}\verb|.]|.
+\program{Tib} databases do not contain a key field; instead,
+the citation keys can come from any fields in the
+database entry (you can exclude some fields
+if you wish).
+The punctuation around citations in square brackets is adjusted by
+\program{Tib}.  An alternate form of citation using angle brackets inserts
+a citation without adjusting any of the surrounding punctuation.
+
+The bibliography is inserted into your document wherever the string
+``\verb|.[]|'' occurs at the beginning of a line.  Analogous to \BibTeX,
+the format of the reference list is controlled by a \program{Tib} style.
+Styles for roughly fifteen technical journals are provided.
+
+\section{Making Indexes}
+
+Constructing an index\index{indexes}\index{tex@\TeX!indexes} for 
+a \TeX\ document is relatively straightforward.
+First, you must identify each occurrence of each word or concept that you want
+indexed.  To do this, you must insert \verb|\index| entries into your
+document.\footnote{The format you use must also provide support for
+indexing.  In \LaTeX\index{latex@\LaTeX!indexes}, most of the 
+support is built in, but you must use the
+\idx{makeidx style option}.  In Plain \TeX\ and other Plain-derived
+formats, input the \filename{idxmac.tex} macros at the top of your document.
+The rest of this section assumes that you use \LaTeX, although the
+principles hold for any macro package that supports indexing.}  When you
+format your document containing the 
+index entries, an \ext{IDX} file\index{IDX files} is
+created that contains all of the entries along with the page number where each
+entry occurred.
+
+The \program{MakeIndex}\index{MakeIndex!for indexes} 
+program\footnote{Frequently called \filename{makeidx} 
+on MS-DOS systems.} reads the \ext{IDX} file, sorts and collates the entries,
+and writes an \ext{IND} file\index{IND files}.  The \program{MakeIndex} 
+program can also 
+load an index style file, discussed in the next section.
+
+When \LaTeX\ processes your document, it inserts
+the contents of the \ext{IND} file into your document at the point where you
+use the \verb|\printindex| control sequence.
+
+\subsection{Index Entries}
+
+Index entries\index{indexes!entries}\index{special characters!in indexes}\index{characters!special!in indexes} use special 
+characters to identify different types of entries
+(simple entries, multiple-level entries, see-also's, etc.).  The exact
+characters used are controlled by the index style file, and it may be
+convenient to select an alternate style.  For example,
+\program{MakeIndex} uses the double-quote character by default to identify literal
+characters in the index entry, but the German\index{German} Babel style makes the literal
+double quote character a shortcut for the umlaut accent; this use makes it
+unavailable as the quotation character in index entries.
+
+Another point to consider when coding index entries is that the arguments
+to the index macros are expanded by \TeX.  This makes it difficult to insert
+some control sequences\index{control sequences!in indexes} in 
+an index entry (for example \verb|\index{TeX@\TeX}|).
+In \LaTeX, you can combat this problem by using the \verb|\protect| control
+sequence: \verb|\index{TeX@\protect\TeX}|.
+
+A complete list of the different kinds of index entries that can be
+created is included in \textit{MakeIndex: An Index Processor for 
+\LaTeX}~\cite{ll:makeindex}.
+
+%\subsubsection{Simple index entries}
+%
+%The simplest index entries identify a single top-level term.  This form
+%of entry is simply:
+%
+%\begin{ttindent}
+%\bs index\{\textit{frogs}\}
+%\end{ttindent}
+%
+%\subsubsection{Multi-level entries}
+%
+%To mark second and third level indexing terms, separate the levels with
+%an exclamation point:
+%
+%\begin{ttindent}
+%\bs index\{\textit{amphibians}!\textit{frogs}\}
+%\end{ttindent}
+%
+%This will create a top level heading called ``pets'' with a subheading
+%for ``dogs''.   To create deeper nesting, use more exclamation points:
+%
+%\begin{ttindent}
+%\bs index\{\textit{pets}!\textit{amphibians}!\textit{frogs}\}
+%\end{ttindent}
+%
+%\subsubsection{Page ranges}
+%
+%To identify an entry that spans a range of pages, simply mark the ends of
+%the range.  To mark the beginning of the range, use:
+%
+%\begin{ttindent}
+%\bs index\{\textit{amphibians}|(\}
+%\end{ttindent}
+%
+%and to mark the end:
+%
+%\begin{ttindent}
+%\bs index\{\textit{amphibians}|)\}
+%\end{ttindent}
+%
+%Both ends of the range should fall on pages with the same numbering
+%scheme (i.e. roman, arabic, etc.).
+%
+%\subsubsection{Cross references}
+%
+%To make a cross-reference entry, use the 
+
+\subsection{Index Format}
+\label{sec:indexeslooklike}
+
+The format of the index is controlled by both the index style (which
+specifies whether or not headings should be present, what the delimiters
+should be, etc.) and the definition of several control sequences:\footnote{In
+\LaTeX, these control sequences have default definitions that you may not
+need to change.}
+
+\begin{iplist}[\textnormal]{.25in}
+  \ipitem[\bs\texttt{theindex}] Controls what happens just before the index
+    is printed.  This sequence should establish a new page, set up 
+    running headers and footers, select multiple columns, and do whatever
+    other global setup is desired.
+  \ipitem[\bs\texttt{item}] Executed just before a first-level entry.
+  \ipitem[\bs\texttt{subitem}] Executed just before a second-level entry.
+  \ipitem[\bs\texttt{subsubitem}] Executed just before a third-level entry.
+  \ipitem[\bs\texttt{indexspace}] Executed between alphabetical sections.
+  \ipitem[\bs\texttt{endtheindex}] Controls what happens just after the index
+   is printed.  This sequence should undo anything that was started by
+   \verb|\theindex|.
+\end{iplist}
+
+\subsection{Special-purpose styles}
+
+A number of styles
+%\indexes{special-purpose styles}
+have been written 
+to allow you to develop special-purpose
+indexes.  \program{multind} and \program{index} are described here.
+
+\filename{multind} supports multiple indexes in a single document.
+
+\filename{index} is a reimplementation of the \LaTeX\ indexing
+  commands.  It
+  stores index entries in the \ext{AUX} files so that portions of 
+  a document can be reformatted without losing the entire index.
+  It also provides support for multiple indexes and replaces the
+  \textit{makeidx} style option.
+
+\section{Making Glossaries} 
+
+\index{glossaries}\index{tex@\TeX!glossaries}The \LaTeX\ 
+command \verb|\glossary| can be used to accumulate words
+and concepts for a document glossary.  The output, stored in a
+\ext{GLO} file\index{GLO files}, is very similar 
+to an \ext{IDX} file\index{IDX files}.  Like an index,
+the glossary file can be processed by \program{MakeIndex}\index{MakeIndex!for glossaries} to produce
+a sorted list of terms.  To produce a glossary, you must 
+create an index style for the glossary.  Here is a minimal 
+\filename{glossary.ist}:
+
+\begin{shortexample}
+keyword "\\glossaryentry"
+preamble "\n\\begin{theglossary}\n"
+postamble "\n\\end{theglossary}\n"
+\end{shortexample}
+
+The output file that \program{MakeIndex} creates will have to be edited
+by hand, naturally, in order to incorporate the definitions of the entries.
+You will also have to define an appropriate glossary environment by 
+defining the control sequences\index{control sequences!for glossaries} used to make the glossary:
+
+\begin{iplist}[\textnormal]{.25in}
+  \ipitem[\bs\texttt{theglossary}] Controls what happens just before the glossary
+    is printed.  This sequence should establish a new page, set up 
+    running headers and footers, and do whatever
+    other global setup is desired.
+  \ipitem[\bs\texttt{item}] Executed just before a glossary item.
+  \ipitem[\bs\texttt{endtheglossary}] Controls what happens just after the glossary
+   is printed.  This sequence should undo anything that was started by
+   \verb|\theglossary|.
+\end{iplist}
+
+Finally, you will have to \verb|\input| or \verb|\include| the glossary in
+your document.
+

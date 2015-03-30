@@ -1,0 +1,107 @@
+% Author: Anthony Bloesch
+% Title: tree.sty
+%
+% Copyright (C) Anthony Bloesch 1993
+%
+% Version: 1.0
+%
+% Purpose: Allow the automatic layout of n-ary trees with arbitrary node
+%          sizes in LaTeX.
+%
+% Usage: \begin{tree}[ROOT_POSITION]{TREE_NAME}
+%           \rootnode{ ... }
+%           \treenode{NODE_NAME1}{PARENT_1}{ ... }
+%              .
+%              .
+%              .
+%        \end{tree}
+%
+%        To layout a tree:
+%          1. Describe the tree in a tree environment.
+%          2. Run LaTeX on the file.
+%          3. Run treetex on the generated .tlo file to generate a .tli file.
+%          4. Run LaTeX again.
+%          5. If the tree is ever changed repeat steps 3 and 4.
+%
+%        Example:
+%          \begin{tree}{testtreea}
+%            \rootnode{root node}
+%            \treenode{nodeA}{root}{left root child}
+%            \treenode{nodeB}{root}{right root child}
+%            \treenode{nodeC}{nodeA}{nodeA child}
+%          \end{tree}
+%
+%        The argument of the environment (e.g. "testtreea") gives the
+%        name of the file to be generated.  Each tree must have
+%        exactly one root node which is defined with the \rootnode
+%        macro; its argument is the contents of the node.  All other
+%        nodes are defined with the \treenode macro.  The first
+%        argument of \treenode is its name (consisting only of
+%        alphabetical characters); the second is its parent's name;
+%        and the third is its contents.
+%
+%        The tree environment has an optional environment describing
+%        where the root of the tree should go relative to the tree.
+%        If the parameter is `t' (the default) then the root goes at the
+%        top of the tree with branches hanging down from it;
+%        otherwise the parameter must be a `l' and the root goes at
+%        the left of the tree with the branches spreading to the right.
+%
+%        Example:
+%          \begin{tree}[l]{testtreea}
+%            \rootnode{root node}
+%            \treenode{nodeA}{root}{left root child}
+%            \treenode{nodeB}{root}{right root child}
+%            \treenode{nodeC}{nodeA}{nodeA child}
+%          \end{tree}
+%
+%        Children of a node will be layed out, left to right, in the
+%        same order as they appear in the tree environment.
+%
+%        The tree environment will generate a warning when the .tli
+%        file has not been generated and inconsistencies between the
+%        .tlo and .tli files are detected.
+%
+%        The minimum seperation between nodes in the x and y
+%        directions can be changed setting the lengths
+%        \treexseparation and \treeyseparation.
+
+\newlength\treexseparation
+\treexseparation 10pt
+\newlength\treeyseparation
+\treeyseparation 10pt
+
+\newwrite\@tlo
+
+\def\tree{\@ifnextchar[{\@xtree}{\@xtree[t]}}
+\def\@xtree[#1]#2{\bgroup
+  \def\@treename{#2}
+  \immediate\openout\@tlo=\@treename.tlo
+  \immediate\write\@tlo{#1}
+  \immediate\write\@tlo{\the\treexseparation\space\the\treeyseparation}
+  \def\@printwdhtdp##1{
+     \setbox\@tempboxa\hbox{##1}
+     \edef\tempa{\immediate\write\@tlo{\space\space\the\wd\@tempboxa\space
+                 \the\ht\@tempboxa\space\the\dp\@tempboxa}}
+     \tempa
+     \relax}
+  \def\rootnode##1{
+     \def\root{##1}
+     \immediate\write\@tlo{root }\@printwdhtdp{##1}}
+  \def\treenode##1##2##3{
+     \expandafter\def\csname ##1\endcsname{##3}
+     \immediate\write\@tlo{##1 ##2 }\@printwdhtdp{##3}}
+}
+
+\def\endtree{
+  \immediate\closeout\@tlo
+  \def\shownode##1{\edef\@tempa{\expandafter\@cdr\string ##1\@nil}%
+                   \@ifundefined{\@tempa}{\@warning{Run treetex on \@treename}}{##1}}
+  \openin1=\@treename.tli
+  \ifeof1
+    \@warning{Run treetex on \@treename}
+    \fbox{\fbox{Run treetex on \@treename.}}
+  \else
+    \closein1 \relax\@@input\@treename.tli
+  \fi
+  \egroup}

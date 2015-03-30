@@ -1,0 +1,18 @@
+\newbox\dvgabox
+\newdimen\dvgawd
+\font\dvgaa=dvgaa at 72.27truept
+\font\dvgab=dvgab at 72.27truept
+\setbox\dvgabox=\vbox{\hbox{%
+\dvgaa\char0\char1\char2\char3\char4}}
+\dvgawd=\wd\dvgabox
+\setbox\dvgabox=\hbox{\vbox{\hsize=\dvgawd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\dvgaa\char0\char1\char2\char3\char4}
+\hbox{\dvgaa\char5\char6\char7\char8\char9}
+\hbox{\dvgaa\char10\dvgab\char0\char1\char2\char3}
+\hbox{\dvgab\char4\char5\char6\char7\char8}}}
+\ifx\parbox\undefined
+    \def\setdvga{\box\dvgabox}
+\else
+    \def\setdvga{\parbox{\wd\dvgabox}{\box\dvgabox}}
+\fi

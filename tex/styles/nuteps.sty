@@ -1,0 +1,72 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EPS images...
+%
+\newcount\epsf@g
+\newif\ifepsbox
+\epsboxfalse
+%
+% [#1] = filename
+% #2   = label
+% [#3] = lof caption
+% #4   = caption
+%
+\def\@epsimage[#1]#2[#3]#4{%
+  \begin{figure}
+    \ifepsbox
+      \dimen0=\textwidth
+      \advance\dimen0-2\fboxrule
+      \advance\dimen0-2\fboxsep
+      \fbox{\hbox to \dimen0{\hfil\epsfig{figure=figs/#1}\hfil}}
+    \else
+      \begin{center}
+        \leavevmode\epsfig{figure=figs/#1}
+      \end{center}
+    \fi
+    \caption[#3]{#4}
+    \label{#2}
+  \end{figure}
+  \epsboxfalse
+}
+
+\def\@@epsimage[#1]#2#3{%
+  \@epsimage[#1]{#2}[#3]{#3}%
+}
+
+\def\eps@image[#1]#2{%
+  \@ifnextchar[{\@epsimage[#1]{#2}}{\@@epsimage[#1]{#2}}% ]
+}
+
+\def\eps@tell@image[#1]{%
+  \typeout{Warning: #1 used for figure \f@gn@me}
+  \eps@image[#1]%
+}
+
+\def\eps@@image{%
+  \eps@image[\f@gn@me]%
+}
+
+%\epsimage[filename]{label}[lof caption]{caption}
+\def\epsimage{%
+  \ifnum\value{chapter}<10\relax%
+    \def\f@gch@p{0\arabic{chapter}}%
+  \else%
+    \def\f@gch@p{\arabic{chapter}}%
+  \fi%
+  \epsf@g=\value{figure}%  Need to advance this 'cause begin{figure} will...
+  \advance\epsf@g by 1\relax%
+  \ifnum\epsf@g<10\relax%%
+    \def\f@gf@g{0\number\epsf@g}%
+  \else%
+    \def\f@gf@g{\number\epsf@g}%
+  \fi%
+  \def\f@gn@me{tex.\f@gch@p.\f@gf@g.eps}%
+  \@ifnextchar[{\eps@tell@image}{\eps@@image}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Boxed eps figures
+%
+\def\epsbox{%
+  \epsboxtrue%
+  \epsimage%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

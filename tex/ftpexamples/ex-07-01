@@ -1,0 +1,8 @@
+    Using English and French}
+\documentstyle[english,francais]{article}
+\begin{document}
+This is a document which uses both English and 
+French. \selectlanguage{french} Mais, Je ne parle plus 
+la francais. \selectlanguage{english}  So I won't try 
+to make this example very long.
+\end{document}

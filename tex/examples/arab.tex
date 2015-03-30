@@ -1,0 +1,39 @@
+\documentstyle[arabtex,atrans]{report}
+
+\setarab
+
+\parindent0pt  
+\parskip2mm  
+\sloppy 
+\frenchspacing  
+
+\input arabdmac.tex % get macro definitions
+
+
+\textwidth=3in
+\pagestyle{empty}
+
+\begin{document}
+
+\parskip=2pt
+\let < \oldbra
+
+\setarab    % choose the language conventions
+\vocalize   % diacritics for short vowels on
+\transtrue  % additionally switch on the transliteration
+\arabtrue   % print arabic text ... is on anyway
+\spreadtrue % spread out caption
+
+\centerline {\<^gu.hA wa-.himAruhu>}
+
+\spreadfalse
+\begin{arabtext}
+'at_A .sadIquN 'il_A ^gu.hA ya.tlubu minhu .himArahu li-yarkabahu
+fI safraTiN qa.sIraTiN wa-qAla lahu:
+
+sawfa 'u`Iduhu 'ilayka fI al-masA'i , wa-'adfa`u laka 'u^graTaN. \\
+fa-qAla ^gu.hA:
+\end{arabtext}
+
+\end{document}
+

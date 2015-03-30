@@ -1,0 +1,16 @@
+\newbox\idrawbox
+\newdimen\idrawwd
+\font\idrawa=idrawa at 72.27truept
+\setbox\idrawbox=\vbox{\hbox{%
+\idrawa\char0\char1\char2\char3}}
+\idrawwd=\wd\idrawbox
+\setbox\idrawbox=\hbox{\vbox{\hsize=\idrawwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\idrawa\char0\char1\char2\char3}
+\hbox{\idrawa\char4\char5\char6\char7}
+\hbox{\idrawa\char8\char9\char10\char11}}}
+\ifx\parbox\undefined
+    \def\setidraw{\box\idrawbox}
+\else
+    \def\setidraw{\parbox{\wd\idrawbox}{\box\idrawbox}}
+\fi

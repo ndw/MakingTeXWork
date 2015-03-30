@@ -1,0 +1,73 @@
+% Filename: oldstyle.tex
+
+\def\author{Norman Walsh %
+           (derived from vpfcmrm by Alan Jeffrey)}
+\def\email{norm@ora.com}
+\def\lastmodified{04 Dec 1993}
+\def\versionnumber{0.6}
+\def\description{Computer Modern with old style numerals}
+
+% This TeX program generates osncmr10.vpl (the virtual 
+% property list for a fake CMR font) from:
+%
+%    cmr10 and cmmi10
+%
+
+\input makevpl
+\newcount\source
+\newcount\target
+
+% Then we make the vpl file.
+
+\makevpl{osncmr10}
+
+   \codingscheme TeX-text-with-old-style-numerals;
+
+   \designsize 10pt;
+
+   \loadfont\basefont=cmr10 at 10pt;
+   \loadfont\numbfont=cmmi10 at 10pt;
+
+% The font dimens come from the basefont.
+
+   \basefont
+   \fontdimens
+      1 : \fontdimen1\font
+      \for\source\in2\to7\do ,\fontdimen\source\font \od;
+
+% Create the standard text ligatures: 
+%   ff fi fl ffi ffl -- --- '? '!
+
+   \ligtable "f":"i"=:\oct"034","f"=:\oct"033","l"=:\oct"035";
+   \ligtable \oct"013": "i"=:\oct"016", "l"=:\oct"017";
+   \ligtable \oct"140": \oct"140"=:\oct"134";
+   \ligtable \oct"047": \oct"047"=:\oct"042";
+   \ligtable \oct"055": \oct"055"=:\oct"173";
+   \ligtable \oct"173": \oct"055"=:\oct"174";
+   \ligtable \oct"041": \oct"140"=:\oct"074";
+   \ligtable \oct"077": \oct"140"=:\oct"076";
+   \ligtable \oct"033": "i"=:\oct"036", "l"=:\oct"037";
+
+% Then we load in the characters.
+
+% All of the characters '000--'377 are the same as the 
+% basefont encoding except the numerals which come from 
+% the numbfont...
+% This VPL script assumes that the basefont is CMR and 
+% contains only '177 characters.
+
+   \basefont 
+     \character
+         '000='000
+         \for\source\in'001\to'057\do ,\source=\source\od
+         \for\source\in'072\to'177\do ,\source=\source\od;
+
+% From numbfont we take the numerals
+
+   \numbfont
+      \character 
+         '060='060
+         \for\source\in'061\to'071\do ,\source=\source\od;
+
+\endmakevpl
+\end

@@ -1,0 +1,33 @@
+    Documents Using RCS}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RCS definitions...
+%
+\newif\ifdraft
+\def\RCSID$#1${%
+  \ifdraft{\tolerance=100000%
+           \hbadness=100000%
+           \raggedright%
+           \marginpar{\tiny Draft #1}}%
+           \typeout{Draft #1}%
+  \else\typeout{Production run #1}\fi%
+}
+
+\def\RCSmargid$#1: #2 #3 #4 #5 #6 #7${%
+% #1 = ``Id''
+% #2 = filename
+% #3 = vers
+% #4 = date
+% #5 = time
+% #6 = author
+% #7 = state [locker]
+  \ifdraft
+    \setbox0=\hbox to 0pt{%
+        \tolerance=100000%
+        \hbadness=100000%
+        \parbox{4in}{%
+          \rm\tiny #2\\ #3\\ #4}%
+        \hss}%
+    \marginpar{\box0}%
+    \typeout{Draft Id: #2 #3 #4 #5 #6 #7}%
+  \fi
+}

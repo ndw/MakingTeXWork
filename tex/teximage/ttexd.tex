@@ -1,0 +1,18 @@
+\newbox\ttexdbox
+\newdimen\ttexdwd
+\font\ttexda=ttexda at 72.27truept
+\font\ttexdb=ttexdb at 72.27truept
+\setbox\ttexdbox=\vbox{\hbox{%
+\ttexda\char0\char1\char2\char3\char4}}
+\ttexdwd=\wd\ttexdbox
+\setbox\ttexdbox=\hbox{\vbox{\hsize=\ttexdwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\ttexda\char0\char1\char2\char3\char4}
+\hbox{\ttexda\char5\char6\char7\char8\char9}
+\hbox{\ttexda\char10\ttexdb\char0\char1\char2\char3}
+\hbox{\ttexdb\char4\char5\char6\char7\char8}}}
+\ifx\parbox\undefined
+    \def\setttexd{\box\ttexdbox}
+\else
+    \def\setttexd{\parbox{\wd\ttexdbox}{\box\ttexdbox}}
+\fi

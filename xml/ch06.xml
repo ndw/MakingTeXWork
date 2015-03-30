@@ -1,0 +1,2238 @@
+<chapter id="chap.pictures">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>Pictures and Figures</title>
+
+<para>Pictures<indexterm><primary sortas="tex">&TeX;</primary><secondary>pictures</secondary></indexterm> and figures<indexterm><primary sortas="tex">&TeX;</primary><secondary>figures</secondary></indexterm> are 
+an important component of many documents.  This
+chapter explores how they can be incorporated into your &TeX; documents.
+There are many ways to include pictures and figures in &TeX;.
+The most important considerations are the 
+type of image<indexterm><primary sortas="tex">&TeX;</primary><secondary>images</secondary></indexterm>, the type of
+printer you will be using, what platform you are using, and how portable
+the document must be.
+</para>
+
+<section id="sec.devindrev"><title>Different Kinds of Images</title>
+
+<para>Images<indexterm><primary>images</primary><secondary>types</secondary></indexterm> come from many, many different sources, but they
+can be divided into two broad classes: bitmapped and scalable (or vector).
+Bitmapped images<indexterm><primary>bitmap</primary><secondary>images</secondary></indexterm><indexterm><primary>images</primary><secondary>bitmap</secondary></indexterm> are produced
+whenever an image is scanned from a drawing, photograph, or other printed
+work.  They are also produced by most simple paint programs.
+Scalable images<indexterm><primary>scalable (vector) images</primary></indexterm><indexterm><primary>images</primary><secondary>scalable (vector)</secondary></indexterm><indexterm><primary>vector images (scalable)</primary></indexterm> are produced by some more sophisticated
+drawing programs, many commercial sources, and some other applications.  Both
+classes have advantages and disadvantages.
+</para>
+
+<para>Files that contain graphic images usually end with 
+an extension<indexterm><primary>extensions (file)</primary><secondary>image format</secondary></indexterm> that 
+identifies the format of the image.  The extension is a common
+and convenient nickname for the image format.  In this chapter, I
+refer to graphic image formats by their extension (for example, GIF
+images or XBM images) without explanation.  I do this partly because
+it is easy, but also because it is the most common way of
+referring to them, and you don't really need to know
+anything about the image formats to use them.  If your &dvidriver; understands PCX images, you just need a PCX image; you don't have to
+have a detailed understanding of the format (thank goodness).  If you
+want to know more, refer to the
+filename extension glossary in Appendix&nbsp;<xref role="label" linkend="chap.fileext"/>, which
+will help you identify each of the formats discussed in this chapter.
+</para>
+
+<section><title>Bitmapped Images</title>
+
+<para>Photographs<indexterm><primary>photographs</primary></indexterm> and images 
+with a lot of subtle detail are almost always
+stored as bitmaps.  Scanners always produce bitmapped images<indexterm><primary>bitmap</primary><secondary>images</secondary></indexterm>.  Some
+bitmap images can be converted into scalable formats. High-end graphic
+packages like \product{CorelDRAW}<indexterm><primary>CorelDRAW</primary></indexterm> and \product{\idx{Adobe Illustrator}} can do this,
+but most cannot.  The exceptions are line drawings and other
+very high contrast images.  Bitmaps are also <quote>cheap</quote> to print.
+Neither the computer nor the printer must do very much work to print a
+black-and-white bitmap image.  (Color bitmap images must be dithered
+before they can be printed, but that's a separate consideration because
+it need be done only once, not every time the image is printed.)
+Bitmapped images are also easy to convert from one format to another.
+</para>
+
+<para>Unfortunately, bitmap images are very device-dependent.  They are
+stored as a two-dimensional array of dots, which gives them a fixed
+resolution.  A $3\times5$-inch bitmap image that prints correctly on your
+300dpi laser printer will only be a $\frac{3}{4}\times1\frac{1}{4}$-inch
+picture if you make your final copy on a 1200dpi photo-typesetter.
+</para>
+
+<para>Bitmap images also require considerable memory and disk space to store.
+The $3\times5$ image described above requires more than 150Kb of memory
+(if it is uncompressed).
+</para>
+
+<para>A final consideration is that bitmap images do not scale very well.
+Enlarging or reducing the image requires either removing some dots (causing
+a loss of detail) or inserting extra dots (frequently giving slanted lines 
+a very jagged appearance).  Rescaling images by exact integer amounts 
+(doubling or tripling its size, for example, but not making it 2$\frac{1}{2}$
+times as large) works reasonably well (except for jagged edges).  
+Shaded regions, which are composed of a regular pattern of black and white dots, are
+frequently disrupted by irregular <quote>blotching</quote> if non-integral scaling
+is used.
+</para>
+
+</section>
+<section><title>Scalable Images</title>
+
+<para>Many graphic images can be represented more compactly as a collection
+of lines, curves, and other discrete elements.  Images of this type
+are called <emphasis>scalable</emphasis> or <emphasis>vector</emphasis> images<indexterm><primary>scalable (vector) images</primary></indexterm><indexterm><primary>vector images (scalable)</primary></indexterm>.  Instead of storing every
+pixel in a rectangular array, vector images store the encoded instructions
+for <quote>drawing</quote> the image.  This provides a compact representation.
+A circle, no matter how large, can be represented with
+just a few data points: the position of the center, the radius,
+the width and color of the line that forms the circle, and the 
+pattern that fills the circle.  It is also easy to change the size of 
+the image; if you halve every measurement, the image is drawn
+at one half the size with minimal loss of detail.
+</para>
+
+<para>
+One drawback of scalable images is that they require considerable 
+computational power to render.  Every printer ultimately
+prints the page as a large bitmap; the print engine has to translate
+the lines, curves, and fills of a scalable image into a bitmap
+before this is possible.<footnote><para>{Some devices, most notably
+plotters, don't work this way.  They really draw lines and curves with
+physical pens.}</para></footnote>  Previewing scalable images requires 
+translating them into bitmaps to display them.
+This can be a noticeably slow process unless you have a very fast computer.
+</para>
+
+<para>The other significant drawback of scalable images is that they are difficult 
+to translate
+from one format to another.  For example, to translate 
+a PostScript image<indexterm><primary>PostScript</primary><secondary>images</secondary></indexterm>
+into something that can be printed on a non-PostScript printer, 
+you have to have a program that understands all of
+the commands in the PostScript file.  A bitmap conversion, on the
+other hand, doesn't
+require any understanding of graphics commands; it simply has to know
+how to rearrange the bits in the array.  What it boils down to is this:
+it's a lot easier to write a translation program to <quote>reverse the
+order of all the bits in each byte in each row</quote> than it is to write
+one that can <quote>draw the bezier curve with these three control points
+using a dashed, light-blue line $\frac{1}{8}$ of an inch wide.</quote>
+</para>
+
+</section>
+</section>
+<section><title>Device Independence Revisited</title>
+
+<para>Pictures<indexterm><primary>pictures</primary><secondary>device independence</secondary></indexterm> and 
+figures<indexterm><primary>figures</primary><secondary>device independence of</secondary></indexterm> are a 
+foreign concept to &TeX;.  Remember, &TeX; cares only about building pages out of boxes and glue.  &TeX;'s notion
+of a picture is frequently nothing more than <quote>something special goes
+here (I don't know what) and it's 5 inches wide, 2 inches high, and 1
+inch deep.</quote>  This is device independence, of a sort, but many of the
+easiest ways to include pictures and figures in &TeX; do rely on
+features of a specific &dvidriver; or a specific kind of printer.  If
+document portability is an issue, consider carefully before you select
+a particular way of including pictures and figures.
+</para>
+
+<para>On the bright side, 
+most &dvidriver;s<indexterm><primary>DVI drivers</primary><secondary>handling pictures and figures</secondary></indexterm> provide 
+some mechanism
+for incorporating pictures and figures.  As long as it is possible to
+convert the images from the format originally used to a format that
+another &dvidriver; understands, document portability can be achieved.
+For example, it is possible to print PostScript figures on a
+non-PostScript device if they are first converted into another format with
+<command>Ghostscript</command> or some other PostScript interpreter.
+Unfortunately, it is usually
+inconvenient to convert pictures from one format to another, and some
+conversions may distort the images a little bit (or a
+lot).
+</para>
+
+</section>
+<section id="sec.ptexpic"><title>Using Only &TeX;</title>
+
+<para>This section describes picture and figure environments that don't use
+any external programs.  Graphics created in this way are entirely 
+device-independent and can be printed with any &dvidriver;.
+</para>
+
+<section><title>Plain &TeX;</title>
+
+<para>Plain &TeX;<indexterm><primary sortas="Plain tex">Plain &TeX;</primary><secondary>pictures and figures</secondary></indexterm><indexterm><primary>pictures</primary><secondary sortas="Plain tex">Plain &TeX;</secondary></indexterm><indexterm><primary>figures</primary><secondary sortas="Plain tex">Plain &TeX;</secondary></indexterm> has no 
+built-in provision for creating pictures or
+figures.  It is possible to do simple diagrams and graphs by writing
+macros that place individual points on the page.
+Figure&nbsp;<xref role="label" linkend="fig.plaintex"/> shows several data points plotted in Plain
+&TeX;.  The input was derived from
+macros presented in Appendix D of <emphasis>The
+&TeX;book</emphasis>&nbsp;<xref linkend="kn:texbook"/>; it is shown in
+Example&nbsp;<xref role="label" linkend="ex.plaintexm"/>.
+</para>
+
+<figure id="fig.plaintex">
+<title>An example diagram in Plain &TeX;</title>
+<screen>FIXME:</screen>
+</figure>
+
+<example id="ex.plaintexm">
+<title>The Input for the Plain &TeX; Diagram</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="tex.06.01.tex"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>With special-purpose fonts, it is possible to make more complex figures
+in Plain &TeX;.  However, &LaTeX; provides a <literal>picture</literal> environment
+which greatly simplifies the process.
+</para>
+
+</section>
+<section id="sec.pictures.latex"><title>&LaTeX;</title>
+
+<para>The <literal>picture</literal> environment 
+in &LaTeX;<indexterm><primary sortas="latex">&LaTeX;</primary><secondary>pictures and figures</secondary></indexterm><indexterm><primary>pictures</primary><secondary sortas="latex">&LaTeX;</secondary></indexterm><indexterm><primary>figures</primary><secondary sortas="latex">&LaTeX;</secondary></indexterm> is implemented on top of
+the kinds of primitive operations shown in Example&nbsp;<xref role="label" linkend="ex.plaintexm"/>.
+Working in the <literal>picture</literal>
+environment is a lot like working on graph paper: you begin by
+specifing how big the graph paper is and the distance between lines on
+the paper (the lines aren't really there; they're just used for
+reference), and then inside the <literal>picture</literal> environment, you
+put <emphasis>picture elements</emphasis> down on the page at the intersections of the
+lines on the grid.
+</para>
+
+<para>&LaTeX; provides picture elements for text, boxes, solid and empty
+circles, lines, and arrows.  Lines and arrows can be drawn at angles,
+but they are formed by taking characters from a special set of fonts
+so there is a limited number of angles available.  The advantage
+of using special fonts to draw the lines is that it is relatively efficient.
+</para>
+
+<para>Figure&nbsp;<xref role="label" linkend="fig.latexpic"/> is a simple figure drawn with &LaTeX;'s
+<literal>picture</literal> environment.  The &LaTeX; input for this environment is shown
+in Example&nbsp;<xref role="label" linkend="ex.latexpicsrc"/>.  
+</para>
+
+<figure id="fig.latexpic">
+<title>A parallelogram in &LaTeX;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<example id="ex.latexpicsrc">
+<title>The &LaTeX; Input for <xref linkend="fig.latexpic"/></title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="tex.06.02.tex"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<section id="sec.Fig"><title>The epic and eepic styles</title>
+
+<para>Constructing diagrams using <literal>picture</literal> primitives is very tedious
+because each element of the picture has to be placed individually.
+The <emphasis>epic</emphasis> style extends &LaTeX;'s picture environment
+by adding several higher-level commands for picture construction.
+These commands allow you to draw solid, dotted, and dashed lines with 
+arbitrary slopes, create matrices and grids with a single command,
+join several independently placed elements together, and read a list
+of points from an external file.  
+</para>
+
+<para>The diagrams produced 
+by <filename>epic.sty</filename><indexterm><primary>epic.sty style files</primary></indexterm> are still limited by
+the fonts available 
+to &LaTeX;.  The <filename>eepic.sty</filename><indexterm><primary>eepic.sty style files</primary></indexterm> extends
+<filename>epic.sty</filename> by using \special commands to construct the
+more complex figure elements.  The \special commands are 
+the same as those used by <filename>tpic</filename> (see the <quote><xref role="label" linkend="sec.tpic"/></quote>
+section in this chapter) and are supported by
+many &dvidriver;s.
+</para>
+
+<para>Figure&nbsp;<xref role="label" linkend="fig.epic"/> shows
+a figure constructed with the <emphasis>epic</emphasis> macros.  
+Figure&nbsp;<xref role="label" linkend="fig.epic"/> (a) uses <filename>epic.sty</filename>, and (b) uses
+<filename>eepic.sty</filename>.  Notice that <filename>eepic.sty</filename> provides circles
+of arbitrary size and smooth lines at any angle.  The
+end points of the radial lines in this figure were calculated by
+another program and read from a data file by <emphasis>epic</emphasis>.  The
+source for these figures is shown in Example&nbsp;<xref role="label" linkend="ex.epicsrc"/> (both diagrams
+were created with the same source).
+</para>
+
+<example id="ex.epicsrc">
+<title>The epic Input for <xref linkend="fig.epic"/></title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="tex.06.03.tex"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<figure id="fig.epic">
+<title>A figure created with (a) epic, and (b) eepic</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+</section>
+<section><title>The bezier style</title>
+
+<para>The <emphasis>bezier</emphasis> style<indexterm><primary>bezier style macros</primary></indexterm> allows you 
+to construct curved lines in the 
+&LaTeX; picture environment.  An example is shown in 
+Figure&nbsp;<xref role="label" linkend="fig.bezier"/>.  Its source is shown in Example&nbsp;<xref role="label" linkend="ex.beziersrc"/>.
+The grid in this example was created with <emphasis>epic</emphasis> for convenience.
+</para>
+
+<example id="ex.beziersrc">
+<title>The Input for <xref linkend="fig.bezier"/></title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="tex.06.04.tex"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<figure id="fig.bezier">
+<title>Several bezier curves created with the &LaTeX; bezier style</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+</section>
+<section><title>Other styles</title>
+
+<para>In addition to these styles, there are several other style files
+for doing particular types of drawing.  Styles exist for drawing logical
+circuit diagrams, bar charts, trees, and more.
+</para>
+
+</section>
+<section><title>Other approaches</title>
+
+<para>Because constructing &LaTeX; drawing by hand is tedious, several programs 
+have been written that allow you to construct diagrams visually
+and then produce the appropriate <literal>picture</literal> environments
+automatically.  The <command>texcad</command><indexterm><primary>texcad</primary></indexterm> program distributed 
+with &emTeX;<indexterm><primary sortas="emTeX">&emTeX;</primary></indexterm>
+is one such program.  A similar program called <command>xtexcad</command><indexterm><primary>xtexcad</primary></indexterm> runs
+under X11 on some platforms, and there is a Fig translator for the
+&LaTeX; <literal>picture</literal> environment. (For more information about Fig,
+see the <quote><xref role="label" linkend="sec.Fig"/></quote> section later in this chapter.)
+</para>
+
+</section>
+</section>
+<section><title>&PiCTeX;</title>
+
+<para>&PiCTeX;<indexterm><primary sortas="PiCTeX">&PiCTeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="PiCTeX">&PiCTeX;</secondary></indexterm> is a macro 
+package that you can load on top of Plain &TeX; or &LaTeX;.<footnote><para>And probably any other format derived from Plain &TeX;.</para></footnote>  
+It does an
+amazing job of plotting mathematical functions<indexterm><primary>mathematics</primary><secondary sortas="functions with PiCTeX">functions with &PiCTeX;</secondary></indexterm> and two-dimensional
+graphs directly in &TeX;.  An example of &PiCTeX; (taken from 
+<emphasis>The &PiCTeX; Manual</emphasis>&nbsp;<xref linkend="mw:pictex"/>)
+ is shown in Figure&nbsp;<xref role="label" linkend="fig.pictex"/>.  The source for this
+figure is shown in Example&nbsp;<xref role="label" linkend="ex.pictexsrc"/>.
+</para>
+
+<figure id="fig.pictex">
+<title>Sample diagrams using &PiCTeX;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<example id="ex.pictexsrc">
+<title>&PiCTeX; Input for <xref linkend="fig.pictex"/></title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="tex.06.05.tex"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>The primary drawback of &PiCTeX; is that it requires a considerable
+amount of memory to use.  Even relatively simple looking graphs
+require a big &TeX; to plot with &PiCTeX;.  &PiCTeX; also produces
+very, very large <filename role="extension">DVI</filename> files (the graphs are drawn by interpreting
+and plotting each pixel individually).  This usually results in very
+large output files from the &dvidriver;, and some printers may have
+difficulty printing your documents.
+</para>
+
+<para>The &PiCTeX; macros are freely available, but the manual is not.  You
+can purchase the manual directly from the author of &PiCTeX; or 
+from the &TeX; User's 
+Group.
+</para>
+
+</section>
+<section><title>&XYPic;</title>
+
+<para><command>&XYPic;</command><indexterm><primary sortas="XYPic">&XYPic;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="XYPic">&XYPic;</secondary></indexterm> is 
+another add-on macro package for &TeX;, &LaTeX;, and other
+formats.  It provides considerably more flexibility than the &LaTeX; picture environment without resorting to the resource-expensive
+strategy of &PiCTeX;.  
+</para>
+
+<para><command>&XYPic;</command> provides many more arrows than &LaTeX; (including curved 
+and self-pointing
+forms), a wider variety of dashed and dotted lines, provision for
+lines that bend and go around
+\linebreak
+</para>
+
+<para>other picture elements, and annotations
+for lines and arrows.  It seems especially well suited to typesetting
+commutative diagrams, simple state-transition diagrams, and complex
+annotated matrices.
+</para>
+
+<para>The syntax used in <command>&XYPic;</command> diagrams is not as straightforward
+as &LaTeX;'s picture environment.  An example of a complex <command>&XYPic;</command>
+diagram is shown in Figure&nbsp;<xref role="label" linkend="fig.xypic"/>. The corresponding 
+source is shown in Example&nbsp;<xref role="label" linkend="ex.xypicsrc"/>.
+</para>
+
+<figure id="fig.xypic">
+<title>An &XYPic; diagram</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<example id="ex.xypicsrc">
+<title>The &XYPic; Input for <xref linkend="fig.xypic"/></title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="tex.06.06.tex"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+</section>
+<section><title>&DraTeX;</title>
+
+<para>&DraTeX;<indexterm><primary sortas="DraTeX">&DraTeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="DraTeX">&DraTeX;</secondary></indexterm> is a 
+macro package that can be loaded on top of Plain &TeX; or
+&LaTeX; and provides many sophisticated drawing features.  An example is shown
+in Figure&nbsp;<xref role="label" linkend="fig.dratex"/>. The source is in Example&nbsp;<xref role="label" linkend="ex.dratexsrc"/>.
+</para>
+
+<figure id="fig.dratex">
+<title>An &DraTeX; diagram</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<example id="ex.dratexsrc">
+<title>The &DraTeX; Input for <xref linkend="fig.dratex"/></title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="tex.06.07.tex"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>&DraTeX; offers a wide variety of low-level drawing commands: straight lines at
+arbitrary angles, circles of any size, bezier curves, rectangular or polar
+coordinate systems, perspective for three-dimensional figures, user-definable
+shading patterns, clipping, repetition, and user-definable drawing objects and
+commands.  A supporting package, Al&DraTeX;<indexterm><primary sortas="AlDraTeX">Al&DraTeX;</primary></indexterm>, provides high-level drawing
+commands for pie charts, XY charts, bar charts, spread diagrams, grid
+diagrams, trees, and diagram annotations (arrows, edges, labels).
+</para>
+
+<para>Although it is a flexible and portable solution, beware that complex figures
+may require considerable time to compute and will almost certainly require
+a big &TeX;.  The resulting <filename role="extension">DVI</filename> files tend to be large as well.
+</para>
+
+<para>&DraTeX; and Al&DraTeX; are described in <emphasis>&TeX; &amp; &LaTeX;:
+Drawing and Literate Programming</emphasis>&nbsp;<xref linkend="eg:dratex"/>.
+</para>
+
+</section>
+</section>
+<section><title>Using a Little Help</title>
+
+<para>On most platforms, if you 
+have &TeX;, &MF;<indexterm><primary sortas="metafont">&MF;</primary><secondary>for pictures and figures</secondary></indexterm> is 
+available.  Because &MF; was
+designed for drawing, it has much better support for pictures and figures
+than &TeX;.  There are three utilities that allow you to combine &TeX; and &MF; to create pictures: <command>&MFPic;</command> and <command>&FigMF;</command>.
+</para>
+
+<section><title>&MFPic;</title>
+
+<para><command>&MFPic;</command>'s <literal>picture</literal> environment and &LaTeX;'s <literal>picture</literal> environment
+are implemented very differently.
+The commands
+in <command>&MFPic;</command> don't attempt to typeset your diagram with special fonts;
+instead, they write &MF; commands to another file.  This file must be
+processed with &MF; before your document can be viewed.
+</para>
+
+<para>Because &MF; is used to draw the actual diagram, the <command>&MFPic;</command> macros
+are much more flexible than the &LaTeX; picture creation commands.
+<command>&MFPic;</command> macros provide lines (at any angle), rectangles, polygons,
+circles (of any size), ellipses, cyclic and acyclic curves,
+arcs, and wedges (all empty, shaded, or filled). 
+</para>
+
+<para>Unlike <command>&FigMF;</command>, described below, <command>&MFPic;</command> can plot user-specified functions
+(parametrically or directly, using polygonal or bezier interpolation).
+</para>
+
+<para>Finally, because <command>&MFPic;</command> works so directly with &TeX;, it can include
+labels and captions in the figure as well as allowing <quote>&MF; hackers</quote>
+to insert &MF; code directly.
+</para>
+
+</section>
+<section><title>&FigMF;</title>
+
+<para>The <quote>Fig</quote> in <command>&FigMF;</command><indexterm><primary sortas="FigMF">&FigMF;</primary></indexterm> stands for the Fig graphics code (in this
+case, Fig version 2.1).  Fig is a device-independent way of
+representing figures.  Like &TeX; <filename role="extension">DVI</filename> files, Fig graphics<indexterm><primary>Fig graphics</primary></indexterm> are
+always translated into a device-dependent form before they are
+printed.  
+<command>&FigMF;</command> translates Fig graphics into &MF; code, which can be rendered
+into a font that is usable by &TeX; on any platform.  
+</para>
+
+<para>At present, there are a few limitations on <command>&FigMF;</command>: text objects are
+ignored, and arrowed and non-solid line styles are not supported.  
+The advantage of <command>&FigMF;</command> is that very good interactive drawing programs,
+like <command>xfig</command>, can be used to create figures.
+</para>
+
+</section>
+<section id="sec.tpic"><title>&MF;</title>
+
+<para>If the idea of programming directly in &MF;<indexterm><primary sortas="metafont">&MF;</primary><secondary>for pictures and figures</secondary></indexterm> is appealing to you, start by
+reading <quote>Simple Drawings in &MF;</quote>&nbsp;<xref linkend="zw:simple"/>.  This is a short document
+(freely available) that describes how simple drawings can easily be rendered
+directly in &MF;.
+</para>
+
+<para>In order to use &MF; creatively, <emphasis>The \MF{}book</emphasis>&nbsp;<xref linkend="kn:mfbook"/> is
+really a necessity, but you can get a feel for the picture creation process in
+&MF; without it.
+</para>
+
+</section>
+</section>
+<section><title>Using a Little More Help</title>
+
+<para>A couple of &TeX; macro packages combine the convenience of using
+only &TeX; commands to produce pictures and figures with the power
+of PostScript<indexterm><primary>figures</primary><secondary>with PostScript</secondary></indexterm><indexterm><primary>pictures</primary><secondary>with PostScript</secondary></indexterm>.  Using these macros makes your documents less portable
+because they rely on a PostScript printer or PostScript interpreter to
+be printed.
+</para>
+
+</section>
+<section id="sec.pictures.pstricks"><title>&PSTricks;</title>
+
+<para>The &PSTricks;<indexterm>
+<primary>PSTricks</primary>
+</indexterm><indexterm>
+<primary>macro packages</primary>
+<secondary>PSTricks</secondary>
+</indexterm> macro package
+is a &TeX;-PostScript hybrid.  The advantage of this approach is that
+&PSTricks; is able to provide much wider functionality than the
+preceding packages without leaving &TeX;.  The disadvantage is that it
+makes your documents dependent on a PostScript printer.
+</para>
+
+<para>One of the neatest features of &PSTricks; is the ability to
+interact with other &TeX; objects.  You can add PostScript annotations
+(curved lines, labels, etc.) to the entries in a table, for example,
+or point to other elements on the page.
+</para>
+
+<para>In addition to allowing you to insert essentially arbitrary
+PostScript commands directly into your document, &PSTricks; provides
+&TeX; macros for most common picture elements including: commands for
+curved and straight lines (at arbitrary angles), a wide variety of
+arrow heads and tails, pattern-filled regions, regular and irregular
+polygonal shapes, text scaling and rotation, and grids.
+</para>
+
+</section>
+<section><title>&TeX;draw</title>
+
+<para>&TeX;draw, like \product{\PSTricks}, provides support for pictures and figures
+by relying on a PostScript back end.  
+</para>
+
+<para>&TeX;draw<indexterm><primary sortas="tex{}draw">&TeX;draw</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="tex{}draw">&TeX;draw</secondary></indexterm> is 
+organized into a toolbox of simple routines from which
+more complex commands can be constructed.  
+The &TeX;draw manual&nbsp;<xref linkend="pk:texdraw"/>
+includes several examples of how complex commands can be built from
+toolbox routines.
+</para>
+
+</section>
+<section><title>tpic</title>
+
+<para>The <quote>pic</quote><indexterm><primary>pic graphics in troff</primary></indexterm> 
+drawing language was designed for <command>troff</command> documents.
+The <command>tpic</command><indexterm><primary>tpic</primary></indexterm><indexterm><primary>macro packages</primary><secondary>tpic</secondary></indexterm><indexterm><primary>troff</primary><secondary>for pictures and figures</secondary></indexterm> program interprets pic drawings and produces &TeX; output to render them.  The output relies on a set of \special
+commands, which must be implemented by the &dvidriver; to actually
+produce the output.  The <command>tpic</command> \specials are implemented
+by many &dvidriver;s.
+</para>
+
+</section>
+<section id="sec.scaleformat"><title>Using a Lot of Help</title>
+
+<para>Although many nice effects can be achieved directly in &TeX; or
+with &MF;, you will probably want to include some other form of image
+(e.g., an encapsulated PostScript figure or a scanned photograph) 
+in a &TeX; document eventually.
+</para>
+
+<para>There are a myriad of choices when this occurs.  To a large extent,
+the options available depend on the kind of printer you have,
+which &dvidriver;s you use, and to what extent you are willing
+to sacrifice device independence.
+</para>
+
+<section><title>Electronic Cut-and-paste</title>
+
+<para>Documents<indexterm><primary sortas="cut and paste (in tex)">cut and paste (in &TeX;)</primary></indexterm> that 
+require complex graphics may be difficult to produce
+as a single &TeX; document.  You may exceed the memory
+limitations of your version of &TeX; if you try to put too many
+figures on a given page, or you may wish to include graphics
+from incompatible macro packages (suppose you are using the 
+Lollipop format for example, and you want to include a &LaTeX; <literal>picture</literal>).
+</para>
+
+<para>You can always leave blank space in your document, print the graphic
+on a separate page, and then combine the two pages with scissors,
+glue, and a photocopy machine.  However, there are many times when
+this is inappropriate (not to mention the aesthetic sensibilities
+it may disturb).
+</para>
+
+<para>Another solution is to use a program that can perform cut-and-paste
+operations on the output files before they are printed.  If you use
+Plain &TeX; or &LamSTeX;, one option 
+is <command>DVIpaste</command><indexterm><primary>DVIpaste</primary></indexterm>.  <command>DVIpaste</command>
+can insert parts of one <filename role="extension">DVI</filename> file into another.  It is part of the
+&LamSTeX; distribution.  The documentation for <command>DVIpaste</command> contains
+a good example of its use.  Unfortunately, <command>DVIpaste</command> relies on
+macros that are incompatible with most other macro packages.
+</para>
+
+<para>Some &dvidriver;s like <command>dvimsp</command><indexterm><primary>dvimsp</primary></indexterm>,<footnote><para>{<command>dvimsp</command>
+has been replaced by <command>dvidot</command> in the beta test distributions.}</para></footnote> 
+which comes with
+&emTeX;, can translate <filename role="extension">DVI</filename> files into bitmapped images that can
+then be incorporated into your document directly.  
+Figures&nbsp;<xref role="label" linkend="fig.caffeine"/>, <xref role="label" linkend="fig.lithium"/>, and &nbsp;<xref role="label" linkend="fig.mozart"/>
+in Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>, <emphasis><xref role="label" linkend="chap.macpack"/></emphasis>, were inserted
+into this book
+using <command>dvidot</command><indexterm><primary>dvidot</primary></indexterm>.
+</para>
+
+</section>
+<section><title>Scalable Image Formats</title>
+
+<para>Several of the most commonly encountered scalable image formats are
+PostScript (usually encapsulated)<indexterm><primary>PostScript</primary><secondary>for scalable images</secondary></indexterm><indexterm><primary>EPS (Encapsulated PostScript) file format</primary></indexterm>, 
+HPGL (Hewlett-Packard's<indexterm><primary>HPGL file format</primary></indexterm>
+Plotter language), DXF (Autocad's vector format)<indexterm><primary>Autocad DXF file format</primary></indexterm>, and the Fig graphics<indexterm><primary>Fig graphics</primary></indexterm> language.  PostScript
+and HPGL are used by specific printers and plotters, DXF files are created
+by many computer-aided design programs, and Fig is a graphic language
+understood by several free editing tools---it is always converted into
+something else before it is printed.  Many programs
+that can edit scalable images have their own vendor-specific formats.
+Luckily, these programs can usually produce PostScript or HPGL output
+as well.
+</para>
+
+<para>PostScript images are the most commonly encountered scalable images.
+Drawing packages that output PostScript generally 
+produce <emphasis>encapsulated  PostScript</emphasis> (EPS)<indexterm><primary>encapsulated  PostScript (EPS)</primary></indexterm><indexterm><primary>PostScript</primary><secondary>Encapsulated (EPS)</secondary></indexterm>.  Similarly, most PostScript clip-art
+is distributed in EPS format.  Encapsulated PostScript is a subset of
+the PostScript language.  One of the most important features of EPS
+images is a <emphasis>bounding box</emphasis><indexterm><primary>PostScript</primary><secondary>bounding box</secondary></indexterm><indexterm><primary>bounding box</primary><secondary>in PostScript</secondary></indexterm>.  
+The bounding box identifies the size of
+the EPS image.  This information is used to determine the
+scaling factor required to get an image of the correct size.  
+</para>
+
+<para>Generic PostScript can sometimes be converted into encapsulated
+PostScript.  For example, the <command>ps2epsi</command><indexterm><primary>ps2epsi</primary></indexterm> program that comes
+with <command>Ghostscript</command><indexterm><primary>Ghostscript</primary></indexterm> attempts to convert generic PostScript into
+encapsulated PostScript.  
+</para>
+
+<para>Some software produces reasonable PostScript figures, but fails to include the
+bounding box.  For those situations, the <command>bbfig</command><indexterm><primary>bbfig</primary></indexterm> program 
+that comes
+with <command>dvips</command> may help.  <command>bbfig</command> uses the printer to calculate
+a bounding box that you can insert into the figure.  After you have printed
+the figure, you can construct a bounding box by hand, if necessary (sometimes
+<command>bbfig</command> gets confused).  Simply measure the height and width of the
+figure and its position on the page (measured from the bottom-left corner).  
+The bounding box is a rectangle measured from the
+lower-left corner of the figure to the upper-right corner.
+An example is shown in Figure&nbsp;<xref role="label" linkend="fig.epsbox"/>.  
+</para>
+
+<figure id="fig.epsbox">
+<title>A PostScript bounding box example</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<para>The bounding box is measured in PostScript points.  There are 72 PostScript
+points to the inch, so the image in Figure&nbsp;<xref role="label" linkend="fig.epsbox"/> has the
+following bounding box:
+</para>
+
+<informalexample>
+<para>
+  &lt;!-- %BoundingBox: 115.2 180 468 626.4 -->
+</para>
+</informalexample>
+
+<para>If you are printing your document on a PostScript printer, you will find that
+PostScript
+images are easy to handle; every PostScript &dvidriver; that I have seen 
+allows you to incorporate encapsulated PostScript
+with one or more \special commands.  The section 
+<quote><xref role="label" linkend="sec.incps"/></quote>
+later in this chapter describes two ways of incorporating encapsulated
+PostScript images into Plain &TeX; or &LaTeX; documents for printing
+on a PostScript printer.
+</para>
+
+<para>PostScript output on non-PostScript devices is much more difficult,
+although it can be achieved with a PostScript interpreter like
+<command>Ghostscript</command>.<footnote><para>{In fairness, the degree of difficulty
+depends on the platform you work on.  Some systems, like the Amiga,
+have very good support for PostScript output, even on non-PostScript
+devices.  Alternatively, if you have a fast computer, the extra 
+translation through <command>Ghostscript</command> may be quite painless.}</para></footnote>
+For a detailed description of how PostScript images can be converted
+into another format with <command>Ghostscript</command>, see the <quote><xref role="label" linkend="sec.gs"/></quote>
+section later in this chapter.
+</para>
+
+<para>Hewlett-Packard HPGL<indexterm><primary>HPGL file format</primary></indexterm> is 
+the plotter language developed by
+HP for its line of pen-based plotting devices.  Many
+computer-aided design and drafting programs can produce HPGL.  In
+addition to plotters, the HP LaserJet III and more recent HP
+LaserJet printers also understand HPGL.  On an
+HP LaserJet III or later model printer, you can print HPGL directly if
+your &dvidriver; allows you to include printer-specific data.  This
+ability was introduced in version 1.4t 
+of the &emTeX; <command>dvihplj</command><indexterm><primary>dvihplj</primary></indexterm>
+driver.
+</para>
+
+<para>If your &dvidriver; does not support printer-specific files or
+your printer does not understand HPGL, there are at least two
+conversion programs (<command>hp2xx</command><indexterm><primary>hp2xx</primary></indexterm> and 
+<command>hp2ps</command><indexterm><primary>hp2ps</primary></indexterm>) that 
+may be able to convert your HPGL drawings into another form you can use.
+</para>
+
+<para>The Fig graphics language was designed to represent pictures and
+figures in an easy to interpret and portable manner.  
+The <command>Fig</command><indexterm><primary>Fig</primary></indexterm> and
+<command>xfig</command><indexterm><primary>xfig</primary></indexterm> drawing programs work with Fig graphics<indexterm><primary>Fig graphics</primary></indexterm>.  
+Several other
+programs, like <command>gnuplot</command><indexterm><primary>gnuplot</primary></indexterm>, can also produce Fig graphics.
+See the <quote><xref role="label" linkend="sec.Fig"/></quote> section for more information.
+</para>
+
+</section>
+<section id="sec.incps"><title>Bitmapped Image Formats</title>
+
+<para>Including bitmapped images<indexterm><primary>bitmap images</primary></indexterm> is easier than including 
+scalable images
+because no real interpretation of commands is necessary.  Over the
+years, lots of different ways have been developed for including
+bitmapped images in &TeX; documents.  Since the development of the
+<command>bm2font</command> program, most of these methods have become obsolete.
+As a result, this section examines only a few methods.
+</para>
+
+<section><title>DVI driver {\ttbackslash special}</title>
+
+<para>The first method is &dvidriver;-specific: if your &dvidriver; includes
+a \special command for including bitmapped graphic images, you
+can simply use that command.  The disadvantage of using a &dvidriver; \special is that it makes the document less portable.  Instead
+of being printable with any &dvidriver;, it now requires a &dvidriver; that recognizes a particular \special command.  Note also that
+some &dvidriver;s do not handle color images very well; you may need
+to convert the image to black and white first. (Many programs described
+in the <quote><xref role="label" linkend="sec.picconv"/></quote> section later in this chapter can
+perform this operation.)
+</para>
+
+</section>
+<section><title>bm2font</title>
+
+<para>On most platforms, <command>bm2font</command><indexterm><primary>bm2font</primary></indexterm> provides an ideal solution for
+including bitmapped images.
+This program
+translates bitmapped images into <filename role="extension">PK</filename><indexterm><primary sortas="PK fonts"><filename role="extension">PK</filename> fonts</primary></indexterm> fonts and produces a snippet
+of &TeX; code that can be used to print the image in your document.
+Because most &dvidriver;s can use <filename role="extension">PK</filename> fonts, a high degree of
+portability is maintained.  Some portability is still lost since the
+bitmapped image has a fixed resolution, but that is a consequence of using the
+bitmapped image, not <command>bm2font</command>.  All
+of the bitmap images in this book were included with the
+<command>bm2font</command> program.  
+</para>
+
+<para>This book is a good example of an instance
+where portability is required.  I could easily have included the
+graphics with the \special command of the &dvidriver; that I
+use most frequently (<command>dvihplj</command>), but then I couldn't have 
+produced pages suitable
+for final publication.
+</para>
+
+<para><command>bm2font</command> can read a number of common graphic image formats
+including <filename role="extension">GIF</filename><indexterm><primary>GIF file format</primary></indexterm>, 
+Windows <filename role="extension">BMP</filename><indexterm><primary sortas="windows">Windows</primary><secondary>BMP file format</secondary></indexterm>, 
+and <filename role="extension">PCX</filename><indexterm><primary>PCX file format</primary></indexterm>.  It can
+translate color images into black and white using a number of
+dithering<indexterm><primary>dithering</primary></indexterm> methods, and it can scale the image to a specific size
+(although scaling bitmap images is not usually very effective).
+</para>
+
+</section>
+<section><title>pbmtopk</title>
+
+<para>The <command>pbmtopk</command><indexterm><primary>pbmtopk</primary></indexterm> program provides a solution similar to
+<command>bm2font</command>.  Because <command>pbmtopk</command><indexterm><primary>pbmtopk</primary></indexterm> is 
+a smaller program, it may be
+easier to port to other systems.  The <command>pbmtopk</command> distribution includes
+<command>pktopbm</command><indexterm><primary>pktopbm</primary></indexterm>, which can translate <filename role="extension">PK</filename> files 
+back into <filename role="extension">PBM</filename><indexterm><primary>PBM file format</primary></indexterm> bitmaps.
+</para>
+
+</section>
+</section>
+<section><title>Inserting PostScript Images into &TeX;</title>
+
+<para>If you are using Plain &TeX; or &LaTeX; and printing your documents
+on a PostScript printer<indexterm><primary>PostScript</primary><secondary>images</secondary></indexterm>, there 
+are several (essentially equivalent) 
+style files that you can use to include your figures.
+</para>
+
+<para>One is <filename>epsfig.sty</filename><indexterm><primary>epsfig.sty style files</primary></indexterm>, which 
+can be used as a &LaTeX; style option or be inserted directly into Plain &TeX; documents with
+\input.<footnote><para>{The <filename>epsfig.sty</filename> style relies on 
+<filename>epsf.tex</filename><indexterm><primary sortas="epsftex files">epsf.tex files</primary></indexterm> to 
+provide low-level support for including EPS 
+images.  The <filename>epsf.tex</filename> file is part of the <command>dvips</command> 
+distribution.}</para></footnote>  
+The <filename>epsfig</filename> style option is supported by 
+&LaTeXe; as well.
+</para>
+
+<para>After the style file is loaded, you can use the macro \epsfig
+to include your figure.  The complete syntax for \epsfig is:
+</para>
+
+<screen>
+  \epsfig{figure=, height=, width=, rheight=, rwidth=, 
+          bbllx=, bblly=, bburx=, bbury=,
+          clip=, angle=, silent=}
+</screen>
+
+<para>In practice, only a few of these options are commonly used. Here is a
+description of each:
+</para>
+
+<variablelist>
+  <varlistentry>
+<term><literal>figure=</literal></term>
+<listitem>
+
+<para>        Identifies the name of the file containing the 
+        PostScript figure.  This option is required.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>height=, width=</literal></term>
+<listitem>
+
+<para>        Specify the height and width of the figure.
+        If only one is specified, the other will be scaled automatically
+        to keep the proportions of the original figure.  If both are given,
+        the figure will be scaled (anamorphically) to the requested size.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>rheight=, rwidth=</literal></term>
+<listitem>
+<para> 
+        Provide the <quote>reserved</quote> height and width 
+        of the figure.  This is how big the &TeX; box that encloses the
+        figure will be.  By default, the box is as big as the figure.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>bbllx=, bblly=, bburx=, bbury=</literal></term>
+<listitem>
+<para> 
+        Specify the bounding box<indexterm><primary>bounding box</primary><secondary>in PostScript</secondary></indexterm>
+        of the figure.  If not specified (it usually isn't), the bounding
+        box is read from the PostScript figure.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>clip=</literal></term>
+<listitem>
+
+<para>        Indicates whether or not the figure should be <quote>clipped</quote>
+        at its bounding box.  Clipping prevents lines in the figure from
+        extending beyond the bounding box.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>angle=</literal></term>
+<listitem>
+
+<para>        Allows you to specify that the figure should be rotated.
+        Always specify the angle of rotation in degrees.  The figure
+        is always rotated counter-clockwise.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>silent=</literal></term>
+<listitem>
+
+<para>        Turns off informative messages printed by the 
+        macros as the figure is processed.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>The parameters to the \epsfig macro have to obey &TeX;'s strict
+parsing rules.  In particular, you must not put spaces around the
+equal sign in any option.  The <literal>clip=</literal> and <literal>silent=</literal> 
+options have no values, but you must include the equal sign anyway.
+</para>
+
+<para>For example, Figure&nbsp;<xref role="label" linkend="fig.psfigure"/> was inserted by \epsfig
+using the following commands:
+</para>
+
+<screen>
+\begin{figure}
+  \epsfig{figure=figs/sample.eps}
+  \caption{An example of an encapsulated figure.}
+  \label{fig.psfigure}
+\end{figure}
+</screen>
+<indexterm><primary>label</primary></indexterm>
+
+<figure id="fig.psfigure">
+<title>An example of an encapsulated figure</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<para>Figure&nbsp;<xref role="label" linkend="fig.psfigurerot"/> demonstrates a few of other 
+<filename>epsfig</filename> options:
+</para>
+
+<screen>
+\begin{figure}
+  \epsfig{figure=figs/sample.eps,width=6cm,angle=45}
+  \caption{Another example of an encapsulated figure 
+           (resized and rotated)}
+  \label{fig.psfigurerot}
+\end{figure}
+</screen>
+<indexterm><primary>label</primary></indexterm>
+
+<figure id="fig.psfigurerot">
+<title>Another example of an encapsulated figure (resized and rotated)</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figs/tex.06.09.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+</section>
+</section>
+<section id="sec.picconv"><title>Manipulating Images</title>
+
+<para>There are literally dozens of software packages available for
+manipulating graphic images<indexterm><primary>images</primary><secondary>manipulating</secondary></indexterm>.  The 
+discussion that follows focuses on a
+small handful of these programs.  The programs selected are
+representative of the kinds of tools available, but this is by no means
+an endorsement that these are the best tools.  
+Table&nbsp;<xref role="label" linkend="tab.manipover"/> summarizes the programs described in this
+section.  
+</para>
+
+<para>If you cannot find any way of converting a particular image, remember
+that you may be able to display the image and capture it with another
+program that can save the image in a more tractable format.
+</para>
+
+<table id="tab.manipover">
+<title>Graphics Manipulation Packages</title>
+<tgroup cols="4">
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf Program</entry>
+  <entry>\bf Platforms</entry>
+  <entry>\bf Cost</entry>
+  <entry>\bf Purpose</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>Image Magick</entry>
+  <entry>&unix;</entry>
+  <entry>Free</entry>
+  <entry>Display, manipulate, convert and capture images </entry>
+</row>
+<row>
+  <entry>PBMplus</entry>
+  <entry>All</entry>
+  <entry>Free</entry>
+  <entry>Convert and manipulate images </entry>
+</row>
+<row>
+  <entry>xv</entry>
+  <entry>&unix;</entry>
+  <entry>SW${}^1$</entry>
+  <entry>Display, manipulate, convert and capture images </entry>
+</row>
+<row>
+  <entry>xloadimage</entry>
+  <entry>&unix;</entry>
+  <entry>Free</entry>
+  <entry>Display images </entry>
+</row>
+<row>
+  <entry>Image Alchemy</entry>
+  <entry>MS-DOS${}^2$</entry>
+  <entry>SW</entry>
+  <entry>Convert images </entry>
+</row>
+<row>
+  <entry>ColorView</entry>
+  <entry>MS-DOS</entry>
+  <entry>SW</entry>
+  <entry>Convert images </entry>
+</row>
+<row>
+  <entry>Jpeg4</entry>
+  <entry>MS-DOS</entry>
+  <entry>SW</entry>
+  <entry>Convert images </entry>
+</row>
+<row>
+  <entry>pmjpeg</entry>
+  <entry>OS/2</entry>
+  <entry>SW</entry>
+  <entry>Display and convert images </entry>
+</row>
+<row>
+  <entry>txt2pcx</entry>
+  <entry>MS-DOS</entry>
+  <entry>SW</entry>
+  <entry>Translate text into graphic image format </entry>
+</row>
+<row>
+  <entry>Ghostscript</entry>
+  <entry>All</entry>
+  <entry>Free</entry>
+  <entry>Convert PostScript to other formats </entry>
+</row>
+<row>
+  <entry>GoScript</entry>
+  <entry>MS-DOS</entry>
+  <entry>\$\$${}^3$</entry>
+  <entry>Convert PostScript to other formats </entry>
+</row>
+<row>
+  <entry>hp2xx</entry>
+  <entry>&unix;</entry>
+  <entry>Free</entry>
+  <entry>Convert HPGL to other formats </entry>
+</row>
+<row>
+  <entry>\multicolumn{4}{l}{ ${}^1$\vrule height11pt width0pt\tiny Shareware: <quote>Try before you buy,</quote> but not free.}</entry>
+</row>
+<row>
+  <entry>\multicolumn{4}{l}{ ${}^2$\tiny Also available for Sun workstations; see documentation.}</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+<section id="sec.gs"><title>Image Magick</title>
+
+<para>  <command>Image Magick<indexterm><primary>Image Magick</primary></indexterm></command> is a collection of eight programs for manipulating
+  images.
+  These programs work with MIFF files<indexterm><primary>MIFF file format</primary></indexterm> by 
+  default.  MIFF is the
+  <quote>machine-independent file format</quote> developed by the package's author.  If
+  you are going to manipulate images with these tools, the author
+  recommends converting them to MIFF format first.  The
+  <command>convert</command> program reads and writes a
+  large number of image formats, so conversion to and from MIFF
+  format is straightforward.  
+  
+</para>
+
+<para>  <command>Image Magick</command> requires the Independent JPEG Group<indexterm><primary>Independent JPEG Group</primary></indexterm>'s JPEG library
+  in order to manipulate JPEG images.  
+  Similarly, Sam Leffler<indexterm><primary>Leffler, Sam</primary></indexterm>'s
+  TIFF software library is required to manipulate TIFF<indexterm><primary>TIFF   file format</primary></indexterm> images.
+  Both of these are compile-time options.  If you did not build
+  <command>Image Magick</command>, you may not be able to manipulate JPEG or TIFF
+  images.  To manipulate PostScript images, <command>Ghostscript</command>
+  must be available.
+</para>
+
+<para>  The programs described below are the <command>Image Magick</command> tools that
+  allow you to manipulate images in ways that may be necessary
+  or useful for creating printable images.  Other tools, like 
+  <command>animate</command><indexterm><primary>animate</primary></indexterm>, included in the <command>Image Magick</command> distribution,
+  aren't described here because they have no bearing on printability.
+</para>
+
+<variablelist>
+<varlistentry>
+<term><command>display</command></term>
+<listitem>
+<para>      This program<indexterm><primary>display (in Image Magick)</primary></indexterm> allows 
+      you to preview images on an 
+      X11 display.  The number of colors in the image is reduced to 
+      match the number of colors of your display, if necessary.  
+      Program options allow you to specify a variety of image-processing
+      operations on the image (noise reduction, scaling, manipulation
+      of the color map, etc.).
+</para>
+
+<para>      Conversion to MIFF format, as recommended above, isn't necessary
+      for simply displaying the image.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>import</command></term>
+<listitem>
+
+<para>      This program<indexterm><primary>import (in Image Magick)</primary></indexterm> allows 
+      you to capture visible portions of an X11
+      display.  You can capture any visible window, the entire display,
+      or any rectangular portion of the display.  <command>import</command> can
+      save the image in any format recognized by <command>convert</command>.
+</para>
+
+<para>    </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>convert</command></term>
+<listitem>
+
+<para>      As the name implies, this utility<indexterm><primary>convert (in Image Magick)</primary></indexterm> converts images between graphics
+      formats.  The following standard formats are recognized: 
+</para>
+
+<simplelist type="horiz" columns="10">
+<member>MIFF</member>
+<member>BMP</member>
+<member>CMYK</member>
+<member>EPS</member>
+<member>FAX</member>
+<member>GIF</member>
+<member>IRIS</member>
+<member>JPEG</member>
+<member>PICT</member>
+<member>PNM</member>
+<member>PS</member>
+<member>RGB</member>
+<member>RLE</member>
+<member>SUN</member>
+<member>TGA</member>
+<member>TEXT</member>
+<member>TIFF</member>
+<member>XBM</member>
+<member>XWD</member>
+</simplelist>
+
+<para>      Additionally, a few less-standard formats are recognized.  A 
+      complete list is available in the manual page for <command>convert</command>.  
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>combine</command></term>
+<listitem>
+<para>
+    
+      This program combines<indexterm><primary>combine (in Image Magick)</primary></indexterm>
+      two images by blending them together.  The
+      result varies tremendously, depending on the kind of blending
+      used.  Simple overlaps, various kinds of cutouts, and more complex
+      color blendings are possible.
+</para>
+
+<para>    </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>montage</command></term>
+<listitem>
+<para>
+    
+      Unlike <command>combine</command>, <command>montage</command><indexterm><primary>montage (in Image Magick)</primary></indexterm> combines multiple images
+      by <emphasis>tiling<indexterm><primary>tiling</primary></indexterm></emphasis>.  (The images are laid next to each other rather than
+      on top of each other.)  Optionally, the image name can appear below 
+      each tile.
+      
+    </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>mogrify</command></term>
+<listitem>
+
+<para>      <command>mogrify</command><indexterm><primary>mogrify (in Image Magick)</primary></indexterm> is 
+      used to transform an image (or series of
+      images).  You can specify alternate color maps in a variety
+      of ways, as well as dithering<indexterm><primary>dithering</primary></indexterm> and error correcting transformations.
+      The images can also be rolled, rotated, rescaled, and sheared.
+      (Shearing<indexterm><primary>shearing</primary></indexterm> transforms a rectangle into a parallelogram by 
+      shifting the X or Y axis.)
+    </para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</section>
+<section><title>PBMplus</title>
+
+<para>  The <command>PBMplus<indexterm><primary>PBMplus</primary></indexterm></command> package is a large collection of image translation
+  programs.  This package was written originally for &unix;,
+  but has since been ported to MS-DOS and OS/2.
+</para>
+
+<para>  <command>PBMplus</command> defines three file formats<indexterm><primary>PBM file format</primary></indexterm><indexterm><primary>PGM file format</primary></indexterm><indexterm><primary>PPM file format</primary></indexterm>:
+  
+  <itemizedlist>
+    <listitem>
+<para> PBM---The Portable Bitmap format for black and white images
+</para>
+
+</listitem>
+<listitem>
+<para> PGM---The Portable Graymap format for grayscaled images
+</para>
+</listitem>
+<listitem>
+<para> PPM---The Portable Pixmap format for color images
+</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>  Translation from one format to another is accomplished by translating
+  into the appropriate portable format first, and then translating the
+  portable bitmap into the destination format.
+</para>
+
+<para>  The following image formats are supported by the PBMPlus tools: 
+<!-- are summarized in Table&nbsp;<xref role="label" linkend="tab.pbmplus"/>. -->
+</para>
+
+<simplelist columns="2" type="horiz">
+<member>Abekas YUV bytes</member>
+<member>MGR bitmaps</member>
+<member>Andrew Toolkit raster objects</member>
+<member>MTV or PRT ray traced images</member>
+<member>Atari Degas .pi1 images</member>
+<member>MacPaint files</member>
+<member>Atari Degas .pi3 files</member>
+<member>Macintosh PICT files</member>
+<member>Atari Spectrum files</member>
+<member>PCX files</member>
+<member>AutoCAD slides</member>
+<member>PostScript <quote>images</quote></member>
+<member>Bennet Yee <quote>faces</quote></member>
+<member>QRT ray tracer files</member>
+<member>CMU window manager bitmaps</member>
+<member>Raw grayscale bytes</member>
+<member>Doodle brush files</member>
+<member>Raw RGB bytes</member>
+<member>FITS files</member>
+<member>Sun icons</member>
+<member>GIF files</member>
+<member>Sun rasterfiles</member>
+<member>Gould scanner files</member>
+<member>TIFF images</member>
+<member>Group 3 faxes</member>
+<member>TrueVision Targa files</member>
+<member>HIPS files</member>
+<member>Usenix FaceSaver(tm) images</member>
+<member>HP PaintJet files</member>
+<member>X10/X11 window dumps</member>
+<member>IFF ILBM files</member>
+<member>X11 pixmaps</member>
+<member>IMG (GEM) images</member>
+<member>XBM files</member>
+<member>Img-whatnot files</member>
+<member>Xim file</member>
+<member>Lisp Machine bitmaps</member>
+</simplelist>
+
+<para>  The <command>PBMplus</command> tools translate the image into the appropriate portable
+  format (PBM, PGM, or PPM) depending on the nature of the image.
+  Similarly, the tools can all work with <quote>lower</quote> formats. (PPM tools
+  can work with PGM and PBM files, and PGM tools can work with PBM files.)
+  For example, there is no <quote><command>pbmtopcx</command>,</quote> however the 
+  <command>ppmtopcx</command><indexterm><primary>ppmtopcx</primary></indexterm> tool will create a black and white PCX file
+  if you use a PBM file as the input.
+  Once converted into a portable format, the image can be translated
+  back into (almost) any of the supported formats.
+</para>
+
+<para>  In addition to image conversion, the PBMPlus tools include programs
+  to perform a wide variety of image manipulations.  
+<!-- These manipulations are summarized in Table&nbsp;<xref role="label" linkend="tab.pbmplusman"/>. -->
+</para>
+
+<simplelist columns="2" type="horiz">
+<member>Apply Conway's rules of life</member>
+<member>Create a blank image</member>
+<member>Create a mask bitmap</member>
+<member>Reduce/enlarge an image</member>
+<member>Convert text into a bitmap</member>
+<member>Create a UPC bitmap</member>
+<member>Bentleyize a greymap</member>
+<member>Apply edge-detection</member>
+<member>Apply edge-enhancement</member>
+<member>Generate a histogram</member>
+<member>Normalize contrast</member>
+<member>Apply an <quote>oil-painting</quote> filter</member>
+<member>Create a <quote>ramp</quote></member>
+<member>Generate textural features</member>
+<member>Perform bitwise arithmetic</member>
+<member>Perform MxN convolution</member>
+<member>Crop an image</member>
+<member>Cut/Paste rectangles</member>
+<member>Color-reduce</member>
+<member>Flip/rotate</member>
+<member>Apply gamma-correction</member>
+<member>Build a visual index</member>
+<member>Invert an image</member>
+<member>Add a border to an image</member>
+<member>Scale an image</member>
+<member>Shear an image</member>
+<member>Smooth an image</member>
+<member>Build a tiled image</member>
+<member>Colorize a graymap</member>
+<member>Dither color images</member>
+<member>Create fractal terrain</member>
+<member>Apply Laplacian-relief filter</member>
+</simplelist>
+
+</section>
+<section><title>xv</title>
+
+<para>  <command>xv</command><indexterm><primary>xv</primary></indexterm> is an interactive image viewing/converting tool that
+  runs on X11 servers (including MS-DOS implementations of X11
+  such as Desqview/X).
+</para>
+
+<para>  You can view GIF<indexterm><primary>GIF file format</primary></indexterm>, 
+  PBM<indexterm><primary>PBM file format</primary></indexterm>, 
+  XBM<indexterm><primary>XBM file format</primary></indexterm>, 
+  Sun rasterfile<indexterm><primary>Sun rasterfile format</primary></indexterm>, 
+  JPEG<indexterm><primary>JPEG file format</primary></indexterm>, 
+  and TIFF<indexterm><primary>TIFF file format</primary></indexterm> images.
+  You can save any image in one of those formats or in encapsulated
+  PostScript.  In addition, you can capture any visible portion of
+  the X11 server window interactively with <command>xv</command>.
+</para>
+
+<para>  Like most of the tools described here, <command>xv</command> includes a
+  number of image manipulation tools (cropping, scaling, editing
+  the color map, etc.). If you try to view an image that is larger 
+  than your display, <command>xv</command> automatically scales it to fit.
+  I find that <command>xv</command>'s interactive
+  nature makes it easier to use for image manipulation than the
+  command-driven tools.
+</para>
+
+</section>
+<section><title>xloadimage</title>
+
+<para>  The <command>xloadimage</command><indexterm><primary>xloadimage</primary></indexterm> program is another X11 picture display
+  tool.  Like <command>xv</command> and <command>Image Magick</command>'s <command>display</command>, it
+  has a number of picture manipulation options (although they are
+  not interactive).
+</para>
+
+<para>  One advantage of <command>xloadimage</command> is that it does not rescale images
+  that are too large to fit within the display.  Instead, it places them in a
+  scrollable window.  I find this behavior superior to <command>xv</command>'s solution
+  of rescaling a very large image even though you are interested only in a
+  small section of it.
+</para>
+
+</section>
+<section><title>Image Alchemy</title>
+
+<para>  <command>Image Alchemy</command><indexterm><primary sortas="Image Alchemy">Image Alchemy (program)</primary></indexterm> is a shareware tool for converting graphic
+  images between various formats.  Although the manual mentions a version for
+  Sun workstations, I have only seen the MS-DOS version.
+</para>
+
+<para>  Note that the unregistered shareware version of this program will only
+  convert images which are 640$\times$480 pixels or smaller.
+</para>
+
+<para>
+<!-- Table&nbsp;<xref role="label" linkend="tab.imagealch"/> summarizes  -->
+  The following is a list of the graphic formats recognized by
+  version 1.5 of <command>Image Alchemy</command>:
+</para>
+
+<simplelist type="horiz" columns="2">
+<member>ADEX</member>
+<member>PCPAINT/Pictor Page Format</member>
+<member>Autologic</member>
+<member>PCX</member>
+<member>Binary Information Files (BIF)</member>
+<member>Portable BitMap (PBM)</member>
+<member>Encapsulated PostScript (EPS)</member>
+<member>Q0</member>
+<member>Erdas LAN/GIS</member>
+<member>QDV</member>
+<member>Freedom of the Press</member>
+<member>QRT</member>
+<member>GEM VDI Image File</member>
+<member>Scodl</member>
+<member>GIF</member>
+<member>Silicon Graphics Image</member>
+<member>HP Printer Command Language (PCL)</member>
+<member>Stork</member>
+<member>HP Raster Transfer Language (RTL)</member>
+<member>Sun Raster</member>
+<member>HSI JPEG</member>
+<member>TIFF</member>
+<member>HSI Palette</member>
+<member>Targa</member>
+<member>HSI Raw</member>
+<member>Utah Raster Toolkit (RLE)</member>
+<member>IFF/ILBM</member>
+<member>Vivid</member>
+<member>JPEG/JFIF</member>
+<member>Windows Bitmap (BMP)</member>
+<member>Jovian VI</member>
+<member>WordPerfect Graphic File</member>
+<member>Macintosh PICT/PICT2</member>
+<member>XBM</member>
+<member>MTV Ray Tracer</member>
+<member>XWD</member>
+</simplelist>
+
+<para>
+<command>Image Alchemy</command> can also perform a number of image manipulations like
+rescaling, cropping, and color map changes.
+</para>
+
+</section>
+<section><title>ColorView</title>
+
+<para>  <command>ColorView<indexterm><primary>ColorView</primary></indexterm></command> is a shareware MS-DOS program for displaying and
+  converting graphic images.  Although designed to work with VESA
+  SuperVGA adapters, <command>ColorView</command> can also work with plain VGA adapters.
+  It does require a 80286 or a more powerful processor.
+</para>
+
+<para>  <command>ColorView</command> can read JPEG<indexterm><primary>JPEG file format</primary></indexterm>, 
+  GIF (87 and 89)<indexterm><primary>GIF file format</primary></indexterm>, 
+  BMP<indexterm><primary sortas="windows">Windows</primary><secondary>BMP file format</secondary></indexterm>, 
+  and RLE<indexterm><primary>RLE file format</primary></indexterm> images.  It
+  can write GIF (87), 8-bit BMP, 24-bit BMP, JPEG, and RLE images.
+  It can perform image translation without displaying the images,
+  so a VGA or SuperVGA adapter is not required for translation.
+</para>
+
+</section>
+<section><title>Jpeg4</title>
+
+<para>  
+  This<indexterm><primary>Jpeg4</primary></indexterm> is the Independent JPEG Group<indexterm><primary>Independent JPEG Group</primary></indexterm>'s 
+  JPEG Software.  The compression
+  tool can convert GIF<indexterm><primary>GIF file format</primary></indexterm>, 
+  PPM<indexterm><primary>PPM file format</primary></indexterm>, and 
+  Targa (TGA)<indexterm><primary>TGA file format</primary></indexterm>  images into 
+  JPEG<indexterm><primary>JPEG file format</primary></indexterm> format.  The
+  decompression tool converts JPEG images into GIF, PPM 
+  (or PGM<indexterm><primary>PGM file format</primary></indexterm>),
+  or Targa formats.
+</para>
+
+</section>
+<section><title>pmjpeg</title>
+
+<para>  The <command>pmjpeg</command><indexterm><primary>pmjpeg</primary></indexterm> program is an OS/2 2.x program that can read
+  and display JPEG<indexterm><primary>JPEG file format</primary></indexterm>, 
+  TIFF<indexterm><primary>TIFF file format</primary></indexterm>, 
+  Targa<indexterm><primary>TGA file format</primary></indexterm>, 
+  GIF<indexterm><primary>GIF file format</primary></indexterm>, 
+  PCX<indexterm><primary>PCX file format</primary></indexterm>, 
+  and Windows<indexterm><primary sortas="windows">Windows</primary><secondary>BMP file format</secondary></indexterm> or 
+  OS/2 BMP<indexterm><primary>OS/2</primary><secondary>BMP file format</secondary></indexterm> images.
+  In addition, <command>pmjpeg</command> can write images in any of these formats
+  except Windows BMP.  <command>pmjpeg</command> can also capture all or part
+  of the desktop.
+  
+  Some of the other features of <command>pmjpeg</command> are color map editing,
+  contrast enhancement, image cropping, scaling, rotation, batch
+  translation of images into JPEG format, cyclic slideshow presentations,
+  and the ability to reduce an image to the system palette colors.
+</para>
+
+</section>
+<section><title>txt2pcx</title>
+
+<para>  <command>txt2pcx</command><indexterm><primary>txt2pcx</primary></indexterm> is a memory-resident MS-DOS utility that captures
+  text-mode screens as PCX graphic images.  See the discussion of
+  screen capturing in the <quote><xref role="label" linkend="sec.screendump"/></quote> section of
+  this chapter for more information about why this is sometimes desirable.
+</para>
+
+</section>
+<section><title>Ghostscript</title>
+   
+<para><command>Ghostscript</command><indexterm><primary>Ghostscript</primary></indexterm> is distributed by 
+  the Free Software Foundation (FSF)<indexterm><primary>Free Software Foundation (FSF)</primary></indexterm>.  
+  It is one
+  of the few freely available programs that can convert PostScript images
+  into other formats.
+</para>
+
+<para>  <command>Ghostscript</command> is a (mostly) complete 
+  PostScript<indexterm><primary>PostScript</primary><secondary>interpreting with Ghostscript</secondary></indexterm> interpreter. 
+  Converting an entire page of PostScript into another format is 
+  straightforward with <command>Ghostscript</command>.  The following example converts
+  the PostScript file <filename>file.ps</filename> into a monochrome 
+  GIF<indexterm><primary>GIF file format</primary></indexterm> image
+  called <filename>image1.gif</filename>:
+  
+  <screen>
+\$ <emphasis role="bold">gs -r300 -sDEVICE=gifmono -sOutputFile=image1.gif file.ps</emphasis>
+  </screen>
+  
+</para>
+
+<para>  The parameter <emphasis>-r300</emphasis> indicates that <command>Ghostscript</command> should
+  generate output at a resolution of 300dpi.  This controls the size
+  of the bitmap.  If you plan to print the resulting bitmap, you should
+  specify the same resolution as your printer.
+  
+  If <filename>file.ps</filename> contains more than one page, you can use a 
+  <literal>&lt;!-- d</literal> in the output file's name to identify how multiple pages -->
+  should be handled.  For example, if <filename>file.ps</filename> contains 
+  three pages, the following command will extract the first page
+  into <filename>image1.gif</filename>, the second page into <filename>image2.gif</filename>, and
+  the third page into <filename>image3.gif</filename>:<footnote><para>{Under MS-DOS and OS/2,
+  remember that the command processor performs variable substitution 
+  with the percent sign.  Use two consecutive percent signs.}</para></footnote>
+  
+  <screen>
+\$ <emphasis role="bold">gs -r300 -sDEVICE=gifmono -sOutputFile=image\%d.gif file.ps</emphasis>
+  </screen>
+\vskip-\baselineskip
+</para>
+
+<para>  For incorporating images into &TeX;, it is more common to
+  convert an 
+  encapsulated PostScript (EPS)<indexterm><primary>encapsulated PostScript (EPS)</primary></indexterm><indexterm><primary>PostScript</primary><secondary>images</secondary></indexterm><indexterm><primary>EPS (Encapsulated PostScript) file format</primary></indexterm> image into 
+  a bitmapped format than it is to
+  convert entire pages.  Encapsulated PostScript is described earlier
+  in this chapter in the section <quote><xref role="label" linkend="sec.scaleformat"/>.</quote>
+  It is slightly more difficult to convert encapsulated PostScript
+  because of the bounding box<indexterm><primary>bounding box</primary><secondary>in PostScript</secondary></indexterm>.
+  To convert this into a bitmap of exactly the right size, you have
+  to tell <command>Ghostscript</command> to move the image to the upper-left corner
+  of the page (where <command>Ghostscript</command> always begins its conversion) and
+  tell it how big the image is in pixels.
+</para>
+
+<para>  The following steps are necessary to produce exactly the right size
+  bitmap of the encapsulated PostScript figure:
+</para>  
+  <orderedlist>
+    <listitem>
+<para> Find the size of the bounding box.  Examine the PostScript file
+          using a text editor.  Find the line that begins with
+          <literal>&lt;!-- % BoundingBox:</literal> -->
+        followed by four numbers.
+        Those numbers are the lower-left x-coordinate (llx), the 
+        lower-left y-coordinate (lly), the upper-right x-coordinate (urx),
+        and the upper-right y-coordinate (ury), respectively.
+  
+    </para>
+</listitem>
+<listitem>
+<para> Create another file called <filename>trans.ps</filename> that contains
+          the single line:</para>
+        
+<screen>
+<emphasis>llx</emphasis> neg <emphasis>lly</emphasis> neg translate
+</screen>
+</listitem>
+    <listitem>
+<para> Calculate the width of the bounding box: $width_{bb} = urx - llx$.
+  
+    </para>
+</listitem>
+<listitem>
+<para> The width you have just calculated is the width at 72dpi.  To 
+          convert this to the resolution that you will be using, multiply
+          by the resolution and divide by 72.  For example, if you will
+          be printing at 300dpi and the width of the bounding box 
+          $width_{bb}$ is 216, the width at 300dpi, <emphasis>width</emphasis>, 
+          is $(216 \times 300) \div 72 = 900$.
+  
+    </para>
+</listitem>
+<listitem>
+<para> Calculate the corrected height in an analogous manner using
+          $height_{bb} = ury - lly$ as a starting point.  For example,
+          if $height_{bb} = 360$, the height you get at 300dpi is 1500.
+</para>
+
+<para>    </para>
+</listitem>
+<listitem>
+<para> Finally, run <command>Ghostscript</command> using the <emphasis>-g</emphasis> parameter to
+          select the image size ($width \times height$).  
+          For example, to translate the EPS file <filename>card.ps</filename> into
+          the GIF file  <filename>card.gif</filename> at 300dpi assuming the
+          height and width calculated above, run:</para>
+  
+  <screen>
+\$ <emphasis role="bold">{gs -r300 -g900x1500 -sDEVICE=gifmono {\bs}
+       -sOutputFile=card.gif trans.ps card.ps}</emphasis>
+  </screen>
+</listitem>  
+    </orderedlist>
+
+<para>The <emphasis>Perl</emphasis> script shown in Example&nbsp;<xref role="label" linkend="ex.gseps"/> automates
+  this process.
+</para>
+
+<example id="ex.gseps">
+<title>Converting Encapsulated PostScript to a Bitmap with
+<application>Ghostscript</application></title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="gs-eps.pl"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>  The primary disadvantage of <command>Ghostscript</command> is that the selection of 
+  free
+  PostScript fonts is quite limited.  The only freely available fonts
+  are: IBM Courier, Bitstream Courier, Bitstream Charter, Adobe Utopia,
+  URW Antiqua, URW Grotesk Bold, Nimbus Roman No9, and Nimbus Sans.
+  Unless you have the PostScript sources for other fonts used in your figures
+ (<filename role="extension">PFA</filename> or <filename role="extension">PFB</filename> and <filename role="extension">AFM</filename> files), <command>Ghostscript</command> will
+  use crude approximations of the desired font.
+</para>
+
+</section>
+<section id="sec.screendump"><title>GoScript</title>
+
+<para><command>GoScript</command><indexterm><primary>GoScript</primary></indexterm> is a commercial 
+PostScript<indexterm><primary>PostScript</primary><secondary>interpreting with GoScript</secondary></indexterm> interpreter sold by
+LaserGo, Inc.<indexterm><primary>LaserGo, Inc.</primary></indexterm>  <command>GoScript</command> is available for MS-DOS systems only.
+A special version is available for Microsoft Windows.
+</para>
+
+<para>The primary advantage of a commercial interpreter is that it comes
+with more high-quality fonts.  The <command>GoScript</command> program comes
+with <quote>clones</quote> of the 13 standard PostScript fonts:
+</para>
+
+<simplelist columns="2" type="horiz">
+<member>Times Roman</member>
+<member>Times Italic</member>
+<member>Times Bold</member>
+<member>Times Bold Italic</member>
+<member>Helvetica</member>
+<member>Helvetica Oblique</member>
+<member>Helvetica Bold</member>
+<member>Helvetica Bold Oblique</member>
+<member>Courier</member>
+<member>Courier Oblique</member>
+<member>Courier Bold</member>
+<member>Courier Bold Oblique</member>
+<member>Symbol</member>
+</simplelist>
+
+<para>
+The <command>GoScript Plus</command> program
+includes clones of all 35 standard fonts (the standard 13 plus
+AvantGarde, Bookman, Helvetica-Narrow, New Century Schoolbook,
+Palatino in four styles, Zapf Chancery Italic, and Zapf Dingbats).
+For MS-DOS users, this program has the additional advantage of being
+quite a bit faster than <command>Ghostscript</command>.
+</para>
+
+<para>Although <command>GoScript</command> can use any PostScript Type&nbsp;1 or Type&nbsp;3
+font, the fonts supplied with <command>GoScript</command> are not in a standard
+PostScript format, so they cannot be used with other applications.
+</para>
+
+<para>On a 300dpi LaserJet printer, <command>GoScript</command> did not seem to 
+align the baseline of bitmapped PostScript fonts with great accuracy.
+This is unfortunate, because the Computer Modern fonts created with
+&MF; for &TeX; are bitmapped.  
+</para>
+
+</section>
+<section><title>hp2xx</title>
+
+<para><command>hp2xx</command><indexterm><primary>hp2xx</primary></indexterm> converts scalable 
+images in HPGL<indexterm><primary>HPGL file format</primary></indexterm> into other
+formats.  HPGL is Hewlett-Packard's command language for controlling
+pen-based plotters.   (HP's LaserJet series of printers,
+starting with the LaserJet III, also understand HPGL.)
+</para>
+
+<para>Many computer-aided drafting packages can save diagrams in HPGL
+format.  Other software that works with scalable images is
+likely to be able to save in HPGL format as well.
+Because HPGL support is uncommon in printers, you will probably have
+to convert HPGL diagrams into another format to include
+them in your &TeX; documents.
+  
+<command>hp2xx</command> output comes in three flavors: scalable graphics,
+&TeX; commands, and bitmapped graphics. 
+</para>
+
+<variablelist>
+  <varlistentry>
+<term>Scalable graphics</term>
+<listitem>
+
+<para>  The supported scalable graphics formats are encapsulated PostScript
+  and &MF; source code.  
+</para>
+
+<para>
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>&TeX; commands</term>
+<listitem>
+
+<para>  HPGL drawings composed of mostly straight lines can be rendered in
+  &TeX;.  <command>hp2xx</command>'s &TeX; output is designed for either the
+  &emTeX; &dvidriver;s (it relies on \special commands to draw
+  lines at arbitrary angles) or the <emphasis>epic</emphasis> macros (which
+  also use \special commands that must be supported by your
+  &dvidriver;).
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Bitmapped graphics</term>
+<listitem>
+
+<para>  Bitmaps can be produced in PBM<indexterm><primary>PBM file format</primary></indexterm>, 
+  PCX<indexterm><primary>PCX file format</primary></indexterm>, or PCL<indexterm><primary>PCL file format</primary></indexterm> (HP 
+  LaserJet bitmap)
+  formats.  You can select image size and resolution to produce a
+  bitmap that will print at the correct size for your printer.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</section>
+</section>
+<section><title>Image Editors</title>
+
+<para>Although many images<indexterm><primary>image editors</primary></indexterm><indexterm><primary>editors</primary><secondary>image</secondary></indexterm> are 
+available on the Net and commercially, it
+is very likely that you will want to create your own pictures and
+diagrams for some of the documents that you write.  A few common drawing
+tools are described below.  Table&nbsp;<xref role="label" linkend="tab.drawingtools"/> summarizes the
+packages discussed here.  
+There are many more commercial packages for image editing---so many, in fact,
+that I'm not going to make any effort to describe them here.
+</para>
+
+<table id="tab.drawingtools">
+<title>Graphics Editing Packages</title>
+<tgroup cols="4">
+<colspec align="left"/>
+<colspec align="center"/>
+<colspec align="center"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>Program</entry>
+  <entry>Platforms</entry>
+  <entry>Cost</entry>
+  <entry>Purpose</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>xfig</entry>
+  <entry>&unix;</entry>
+  <entry>free</entry>
+  <entry>Edit scalable Fig drawings </entry>
+</row>
+<row>
+  <entry>idraw</entry>
+  <entry>&unix;</entry>
+  <entry>free</entry>
+  <entry>Edit encapsulated PostScript images </entry>
+</row>
+<row>
+  <entry>tgif</entry>
+  <entry>&unix;</entry>
+  <entry>free</entry>
+  <entry>Edit scalable drawings </entry>
+</row>
+<row>
+  <entry>pixmap</entry>
+  <entry>&unix;</entry>
+  <entry>free</entry>
+  <entry>Edit X11 XBM and XPM files </entry>
+</row>
+<row>
+  <entry>texcad</entry>
+  <entry>MS-DOS</entry>
+  <entry>free</entry>
+  <entry>Edit &LaTeX; picture environments </entry>
+</row>
+<row>
+  <entry>xtexcad</entry>
+  <entry>&unix;</entry>
+  <entry>free</entry>
+  <entry>An X11 implementation of <command>texcad</command> </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<section><title>xfig</title>
+
+<para><command>xfig</command><indexterm><primary>xfig</primary></indexterm> is an editing tool for scalable images stored in the
+  Fig format, described in the <quote><xref role="label" linkend="sec.Fig"/></quote>
+  section of this chapter.  
+  An example of a drawing being constructed with <command>xfig</command> is shown
+  in Figure&nbsp;<xref role="label" linkend="fig.sd-xfig"/>.
+</para>
+
+<figure id="fig.sd-xfig">
+<title>Editing an image with xfig</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tex.06.11.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<para>  The objects in Fig are arcs, circles, open and closed splines,
+  ellipses, regular and irregular polygons, polylines, boxes, arc-boxes
+  (boxes with rounded corners), text, and encapsulated PostScript.  Compound
+  objects can be constructed by binding these objects together.
+</para>
+
+<para>  As a consequence of Fig's device independence, it can be translated
+  into a number of different output formats.  A completed Fig drawing
+  can be rendered in PostScript, &PiCTeX;,
+\linebreak
+</para>
+
+<para>&LaTeX;'s <literal>picture</literal>
+  environment, &MF;, or any of the pic, epic, eepic, box, eepicemu and
+  \special environments.  Figures can also be saved as X11
+  bitmaps.  Not all of the output formats support all of the features
+  of Fig. For example, arbitrarily sloped lines are not supported by
+  the &LaTeX; <literal>picture</literal> environment, and encapsulated PostScript
+  makes sense only for PostScript output.
+</para>
+
+<para>  <command>xfig</command> supports rotation, flipping, scaling, and duplication
+  of objects.  However, it imposes some limitations on the figures
+  that you create.
+  Objects that contain boxes, arc-boxes, circles, or ellipses can 
+  be rotated only in 90 degree increments.  Text objects cannot be flipped
+  over.
+</para>
+
+<para>  When objects are placed on the <quote>canvas,</quote> you can elect to have
+  <command>xfig</command> restrict their placement to $\frac{1}{16}$, 
+  $\frac{1}{4}$, or $\frac{1}{2}$-inch intervals.  Restricted placement
+  makes alignment of a large number of objects easier.  Unrestricted
+  placement is also allowed, and there is an alignment operator that
+  can center (vertically and horizontally) any number of objects.
+  A nonprinting grid is available in several sizes, independent of
+  the restriction on object placement.
+  In a similar way, <command>xfig</command> can be instructed to draw sloped
+  lines within specific limits (for example, only allowing lines
+  at slopes supported by &LaTeX;'s <literal>picture</literal> environment).
+  Precise numeric-coordinate placement of individual objects is 
+  also supported.
+</para>
+
+<para>  <command>xfig</command> provides access to the standard 35 PostScript fonts
+  as well as the standard &LaTeX; fonts.  Eight-bit input, allowing
+  access to international symbols, is also provided.
+</para>
+
+</section>
+<section><title>idraw</title>
+
+<para>  <command>idraw</command><indexterm><primary>idraw</primary></indexterm>, the InterViews drawing editor, is an X Windows 
+  application for editing encapsulated PostScript figures.
+  Figure&nbsp;<xref role="label" linkend="fig.sd-idraw"/> shows a drawing constructed with
+  <command>idraw</command>.
+</para>
+
+<figure id="fig.sd-idraw">
+<title>Editing an image with idraw</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<para>
+  The objects in <command>idraw</command> are lines, ellipses, open and closed
+  splines, irregular polygons, polylines, rectangles, and text.
+  Compound objects can be constructed by gluing these objects
+  together.
+  Fonts, brushes, and patterns can be customized and extended with
+  X-defaults.  <command>idraw</command> supports the full complement of 
+  rotation, flip, scale, and duplicate operations with or without grid lines
+  and optional gravity.
+</para>
+
+<para>  Unfortunately, the <quote>gravity</quote> option, which allows you to create
+  horizontally and vertically aligned objects, is not preserved when
+  a file is saved.  It is very difficult to recover the alignment
+  of a file when it has been saved and reloaded.
+</para>
+
+<para>  Graphics in TIFF, encapsulated PostScript, X11 bitmap format,
+  and Unidraw format can be imported into <command>idraw</command> figures.
+</para>
+
+</section>
+<section><title>tgif</title>
+
+<para>  <command>tgif</command><indexterm><primary sortas="tgif">tgif (program)</primary></indexterm>, like <command>xfig</command> and <command>idraw</command>, is an
+  editor for scalable drawings.  The <quote>gif\,</quote> in <command>tgif</command> has nothing
+  to do with the bitmap GIF format.
+  The captured screen in Figure&nbsp;<xref role="label" linkend="fig.sd-tgif"/> shows a drawing
+  being constructed with <command>tgif</command>.
+</para>
+
+<figure id="fig.sd-tgif">
+<title>Editing an image with tgif</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<para>  <command>tgif</command> stores objects as a set of Prolog <quote>facts.</quote>
+  Several programs are provided for interpretation of <command>tgif</command>
+  objects outside of <command>tgif</command>.
+  Only four output types are built into <command>tgif</command>: PostScript<indexterm><primary>PostScript</primary></indexterm>,
+  encapsulated PostScript (EPS)<indexterm><primary>encapsulated PostScript (EPS)</primary></indexterm>, X11 bitmaps<indexterm><primary>X11</primary><secondary>file format</secondary></indexterm>, and X11 pixmaps.
+</para>
+
+<para>  <command>tgif</command> has a number of interesting features including the ability
+  to design hierarchical drawings in either a <quote>top down</quote> or <quote>bottom
+  up</quote> manner, and the separation of an object's <emphasis>representation</emphasis>
+  from its <emphasis>instantiation</emphasis>.  In addition, arbitrary text-based 
+  attributes can be attached to each object.  <command>tgif</command> uses these
+  attributes in a number of ways, such as the execution
+  of system commands based upon object attributes.
+</para>
+
+<para>  The objects supported by <command>tgif</command> are arcs, ellipses,
+  rectangles, rounded-corner rectangles, polylines, polygons, open and
+  closed splines, text, X11 bitmaps, some forms of X11 pixmaps, and
+  encapsulated PostScript.  These objects can be grouped together.
+</para>
+
+<para>  <command>tgif</command> supports only five fonts (Times, Courier, Helvetica,
+  New Century Schoolbook, and Symbol) at a few fixed sizes.  The fill
+  patterns, line styles, text-styles, and other attributes are similarly
+  fixed (although more generous in number).
+</para>
+
+</section>
+<section><title>bitmap/pixmap</title>
+
+<para>  <command>bitmap</command><indexterm><primary>bitmap</primary></indexterm> and <command>pixmap</command><indexterm><primary sortas="pixmap">pixmap (program)</primary></indexterm> are 
+  standard tools distributed 
+  with the X11 Window System.  The <command>pixmap</command> tool provides a
+  superset of the functions in <command>bitmap</command>, including support for
+  color images.
+  An example of the <command>bitmap</command> program editing a small X icon is
+  shown in Figure&nbsp;<xref role="label" linkend="fig.xbitmap"/>.
+</para>
+
+<figure id="fig.xbitmap">
+<title>An example of bitmap editing an icon</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="FIXME:"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+</section>
+<section><title>Other Bitmap Editors</title>
+
+<para>  Free or inexpensive bitmap editors<indexterm><primary>editors</primary><secondary>bitmap</secondary></indexterm> are 
+  available for almost every
+  computer system.  The selection of a particular package depends
+  in large part on what kinds of diagrams you need to create.
+</para>
+
+<para>  The primary disadvantage of bitmap editing is that it is difficult
+  to create bitmaps large enough to be used at printer resolution.
+  Even a <quote>full screen</quote> image on a high-resolution monitor is only
+  a couple of inches across (at best) on a laser printer.
+</para>
+
+</section>
+<section><title>texcad/xtexcad</title>
+
+<para>  <command>texcad</command><indexterm><primary>texcad</primary></indexterm> is an MS-DOS program (distributed with &emTeX;)
+  for editing &LaTeX; <literal>picture</literal> environments.  <command>xtexcad</command><indexterm><primary>xtexcad</primary></indexterm>
+  is a similar program that runs under the X11 Window system.
+</para>
+
+<para>  The &LaTeX; <literal>picture</literal> environment 
+  suffers from two limitations: it can only draw relatively
+  simple diagrams, and it is very difficult to use.  <command>texcad</command>
+  and <command>xtexcad</command> remove the second limitation.  With
+  one of these programs, the &LaTeX; <literal>picture</literal> environment
+  becomes a viable option for many diagrams.
+</para>
+
+</section>
+</section>
+<section><title>Screen Dumps</title>
+
+<para>If you are writing a document that describes a computer program, it is
+frequently desirable to include an image of the running program (a
+captured screen or screen dump<indexterm><primary>screen dump</primary></indexterm>) in the document.  There are several ways
+that this can be 
+accomplished<indexterm><primary>Screen Thief</primary></indexterm><indexterm><primary>GrabIt</primary></indexterm><indexterm><primary>xv</primary></indexterm><indexterm><primary>Image Magick</primary></indexterm><indexterm><primary>xwd</primary></indexterm><indexterm><primary>PM-Cam</primary></indexterm><indexterm><primary>Nikon II</primary></indexterm><indexterm><primary>pmjpeg</primary></indexterm>:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> <command>Screen Thief</command>  for MS-DOS
+  </para>
+</listitem>
+<listitem>
+<para> <command>GrabIt</command> for Microsoft Windows
+  </para>
+</listitem>
+<listitem>
+<para> <command>xv</command>, <command>Image Magick</command>, or <command>xwd</command> for X11
+        workstations
+  </para>
+</listitem>
+<listitem>
+<para> <command>PM-Cam</command>, <command>Nikon II</command>, or <command>pmjpeg</command> for OS/2</para>
+</listitem>
+</itemizedlist>
+
+<para>The captured screen may be in a graphics format that is directly usable
+by your &dvidriver; or by <command>bm2font</command>.  If not, one or more of the
+conversion programs described in <quote><xref role="label" linkend="sec.picconv"/></quote> earlier in
+this chapter will help you convert it into a usable format.
+</para>
+
+<para>The most common output devices for &TeX; are laser printers with a
+resolution of 300dpi or higher.  By contrast, the resolution of a
+typical display is around 80dpi.  This discrepancy may require you to
+enlarge the bitmap image to make it legible in your document.
+For example, a 640x480 bitmap image is only about two inches wide when
+printed at 300dpi.  In color images, <emphasis>dithering<indexterm><primary>dithering</primary></indexterm></emphasis>, which increases the
+number of dots used to represent each pixel in the original image, has
+a natural enlarging effect on the image, and this reduces the magnitude of
+the problem.  However, some scaling may still be necessary.
+</para>
+
+<para>If the screen you want to include is only text (this includes IBM's
+line-drawing characters and other symbols), you can include it as a
+special <quote>verbatim</quote> environment if you have an appropriate font.  The
+advantages of this method are that the actual screen text can be
+incorporated directly into your document (making the document more
+portable and easier to distribute, if that is a concern), and that the
+resulting document is small and easy to print.  The disadvantage of
+this approach is that information about color is lost.
+If parts of the on-screen text appear in different colors for
+highlighting, using a pure-text approach may not produce
+acceptable results.  For example, compare Figure&nbsp;<xref role="label" linkend="fig.textshot"/> with
+the results in Figure&nbsp;<xref role="label" linkend="fig.melatexcmp"/> in Chapter&nbsp;<xref role="label" linkend="chap.editing"/>,
+<emphasis><xref role="label" linkend="chap.editing"/></emphasis>.
+</para>
+
+<figure id="fig.textshot">
+<title>A text mode screen dump.</title>
+<literallayout>\screendump{metext}</literallayout>
+</figure>
+
+<para>To insert pure-text screen captures, you have to have a font
+with exactly the same encoding as the text on the screen (for more
+information about font encodings, see the section
+<quote><xref role="label" linkend="sec.fonts.encodingvec"/></quote>
+in Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>, <emphasis><xref role="label" linkend="chap.fonts"/></emphasis>).  On
+MS-DOS and OS/2 PCs, this is sometimes a problem because the IBM line
+drawing characters do not appear in most fonts.  Several commercial
+fonts provide the appropriate character set, but so do the freely
+available IBM Courier fonts (distributed by IBM for the X11
+Consortium).  
+The IBM Courier fonts are PostScript Type&nbsp;1 fonts.  If you need &TeX; 
+<filename role="extension">PK</filename> fonts, use the <command>ps2pk</command> program as described in 
+the section called <quote><xref role="label" linkend="sec.t1fonts"/></quote> in Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>.
+</para>
+
+<para>
+To use the IBM Courier fonts to print captured screens, you
+will need <filename role="extension">AFM</filename> files<indexterm><primary sortas="AFM files"><filename role="extension">AFM</filename> files</primary></indexterm> that have the correct encoding vector.
+<filename role="extension">AFM</filename> files with the IBM OEM character set encoding are available
+from the CTAN archives in the directory <filename role="ctan" class="directory">fonts/courier</filename>.
+</para>
+
+<para>After the appropriate font is available, you are almost ready to
+reproduce a captured screen.  One problem remains: &TeX; cannot
+\input binary files.  Because screen dumps frequently contain
+characters from outside the normal ASCII range, they must be
+considered binary in this context.  To overcome this
+difficulty, it is necessary to process the screen dump and convert it
+into a text file.  The <command>Perl</command> script in
+Example&nbsp;<xref role="label" linkend="ex.txt2verb"/> in Appendix&nbsp;<xref role="label" linkend="app.examples"/>, <emphasis><xref role="label" linkend="app.examples"/></emphasis>, will perform this conversion.
+</para>
+
+<para>After conversion, the &TeX; code shown in Example&nbsp;<xref role="label" linkend="ex.texscreencapt"/> will
+insert the screen. This code will work in both Plain &TeX; and &LaTeX;.  Similar
+code can be written for other formats. Figure&nbsp;<xref role="label" linkend="fig.textshot"/> was produced
+with this code.
+</para>
+
+<example id="ex.texscreencapt">
+<title>Script for Inserting a Captured Text Screen</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="screendump.sty"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+</section>
+</chapter>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: xml
+sgml-parent-document: "book.xml"
+ispell-skip-sgml: t
+End:
+-->

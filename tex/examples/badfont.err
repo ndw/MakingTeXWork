@@ -1,0 +1,16 @@
+This is TeX, Version 3.1415 (C version 6.1)
+LaTeX Version 2.09 <25 March 1992> with NFSS2
+(badfont.tex (/work/nutshell/texguide/styles/latex/article.sty
+Standard Document Style `article' <14 Jan 92>.
+(/work/nutshell/texguide/styles/latex/art10.sty)) (badfont.aux)
+(/usr/local/lib/tex/inputs/nfss2/T1cmr.fd)
+! Undefined control sequence.
+\Large ->\fontsiz 
+                  {17}{20pt}\selectfont 
+<argument> \reset@font \Large 
+                              \bf 
+\@sect ...x \ifdim \@tempskipa >\z@ \begingroup #6
+                                                  \relax \@hangfrom {\hskip ...
+l.21 \section{First Section}
+                            
+? 

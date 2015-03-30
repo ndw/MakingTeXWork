@@ -1,0 +1,18 @@
+\newbox\alphbox
+\newdimen\alphwd
+\font\alpha=alpha at 72.27truept
+\font\alphb=alphb at 72.27truept
+\setbox\alphbox=\vbox{\hbox{%
+\alpha\char0\char1\char2\char3\char4}}
+\alphwd=\wd\alphbox
+\setbox\alphbox=\hbox{\vbox{\hsize=\alphwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\alpha\char0\char1\char2\char3\char4}
+\hbox{\alpha\char5\char6\char7\alphb\char0\char1}
+\hbox{\alphb\char2\char3\char4\char5\char6}
+\hbox{\alphb\char7\char8\char9\char10\char11}}}
+\ifx\parbox\undefined
+    \def\setalph{\box\alphbox}
+\else
+    \def\setalph{\parbox{\wd\alphbox}{\box\alphbox}}
+\fi

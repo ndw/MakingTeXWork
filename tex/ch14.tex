@@ -1,0 +1,356 @@
+\extrachapspace=.6pc
+\chapter[Commercial Environments]{Commercial\\Environments}
+\RCSID$Id: ch14.tex,v 1.1 2002/08/23 14:58:46 nwalsh Exp $
+\label{chap:commercialtex}
+
+\ifincludechapter\else\endinput\fi
+
+There are several commercial versions\index{tex@\TeX!commercial implementations} of \TeX\ on the market.  The advantage of commercial
+programs over free ones is that they provide an automated installation
+procedure and some level of technical support.  There's no reason to believe
+that a commercial implementation of \TeX\ is necessarily better than a free
+one (or vice versa, for that matter) because the source code for \TeX\ is in
+the public domain.
+
+The following sections highlight several commercial implementations of
+\TeX.
+
+\section{\protect\utex\ by ArborText}
+
+\idx{ArborText} sells \ixx{\utex}{utex@\utex} for MS-DOS\index{MS-DOS!TeX implementations@\TeX\ implementations} systems as well as an implementation of
+\TeX\ for \Unix\ workstations.  The ArborText previewer and \dvidriver\
+software are also available for both \Unix\ and MS-DOS systems.  The following
+discussion is based on experiences with \utex\ version 3.14B, the MS-DOS
+implementation of ArborText's \TeX\ package.
+
+The \utex\ package is a complete \TeX\ implementation for MS-DOS.  The
+additional utilities, \ixx{\program{PLtoTF}}{PLtoTF},
+\ixx{\program{TFtoPL}}{TFtoPL}, and
+\ixx{\BibTeX}{bibtex@\BibTeX}, are also included.  Neither \MF\ nor
+\program{MakeIndex} is provided.
+
+The default installation of \utex\ creates format files for Plain \TeX\ and
+\LaTeX.  To be as fast as possible, \utex\ creates executable
+versions of \TeX\ for each of these formats; these versions have the
+appropriate macro packages preloaded into the executable.  You can use the
+standard notation to load alternate macro packages if you wish to save disk
+space.
+
+ArborText includes a lot of support for using \TeX\ for non-English
+documents\index{international!support by ArborText}.  Several files of
+international hyphenation patterns (English, French\index{French}, German\index{German},
+Dutch\index{Dutch}, and Portuguese\index{language considerations}) are provided, as well as reprints of the TUGboat articles
+describing new features of \TeX\ version 3.0 and virtual fonts.
+
+Designed for an MS-DOS environment having only limited memory, \utex\ uses a
+swap file (potentially located in EMS\index{EMS memory} or \idx{XMS memory})
+to process large files.  Several environment variables can be used to alter
+the size of internal \TeX\ data structures when a new format is being
+produced.  In terms of big and small versions, \utex\ can be configured either
+way.  These choices are made when you create the format file however, so you
+will need to use \ixx{ini\TeX}{initex@ini\TeX} (included with \utex) to make a
+``bigger'' \TeX.
+
+One of the most interesting features of \utex\ is a quick-and-dirty preview
+mode provided by the \TeX\ executable.  After at least one page of your
+document has been processed, you can switch to a preview mode and see what the
+page looks like while \TeX\ continues processing your document.  This
+previewer is not particularly attractive, but it's quick and easy to use.  No
+other previewer is provided.  ArborText sells a fully functional previewer as
+a separate package.
+
+To print your documents, you must purchase or obtain a \dvidriver\
+separately.  ArborText sells two drivers, one for HP LaserJet printers and
+another for PostScript printers.  The \utex\ distribution includes a complete
+set of \ext{TFM} files, but it does not include any \ext{PK} files.
+
+The ArborText previewer is summarized in the section called
+``\nameref{sec:arb:preview}'' in Chapter~\ref{chap:preview}, {\it
+\nameref{chap:preview}}.  The ArborText printer drivers,
+\program{DVILASER/HP}\index{DVILASER/HP drivers} and
+\program{DVILASER/PS}\index{DVILASER/PS drivers}, are described in
+Chapter~\ref{chap:printing}, {\it \nameref{chap:printing}\/}.
+
+\section{\protect\yyTeX}
+
+\ixx{\yyTeX}{yyTeX@\yyTeX} is an MS-DOS\index{MS-DOS!TeX implementations@\TeX\ implementations} implementation of \TeX\ by \ixx{\YY\ Inc.}{YY Inc.@\YY\ Inc.} 
+(a 386 or higher processor is required).  \yyTeX\ is
+sold as a bundled package with
+\ixx{\program{DVIWindo}}{DVIWindo},
+\ixx{\program{dvipsone}}{dvipsone},\footnote{\program{DVIWindo}
+is described in Chapter~\ref{chap:preview},
+and \program{dvipsone} is described in Chapter~\ref{chap:printing}.} 
+and a set of PostScript fonts (either the
+Computer Modern fonts, the Lucida Bright and Lucida New Math fonts, or the
+MathTime fonts).  The installation provides format files for Plain \TeX\ and
+\LaTeX.
+
+\yyTeX\ stands out among \TeX\ systems because of its memory management.
+Unlike other \TeX\ systems, which exist in big and small versions, all of
+\yyTeX's memory management is dynamic.  All of the buffers that \TeX\ uses
+(main memory, font memory, string memory, etc.) will expand to meet the needs
+of the most complex documents you create.  The memory required for hyphenation
+patterns is dynamically allocated as well, which means that you can construct
+multilingual formats with as many sets of hyphenation patterns as you need
+(multilingual formats are discussed in more detail in
+Chapter~\ref{chap:foreign}, \textit{\nameref{chap:foreign}}).  The advantage
+of dynamic memory management over a fast and big \TeX\ is that \yyTeX\ starts
+out small (big \TeX{}s reserve a large fixed amount of memory even when
+processing simple jobs that don't require very much).  In a multitasking
+environment where several programs are competing for memory, one large program
+can slow the progress of the entire system.  \yyTeX's memory manager supports
+XMS\index{XMS memory}, VCPI\index{VCPI memory}, and DPMI\index{DPMI memory}.
+This means that it can run under MS-DOS with any of the common memory managers
+and under Windows, Windows NT, and DOS sessions in OS/2\index{Microsoft Windows!TeX implementations@\TeX\ implementations}\index{Microsoft Windows NT!TeX implementations@\TeX\ implementations}\index{NT TeX implementations@NT \TeX\ implementations}.
+
+\yyTeX\ has a couple of additional strengths for multilingual use: it supports
+customizable input character translation and more than 255 internal font
+numbers. Most versions of \TeX\ only support a maximum of 255 fonts in any
+single document.
+
+\section{Textures}
+
+\ixx{\program{Textures}}{Textures} is a commercial
+implementation of \TeX\ for the Macintosh\index{Macintosh!TeX implementations@\TeX\ implementations} distributed by \idx{Blue Sky Research}.
+It is described fully in Chapter~\ref{chap:mac}, {\it \nameref{chap:mac}}.
+
+\section{Turbo\protect\TeX}
+\label{sec:com:turbo}
+
+\ixx{Turbo\TeX}{TurboTeX@\TurboTeX} is a complete \TeX\ system for 
+MS-DOS\index{MS-DOS!TeX implementations@\TeX\ implementations}\index{Microsoft Windows!TeX implementations@\TeX\ implementations} with full
+support for Microsoft Windows.  It is distributed by the \idx{Kinch Computer Company}.
+The programs included in Turbo\TeX\ version 3.0 are shown in
+Table~\ref{tab:turbotex}.
+The \program{dvideo} and \program{wdviwin} previewers are described
+in Chapter~\ref{chap:preview}.
+
+{\def\x{${}^1$}
+\begin{xtable}{l|l}
+  \caption{Turbo\protect\TeX\ Programs\label{tab:turbotex}}\\
+  \bf Program & \bf Description \\[2pt]
+  \hline
+  \tstrut     
+  \it dvialw\,\x& A PostScript \dvidriver \\
+  \it dvideo  & An EGA (non-Windows) previewer \\
+  \it wdviwin & A Windows previewer \\
+  \it dvielq\,\x& An Epson LQ driver \\
+  \it dvieps\,\x& An Epson/IBM graphics printer driver \\
+  \it dvijep\,\x& An HP LaserJet PLus/Series II driver \\
+  \it dvijet\,\x& An HP LaserJet/DeskJet driver \\
+  \it dvilj4\,\x& An HP LaserJet 4 driver \\
+  \it initex\,\x& ini\TeX\ for building new format files \\
+  \it latex\,\x & \TeX\ with the \LaTeX\ format preloaded \\
+  \it tex\,\x   & \TeX\ with the Plain format preloaded \\
+  \it texidx  & The GNU \TeX\ indexing program \\
+  \it tif2hp  & Converts TIFF bitmapped graphics to HP LaserJet bitmaps \\
+  \it virtex\,\x& \TeX\ with no format preloaded \\[2pt]
+  \hline
+  \multicolumn{2}{l}{%
+    ${}^1$\vrule height11pt width0pt\tiny Windows version included.}
+\end{xtable}
+}
+
+\newpage
+The Microsoft Windows version of Turbo\TeX\ is a superset of
+the DOS version (you must install both, but you can delete the non-Windows
+executable programs that have Windows versions, if you wish).  
+
+\TurboTeX\ includes a complete \MF\ distribution.  In addition to the 
+programs shown in Table~\ref{tab:turbomf}, the complete sources for
+the Computer Modern, \LaTeX, and \AmS-fonts are also provided.
+
+{\def\x{${}^1$}
+\begin{xtable}{l|l}
+  \caption{Turbo\protect\TeX\ \protect\MF\ Programs\label{tab:turbomf}}\\
+  \bf Program   & \bf Description \\[2pt]
+  \hline
+  \tstrut
+  \it gftodvi\x & Creates proof sheets of \MF\ characters \\
+  \it inimf     & \MF\ with no base file preloaded \\
+  \it mfscript  & A script generator (for building multiple fonts) \\
+  \it mfcga     & \MF\ for CGA displays \\
+  \it mfhga     & \MF\ for Hercules displays \\
+  \it gftopk\x  & Converts \ext{GF} files to \ext{PK} files \\[2pt]
+  \hline
+  \multicolumn{2}{l}{%
+    ${}^1$\vrule height11pt width0pt\tiny A standard, or otherwise 
+    freely available, utility.}
+\end{xtable}
+}
+
+At the time of this writing, a new version of Turbo\TeX\ is actively being
+developed.  Unfortunately, it was not available for review in time for this
+edition of \textit{Making \TeX\ Work}.  The Kinch Computer Company claims that
+the next release will include a big \TeX\ running under Windows 3.1/Win32s and
+Windows NT as a native, protected-mode 32-bit application.  A new Windows
+previewer will also be available, and it takes advantage of Windows ``multiple
+document interface'' to preview multiple documents in the same session.  Kinch
+will also provide a set of the standard Computer Modern Fonts in TrueType and
+Type 1 formats.
+
+\section{\protect\PCTeX}
+\label{sec:pctex}
+
+\ixx{\PCTeX}{PCTeX@\PCTeX} is a complete \TeX\ system for 
+MS-DOS\index{MS-DOS!TeX implementations@\TeX\ implementations} distributed by \ixx{Personal \TeX, Inc.}{Personal tex, Inc.@Personal \TeX, Inc.}  It is one of two
+offerings from PTI.
+The version for Windows is described later in this chapter.
+
+\PCTeX\ is sold in two configurations.  The \PCTeX\ Starter System
+includes the latest releases of \PCTeX\ and \ixx{\PCTeX/386}{PCTeX@\PCTeX!PCTeX/386@\PCTeX/386}, 
+\ixx{\program{PTI View}}{PTI View} (for previewing), one printer driver with the appropriate
+Computer Modern fonts in \ext{PK} format, {\it \LaTeX\ For
+Everyone}~\cite{jh:latexforeveryone}, and the sources for Plain \TeX,
+\LaTeX, and \AMSTeX.  The \PCTeX\ Laser System includes Big
+\PCTeX/386, LaserJet, LaserJet 4, PostScript and DeskJet printer
+drivers (along with a complete set of Computer Modern fonts in \ext{PK}
+format at 300dpi and 600dpi), and the {\it PC \TeX\ Manual}, in addition to 
+everything contained in the Starter System.
+
+The discussion that follows is based on experiences with the \PCTeX\
+Starter System with \PCTeX\ version 3.14 and the \program{PTI Laser/HP} 
+\dvidriver.
+
+\newpage
+In addition to the \TeX\ executables and macro packages mentioned above,
+\PCTeX\ includes these standard \TeX\ utilities: \ixx{\BibTeX}{bibtex@\BibTeX}, 
+\ixx{\program{PLtoTF}}{PLtoTF}, 
+\ixx{\program{TFtoPL}}{TFtoPL}, \ixx{\program{PXtoPK}}{pxtopk}, 
+and \ixx{\program{PKtoPX}}{pktopx}.  It does not
+include any of the other standard utilities or the \program{MakeIndex}
+processor.  \MF\ is available as a separate package (although it is
+being discontinued, so it may not be available for long).
+
+Several additional features make \PCTeX\ an attractive commercial
+alternative:
+
+\begin{itemize}
+  \item It uses a text-based ``menu system'' for processing documents.  
+        This program
+        makes the edit/format/preview cycle a simple matter of selecting the
+        appropriate menu item.  Figure~\ref{fig:pcmenu} shows this system
+        in use.
+
+        \epsimage{fig:pcmenu}{The \protect\PCTeX\ menu system}  
+
+  \item Support is provided for Bitstream fonts\index{fonts!Bitstream}.  
+        \idx{Bitstream} is a vendor of high-quality
+        scalable typefaces.  The utilities included with \PCTeX\ allow you
+        to create \ext{TFM} and \ext{PK} files from Bitstream compressed
+        outline fonts.
+  \item If you prepare multilingual documents, you'll appreciate the 
+        attention they receive in the \PCTeX\ documentation.  Although
+        the ability to compose multilingual documents is really a feature
+        of \TeX\ version 3, not \PCTeX\ in particular, PTI provides 
+        step-by-step instructions for building a multilingual format file.
+        Support files for English, French\index{French}, and Spanish\index{Spanish} are included.
+\end{itemize}
+
+PTI's previewer, \program{PTI View}, is described in
+Chapter~\ref{chap:preview}, {\it\nameref{chap:preview}}.  The
+\program{PTI Laser/HP} and \program{PTI Laser/PS} printer drivers are
+discussed in Chapter~\ref{chap:printing}, {\it\nameref{chap:printing}}.
+Drivers for DeskJet and Epson printers are also available.
+
+\section{\protect\PCTeX\ For Windows}
+\label{sec:pctexforwin}
+
+\ixx{\PCTeX\ For Windows}{PCTeX@\PCTeX!For Windows}\index{Microsoft Windows!TeX implementations@\TeX\ implementations} is a new offering from \ixx{Personal \TeX, Inc.}{Personal tex, Inc.@Personal \TeX, Inc.}  \PCTeX\ For Windows is a superset of Personal \TeX's
+MS-DOS version of \PCTeX.
+
+This version of \PCTeX\ is an integrated system with a built-in editor (with
+complete on-line help),
+previewer, and push-button access to \PCTeX\ for composing your documents.
+Figure~\ref{fig:wpctex} shows \PCTeX\ For Windows in action.
+
+\epsimage{fig:wpctex}{\protect\PCTeX\ For Windows editing and previewing 
+        a \protect\LaTeX\ document} 
+
+\program{\PCTeX\ For Windows} includes a complete set of Computer Modern
+and \AmS\ fonts in scalable TrueType format.  This allows \PCTeX\ to 
+print directly to any printer (or other device) supported by Microsoft 
+Windows.  To provide better access to other TrueType fonts that
+you may have installed, \PCTeX\ includes a \ext{TFM} generator for
+TrueType fonts.  This generator is shown in Figure~\ref{fig:wpctextttotf}.
+
+\epsimage{fig:wpctextttotf}{\protect\PCTeX\ For Windows TrueType font 
+  metric builder}
+
+Except for the \program{PXtoPK} and \program{PKtoPX} utilities,
+\program{\PCTeX\ For Windows} has all of the features of the MS-DOS
+version of \PCTeX.
+
+\newpage
+\section{Scientific Word}
+
+\ixx{\program{Scientific Word}}{Scientific Word@Scientific Word (program)}, a commercial package from 
+\idx{TCI Software Research}, bridges the gap between \TeX\ and word processing
+by providing a more or less WYSIWYG interface on top of \TeX.
+\program{Scientific Word} requires Microsoft 
+Windows\index{Microsoft Windows!TeX implementations@\TeX\ implementations}.
+Figure~\ref{fig:sciword} shows a sample document being edited by
+\program{Scientific Word}.
+
+\epsimage{fig:sciword}{Editing a document with \protect\program{Scientific Word}} 
+
+\program{Scientific Word} is a powerful program that might prove to
+be invaluable in some circumstances.  An ideal candidate for 
+\program{Scientific Word} is someone with little or no desire to learn
+\TeX, but who wants professional quality output for documents
+containing a lot of mathematics.  \program{Scientific Word} is not simply
+a fast, interactive previewer; it really is a visual editor that
+produces \TeX\ code behind the scenes.  You enter document elements
+(even complex elements like mathematics) in an interactive push-button
+fashion, and \program{Scientific Word} translates it into the appropriate
+\LaTeX\ input.
+This is very different
+from Blue Sky Research's \program{Textures} where the user types in 
+\TeX\ but has nearly instantaneous feedback.
+
+Unfortunately, the complexity of \TeX\ vastly exceeds
+\program{Scientific Word's} ability to act as a visual editor, and this
+leads to a number of potentially confusing discrepancies.  For
+example, in a \TeX\ document, the \verb|\parindent| and
+\verb|\parskip| control sequences control the indentation of the
+first line of a paragraph and the distance between paragraphs.  In
+\program{Scientific Word}, the on-screen appearance of the document is
+controlled separately.  This difference is apparent in
+Figure~\ref{fig:sciword}, where the paragraphs appear to be indented with
+no additional space between them, and Figure~\ref{fig:commercial:swpreview}
+(the same document shown in the previewer) where the paragraphs are not
+indented but have additional space between them.
+
+These discrepancies arise because \program{Scientific Word} was designed with
+the same philosophy as \LaTeX: separation of content and form.  The purpose of
+the \program{Scientific Word} editor is to allow you to organize your thoughts
+and perfect the content of your document.  It is the job of \LaTeX, in
+conjunction with the document style options that you select, to perfect the
+appearance of your document.  The display shown in Figure~\ref{fig:sciword} is
+not incorrect in any way, it just isn't WYSIWYG.  TCI Research claims that
+``by going beyond WYSIWYG, \program{Scientific Word} allows you to focus on
+the creative process~$\ldots$ and not the layout commands necessary to typeset
+[your document].''
+
+\epsimage{fig:commercial:swpreview}{Preview of the Scientific Word document shown in Figure~\protect\ref{fig:sciword}}
+
+When \program{Scientific Word} encounters \TeX\ code that it does not
+understand, it leaves a labelled grey box in the display (you can see two such
+boxes above the chapter title ``Unsolved Problems'' in
+Figure~\ref{fig:sciword}).\footnote{I forced the issue of unrecognized control
+sequences by inserting \cs{parskip} and \cs{parindent} control sequences into
+the body of the document.  They really belong in a document style option.}
+This means that you can edit all of the \TeX\ code in your document from
+within \program{Scientific Word}, and small amounts of customization do not
+require abandoning the program.  The \program{Scientific Word} technical
+reference, included online with the program, describes how you can tailor
+\program{Scientific Word} to recognize many of your customizations.
+
+Behind the scenes, \program{Scientific Word} documents are processed by
+a full-fledged \TeX\ processor (\ixx{\TurboTeX}{TurboTeX@\TurboTeX} by the
+\idx{Kinch Computer Company}).
+This includes integrated document formatting and previewing under Windows.
+Starting with version 1.1 of \program{Scientific Word}, instructions are
+included to switch to a different version of \TeX, or different previewers
+and \dvidriver{}s, if you prefer.
+

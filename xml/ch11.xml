@@ -1,0 +1,790 @@
+<chapter id="chap.mf">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>Introducing &MF;</title>
+
+<para>&TeX; builds pages out of boxes<indexterm><primary>boxes</primary></indexterm> and glue<indexterm><primary>glue</primary></indexterm>.  The smallest boxes 
+are usually
+individual characters.  &MF;<indexterm><primary sortas="metafont">&MF;</primary></indexterm> is a tool that creates the actual characters.
+</para>
+
+<para>In the last few years, a real explosion has taken place in the number 
+of readily available fonts<indexterm><primary>fonts</primary><secondary sortas="building with metafont">building with &MF;</secondary></indexterm><indexterm><primary>characters</primary><secondary>as boxes</secondary></indexterm><indexterm><primary sortas="metafont">&MF;</primary><secondary>building fonts</secondary></indexterm>.  
+Today, many people have access to a large number
+of high quality typefaces.  Not too long ago (before Adobe Type Manager (ATM)<indexterm><primary>Adobe Type Manager (ATM)</primary></indexterm> 
+was available for the Macintosh and Microsoft Windows), fonts were too expensive
+to be generally available.  In those days, a font building tool like &MF; was
+essential if &TeX; was going to have a number of typefaces and a large number 
+of mathematical symbols.  Today, the role of &MF; is diminishing.  Many people
+choose to use PostScript fonts<indexterm><primary>fonts</primary><secondary>PostScript</secondary></indexterm> almost 
+entirely.  In fact, with PostScript
+alternatives to the Computer Modern Math fonts<indexterm><primary>Computer Modern Math fonts</primary></indexterm><indexterm><primary>fonts</primary><secondary>Computer Modern</secondary></indexterm> now available, it's possible to
+use &TeX; without using &MF; fonts at all.
+</para>
+
+<para>On the other hand, lots of people do still use the Computer Modern
+fonts, and there are many other &MF; fonts (for non-English languages
+like Arabic and Japanese, for example), so &MF; is still a useful tool.
+Also, it can be used to make nice portable diagrams.
+</para>
+
+<para>This chapter cannot teach you how to harness all of &MF;'s power.  The only
+practical way to learn how to design your own images with &MF; is to 
+read <emphasis>The \MF{}book</emphasis>&nbsp;<xref linkend="kn:mfbook"/>  (even if your images
+are nowhere near as complex as an entire font).
+</para>
+
+<para>
+What you will learn from this chapter is how to run &MF; to create 
+&TeX; <filename role="extension">PK</filename> fonts<indexterm><primary sortas="PK fonts"><filename role="extension">PK</filename> fonts</primary><secondary sortas="made with metafont">made with &MF;</secondary></indexterm> 
+and <filename role="extension">TFM</filename> files<indexterm><primary>TFM files</primary><secondary sortas="making with metafont">making with &MF;</secondary></indexterm> from 
+existing &MF; programs.  
+The Computer
+Modern fonts, the \AmS fonts, and the DC Fonts are all created
+with &MF;.  It is not unreasonable to imagine that you might someday
+want to create one of these fonts at a non-standard size or unusual
+magnification.  
+</para>
+
+<para>Knowing how to run &MF; will also help you set up a system for
+performing automatic font generation.  This can save a lot
+of disk space.  See the section called <quote><xref role="label" linkend="sec.autofont"/></quote> in
+Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>, <emphasis><xref role="label" linkend="chap.fonts"/></emphasis>, for more information
+about setting up automatic font generation.
+</para>
+
+<para>From many perspectives, &TeX; and &MF; behave in analogous ways.  
+Where &TeX; reads a plain text <filename role="extension">TEX</filename> document, processes it, and
+produces a <filename role="extension">DVI</filename> file, &MF; reads a
+plain text <filename role="extension">MF</filename> program, processes it, and produces a generic
+bitmap font file as output. 
+</para>
+
+<para>Because you probably aren't going to be writing your own font programs for &MF;,
+you have to get them from somewhere.  Many distributions of &TeX; include &MF; and the font files for the Computer Modern fonts.
+This chapter will concentrate on just the Computer Modern font programs
+because those are the most likely to be available.  
+</para>
+
+<para>Many &MF; fonts can be retrieved from the CTAN archives.  
+Table&nbsp;<xref role="label" linkend="tab.mf.mfdistrib"/>
+lists some common fonts and their location in 
+the CTAN archives.  A collection of font samples is shown in
+Appendix&nbsp;<xref role="label" linkend="app.fonts"/>, <emphasis><xref role="label" linkend="app.fonts"/></emphasis>.
+</para>
+
+<table id="tab.mf.mfdistrib">
+<title>Some Popular &MF; Fonts on the CTAN Archives</title>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry>Fonts</entry>
+  <entry>Location</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>Standard Computer Modern</entry>
+  <entry><filename>fonts/cm</filename></entry>
+</row>
+<row>
+  <entry>Standard &LaTeX;</entry>
+  <entry><filename>macros/latex/distribs/base/fonts</filename></entry>
+</row>
+<row>
+  <entry>&AmS; Fonts</entry>
+  <entry><filename>fonts/ams</filename></entry>
+</row>
+<row>
+  <entry>DC Fonts</entry>
+  <entry><filename>fonts/dc</filename></entry>
+</row>
+<row>
+  <entry>Concrete</entry>
+  <entry><filename>fonts/concrete</filename></entry>
+</row>
+<row>
+  <entry>Pandora</entry>
+  <entry><filename>fonts/pandora</filename></entry>
+</row>
+<row>
+  <entry>Ralph Smith's Script Font</entry>
+  <entry><filename>fonts/rsfs</filename></entry>
+</row>
+<row>
+  <entry>St. Mary's Road</entry>
+  <entry><filename>fonts/stmary</filename></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<section id="sec.mf.gettingstarted"><title>What to Run?</title>
+
+<para>Like &TeX; itself, the actual &MF; file you have to execute
+<indexterm><primary sortas="metafont">&MF;</primary><secondary>running</secondary></indexterm> varies between
+platforms and implementations.  If you have built and/or installed
+&TeX;, you probably already know what program to run.  
+You'll have to ask your system administrator for help if you cannot
+figure out what the name of the &MF; executable is on your computer.
+In the rest
+\linebreak
+</para>
+
+<para>of this chapter, I'll assume that the command <emphasis>mf</emphasis>
+runs &MF;.  You should substitute the name of the executable
+program on your system for <emphasis>mf</emphasis> in the examples that follow.
+</para>
+
+<para>&MF; comes in big and small versions just like &TeX;.  You will
+need the big &MF; if you are building fonts for very high-resolution
+devices or at very large sizes.  Most fonts can be built with a small
+&MF;.
+</para>
+
+</section>
+<section><title>What Files Does &MF; Need?</title>
+
+<para>In addition to the &MF; programs, &MF;<indexterm><primary sortas="metafont">&MF;</primary><secondary>files</secondary></indexterm> must 
+be able to find several
+other files.  The files that are needed are normally created during the
+installation process.  The sections that follow describe each of the
+files that &MF; needs.
+</para>
+
+<section><title>Pool Files</title>
+
+<para>The pool file<indexterm><primary>pool files</primary><secondary sortas="for metafont">for &MF;</secondary></indexterm> for each 
+version of &MF; has the same purpose as the
+pool file created for &TeX;.  It is created when &MF; is compiled.
+If you don't have a pool file, there's nothing you can do about it.
+If you obtained precompiled programs (from the Internet, from a
+friend, or commercially) and you don't have the pool file needed by
+&MF;, you received an incomplete distribution.
+</para>
+
+<para>If you did not install &MF;, and the pool file is missing, contact the
+system administrator who performed the installation.  Something was
+done incorrectly.
+</para>
+
+</section>
+<section><title>Base Files</title>
+
+<para>Base files<indexterm><primary>base files</primary><secondary sortas="for metafont">for &MF;</secondary></indexterm> for &MF; are 
+analogous to format files for &TeX;.
+Unlike &TeX;, which has many different format files, there are
+relatively few base files for &MF;.  
+</para>
+
+<para>Base files are created by a special version of &MF;, usually called
+\iniMF.  However, some implementations combine &MF; and \iniMF into one program, in which case you must select \iniMF with a special
+option when you run the program.  
+</para>
+
+<para>Like ini&TeX;, \iniMF interprets all the control sequences in a set of
+base macros and builds the in-memory data structures that the &MF; program needs.  After loading all the files, \iniMF writes
+the memory image into a base file.  When &MF; loads the base file, it simply copies it into memory; no
+interpretation is necessary.  
+</para>
+
+<para>Because &MF; loads the base files without interpretation, they are not
+generally portable from one system to another, or even between
+different versions of &MF; on the same system.  Different versions of
+&MF; load differently in memory, and this makes the base files
+incompatible.  For example, you need a big \iniMF to make
+base files for big &MF; and small \iniMF for a small &MF;.
+</para>
+
+<para>The <quote><xref role="label" linkend="sec.mf.gettingstarted"/></quote> section later in this chapter 
+describes how to build a base file, if you do not already have one.
+</para>
+
+</section>
+<section><title>&MF; Programs</title>
+
+<para>When you run &MF;, you have to tell it what 
+file (&MF; program)<indexterm><primary sortas="metafont">&MF;</primary><secondary>programs</secondary></indexterm> to
+process.  &MF; programs are stored in files with the extension <filename>.mf</filename>.
+If you specify a complete pathname, &MF; will load the
+specific file that you request.  If you specify a simple filename
+without a path, &MF; looks for the file in several user-defined and,
+possibly, system-defined locations.  The most common way to specify
+user-defined locations is by setting the <literal>MFINPUTS</literal>
+environment variable to a list of subdirectories where &MF; programs
+are kept.  The format of the environment variable differs according to
+the platform you use.  On &unix; systems, it is 
+a list of directory names separated by colons.  On MS-DOS and OS/2 systems, 
+it is a
+list of directory names separated by semicolons.  Consult the
+documentation for the particular implementation of &MF; you use
+for more information about system-defined locations where &MF; looks for input files.
+</para>
+
+</section>
+</section>
+<section><title>Command-line Options</title>
+
+<para>In addition to the name of the &MF; program, &MF; has very few 
+command-line<indexterm><primary>command line</primary><secondary sortas="metafont options">&MF; options</secondary></indexterm><indexterm><primary>command line</primary><secondary>specifying filenames</secondary><tertiary sortas="for metafont">for &MF;</tertiary></indexterm>
+options.  The name of a base file is the only option regularly 
+used.
+In this section, I'll explain what can go on the &MF; command
+line.
+</para>
+
+<para>A formal specification of the &MF; command line looks like this:
+</para>
+
+<screen>
+$ <emphasis role="bold">mf <emphasis>switches</emphasis> <emphasis role="bold">&amp;</emphasis><emphasis>base</emphasis> mf-program mf-commands</emphasis>
+</screen>
+
+<para>After the name of the &MF; program, the first things that you can specify
+on the command line are implementation-dependent switches and options.  For
+example, implementations of &MF; that combine \iniMF and &MF; into a
+single program may use the switch <emphasis>/I</emphasis> to specify that \iniMF processing is desired.  There are no system-independent switches for &MF;.
+Consult the documentation that comes with your implementation for more
+information about system-dependent switches.
+</para>
+
+<para>After any system-dependent switches, you can specify
+the name of the base file to use.  This option,
+if present, must come before any other options, and you must put an
+ampersand (&amp;) in front of the base file name.  If you do not specify a
+base file, &MF; will use a default base.
+</para>
+
+<para>After the base, &MF; looks for the name of a &MF; program file.  If &MF; finds a filename on the command line, it will process the program contained
+in that file before looking at any other options that may follow.
+</para>
+
+<para>Finally, you can insert arbitrary &MF; commands on the command line by
+typing them just as you would in a program.  In fact, this is
+frequently done to change the size or magnification of the font being
+created.  Exactly how this is accomplished is described in the
+section called <quote><xref role="label" linkend="sec.buildfont"/></quote> later in this chapter.
+</para>
+
+<para>Please read the section called <quote><xref role="label" linkend="sec.runtex.cmdcautions"/></quote>
+in Chapter&nbsp;<xref role="label" linkend="chap.running"/>, <emphasis><xref role="label" linkend="chap.running"/></emphasis>, for a
+detailed description of some common problems with &MF; commands on the
+command line.  They are exactly the same problems that can occur on
+the &TeX; command line.
+</para>
+
+<para>Also, the behavior of &MF; when run without any options at all is the 
+same as the behavior of &TeX; as described in the section called
+<quote><xref role="label" linkend="sec.runtex.texwoopts"/></quote> in Chapter&nbsp;<xref role="label" linkend="chap.running"/>.
+</para>
+
+</section>
+<section><title>Building a Base File</title>
+
+<para>Building a base file<indexterm><primary>base files</primary><secondary>building</secondary></indexterm> for &MF; is 
+exactly analogous to building
+a format file for &TeX;.  Fortunately, there are far fewer base files.
+The two most common base files are the <emphasis>plain</emphasis>
+<indexterm><primary>plain base files</primary></indexterm> base and the 
+<emphasis>cmbase</emphasis><indexterm><primary>cmbase base files</primary></indexterm> (the
+base used for the Computer Modern fonts).  Use the \iniMF program<indexterm><primary>iniMF building base file</primary></indexterm> to build a base file.  For 
+example, to build the plain base,
+use:
+</para>
+
+<screen>
+\$ <emphasis role="bold">inimf plain</emphasis>
+</screen>
+
+<para>Move the resulting files, <filename>plain.base</filename><indexterm><primary>plain.base files</primary><secondary sortas="for metafont">for &MF;</secondary></indexterm> and <filename>plain.log</filename><indexterm><primary sortas="plainlog files">plain.log files</primary><secondary sortas="for metafont">for &MF;</secondary></indexterm>,
+into the directory where &MF; looks for base files (typically in a 
+<filename>bases</filename> or <filename>formats</filename> subdirectory under the standard
+&TeX; directory).
+</para>
+
+<para>The <emphasis>cmbase</emphasis> is actually an extension of the plain base.  To build
+it, use the command:
+</para>
+
+<screen>
+\$ <emphasis role="bold">inimf &amp;plain cmbase</emphasis>
+</screen>
+
+<para>Remember to use appropriate quotation or shell escape characters to prevent
+the ampersand from being misinterpreted.
+</para>
+
+</section>
+<section id="sec.buildfont"><title>Running &MF;</title>
+
+<para><indexterm><primary sortas="metafont">&MF;</primary><secondary>running</secondary></indexterm><indexterm><primary sortas="running metafont">running &MF;</primary></indexterm>The sections that 
+follow describe how to use &MF; to make a font from
+an existing <filename role="extension">MF</filename> file.  You should reread the sections
+<quote><xref role="label" linkend="sec.issueofsize"/></quote> from Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>,
+<emphasis><xref role="label" linkend="chap.fonts"/></emphasis>, and <quote><xref role="label" linkend="sec.bitfonts"/></quote> from
+Chapter&nbsp;<xref role="label" linkend="chap.printing"/>, <emphasis><xref role="label" linkend="chap.printing"/></emphasis>,
+if you are unfamiliar with the notions of
+bitmap and device resolution and magnification and design size in
+&TeX; fonts.
+</para>
+
+<section><title>Picking a Mode</title>
+
+<para>The input to &MF;<indexterm><primary sortas="metafont">&MF;</primary><secondary>picking a mode</secondary></indexterm> is 
+an <quote>outline</quote> description of a font.  The output is
+a set of bitmaps that realize the outline on a particular device
+at a particular size.  
+</para>
+
+<para>Output from &MF; is naturally device-dependent because different
+printers have different resolutions.  But even two printers with
+the same resolution sometimes produce different looking results from the 
+same bit patterns.
+For example, some laser
+printers are <quote>write white</quote> printers, and some are <quote>write black</quote>
+printers---depending on whether the printer fills in the black (text)
+areas or the white (non-text) areas of the page.  A small, intricate bitmap
+(like a character from a font) designed for a write-black printer
+may not look as good on a write-white printer and vice versa.
+</para>
+
+<para>There are several internal parameters that can be modified to produce
+optimal output on any given device.  These parameters are grouped together
+in a <emphasis>mode</emphasis>.  Whenever you run &MF; to create a new set of bitmaps, 
+you must select a mode. 
+</para>
+
+<para>There are no rules for determining what parameters produce the best
+mode for a particular printer; it's just done by trial and error (set
+some values, print a font, see if it looks good, adjust some values,
+print another font, etc.).
+</para>
+
+<para>Luckily, a large collection of predefined &MF; modes is available in the 
+CTAN archives. The file <filename>fonts/modes/modes.mf</filename> contains 
+appropriate &MF; modes for many printers.
+</para>
+
+<para>Each mode has a name<indexterm><primary sortas="metafont">&MF;</primary><secondary>mode name</secondary></indexterm>. 
+For example, <literal>laserwriter</literal> and
+<literal>LNOthree</literal> are two modes from <filename>modes.mf</filename>.  See
+<quote><xref role="label" linkend="sec.buildfont"/>,</quote> later in this chapter for
+how to select a mode when you run &MF;.
+</para>
+
+<para>Internally, &MF; has a variable called <literal>mode</literal> that it uses
+to keep track of the current mode.  The examples in this chapter
+use the <literal>laserwriter</literal> mode because that is appropriate for my
+printer.  
+</para>
+
+<!-- Two modes, <literal>proofing</literal> mode and <literal>localfont</literal> mode are -->
+<!-- special.   -->
+
+<section><title>Proofing mode</title>
+
+<para>Proofing mode<indexterm><primary sortas="metafont">&MF;</primary><secondary>proofing mode</secondary></indexterm> is the 
+mode that &MF; uses if you do not select another
+mode.  In proofing mode, &MF; displays each character on the screen.
+This mode does not usually produce a useful font because it
+ sets the device resolution to 2601.72 dots per inch (dpi).  That
+resolution is chosen so that there are exactly 36 pixels per point
+(one point is 1/72.27 inches in &TeX;).
+</para>
+
+<para>Because font designers are going to want to look at a font on the
+screen far more often than they will want to print it, &MF; uses 
+proofing mode as the default.
+</para>
+
+<para>If you find that &MF; is producing fonts with huge resolutions
+(thousands of dots per inch) or fonts without <filename role="extension">TFM</filename> files, you're 
+probably running in proofing mode.
+Remember to use the mode-setting commands on the command line when
+you run &MF;.  These commands are described in <quote><xref role="label" linkend="sec.buildfont"/>,</quote>
+later in this chapter.
+</para>
+
+</section>
+</section>
+<section><title>Selecting a Size</title>
+
+<para>The design size<indexterm><primary sortas="metafont">&MF;</primary><secondary>font design size</secondary></indexterm> of 
+the font you are creating is determined
+by the <filename role="extension">MF</filename> file you use.  For example, the design size of
+<filename>cmr10.mf</filename> is 10pt.  The design size of <filename>cmr12.mf</filename>
+is 12pt, etc.
+To select how large you want the bitmaps to be, you must set
+the magnification.  There is no other way to select the
+size when you are running &MF;.
+</para>
+
+<para>
+If you know the design size of a font and the size of the bitmaps that
+you actually want to produce, it is easy to calculate the magnification
+required.  The magnification is simply the ratio of the size
+you want to the design size.
+</para>
+
+<para>For example, suppose you need a 16pt version of Computer Modern Roman.
+First, pick the font that has a design size closest to the size you
+want---in this case, Computer Modern Roman 17pt
+(<filename>cmr17.mf</filename>).  To calculate the magnification, simply
+divide 16 by 17; in other words, the desired magnification is 0.9412.
+To make a 13pt version of <filename>cmr12</filename>, use a magnification of 1.0833.
+Remember, in order to use these fonts in &TeX;, you will have to use the
+<literal>at</literal> or <literal>scaled</literal> operators (for example, 
+<literal>\font\cmrxvi=cmr17 at 16pt</literal>).
+</para>
+
+</section>
+<section><title>Making a GF Font</title>
+
+<para><indexterm><primary>GL fonts</primary><secondary sortas="making with metafont">making with &MF;</secondary></indexterm><indexterm><primary sortas="metafont">&MF;</primary><secondary>GL fonts</secondary></indexterm><indexterm><primary>fonts</primary><secondary>GL</secondary></indexterm>After you 
+have selected a mode and a magnification, running &MF; is
+easy.  In general, you use a command line like the following:
+</para>
+
+<screen>
+\$ <emphasis role="bold">mf {\bs}mode=</emphasis><emphasis>selected-mode</emphasis><emphasis role="bold">; mag=</emphasis><emphasis>desired-magnification</emphasis><emphasis role="bold">; {\bs}input</emphasis> <emphasis>mf-file</emphasis>
+</screen>
+
+<para>For example, on a &unix; system, the following command line would make
+a GF file for the Computer Modern Roman 12pt font at a size of 13pt:
+</para>
+
+<screen>
+\$ <emphasis role="bold">mf '{\bs}mode=laserwriter; mag=1.0833; {\bs}input cmr12'</emphasis>
+</screen>
+
+<para>Note the use of quotation marks to avoid shell-expansion of the backslash
+characters.
+</para>
+
+<para>On an MS-DOS or OS/2 system, where the backslash is not a special
+character, the 13pt version of <filename>cmr12</filename> is made with the following
+command:
+</para>
+
+<screen>
+\$ <emphasis role="bold">mf {\bs}mode=laserwriter; mag=1.0833; {\bs}input cmr12</emphasis>
+</screen>
+
+<para>As you can see, the semicolons are <emphasis>required</emphasis> in both cases.
+</para>
+
+<para>Magnification<indexterm><primary>magnification</primary><secondary sortas="for metafont">for &MF;</secondary></indexterm> can 
+be expressed with the <literal>magstep()</literal> function
+if the font is being built at a standard magstep size.  For example,
+the following command builds a 14.44pt version of <filename>cmr12</filename>:
+</para>
+
+<screen>
+  \$ <emphasis role="bold">mf {\bs}mode=hplaser; mag=magstep(1); {\bs}input cmr12</emphasis>
+</screen>
+
+<para>This corresponds to \magstep1.  This example also illustrates
+how a different mode can be selected. In this case, the font is being
+built for an HP LaserJet printer.  The command is shown without quotations,
+but they are still necessary on &unix; systems.
+</para>
+
+</section>
+<section><title>Making a PK Font</title>
+
+<para><indexterm><primary sortas="PK fonts"><filename role="extension">PK</filename> fonts</primary><secondary sortas="made with metafont">made with &MF;</secondary></indexterm><indexterm><primary sortas="metafont">&MF;</primary><secondary>PK fonts</secondary></indexterm><indexterm><primary>fonts</primary><secondary>PK</secondary></indexterm>Running 
+&MF;, as shown above, produces a <filename role="extension">TFM</filename> file and a <filename role="extension">GF</filename>
+file.  &TeX; only needs the <filename role="extension">TFM</filename> file, which can simply be copied
+to the appropriate directory.  For the Computer Modern fonts, you
+probably already have copies of the <filename role="extension">TFM</filename> files, so the duplicates
+produced by &MF; can
+be deleted. The <filename role="extension">TFM</filename> file does not change at
+different magnifications, so you do not need to save different
+<filename role="extension">TFM</filename> files for different sizes.
+</para>
+
+<para>The <filename role="extension">GF</filename> file contains a font in the <quote>generic bitmap</quote> format.
+Most &dvidriver;s use <filename role="extension">PK</filename> files.  The <command>GFtoPK</command> program
+converts <filename role="extension">GF</filename> fonts into <filename role="extension">PK</filename> fonts.
+If &MF; creates the file <filename>cmr12.gf</filename>, you can convert it into
+a <filename role="extension">PK</filename> file by issuing the command:
+</para>
+
+<screen>
+  \$ <emphasis role="bold">gftopk cmr12.gf cmr12.pk</emphasis>
+</screen>
+
+<para>After conversion, you should move the <filename role="extension">PK</filename> file to the appropriate
+directory for your &dvidriver; and delete the <filename role="extension">GF</filename> file.  <filename role="extension">PK</filename> files
+are generally stored in one of two directory structures.  On operating systems
+that support long filenames, it is most common to store all the <filename role="extension">PK</filename>
+files for a given font in the same directory, using the extension to identify
+the resolution.  In this case, a 360dpi version of <filename>cmr10</filename> would be
+stored as <filename>cmr10.360pk</filename>.  Under operating systems like MS-DOS, which
+do not support long filenames, different resolutions are stored in their
+own directories.  In this case the 360dpi font just described would be stored
+as <filename>cmr10.pk</filename> in a directory called <filename>360dpi</filename> or
+<filename>dpi360</filename>.
+</para>
+
+</section>
+</section>
+<section><title>What About Errors?</title>
+
+<para>Because I'm operating under the assumption that you are not writing your
+own &MF; programs, errors<indexterm><primary>error messages</primary><secondary sortas="metafont">&MF;</secondary></indexterm> are 
+far less likely.  Nevertheless,
+there are a few things that can go wrong.
+</para>
+
+<para>Figure&nbsp;<xref role="label" linkend="fig.eight"/> shows a simple figure eight created with &MF;.
+The code which creates this symbol is shown in Example&nbsp;<xref role="label" linkend="ex.eightcode"/>.
+</para>
+
+<figure id="fig.eight">
+<title>A figure eight created with &MF;</title>
+<screen>8</screen>
+</figure>
+
+<example id="ex.eightcode"><title>The Code for the Figure Eight</title>
+<screen>
+mode_setup;
+u# := 2mm#;
+define_pixels(u);
+
+beginchar("A", 8u#, 9u#, 5u#);
+  z1 = ( 0u,  0u);
+  z2 = ( 8u,  0u);
+  z3 = ( 1u,  8u);
+  z4 = ( 7u,  8u);
+  pickup pencircle scaled 1u#;
+  draw z4 ..  z1 .. z2 ..  z3 .. cycle;
+  pickup pencircle scaled 3u#;
+  drawdot z1;
+  drawdot z2;
+  drawdot z3;
+  drawdot z4;
+endchar;
+
+\end
+</screen>
+</example>
+
+<para>Let's look at some of the things that can go wrong.  In the following
+examples, a &unix; implementation of &MF; is being used.  Quotation marks are
+used to prevent misinterpretation of the backslashes.
+</para>
+
+<variablelist>
+  <varlistentry>
+<term><literal>! I can't find file `mode=laserwriter.mf'.</literal></term>
+<listitem>
+
+<para>  If you forget to put a backslash in front of the <literal>mode</literal> parameter,
+  &MF; thinks that mode specification is the name of the <filename role="extension">MF</filename> file.
+  For example, <literal>mode=laserwriter</literal> is misinterpreted as the
+  filename:
+</para>
+
+<screen><![CDATA[$ mf 'mode=laserwriter; \input eight'
+This is METAFONT, Version 2.71 (C version 6.1)
+! I can't find file `mode=laserwriter.mf'.
+<*> mode=laserwriter
+                    ; \input eight
+Please type another input file name: ]]></screen>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>! Value is too large (xxxx).</literal></term>
+<listitem>
+
+<para>This error occurs if some element of the image goes outside of the bounds
+allowed by &MF;.  Frequently, this occurs in proofing mode when the image is so
+large that it can't be rendered.<footnote><para>{Obtaining this error from
+<filename>eight.mf</filename> required changing unit size from 2mm to 5mm.}</para></footnote>  In this
+example, &MF; is in proofing mode because I forgot the \mode=laserwriter
+parameter on the command line:
+</para>
+
+<screen>
+$ mf '\input eight'
+This is METAFONT, Version 2.71 (C version 6.1)
+(eight.mf
+! Value is too large (4097).
+&lt;recently read> ;
+                 
+beginchar->...rdp:=(EXPR3);w:=hround(charwd*hppp);
+                                       h:=vround(charht*hppp);
+l.5 beginchar("A", 8u#, 9u#, 5u#)
+                                 ;
+? 
+</screen>
+
+<para>This doesn't mean that &MF; can't render very large images; it just means that
+my design isn't robust enough to handle an extremely high resolution.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>! Curve out of range.</literal></term>
+<listitem>
+
+<para>This error is also caused by an image that is too large to be
+rendered.<footnote><para>{Obtaining this error from <filename>eight.mf</filename> required
+changing unit size from 2mm to 4mm.}</para></footnote>  Again, &MF; is trying to create the
+image at an extremely high resolution; it is in proofing mode because
+I forgot the \mode=laserwriter parameter on the command line:
+</para>
+
+<screen>
+$ mf '\input eight'
+This is METAFONT, Version 2.71 (C version 6.1)
+(eight.mf
+! Curve out of range.
+&lt;to be read again> 
+                   ;
+l.11   draw z4 ..  z1 .. z2 ..  z3 .. cycle;
+                                            
+? 
+</screen>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>unknown string</literal></term>
+<listitem>
+
+<para>This is what happens if you forget the semicolon after the \mode
+parameter.  In this example, &MF; thinks that <quote><literal>laserwriter \input eight</literal></quote>
+is the mode, which doesn't make sense:
+</para>
+
+<screen>
+$ mf '\mode=laserwriter \input eight'
+This is METAFONT, Version 2.71 (C version 6.1)
+(eight.mf
+>> unknown string mode_name0
+! Not a string.
+&lt;to be read again> 
+                   ;
+mode_setup->...nput "&amp;mode)else:mode_name[mode]fi;
+                                                  if.unknown.mag:...
+l.1 mode_setup
+              ;
+? 
+</screen>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>! Extra tokens will be flushed.</literal></term>
+<listitem>
+
+<para>Oops, another missing semicolon:
+</para>
+
+<screen>
+$ mf '\mode=laserwriter; mag=magstep(1) \input eight'
+This is METAFONT, Version 2.71 (C version 6.1)
+(eight.mf
+! Extra tokens will be flushed.
+&lt;to be read again> 
+                   warningcheck
+mode_setup->warningcheck
+                        :=0;if.unknown.mode:mode=proof;fi...
+l.1 mode_setup
+? 
+</screen>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Nothing happens&hellip;</term>
+<listitem>
+
+<para>&MF; is sitting at the asterisk prompt waiting for you to do something.
+You forgot to \input the font:
+</para>
+
+<screen>
+$ mf '\mode=laserwriter; eight'
+This is METAFONT, Version 2.71 (C version 6.1)
+
+*
+</screen>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>Output written on eight.nnngf&hellip;</literal></term>
+<listitem>
+
+<para>Success!  A 300dpi version of <filename>eight.mf</filename> has been created and stored
+in the file <filename>eight.300gf</filename>:
+</para>
+
+<screen>
+$ mf '\mode=laserwriter; \input eight'
+This is METAFONT, Version 2.71 (C version 6.1)
+(eight.mf [65] )
+Font metrics written on eight.tfm.
+Output written on eight.300gf (1 character, 1964 bytes).
+Transcript written on eight.log.
+</screen>
+
+<para>On systems that place restrictions on the length of a filename extension, it
+is abbreviated to <filename>eight.300</filename>.  The next step is to run
+<emphasis>gftopk eight.300gf</emphasis>. This will produce <filename>eight.300pk</filename>, which
+our &dvidriver; can use.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<section><title>Other Errors</title>
+
+<para>The list of errors in the preceding sections is hardly exhaustive.  For
+example, the gothic fonts (see Appendix&nbsp;<xref role="label" linkend="app.fonts"/>,
+<emphasis><xref role="label" linkend="app.fonts"/></emphasis>) produce two more errors when rendered at low
+resolutions: <emphasis>! inconsistent equation</emphasis>, caused by apparently
+contradictory statements (probably due to rounding errors) and <emphasis>{!
+strange path}</emphasis>, caused by a path that does not appear to run
+counter-clockwise (again probably caused by rounding errors, these are very
+complex fonts).<footnote><para>{There are very specific rules about which way paths
+must be drawn so that &MF;'s algorithms for filling in the character's outline
+can succeed.}</para></footnote>  
+</para>
+
+<para>Most of the other errors that are encountered can be ignored (the preceding
+examples from the gothic fonts can certainly be ignored---at least at 300dpi).
+Entering <keycap>H</keycap> at &MF;'s question mark prompt will describe the cause of the
+error in more detail.
+</para>
+
+</section>
+</section>
+<section><title>Output at Very High Resolutions</title>
+
+<para>Producing &MF; output for very high resolution
+<indexterm><primary sortas="metafont">&MF;</primary><secondary>high-resolution output</secondary></indexterm> devices like phototypesetters
+is sometimes difficult.  This will frequently require a big &MF; for
+the same reasons that processing a large document requires a big &TeX;.
+</para>
+
+<para>It is possible to construct examples that cannot be rendered at very high
+resolutions because they are simply too large and complex.
+</para>
+
+</section>
+<section><title>Output at Very Low Resolutions</title>
+
+<para><indexterm><primary sortas="metafont">&MF;</primary><secondary>low-resolution output</secondary></indexterm>The intricate 
+detail of many characters is difficult to render at very 
+low resolutions.  Yet, it is sometimes desirable to produce output at low
+resolutions for on-screen previewers and dot matrix printers.
+</para>
+
+<para>Usually, errors like <quote><literal>strange turning path</literal></quote> that result from attempting
+to produce output at low resolutions can be ignored, but sometimes the
+resulting characters will be distorted.
+</para>
+</section>
+</chapter>

@@ -1,0 +1,656 @@
+\chapter{Previewing}
+\RCSID$Id: ch09.tex,v 1.1 2002/08/23 14:58:46 nwalsh Exp $
+\label{chap:preview}
+
+\ifincludechapter\else\endinput\fi
+
+\bgroup % <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%
+\def\floatpagefraction{.3}
+
+\index{previewing}\index{tex@\TeX!previewing}Because \TeX\ is not interactive, most \TeX\ documents are developed
+iteratively.  After adding a significant amount of text or changing
+the format of a document, you'll want to see what the document looks like.
+Then you can add more text or try different formats.
+Then, it's helpful to see it again $\ldots$
+
+You could print the document, but that's wasteful and slow (not
+to mention environmentally unfriendly).
+This is where screen previewers enter the picture.  They allow you
+to look at your document on a video display.
+
+Accurate previewing is more difficult than printing your document
+for several reasons.  Screen displays are much more diverse than
+printers (previewing on a PC is very different from previewing on
+a workstation running X11 even though printing to a LaserJet printer
+is essentially the same from both places).  Also, it's very difficult
+to preview documents that use printer-specific features.  For example,
+if you use a PostScript figure in your document, it will be very easy
+to print on a PostScript printer, but on most platforms it is much more 
+difficult to preview that document on the screen (two exceptions are
+the Amiga and NeXT which have integrated support for displaying PostScript
+images).
+
+In the following sections I'll explore options for previewing on several
+platforms.  The X Window System is usually associated with \Unix\ workstations,
+but several PC implementations (running under both MS-DOS and OS/2) are now
+available.  The X11 previewers 
+described here may be available
+for those systems, but I haven't seen them.  \program{Ghostscript} is another
+previewing option that is available on several platforms so it is described
+in its own section.
+
+Table~\ref{tab:previewers} summarizes the previewers described here.
+
+\begin{xtable}{l|l|c|l}
+  \caption{Common Previewers\label{tab:previewers}}\\
+  \bf Previewer          & \bf Supplier  &  \bf OS       & \bf Comments\\[2pt]
+  \hline
+  \tstrut\program{xdvi}         & Free (xdvi)   & Unix/DesqView & X11 \\
+  \program{\XTeX}        & Free (\XTeX)  & Unix          & X11 \\
+  \program{Ghostscript}  & Free (gs)     & most          & PostScript \\
+  \program{Ghostview}    & Free (Ghostview) & Unix, Windows & PostScript \\
+  \program{dviscr}       & Free (\emTeX) & MS-DOS, OS/2  & \\
+  \program{dvipm}        & Free (\emTeX) & OS/2          & Presentation Manager \\
+  \program{dvivga}       & Free (dvivga) & MS-DOS        & EGA/VGA \\
+  \program{\TeX\ Preview}& ArborText     & MS-DOS, Unix  & \\
+  \program{dvideo}       & Kinch Software& MS-DOS        & EGA \\
+  \program{PTI View}     & Personal \TeX & MS-DOS        & \\
+  \program{dvimswin}     & Free (dvimswin) & MS-DOS      & Windows \\
+  \program{dviwin}       & Free (dviwin) & MS-DOS        & Windows \\
+  \program{wdviwin}      & Kinch Software& MS-DOS        & Windows \\
+  \program{DVIWindo}     & \YY              & MS-DOS        & Windows \\[2pt]
+  \program{dvi2tty}        & Free (dvi2tty)& Most          & ASCII \\
+  \program{dvigt/dvitovdu} & Free        & Most      & \\
+  \program{crudetype}    & Free      & VMS           & ASCII \\
+  \hline
+\end{xtable}
+
+\section{Previewing Under X11}
+
+\index{X11!previewing}\index{previewing!X11}The 
+three most common X11 previewers are \program{xdvi}, \XTeX, and
+\program{Ghostview} (really a PostScript previewer).
+\program{Ghostview} runs on top of \program{Ghostscript} and is
+described in the ``\nameref{sec:ghostscript}'' section of this chapter.
+
+\subsection{Previewing with xdvi}
+
+You can retrieve \ixx{\program{xdvi}}{xdvi} from the CTAN archives in the
+directory \ctandir{dviware/xdvi}.
+
+Figure~\ref{fig:xdvi} shows the preview process under \xdvi.  
+\program{xdvi} reads the \ext{DVI} file and loads the \ixx{\ext{PK} files}{PK files@\ext{PK} files}
+for any fonts that are required.  If \xdvi\ cannot find a requested
+font, it will run \ixx{\MakeTeXPK}{MakeTeXPK} to create the font.  \MakeTeXPK\ is a
+shell script (or a batch file called \ixx{\filename{maketexp}}{maketexp} under MS-DOS)
+that tries to use \MF\ or \ixx{\program{ps2pk}}{ps2pk} to build the font.
+
+\epsimage{fig:xdvi}{How Previewing with xdvi Works}
+
+After forming each page, \xdvi\ passes it off to the X11 Window Manager to be
+displayed.  Previewing under \xdvi\ is shown in Figure~\ref{fig:preview:xdvi}.
+
+\epsimage{fig:preview:xdvi}{Previewing with \protect\xdvi}
+
+Screen resolution is typically much lower than printer resolution.  Because
+\xdvi\ uses the \ext{PK} files at printer resolution, it must scale them
+before using them for display purposes.  The scaling process allows \xdvi\ to
+use \ixx{\textit{anti-aliasing}}{anti-aliasing} to improve image quality on color
+displays.  Anti-aliasing is a technique used to improve the appearance of
+scaled images by using colored pixels around the edges of the image to provide
+the illusion of partial pixels.  This can dramatically improve the readability
+of the displayed text.  If the \ps\ font files are available, \xdvi\ can
+display documents that use \ps\ fonts; otherwise, it performs font
+substitution.  
+
+A recent addition to \xdvi\ is the ability to preview documents that
+include PostScript figures.  The figures are rendered behind the scenes
+by \program{Ghostscript} and displayed by \xdvi.  
+In my opinion, this addition really makes \xdvi\ one of the finest X11 
+previewers available.  It is fast, uses printer fonts, has anti-aliasing for 
+superb readability on color displays, and can include PostScript figures.
+
+\subsection{Previewing with \protect\xtex}
+
+The \xtex\ previewer\index{xtex (previewing)@\xtex\ (previewing)}\index{previewing!xtex@\xtex} is
+very similar to \xdvi.  The
+primary difference is that \xtex\ uses X11 fonts for display.
+This means that \xtex\ must build fonts at the appropriate
+resolution.  After the fonts have been built, \xtex\ is typically
+a very fast previewer.
+
+You can retrieve \xtex\ from the CTAN archives in the
+directory \ctandir{dviware/xtex}.
+
+\epsimage{fig:xtex}{How Previewing with \protect\xtex\ Works}
+
+Figure~\ref{fig:xtex}
+shows the preview process under \xtex.  Like \xdvi,
+\xtex\ uses the \MakeTeXPK\ program to build \ext{PK} files for fonts
+that are unavailable.  Additionally, \xtex\ uses the \TeXtoXfont\ shell
+script, or batch file, to convert \ext{PK} fonts into X11 display fonts.
+
+\newpage
+The \xtex\ previewer relies on the X11 Window Manager to build
+the display.  However, if \ps\ figures are present in your
+document, \xtex\ will attempt to display them.  When \xtex\ is
+built, you can specify that \ghostscript\ or another \ps\
+interpreter be used to handle \ps\ figures.  
+
+An example of \xtex's display is shown in Figure~\ref{fig:preview:xtex}.
+
+\epsimage{fig:preview:xtex}{Previewing with \protect\xtex}
+
+\section{Previewing with Ghostscript}
+\label{sec:ghostscript}
+
+Previewing with \program{Ghostscript}%
+\index{previewing!Ghostscript}\index{Ghostscript!previewing} is 
+quite different from previewing with \xdvi\ and \xtex.  Most previewers
+process the \ext{DVI} file to build the display.  \ghostscript\ is a
+general-purpose program for displaying \ps\ files.  Under X11, an additional
+program called \ghostview\ provides more sophisticated control of previewing.
+
+\newpage
+\program{Ghostscript} and \ixx{\program{Ghostview}}{Ghostview} are products of the
+\idx{Free Software Foundation (FSF)}.  You can retrieve them from the GNU archives on
+\verb|prep.ai.mit.edu| in the directory \filename{/pub/gnu} or from any
+mirror of those archives.
+
+\program{Ghostscript} reads and interprets the \ps\ file created by a
+program such as \dvips.  It provides its own means of handling font
+substitution if the appropriate fonts are unavailable.  Because \dvips\
+converts the \TeX\ \ext{DVI} file into \ps, \ghostscript\ can display all
+of the elements of the document including \ps\ figures and other PostScript 
+printer-specific commands.
+
+An example of \program{Ghostview}'s display is shown in
+Figure~\ref{fig:preview:ghostview}.
+
+\epsimage{fig:preview:ghostview}{Previewing with Ghostview}
+
+%\subsection{Commercial PostScript Interpreters}
+%
+%After conversion to PostScript, the issue is really one of previewing
+%PostScript, not \TeX\ output in particular.  Therefore, commercial PostScript
+%previewers can also be used for this purpose.
+
+\section{Previewing with \protect\emTeX}
+\label{preview:emtex}
+
+Figure~\ref{fig:emdvi} in Chapter~\ref{chap:printing},
+{\it\nameref{chap:printing}}, shows the relationship between the
+various components involved when processing a \ext{DVI} file with
+\emTeX\index{emTeX@\emTeX!previewing}\index{previewing!emTeX@\emTeX}.  Previewing 
+and printing are very similar operations with
+\emTeX.  To preview, you use the \ixx{\program{dviscr}}{dviscr} driver, and the
+result is displayed on the screen.  To print, use one of the other
+\dvidriver{}s, and the result is a file that can be sent directly to
+your printer.
+Chapter~\ref{chap:freetex}, {\it\nameref{chap:freetex}}, discusses
+\emTeX\ in more detail.
+
+\program{dvidrv} runs the appropriate \dvidriver:
+\program{dviscr} for previewing, \ixx{\program{dvihplj}}{dvihplj} for
+printing to an HP LaserJet printer, or \ixx{\program{dvidot}}{dvidot} for printing to
+other dot matrix printers.
+
+The \dvidriver\ reads the \ext{DVI} file and loads fonts from
+\ixx{\ext{PK} files}{PK files@\ext{PK} files} or \ixx{\ext{FLI} font libraries}{FLI font libraries@\ext{FLI} font libraries}.  If your document
+uses graphics, they are loaded from \ext{PCX}\index{PCX file format} or 
+\ext{MSP} files\index{MSP file format}.
+
+If your document uses a font that is not available, the
+\dvidriver\ writes the commands necessary to build the
+font to the \ext{MFJ} file\index{MFJ files}.\footnote{Some setup 
+is required to obtain
+this functionality.  By default, the driver asks for the name
+of a font to substitute in place of the missing font.}  Before
+performing font substitution, the driver will ask if you wish
+to build the missing fonts.  If you elect to build them, the
+\dvidriver\ stops and returns control to the \ixx{\program{dvidrv}}{dvidrv}
+program.
+
+\program{dvidrv} notices that the \dvidriver\ stopped
+because of missing fonts and runs \program{\idx{MFjob}} to build them.  After
+building the fonts, the previewer is run again to display
+the document.
+
+The \program{dvidrv} program is quite simple.  With some
+care, it can be replaced by a batch file that does
+more work.\footnote{Particularly in networked environments where
+\program{dvidrv} assures that temporary filenames won't collide
+between users.}  For example, I have replaced \program{dvidrv} with
+a \program{\idx{4DOS}} batch file called \program{dvidxx} that can
+automatically build \ps\ fonts by calling \program{ps2pk} in
+addition to building \MF\ fonts with \program{MFjob}. 
+The \program{dvidxx} batch file is printed in Example~\ref{ex:dvidxx}
+in Appendix~\ref{app:examples}, {\it \nameref{app:examples}}.
+
+A full-screen preview with \program{dviscr} is shown in
+Figure~\ref{fig:preview:dviscr}.
+
+\epsimage{fig:preview:dviscr}{Previewing with \protect\emTeX's dviscr}
+
+Under OS/2, the \ixx{\program{dvipm}}{dvipm} previewer offers more power. 
+A sample
+\program{dvipm} display is shown in Figure~\ref{fig:preview:dvipm} later
+in this chapter.
+
+\epsimage{fig:preview:dvipm}{Previewing with \protect\emTeX's dvipm}
+
+The \program{dviscr} and \program{dvipm} previewers use \textit{\idx{anti-aliasing}}
+to obtain better image quality on a color display.  However, this translates 
+into a poorer quality image when captured for display in a black-and-white
+book.
+
+\section{Previewing with dvivga}
+
+\program{dvivga}\index{dvivga previewing}\index{previewing!dvivga} is 
+an MS-DOS previewer for EGA and VGA displays.
+You can retrieve \program{dvivga} (and a complete set of the Computer Modern
+fonts in \ext{PK} format) from the CTAN archives in the directory
+\ctandir{dviware/dvivga}.  \program{dvivga} requires \ext{PK} fonts
+at screen-resolutions (around 100dpi); that is why a special set of fonts
+is provided.  If you are using a dot-matrix printer with a similar resolution,
+the special fonts may already be installed on your system.
+
+\program{dvivga} does not support any \cs{special} commands for including
+pictures or figures, but it does support configurable font-substitution for 
+fonts that are unavailable.
+
+Figure~\ref{fig:dvivga:vga}
+shows a preview of the sample document from
+Chapter~\ref{chap:macpack}.  This image is from a VGA display.  
+
+\epsimage{fig:dvivga:vga}{Previewing with dvivga}
+
+\section{\protect\TeX\ Preview}
+\label{sec:arb:preview}
+\def\tpre{\program{\TeX\ Preview}}
+
+\tpre\index{TeX Preview previewing@\TeX\ Preview previewing}\index{previewing!TeX Preview@\TeX\ Preview} is 
+the \idx{ArborText} \ext{DVI} previewer for MS-DOS.  A similar previewer
+is available for \Unix\ workstations running the X Window System (versions for
+Motif and Open Look environments are also available).
+The following discussion is based on experiences with \tpre\
+version 6.1.2, the MS-DOS implementation of ArborText's \TeX\
+previewer.
+
+\tpre\ supports a wide range of graphics adapters, including EGA, VGA,
+and Hercules adapters as well as the Olivetti Monochrome Graphics
+adapter, the Tecmar Graphics Master, the Genius VHR Full Page Display
+Monitor, the ETAP Neftis Monitor, the Toshiba 3100, and the AT\&T
+PC6300 display.
+
+Figure~\ref{fig:tpre:vga}
+shows a preview of the sample document from
+Chapter~\ref{chap:macpack}, {\it \nameref{chap:macpack}}.  This image
+is from a VGA display.  Three additional features of the driver, not exercised
+in this example, are the ability to scale fonts to any size, display rulers
+and bitmapped graphics, and a ``two-up'' mode for viewing two
+pages at a time.
+
+\epsimage{fig:tpre:vga}{Previewing with ArborText's Previewer}
+
+When \tpre\ is displaying a \ext{DVI} file, you can move around the page
+and between pages; you can change the magnification, search for text
+in the \ext{DVI} file, show the attributes of the character under the
+cursor (font, dimensions, magnification, etc.), and switch to another file.
+A configuration file allows you to specify a wide range of options to
+control how \tpre\ appears when it starts up.
+
+ArborText supplies a full set of Computer Modern Roman \ext{PK} files
+at screen resolutions as well as a complete set of Times Roman and
+Helvetica fonts at screen resolutions.  The additional PostScript
+fonts are derived from official Adobe sources and allow you to preview
+documents that will be printed on PostScript printers (provided that
+they use only Times, Helvetica, and Computer Modern fonts).  They are
+designed specifically to work with \ext{TFM} files provided with
+\program{DVILASER/PS}, ArborText's PostScript \dvidriver.
+
+If you want to use additional fonts, for example the \AmS-fonts or
+Computer Modern fonts at unusual sizes, you may wish to generate
+\ext{PK} files at the appropriate resolutions.  \tpre\ will perform
+font substitution for missing fonts (you can control what
+substitutions are made) and can use the \ext{DVI} driver metric
+information, so generating additional fonts is not necessary.
+
+\tpre\ understands the virtual font mechanisms introduced in \TeX\ version
+3.0.  Several additional utilities provided with \tpre\ allow
+you to construct virtual fonts.  These utilities are summarized in
+Table~\ref{tab:tpre:utils}\index{aftovp}\index{gftopk}\index{packpxl}%
+\index{pktopx}\index{pxtopk}\index{tftovp}\index{unpkpxl}\index{VFtoVP}%
+\index{VPtoVF}.
+
+{\def\x{${}^1$}%
+\begin{xtable}{l|l}
+  \caption{\protect\tpre\ Utilities\label{tab:tpre:utils}}\\
+  \bf Utility      & \bf Description \\[2pt]
+  \hline
+  \endfirsthead
+  \caption[]{\protect\tpre\ Utilities (continued)}\\
+  \bf Utility      & \bf Description \\[2pt]
+  \hline
+  \endhead
+  \tstrut
+  \it aftovp   & Converts \ext{VPL} from \ext{AFM} file \\
+  \it gftopk\,\x & Converts \ext{GF} files into \ext{PK} files \\
+  \it packpxl  & Creates packed (byte-aligned) \ext{PXL} file \\
+  \it pktopx\,\x & Converts \ext{PK} files into \ext{PXL} files \\
+  \it pxtopk\,\x & Converts \ext{PXL} files into \ext{PK} files \\
+  \it tftovp   & Converts \ext{VPL} from \ext{TFM} file \\
+  \it unpkpxl  & Creates standard, word-aligned \ext{PXL} file \\
+  \it vftovp\,\x & Converts \ext{VF} files into \ext{VPL} files \\
+  \it vptovf\,\x & Converts \ext{VPL} files into \ext{VF} files \\[2pt]
+  \hline
+  \multicolumn{2}{l}{%
+    ${}^1$\vrule height11pt width0pt\tiny A standard, or otherwise 
+    freely available, utility.}
+\end{xtable}
+}
+
+ArborText's \tpre\ program recognizes \cs{special} commands for drawing
+change bars and for rotating {\em any} \TeX\ ``box'' through a multiple
+of 90 degrees.  These are the same \cs{special} commands recognized by
+other ArborText \dvidriver{}s.
+
+\section{dvideo}
+
+The MS-DOS based EGA 
+previewer \program{dvideo}\index{dvideo previewing}\index{previewing!dvideo} 
+is distributed as part
+of the \ixx{\TurboTeX}{TurboTeX@\TurboTeX} distribution by the 
+\idx{Kinch Computer Company}.  
+\TurboTeX\ is described more completely
+in the section called ``\nameref{sec:com:turbo}'' in 
+Chapter~\ref{chap:commercialtex}, {\it \nameref{chap:commercialtex}}.
+\TurboTeX\ also includes a Microsoft Windows previewer.
+
+Figure~\ref{fig:ttexd:ega}
+shows a \program{dvideo} preview of the sample
+document from Chapter~\ref{chap:macpack}.  
+
+\epsimage{fig:ttexd:ega}{Previewing with \protect\program{Turbo\TeX} 
+  \protect\program{dvideo} (using limited selection of fonts)}%
+
+The preview displayed here uses the default set of fonts distributed
+with \TurboTeX.  This does not include several of the large sizes used
+by this example.  In practice, you will have to purchase or build many
+fonts before you can use \TurboTeX.
+
+\newpage
+\section{PTI View}
+
+\program{PTI View}\index{PTI View!previewing}%
+\index{previewing!PTI View} 
+is the MS-DOS previewer that comes with \PCTeX,
+distributed by \ixx{Personal \TeX, Inc.}{Personal tex, Inc.@Personal \TeX, Inc.}
+\PCTeX\ is described in the section called ``\nameref{sec:pctex}''
+in Chapter~\ref{chap:commercialtex}, \textit{\nameref{chap:commercialtex}}.
+
+Figure~\ref{fig:ptipreview}
+shows a \program{PTI View} preview of the
+sample document from Chapter~\ref{chap:macpack}.
+
+\epsimage{fig:ptipreview}{Previewing with Personal \protect\TeX's Previewer}
+
+\program{PTI View} is distributed with a complete set of the Computer
+Modern fonts in \ext{PK} format (\program{PTI View} can use the same
+\ext{PK} fonts as your printer, regardless of the printer's
+resolution).  It can display the preview in many video modes,
+including several high-resolution super VGA modes.
+
+\newpage
+\section{Previewing Under Windows}
+
+Most MS-DOS previewers are inappropriate for previewing in 
+Windows\index{previewing!Microsoft Windows}\index{Microsoft Windows!previewing}
+because they assume that they can control the entire display. Recently,
+several commercial and free previewers for Windows have become available.
+They are described in this section.
+
+\subsection{dvimswin}
+
+The \program{dvimswin}\index{dvimswin!previewing}\index{previewing!dvimswin}
+previewer is a Windows version of
+\program{dvivga}.  It uses the same screen-resolution fonts for
+displaying your \ext{DVI} file and offers font-substitution for
+missing fonts.
+
+You can retrieve \program{dvimswin} from the CTAN archives in
+the directory \ctandir{dviware/dvimswin}.
+The \program{dvimswin} previewer is shown in
+Figure~\ref{fig:preview:dvimswin}.
+
+\epsimage{fig:preview:dvimswin}{Previewing with dvimswin}
+
+\newpage
+\subsection{dviwin}
+
+The \program{dviwin}\index{dviwin previewing}\index{previewing!dviwin}
+previewer is another free Microsoft Windows
+previewer.  \program{dviwin} can use either screen or printer resolution
+fonts 
+to display your \ext{DVI} file.
+You can retrieve \program{dviwin} from the CTAN archives in
+the directory \ctandir{dviware/dviwin}.
+
+What makes \program{dviwin} unique is its support for \cs{special} commands.
+\program{dviwin} understands \cs{special} commands for including pictures
+and figures, as well as the \emTeX\ and \filename{tpic} drawing primitives.
+
+\program{dviwin} has built-in support for \ext{PCX}\index{PCX file format}, \ext{BMP}\index{windows@Windows!BMP file format}, and
+\ext{MSP}\index{MSP file format} graphic formats.  
+Additionally, it can use any graphics filter
+installed in your Windows environment.  Many commercial programs include
+additional filters to handle the images that they construct.  
+\program{dviwin} also supports \ixx{\emTeX\ font libraries}{emTeX@\emTeX!font libraries} and customizable
+automatic font generation.  By using \program{dviwin}, you can print your
+\ext{DVI} files on any Microsoft Windows-supported printer.
+The \program{dviwin} previewer is shown in Figure~\ref{fig:preview:dviwin}.
+
+\epsimage{fig:preview:dviwin}{Previewing with dviwin}
+
+\newpage
+The \program{dviwin} distribution includes two additional utilities:
+\ixx{\program{clipmeta}}{clipmeta} for creating \ext{MSP} graphic files from any image
+captured in the Windows clipboard, and \ixx{\program{wbr},}{wbr} a text-file browser.
+
+\subsection{wdviwin}
+
+As mentioned above, the \ixx{\TurboTeX}{TurboTeX@\TurboTeX} package includes a Windows
+\dvidriver, 
+\program{wdviwin}\index{wdviwin (previewing)}\index{previewing!wdviwin},
+distributed by the \idx{Kinch Computer Company}.  
+Sample output from this previewer is shown in
+Figure~\ref{fig:preview:wttpreview}.
+This sample shows the status window,
+the preview window, and a few of the available tools.
+
+\epsimage{fig:preview:wttpreview}{Previewing with \protect\TurboTeX's wdviwin}
+
+\subsection{DVIWindo}
+
+The 
+\program{DVIWindo}\index{previewing!DVIWindo}\index{DVIWindo!reviewing@previewing} previewer by \ixx{\YY}{YY Inc.@\YY\ Inc.} is unique among the 
+previewers used here.  \program{DVIWindo} has no support for \ext{PK} fonts;
+it relies entirely on scalable fonts\index{fonts!scalable} provided 
+by Microsoft Windows.
+(This means either PostScript Type~1 fonts rendered 
+by \ixx{\program{Adobe Type Manager}}{Adobe Type Manager (ATM)} or built-in TrueType font
+\index{fonts!TrueType} support.)  As a result, to use
+the \program{DVIWindo} previewer, you must purchase the Computer
+Modern fonts in TrueType or Adobe Type~1 format (or not use them at all).
+
+The \program{DVIWindo} previewer is shown in Figure~\ref{fig:preview:dviwindo}.
+The pull-down menu shown in this image is the ``\TeX\ Menu,'' a new feature
+of \program{DVIWindo} 1.1.  This menu, which can be customized to include
+any programs you wish, allows \program{DVIWindo} to function as a \TeX\ 
+shell.  Once \program{DVIWindo} is running, you can edit files and format
+documents with \TeX\ directly from this menu.
+
+\epsimage{fig:preview:dviwindo}{Previewing with \protect\YY's DVIWindo}
+
+The real advantage of using scalable fonts is that you can resize the
+image in arbitrary ways.\footnote{Most previewers support resizing, but they
+are generally limited to the resolutions for which \ext{PK} fonts are
+available.}
+For example,
+Figure~\ref{fig:preview:dviwindo2}
+shows a much-enlarged version of
+the same page.  Similar enlargement with non-scalable fonts would
+require that the \ext{PK} fonts exist at very high-resolutions
+(occupying considerable disk space) or produce very jagged output.
+The jaggedness of the image shown here is the result of
+magnifying the captured screen image, not the previewer.  Several
+useful information boxes are also shown in these images.
+
+\epsimage{fig:preview:dviwindo2}{DVIWindo preview much enlarged}
+
+\program{DVIWindo} has several other interesting features:
+
+\begin{itemize}
+  \item Portions of a document may be copied into the Windows clipboard 
+    and then pasted into other applications.  This allows you to construct
+    complex mathematics in \TeX, for example, and paste them into another
+    Windows application.  The pasted material will appear as a single
+    graphical object that can be moved, resized, and cropped.  The material
+    is not rendered as a bitmap, so it can be resized without loss of quality!
+
+  \item TIFF images are displayed in the document.  If you use
+     \program{dvipsone} (\YY's PostScript printer driver) and create both
+     TIFF and EPS (encapsulated PostScript) versions of an image,
+     \program{DVIWindo} will automatically display the TIFF image, and
+     \program{dvipsone} will automatically print the EPS image.
+
+  \item Colored text and rules can be incorporated into a document with
+    \cs{special} commands.
+\newpage
+  \item You can create ``hypertext'' buttons in your document.  Selecting a 
+    button (an area of text or a rule) automatically moves you to a destination
+    marker in the document.  These buttons
+    are only meaningful to \program{DVIWindo}, but they do allow you to move
+    around quickly in a document while you are writing it.  Of course, they
+    could also be very handy if you use \ext{DVI} files for online
+    documentation.  
+\end{itemize}
+
+In addition to the \program{DVIWindo} executable, several programs are provided
+to help you work with PostScript fonts under Windows.  They are summarized
+in Table~\ref{tab:dviwindo}.
+    
+{\def\x{${}^1$}%
+\begin{xtable}{l|l}
+  \caption{DVIWindo Utilities\label{tab:dviwindo}}\\
+  \bf Utility      & \bf Description \\[2pt]
+  \hline
+  \endfirsthead
+  \caption{DVIWindo Utilities (continued)}\\
+  \bf Utility      & \bf Description \\[2pt]
+  \hline
+  \endhead
+  \tstrut
+  \it pfatopfb\,\x  & Convert \ext{PFA} files into \ext{PFB} files\\
+  \it pfbtopfa\,\x  & Convert \ext{PFB} files into \ext{PFA} files\\
+  \it tifftags  & Show the tags used in a \ext{TIFF} image\\
+  \it reencode  & Change the encoding of a PostScript font\\
+  \it afmtotfm\,\x  & Convert \ext{AFM} files into \ext{TFM} files\\
+  \it tfmtoafm  & Convert \ext{TFM} files into \ext{AFM} files\\
+  \it afmtopfm  & Convert \ext{AFM} files into \ext{PFM} files\\
+  \it pfmtoafm  & Convert \ext{PFM} files into \ext{AFM} files\\
+  \it safeseac  & Circumvents problem with accented letters in PS 
+                    fonts under Windows\\
+  \it cleanup   & Removes inactive Windows from the desktop\\
+  \it sysseg    & Displays information about Windows system memory\\[2pt]
+  \hline
+  \multicolumn{2}{l}{%
+    ${}^1$\vrule height11pt width0pt\tiny A standard, or otherwise 
+    freely available, utility.}
+\end{xtable}
+}
+
+\section{Previewing on a TTY}
+\label{sec:preview:tty}
+
+\index{previewing!TTY}Graphical workstations 
+and personal computers with graphics capabilities
+are a natural environment for previewing \TeX\ output.  Unfortunately,
+they aren't always available.  This section describes several previewers
+that work in less sophisticated environments.
+
+\subsection{dvi2tty}
+
+The \program{dvi2tty} 
+program\index{previewing!dvi2tty}\index{dvi2tty previewing} attempts 
+to convert \TeX\ output into 
+ASCII text.  This program is designed to provide an approximation of
+\ixx{\troff}{troff}'s \ixx{\program{nroff}}{nroff} processor.
+To get the best results,
+you will have to reformat your document using a limited subset of 
+\TeX's capabilities.  A \LaTeX\ style file is included for this purpose.
+You can retrieve \program{dvi2tty} from the CTAN archives in
+the directory \ctandir{dviware/dvi2tty}.
+
+The output from \program{dvi2tty} is imperfect in many ways, but it can
+provide a workable ASCII document.  I used it to produce plain ASCII
+documentation in my \ixx{\program{Sfware}}{Sfware} package, for example.  
+\program{dvi2tty} also provides a quick-and-dirty method of applying some
+standard text processing tools, like \ixx{\program{grep}}{grep}, to \TeX\ output.
+
+\subsection{dvgt/dvitovdu}
+
+\index{dvgt}\index{dvitovdu}\index{previewing!dvgt/dvitovdu}These 
+programs share a common history.  As a result, they offer an
+overlapping set of features.  The most recent work has been done on the
+\program{dvgt} processor.
+You can retrieve \program{dvgt} from the CTAN archives in the directory
+\ctandir{dviware/dvgt}.
+
+Unlike \program{dvi2tty}, which is a conversion program, \program{dvgt} is
+an interactive previewer.  
+One very neat feature of \program{dvgt} is its ability to preview \TeX\
+output on a number of graphics terminals, including Tektronix 4010,
+VT240, VT640, Gigi, Regis, VIS500, VIS550, VIS603, and VIS630 terminals.  
+The importance of this
+feature is that many versions of \ixx{\program{Kermit}}{Kermit} 
+and \ixx{\program{NCSA Telnet}}{NCSA Telnet} 
+(and possibly other communications programs) support one of these terminal 
+types.  This means that you can preview documents 
+even when you are away from your workstation, by using dial-up access with either
+a graphics terminal or plain ASCII. 
+
+Even when output is limited to plain ASCII,
+\program{dvgt} attempts to make its output resemble the printed page.
+To do this, it frequently drops characters out of the middle of words
+and performs other space-saving abbreviations.  The result is a crude, but
+workable preview, on a plain ASCII terminal.
+
+Figure~\ref{fig:dvgttek}
+shows an example of \program{dvgt} display in
+tek4010 emulation.  This is a somewhat contrived example since the
+emulation is being performed by an xterm.
+
+\epsimage{fig:dvgttek}{Previewing with dvgt under Tektronix 4010 emulation}
+
+\program{dvitovdu} is an older version of the program.  It is available in
+source code form in both C and Pascal.  
+You can retrieve \program{dvitovdu}
+from the CTAN archives in the directory \ctandir{dviware/dvitovdu}.
+
+\subsection{crudetype}
+
+\program{crudetype}\index{previewing!crudetype}\index{crudetype previewing}
+is
+another plain-ASCII previewer.  It provides features
+similar to \program{dvgt} and \program{dvitovdu}.  It is written in \Web,
+but it cannot be translated to C with the \program{web2c} conversion tool
+(so you will have to have a Pascal compiler).
+
+The \program{crudetype} program was written with VMS in mind, although it
+may be portable to other systems.
+You can retrieve \program{crudetype}
+from the CTAN archives in the directory \ctandir{dviware/crudetype}.
+
+\egroup % <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

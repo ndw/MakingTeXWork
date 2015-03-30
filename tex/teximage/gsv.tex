@@ -1,0 +1,22 @@
+\newbox\gsvbox
+\newdimen\gsvwd
+\font\gsva=gsva at 72.27truept
+\font\gsvb=gsvb at 72.27truept
+\font\gsvc=gsvc at 72.27truept
+\font\gsvd=gsvd at 72.27truept
+\setbox\gsvbox=\vbox{\hbox{%
+\gsva\char0\char1\char2\char3\char4\char5}}
+\gsvwd=\wd\gsvbox
+\setbox\gsvbox=\hbox{\vbox{\hsize=\gsvwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\gsva\char0\char1\char2\char3\char4\char5}
+\hbox{\gsva\char6\char7\char8\gsvb\char0\char1\char2}
+\hbox{\gsvb\char3\char4\char5\char6\char7\char8}
+\hbox{\gsvc\char0\char1\char2\char3\char4\char5}
+\hbox{\gsvc\char6\char7\char8\gsvd\char0\char1\char2}
+\hbox{\gsvd\char3\char4\char5\char6\char7\char8}}}
+\ifx\parbox\undefined
+    \def\setgsv{\box\gsvbox}
+\else
+    \def\setgsv{\parbox{\wd\gsvbox}{\box\gsvbox}}
+\fi

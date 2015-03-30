@@ -1,0 +1,10 @@
+\ifidx
+  \bgroup
+  \fontsize{9}{11pt}\selectfont
+  \chardef\ubarcatcode=\catcode`\_
+  \catcode`\_=\active\relax
+  \def_{\ttunder}
+  \def\bs{\leavevmode\llap{\char"5C\relax}}
+  \printindex
+  \egroup
+\fi

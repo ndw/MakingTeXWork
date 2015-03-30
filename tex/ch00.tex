@@ -1,0 +1,683 @@
+\chapter*{Preface} \makeatletter\@mkboth{Preface}{Preface}\makeatother
+\RCSID$Id: ch00.tex,v 1.1 2002/08/23 14:58:45 nwalsh Exp $
+\addcontentsline{toc}{chapter}{Preface}
+\chaptermark{Preface} 
+\pagenumbering{roman}
+\setcounter{page}{25} % this is after the page-broken TOC...
+
+\ifincludechapter\else\endinput\fi
+
+\TeX\ is a tool for creating professional quality, typeset pages of any kind.
+It is particularly good, perhaps unsurpassed, at
+\ixx{typesetting mathematics}{typesetting!mathematics}%
+\index{mathematics!typesetting}; 
+as a result, it is widely used in scientific writing.  Some of its other
+features, like its ability to handle
+\ixx{multiple languages}{typesetting!multilingual documents}%
+\index{international!typesetting} in the same document and the fact that the
+content of a document (chapters, sections, equations, tables, figures, etc.)
+can be separated from its form (typeface, size, spacing, indentation, etc.)
+are making \TeX\ more common outside of scientific and academic circles.
+
+Designed by \ixx{Donald Knuth}{Knuth, Donald} in the late 1970s, more than a
+decade of refinement has gone into the program called ``\TeX'' today.  The
+resulting system produces publication-quality output while maintaining
+portability across an extremely wide range of platforms.
+
+Remarkably, \TeX\ is free.  This fact, probably as much as any other, has
+contributed to the development of a complete ``\TeX\ system'' by literally
+thousands of volunteers.  \TeX, the program, forms the core of this
+environment and is now supported by hundreds of tools.
+
+\section{Why Read This Book?}
+
+This book is for anyone who uses \TeX.  Novices will need at least one other
+reference, because this book does not describe the nuts and bolts of writing
+documents with \TeX\ in any great detail.
+
+If you are new to \TeX, there is much to learn.  There are many books that
+describe how to use \TeX.  However, the focus of this book is mostly at a
+higher level.  After digesting Chapter~\ref{chap:overview},
+\textit{\nameref{chap:overview}}, you should be able to proceed through the
+rest of the book without much difficulty even if you have never seen \TeX\
+before.  So, if you are a system administrator interested in learning enough
+about these programs to install and test them for your users, you should be
+all set.  If you are interested in learning how to write documents with \TeX,
+this book will be helpful, but it will not be wholly sufficient.
+
+Why do you need this book at all?  Although many individual components of the
+\TeX\ system are well documented, there has never before been a complete
+reference to the whole system.  This book surveys the entire world of \TeX\
+software and helps you see how the various pieces are related.
+
+A functioning \TeX\ system is really a large collection of programs that
+interact in subtle ways to produce a document that, when formatted by \TeX,
+prints the output you want.  All the different interactions that take place
+ultimately result in less work for you, the writer, even though it may seem
+like more work at first.  Heck, it may {\em be\/} more work at first, but in
+the long run, the savings are tremendous.
+
+Many books about \TeX\ refer the reader to a ``local guide'' for more
+information about previewing and printing documents and what facilities exist
+for incorporating special material into documents (like special fonts and
+pictures and figures).  In reality, very few local guides exist.
+
+The \TeX\ environment is now mature and stable enough to support a more
+``global guide.''  That is what this book attempts to be.  It goes into detail
+about previewing and printing, about incorporating other fonts, about adding
+pictures and figures to your documents, and about many other things overlooked
+by other books.
+
+Because fonts play a ubiquitous role in typesetting, this book is also about
+\MF, the tool that \ixx{Donald Knuth}{Knuth, Donald} designed for creating
+fonts.
+
+\section{Scope of This Book}
+
+Here's how the book is laid out.
+
+\textbf{Part~\ref{part:intro}: {\it \nameref{part:intro}}}.
+
+Chapter~\ref{chap:overview}, {\it \nameref{chap:overview}}.  If you don't know
+anything about \TeX\ at all, this chapter will help you get started.  If
+you're a system adminstrator charged with the task of installing and
+maintaining \TeX\ tools, you'll get enough information to do the job.
+
+Chapter~\ref{chap:editing}, {\it \nameref{chap:editing}}.  An overview of some
+environments that can make working with \TeX\ documents easier.  It describes
+some editors that ``understand'' \TeX, how to integrate \TeX\ into a
+``programmer's editor,'' spellchecking, revision control, and other aspects
+of \TeX{}nical editing.
+
+Chapter~\ref{chap:running}, {\it \nameref{chap:running}}.  The mechanics of
+running \TeX, the program.  It discusses what things \TeX\ needs to be able to
+run, how to start \TeX, command-line options, leaving \TeX, and recovery from
+errors.
+
+Chapter~\ref{chap:macpack}, {\it \nameref{chap:macpack}}.  Overview of \TeX\
+macro packages.  This chapter describes how to make a format file, the major
+general-purpose writing packages, some special-purpose writing packages,
+how to make slides for presentations, and how to handle color in \TeX.
+
+\textbf{Part~\ref{part:elements}: {\it \nameref{part:elements}}}.
+
+Chapter~\ref{chap:fonts}, {\it \nameref{chap:fonts}}.  This chapter explores
+the issues that need to be addressed when using fonts.  Many of these issues
+are not particularly \TeX-related, but \TeX\ is very flexible, and it's
+important to understand the tradeoffs that must be made.  This chapter also
+examines some \TeX-specific issues: font selection, files that \TeX\ needs,
+automatic font generation, and virtual fonts.
+
+Chapter~\ref{chap:pictures}, {\it \nameref{chap:pictures}}.  How many ways are
+there to include pictures and figures in a \TeX\ document?  Lots and lots of
+ways.  This chapter examines them all.
+
+Chapter~\ref{chap:foreign}, {\it \nameref{chap:foreign}}.  \TeX\ is well
+qualified to do international typesetting.  This chapter looks at the issues
+that are involved: representing international symbols in your input file, what
+\TeX\ produces, getting the right fonts, multiple languages in the same
+document, and macro packages and style files that solve some of these
+problems.  Some strategies for dealing with very difficult languages (like
+Japanese and Arabic) are also explored.
+
+Chapter~\ref{chap:printing}, {\it \nameref{chap:printing}}.  What goes in has
+to come out.  This chapter tells the what, where, why, and how of printing
+your documents.
+
+Chapter~\ref{chap:preview}, {\it \nameref{chap:preview}}.  Save paper; preview
+your documents before you print them.
+
+Chapter~\ref{chap:online}, {\it \nameref{chap:online}}.  Online documentation
+is becoming increasingly popular.  This chapter explores different ways that both
+typeset and online documentation can be produced from the same set
+of input files.
+
+Chapter~\ref{chap:mf}, {\it \nameref{chap:mf}}.  Sometimes it is necessary or
+desirable to create a special version of a standard \TeX\ font.  Maybe you
+really need the standard 10pt font at 11.3pt.  This chapter will tell you how
+to work with existing \MF\ fonts.  It {\em won't} tell you how to create your
+own fonts; that's a whole different story.
+
+Chapter~\ref{chap:bibtex}, {\it \nameref{chap:bibtex}}.  Maintaining a
+bibliographic database can be a great timesaver.  This chapter looks at the
+\BibTeX\ program and other tools for building and using bibliographic
+databases.  It also discusses the creation of indexes and glossaries.
+
+\textbf{Part~\ref{part:tools}: {\it \nameref{part:tools}}}.
+
+Chapter~\ref{chap:freetex}, {\it \nameref{chap:freetex}}.  Many \TeX\
+environments are freely available.  This chapter describes public domain,
+free, and shareware versions of \TeX.
+
+\newpage
+Chapter~\ref{chap:commercialtex}, {\it \nameref{chap:commercialtex}}.  A
+large, complex system like \TeX\ can be overwhelming (although I hope less so
+after you read this book ;-).  One of the advantages of selecting a commercial
+implementation of \TeX\ is that some form of customer support is usually
+provided.  Still other commercial implementations offer features not found in
+any free releases.  This chapter describes several commercial \TeX\ releases.
+
+Chapter~\ref{chap:mac}, {\it \nameref{chap:mac}}.  Many issues
+discussed in this book apply equally to all platforms, including the Macintosh
+platform, but the Mac has its own special set of features.  This chapter looks
+at some versions of \TeX\ and other tools designed specifically for use on the
+Mac.
+
+Chapter~\ref{chap:utils}, {\it \nameref{chap:utils}}.  This chapter lists many
+of the the utilities available in the CTAN archives and provides a brief
+description of what they do.
+
+Appendix~\ref{chap:fileext}, {\it \nameref{chap:fileext}}.  Lots of files can
+be identified by their extensions.  This appendix lists the extensions that
+are most often seen in conjunction with \TeX\ and describes what the
+associated files contain.
+
+Appendix~\ref{app:fonts}, \textit{\nameref{app:fonts}}.  Examples of many
+\MF\ fonts available from the CTAN archives.
+
+Appendix~\ref{app:resources}, \textit{\nameref{app:resources}}.  A complete
+list of the resources described in this book.  
+
+Appendix~\ref{app:examples}, \textit{\nameref{app:examples}}.  This appendix
+contains examples (scripts, batch files, programs) that seemed too long to
+place in the running text.
+
+{\it Bibliography}.  Where I learned what I know.  Also, where you can look
+for more information about specific topics.
+
+\section{Conventions Used in This Book}
+
+The following typographic conventions are used in this book:
+
+\begin{conventions}
+
+\item [{\it Italic}] is used for filenames, directories, user commands, program names, and macro packages (except where the distinctive logo type is used).  Sometimes italics
+      are used in the traditional way for emphasis of new ideas and important
+      concepts.
+
+\item [{\tt Typewriter}] is used for program examples, FTP sites, \TeX\
+      control sequences, and 
+      little bits of \TeX\ syntax that appear in running text (for example,
+      typewriter text in a reference to the \LaTeX\ \verb|picture|
+      environment is a clue that \LaTeX\ literally uses the word ``picture''
+      to identify this environment).
+
+\item [{\tt\bf Typewriter Bold}] is used in examples to show the user's actual
+      input at the terminal.
+
+\newpage
+\item [{\tt\it Typewriter Italic}] identifies text that requires a
+      context-specific substitution.  For example, \textit{\texttt{filename}}
+      in an example would be replaced by some particular filename.
+
+\item [Footnotes] are used for parenthetical remarks.  Sometimes, lies are
+      spoken to simplify the discussion, and the footnotes restore the lie to
+      the truth. (And sometimes they don't ;-)
+
+% 
+% ``And sometimes they don't ;-)'' used to be a footnote.  And it was funnier
+% that way.  But for some reason, a footnoterule appeared on the following
+% page, and I couldn't get rid of it except by removing this footnote.
+%
+
+\end{conventions}
+
+Filename extensions, like ``\textit{.tex}'' in \filename{book.tex}, are shown
+in uppercase letters when referring to a particular type of file. For example,
+a \TeX\ Font Metric or \ext{TFM} file would be \filename{somefile.tfm}. The
+actual extension of the file may be different (upper or lowercase, longer or
+shorter) depending on your operating environment.
+
+When the shell prompt is shown in an example, it is shown as a dollar sign,
+{\tt\$}.  You should imagine that this is your system's
+prompt, which might otherwise be \verb|%|, \verb|C>|,
+\verb|[C:\]|, or a dialog box.
+
+When spaces are important in an example, the ``{\ttspace}'' character is used
+to emphasize the spaces.  Effective,\ttspace isn't\ttspace it?
+
+In some places, I refer to specific keys that you should press.  When it's
+important that I mean pressing particular keys and not typing something, I
+emphasize the keys.  For instance, an example that includes \key{Enter} means
+that you should literally press the Enter or Return key.  The sequence
+\key{Ctrl-D} means that you should press and hold the ``Control'' and ``d''
+keys simultaneously.  Control-key combinations aren't case sensitive, so you
+needn't press the shift key.
+
+%Sometimes I say things that I don't expect you to take seriously.
+%I've put the Usenet international standard smiley face
+%symbol\footnote{;-)!} ``;-)'' next to my little jokes if I'm afraid that
+%they aren't very good and that you might take me seriously where I'm
+%joking.
+
+\section{How to Get \protect\TeX}
+
+\TeX\ and the other programs mentioned in this book are available from a
+number of places.  It's impossible to list all of the places where you might
+find any given tool, but there is one place where you will almost certainly
+find {\em every\/} tool: the \ixx{Comprehensive \TeX\ Archive Network (CTAN)}{Comprehensive tex Archive Network@Comprehensive \TeX\ Archive Network|see{CTAN}}.
+
+This network is a fully-mirrored anonymous FTP hierarchy in three countries.
+Always use the \ixx{FTP site}{CTAN!FTP access} that is geographically closest
+to you.  The following table lists the current members of CTAN as of
+July, 1993:
+
+\begin{xtable}{l|l|l|l}
+  \bf Geographic & & & \bf Top Level \\ 
+  \bf Location & \bf Site & \bf IP Address & \bf Directory \\[2pt] 
+  \hline 
+  \tstrut
+  United States & \tt ftp.shsu.edu & 192.92.115.10 & \it /tex-archive \\
+  England & \tt ftp.tex.ac.uk & 131.151.79.32 &  \it /tex-archive \\ 
+  Germany & \tt ftp.uni-stuttgart.de & 129.69.8.13& \it /tex-archive \\[2pt] 
+  \hline
+\end{xtable}
+
+\newpage
+You may also access the CTAN archives by \ixx{electronic mail}{CTAN!e-mail access} if you do not have FTP access.  For up-to-date instructions about the
+mail server, send the single-line message \verb|help| to
+\filename{fileserv@shsu.edu}.
+
+\subsection{Where Are the Files?}
+
+Every CTAN mirror site has the same well-organized 
+\ixx{directory structure}{CTAN!directory structure}.  
+The top-level
+directory also contains a complete catalog of current files organized by name,
+date, and size.  The catalogs are named \filename{FILES.byname},
+\filename{FILES.bydate}, and \filename{FILES.bysize}, respectively, in the top level
+directory.  The top-level directory contains the following subdirectories:
+
+\begin{xtable}{>{\it}l|l}
+  \textnormal{\bf Directory} & \bf Description of Contents \\[2pt] 
+  \hline 
+  \tstrut
+  tools    & Archiving tools (\program{unzip}, \program{tar}, 
+             \program{compress}, etc.) \\ 
+  biblio   & Tools for maintaining bibliographic databases \\  
+  digests  & Electronic digests (\TeX{}hax, UK\TeX, etc.)\\  
+  info     & Free documentation, many good guides \\  
+  dviware  & Printing and previewing software \\  
+  fonts    & Fonts for \TeX \\  
+  graphics & Software for working with pictures and figures \\  
+  help     & Online help files, etc. \\
+  indexing & Indexing and glossary building tools \\  
+  language & Multi-national language support \\  
+  macros   & Macro packages and style files \\  
+  misc     & Stuff that doesn't fit in any other category \\ 
+  support  & Tools for running and supporting \TeX\\  
+  systems  & OS-specific programs and files\\  
+  web      & Sources for \TeX\ programs (in \Web) \\[2pt] 
+  \hline
+\end{xtable}
+
+The archives at \texttt{ftp.shsu.edu} and \texttt{ftp.tex.ac.uk} also support
+\ixx{\program{gopher}}{CTAN!gopher access} access to the archives.  The UK
+\program{gopher} supports indexed access to the archives.  A \ixx{World Wide Web (hypertext) interface}{CTAN!hypertext access (World Wide Web)} to the
+archives is available from:
+
+\begin{shortexample} 
+http://jasper.ora.com/ctan.html
+\end{shortexample}
+
+This interface includes brief descriptions of many packages and the ability to
+perform keyword and date searches.
+
+\subsection{Getting Software Without FTP}
+
+The \ixx{electronic alternatives}{CTAN!other electronic access} to FTP,
+described in the section ``\nameref{sec:gettingexamples}'' of this chapter are
+also viable alternatives for getting software from the CTAN archives.
+
+In addition, there are a number of ways to get distributions through
+\ixx{nonelectronic}{CTAN!nonelectronic access} channels.  The names and
+addresses of these sources are listed in Appendix~\ref{app:resources},
+\textit{\nameref{app:resources}}.
+
+\vfill\eject
+You can get many of the popular \TeX\ distributions on diskette from the
+\ixx{\TeX\ Users Group (TUG)}{TeX User's Group (TUG)@\TeX\ Users Group (TUG)!getting TeX from@getting \TeX\ from}.  Emacs, \program{Ghostscript}, and other packages by the
+\ixx{Free Software Foundation (FSF)}{Free Software Foundation (FSF)!getting tex@getting \TeX} are available on tape directly from the FSF.  You may also find large
+bulletin board systems that support \TeX\ (for example, Channel1 in Cambridge,
+MA)
+
+\subsection{Getting Examples From This Book}
+\label{sec:gettingexamples}
+
+All of the substantial code fragments and programs printed in this book are
+available online.  The \ixx{examples}{examples (getting)} in this book are
+all in \ixx{\program{Perl}}{Perl TeX examples@Perl \TeX\ examples}, a language
+for easily manipulating text, files, and processes. 
+I decided to use \program{Perl} simply because it
+is available for every platform
+discussed in this book.  It is the only ``universal'' scripting language that
+will work under MS-DOS, OS/2, \Unix, and the Macintosh.  All of the scripts in
+this book can be converted to a different scripting language (the various
+\Unix\ shells or something like \program{4DOS}'s extended batch language for MS-DOS and
+OS/2) if you prefer.  I've tried to write the \program{Perl} scripts in a
+straightforward way so that any given task won't be too difficult.
+
+The examples are available electronically in a number of ways: by FTP,
+FTPMAIL, BITFTP, and UUCP. The cheapest, fastest, and easiest ways are listed
+first. If you read from the top down, the first one that works is probably the
+best. Use FTP if you are directly on the Internet. Use FTPMAIL if you are not
+on the Internet but can send and receive electronic mail to Internet sites
+(this includes CompuServe users). Use BITFTP if you send electronic mail via
+BITNET. Use UUCP if none of the above work.
+
+\begin{note}{NOTE}
+The examples were prepared using a \Unix\ system. If you are running
+\Unix, you can use them without modification. If you are running on another
+platform, you may need to modify these examples to correct the end-of-line
+markers. For example, whereas under \Unix\ every line ends with a line feed
+character (the carriage return is implicit), under DOS every line must end
+with explicit carriage return and line feed characters.
+\end{note}
+
+\subsubsection{FTP}
+
+To use \ixx{FTP}{FTP (getting examples via)}, you need a machine with direct access
+to the Internet. A sample session is shown below.
+
+\begin{ttindent}
+\${\bf ftp ftp.uu.net} Connected to ftp.uu.net.  
+220 ftp.UU.NET FTP server (Version 6.34 Oct 22 14:32:01 1992) ready.  
+Name (ftp.uu.net:prefect): {\bf anonymous} 
+331 Guest login ok, send e-mail address as password.  
+Password:{\bf prefect@guide.com}\ \ \ \ \ \ \ {\rm\it\small (use your user name and host here)} 
+230 Guest login ok, access restrictions apply.  
+ftp>{\bf cd /published/oreilly/nutshell/maketexwork} 
+250 CWD command successful.  
+ftp>{\bf get README} 
+200 PORT command successful.  
+150 Opening ASCII mode data connection for README (xxxx bytes).  
+226 Transfer complete.  
+local: README remote: README 
+xxxx bytes received in xxx seconds (xxx Kbytes/s) 
+ftp>{\bf binary}\ \ \ \ \ {\rm\it\small (select binary mode for compressed files)} 
+200 Type set to I.
+{\rm\it\small \ \ (Repeat get commands for the other files.}  
+{\rm\it\small \ \ \ They are listed in the README file.)}  
+ftp>{\bf quit} 221 Goodbye.  
+\$
+\end{ttindent}
+\vspace{6pt}
+
+\subsubsection{FTPMAIL}
+
+\ixx{FTPMAIL}{FTPMAIL (getting examples via)} is a mail server available to anyone
+who can send electronic mail to, and receive it from, Internet sites. This
+includes most workstations that have an email connection to the outside world
+and \ixx{CompuServe}{CompuServe (getting examples via)} users.  You do not need to
+be directly on the Internet.
+
+Send mail to {\it ftpmail@decwrl.dec.com}. In the message body, give the
+name of the anonymous FTP host and the FTP commands you want to run.  The
+server will run anonymous FTP for you and mail the files back to you.  To get
+a complete help file, send a message with no subject and the single word
+\texttt{help} in the body. The following is an example mail session that should get
+you the examples. This command sends you a listing of the files in the
+selected directory and the requested example files. The listing is useful if
+there's a later version of the examples you're interested in.
+
+\begin{ttindent}
+\${\bf mail ftpmail@decwrl.dec.com} 
+Subject: {\bf{}reply prefect@guide.com}\ \ \ \ {\rm\it\small (where you want files mailed)} 
+{\bf{}connect ftp.uu.net}
+{\bf{}chdir /published/oreilly/nutshell/maketexwork} 
+{\bf{}dir} 
+{\bf{}get README} 
+{\bf{}quit}
+\end{ttindent}
+
+A signature at the end of the message is acceptable as long as it appears
+after \texttt{quit}.
+
+\subsubsection{BITFTP}
+
+\ixx{BITFTP}{BITFTP (getting examples via)} is a mail server for BITNET users. You
+send it electronic mail messages requesting files, and it sends you back the
+files by electronic mail. BITFTP currently serves only users who send it mail
+from nodes that are directly on BITNET, EARN, or NetNorth. BITFTP is a public
+service of Princeton University.
+
+To use BITFTP, send mail containing your FTP commands to {\it
+BITFTP@PUCC}. For a complete help file, send \texttt{HELP} as the message body.
+
+The following is the message body you should send to BITFTP:
+
+\begin{ttindent} 
+FTP ftp.uu.net 
+NETDATA USER anonymous 
+PASS{\it your Internet e-mail address}      {\rm\it\small (not your BITNET address)} 
+CD /published/oreilly/nutshell/maketexwork 
+DIR 
+GET README 
+QUIT
+\end{ttindent}
+
+Questions about BITFTP can be directed to {\it MAINT@PUCC} on BITNET.
+
+\subsubsection{UUCP}
+
+\ixx{UUCP}{UUCP (getting examples via)} is standard on virtually all \Unix\ systems
+and is available for IBM-compatible PCs and Apple Macintoshes. The examples
+are available by UUCP via modem from UUNET; UUNET's connect-time charges
+apply. You can get the examples from UUNET whether you have an account or
+not. If you or your company has an account with UUNET, you will have a system
+with a direct UUCP connection to UUNET. Find that system, and type (as one
+line):
+
+\begin{ttindent}
+\$ \textbf{uucp uunet\ttbackslash!~/published/oreilly/nutshell/maketexwork/README \ttbackslash} 
+\textit{\ \ \ \ yourhost}\ttbackslash!~/\textit{yourname}/
+\end{ttindent}
+
+The README file should appear some time later (up to a day or more) in the
+directory {\it /usr/spool/uucppublic/yourname}. If you don't have an account,
+but would like one so that you can get electronic mail, contact UUNET at
+703-204-8000.
+
+If you don't have a UUNET account, you can set up a UUCP connection to UUNET
+in the United States using the phone number 1-900-468-7727. As of this
+writing, the cost is 50 cents per minute. The charges will appear on your next
+telephone bill. The login name is \textit{uucp} with no password. Your entry may vary
+depending on your UUCP configuration.
+
+\subsubsection{Gopher}
+
+If you are on the Internet, you can use the
+\ixx{\program{gopher}}{gopher (getting examples via)} facility to learn about
+online access to examples through the O'Reilly Online Information Resource.
+Access {\it gopher.ora.com} as appropriate from your site.
+
+\section{Versions of \protect\TeX}
+
+The most recent versions of \ixx{\TeX}{tex@\TeX!versions} and
+\ixx{\MF}{metafont@\MF!versions} are version 3.1415 and version 2.71,
+respectively.  Version 3 of \TeX\ introduced several new features designed to
+improve support for non-English languages (including the use of 8-bit input
+and some refinements to hyphenation control).  If you use an older version of
+\TeX, you should upgrade.
+
+\ixx{Donald Knuth}{Knuth, Donald} has specified that \TeX's version number
+converges to $\pi$, therefore version 3.1415 is only the fourth minor revision
+after version 3.  The next minor revision will be version 3.14159.  Similarly,
+\MF's version number converges to $e$ (2.7182818284$\ldots$).
+
+\section{Implementations and Platforms}
+\label{sec:implementation}
+
+The interface that \TeX\ presents to the writer is very consistent.  Most of
+the examples described in this book are applicable to every single
+\ixx{implementation}{tex@\TeX!implementations}\index{tex@\TeX!platforms}
+of \TeX.  However, \TeX\ is not a closed system.  It is possible to step
+outside of \TeX\ to incorporate special elements into your document or take
+advantage of the special features of a particular environment.  These
+extensions can dramatically restrict the portability of your documents.
+
+Many of the topics covered in this book offer alternatives in those areas that
+are less portable.  Therefore, it is natural to ask what implementations
+are really covered.
+
+Before outlining which implementations are covered, let me suggest that this
+book will be useful even if you are using an implementation not ``officially''
+covered here.  The reality of the situation is this: many, many tools have
+been ported with \TeX.  Many of the tools mentioned in this book are
+available on platforms that are not specifically discussed.  
+Time and equipment constraints prevented 
+\ixx{Amiga}{amiga tex implementations@Amiga \TeX\ implementations}, 
+\ixx{Atari}{atari tex implementations@Atari \TeX\ implementations}, 
+\ixx{NeXT}{next tex implementations@NeXT \TeX\ implementations}, 
+\ixx{VMS}{vms tex implementations@VMS \TeX\ implementations}, and
+\ixx{Windows NT}{windows nt tex implementations@Windows NT \TeX} 
+implementations of \TeX\ from being specifically addressed in this 
+edition of the book.
+
+\subsection{UNIX}
+
+\ixx{\Unix}{unix tex implementations@\Unix\ \TeX\ implementations} is probably
+the most common \TeX\ platform.  The emphasis in this book is on \Unix\
+workstations running X11, producing output for PostScript and HP LaserJet
+printers.
+
+\ixx{\program{Linux}}{linux tex implementations@Linux \TeX\ implementations} and other personal computer implementations of \Unix\ are
+not addressed specifically; however, with the successful port of X11 to
+\program{Linux}, I'm confident that every \Unix\ tool here can be, or has
+been, ported to \program{Linux} (and probably other PC \Unix\ environments).
+
+The only implementation of the \TeX\ program for \Unix\ considered in any
+detail is the free implementation distributed in {\it web2c}.  This
+distribution is described in the section called ``\nameref{free:web}'' in
+Chapter~\ref{chap:freetex}, {\it\nameref{chap:freetex}}.  Most of the other
+\Unix\ tools discussed here are also free.
+
+\subsection{MS-DOS}
+
+With very few exceptions, the tools in this book are available under
+\ixx{MS-DOS}{MS-DOS}.
+Because PCs are very popular, a lot of effort has gone into porting \Unix\
+tools to MS-DOS.  Some packages, however, require a 386SX (or more powerful)
+processor.  For the most part, I focus on PCs running MS-DOS only; however,
+\ixx{Microsoft Windows}{microsoft windows@Microsoft Windows!tex implementations@\TeX\ implementations} 
+and \ixx{DesqView}{desqview@DesqView!tex implementations@\TeX\ implementations}
+are not entirely ignored.
+
+There are quite a few options when it comes to selecting an implementation of
+the \TeX\ program under MS-DOS.  Several free implementations are discussed
+%(\ixx{\emTeX}{emTeX@\emTeX!tex implementations@\TeX\ implementations},
+%\ixx{\sbTeX}{sbTeX@\sbTeX}, \ixx{\gTeX}{gTeX@g\TeX}) 
+as well as some commercial implementations.
+%, like \ixx{\utex}{microtex@\utex}
+%\ixx{\TurboTeX}{TurboTeX@\TurboTeX}, and \ixx{\PCTeX}{PCTeX@\PCTeX}.  
+For more
+information about these implementations, consult Chapter~\ref{chap:freetex},
+\textit{\nameref{chap:freetex}},
+and Chapter~\ref{chap:commercialtex}, {\it\nameref{chap:commercialtex}}.
+
+\subsection{OS/2}
+
+In this book, OS/2 is treated primarily as a superset of MS-DOS.  When
+possible, I look at OS/2-specific versions of each utility, but rely on MS-DOS
+as a fall-back.
+
+Extensions to em\TeX\ for 
+\ixx{OS/2}{OS/2!tex implementations@\TeX\ implementations} 
+are explored, as are editing environments such as \program{\idx{epm}}.
+The multi-threaded nature of OS/2 allows more complete porting of \Unix\
+tools.  When better ports are available for OS/2, they are discussed.
+
+\subsection{Macintosh}
+
+The \ixx{Macintosh}{Macintosh!TeX implementations@\TeX\ implementations} is very different from the systems described above.
+Chapter~\ref{chap:mac}, {\it \nameref{chap:mac}}, discusses the Macintosh
+environment in detail.
+
+There are four implementations of \TeX\ for the Macintosh. Three are freely
+available, and one is commercial: \ixx{\cmactex}{cmactex@\cmactex} is free,
+\ixx{\oztex}{oztex@\oztex} and \ixx{\directex}{directex@\directex} are 
+shareware, and \ixx{\program{Textures}}{Textures} is a commercial package 
+from \idx{Blue Sky Research}.
+
+%\subsection{Windows NT}
+%
+%A \program{web2c} port of \TeX\ software for \ixx{Windows NT}{windows nt@Windows NT!tex implementations@\TeX\ implementations} \index{NT}} is
+%now available.  For more information about \program{web2c}, consult
+%Chapter~\ref{chap:freetex}.  The Windows NT port is not addressed
+%specifically.
+
+\section{We'd Like to Hear From You}
+
+We have tested and verified all of the information in this book to the best of
+our ability, but you may find that features have changed (or even that we have
+made mistakes!).  Please let us know about any errors you find, as well as
+your suggestions for future editions, by writing:
+
+\begin{flushleft}
+   O'Reilly \& Associates, Inc. \\ 103 Morris Street, Suite A \\ Sebastopol,
+   CA 95472 \\ 1-800-998-9938 (in the US or Canada) \\ 1-707-829-0515
+   (international/local) \\ 1-707-829-0104 (FAX) \\
+\end{flushleft}
+
+You can also send us messages electronically.  To be put on the mailing list
+or request a catalog, send email to:
+
+\begin{xtable}{ll}
+  {\it nuts@ora.com} & (via the Internet) \\ 
+  {\it uunet!ora!nuts} & (via UUCP) \\
+\end{xtable}
+
+To ask technical questions or comment on the book, send email to:
+
+\begin{xtable}{l}
+  {\it bookquestions@ora.com} (via the Internet)
+\end{xtable}
+
+\section{Acknowledgments}
+
+This book would not exist if I had not received support and encouragement from
+my friends and colleagues, near and far.  I owe the deepest debt of gratitude
+to my wife, Deborah, for patience, understanding, and support as I progressed
+through what is easily the most all-consuming task I have ever undertaken.
+
+The earliest draft of this book came about because my advisor at
+the University of Massachusetts, Eliot Moss, allowed me to tinker with the
+\TeX\ installation in the Object Systems Lab and was always able to suggest
+ways to make it better.  My friends and colleages at UMass, Amer Diwan, Darko
+Stefanovi\'c, Dave Yates, Eric Brown, Erich Nahum, Jody Daniels, Joe McCarthy,
+Ken Magnani, Rick Hudson, and Tony Hosking, asked all the hard questions and
+didn't seem to mind when I used them as guinea pigs for my latest idea.
+
+I'm indebted also to 
+Eberhard Mattes, 
+Geoffrey Tobin,
+George D. Greenwade, 
+Peter Schmitt, 
+Sebastian Rahtz, and
+Tomas Rokicki, 
+who provided
+technical review comments on the materials presented here.  
+Jim Breen and Ken Lunde
+offered invaluable feedback on Chapter 7.
+
+And I'd like to thank a lot of people at O'Reilly for their help and
+enthusiasm; in particular, my editor, Debby Russell, offered advice, helpful
+criticism, and support beyond the call of duty (Debby keyed most of the index
+for this book as production deadlines drew near and other arrangements fell
+through); Chris Tong organized the raw entries into a usable index; Lenny
+Muellner, Donna Woonteiler, and Sheryl Avruch allowed me to work on the book
+when it wasn't technically my job; Stephen Spainhour copyedited it into
+English with the help of Leslie Chalmers and Kismet McDonough (Stephen offered
+helpful suggestions along the way, too); Jennifer Niederst helped me get the
+design right; and Chris Reilly created the figures and screen dumps.  I
+enjoyed working with everyone at O'Reilly so much that I left UMass and joined
+the production department myself ;-).
+
+Several companies provided review copies of their software while I was writing
+this book.  I would like to thank ArborText, Blue Sky Research, Borland
+International, The Kinch Computer Company, LaserGo, Personal \TeX, TCI
+Software Research, and \YY, for their generosity.
+
+Finally, I'd like to thank the entire Internet \TeX\ community.  Countless
+thousands of questions and answers on the Net refined my understanding of how
+\TeX\ works and what it can do.

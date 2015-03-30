@@ -1,0 +1,7 @@
+\nopagenumbers
+\input DraTex.sty
+\input AlDraTex.sty
+
+\input tex.06.07.tex
+
+\bye

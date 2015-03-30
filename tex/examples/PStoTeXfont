@@ -1,0 +1,57 @@
+#!/usr/local/bin/bash
+#
+#   This script file makes a new TeX font from a PS outline.  
+#
+#   Parameters are:
+#
+#   name dpi bdpi [mag mode destdir]
+#
+#   `name' is the name of the font, such as `ptmr'.  `dpi' is
+#   the resolution the font is needed at.  `bdpi' is the base
+#   resolution.
+#
+#   This script ignores the remaining parameters.  They are left here to
+#   document the fact that the caller may provide them.  They may be 
+#   provided because the caller things MetaFont is going to do the work...
+#
+#   Of course, this needs to be set up for your site.
+#
+# TEMPDIR needs to be unique for each process because of the possibility
+# of simultaneous processes running this script.
+
+# This temp directory has to be under /users/oos/bin (or somewhere globally
+# accessible) because this script runs PS2PK on ibis even if it is started
+# elsewhere (e.g. on a Sparc).  To do so, it uses the "ibis [cmd]" shortcut
+# and passes the temp directory.  If the TEMPDIR was /tmp/whatever then,
+# it would fail because /tmp on a Sparc isn't /tmp on ibis.
+TEMPDIR=/users/oos/bin/PStemp/temp-tex-PS.$$
+NAME=$1
+DPI=$2
+BDPI=$3
+
+LOCALDIR=/usr/local/lib/tex/fonts
+DESTDIR=$LOCALDIR/pk
+
+BASENAME=$NAME.$DPI
+PFADIR=/usr/local/lib/tex/fonts/ps-outlines
+
+# Clean up on normal or abnormal exit
+trap "cd /; rm -rf $TEMPDIR" 0 1 2 15
+
+mkdir $TEMPDIR
+cd $TEMPDIR
+
+# We proceed by making a 10pt font at the resolution requested...
+# Note "ibis" forces ps2pk to run on the MIPS.  It dies on Sparcs for
+# mysterious reasons that I don't have time or inclination to investigate.
+#
+if [ "$HOSTTYPE" != "MIPSEL" ]; then
+  echo "Making ${DPI}dpi version of $NAME (using PS2PK on ibis)."
+  ibis "cd $TEMPDIR; ps2pk -C128000 -v -X$DPI -P10 -a$PFADIR/$NAME.afm $PFADIR/$NAME.pfa ${BASENAME}pk"
+else
+  echo Making ${DPI}dpi version of $NAME.
+  ps2pk -C128000 -v -X$DPI -P10 -a$PFADIR/$NAME.afm $PFADIR/$NAME.pfa ${BASENAME}pk
+fi
+mv ${BASENAME}pk $DESTDIR
+
+exit 0

@@ -1,0 +1,26 @@
+\begin{xtable}{l|l|c|l}
+  \caption{Common Previewers\label{tab:previewers}}\\
+  \bf Previewer          & \bf Supplier  &  \bf OS       & \bf Comments\\
+  \hline
+  \program{xdvi}         & free (xdvi)   & Unix/DesqView & X11 \\
+  \program{\XTeX}        & free (\XTeX)  & Unix          & X11 \\
+  \program{Ghostscript}  & free (gs)     & most          & PostScript \\
+  \program{Ghostview}    & free (Ghostview) & Unix, Windows & PostScript \\
+  \program{dviscr}       & free (\emTeX) & MS-DOS, OS/2  & \\
+  \program{dvipm}        & free (\emTeX) & OS/2          & Presentation Manager \\
+  \program{dvivga}       & free (dvivga) & MS-DOS        & EGA/VGA \\
+  \program{dvimswin}     & free (dvimswin) & MS-DOS      & Windows \\
+  \program{dviwin}       & free (dviwin) & MS-DOS        & Windows \\
+  \program{dvi2tty}          & free (dvi2tty)& most          & ASCII \\
+  \program{dvigt/dvitovdu} & free        & most      & \\
+  \program{crudetype}    & free      & VMS           & ASCII \\
+  \program{\TeX\ Preview}& ArborText     & MS-DOS, Unix  & \\
+  \program{Dvideo}       & Kinch Software& MS-DOS        & EGA \\
+  \program{Wdviwin}      & Kinch Software& MS-DOS        & Windows \\
+  \program{PTI View}     & Personal \TeX & MS-DOS        & \\
+  \program{dviwindo}     & Y\&Y              & MS-DOS        & Windows \\
+  \hline
+\end{xtable}
+
+
+      

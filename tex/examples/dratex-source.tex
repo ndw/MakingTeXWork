@@ -1,0 +1,11 @@
+\Draw   \Ragged(4)    %%%%%%%%% tree %%%%%%%%%%%
+
+\Define\DotsToLoc(1){   \MarkLoc(x)  
+   \CSeg\DoLine(x,#1)(5){
+          \MoveF(-3)\LineF(1)} }
+\PictNode(3){     \IF \EqText(,#2) \THEN \Text(--#1--) \ELSE
+  \ThreeDim(#1,#2,#3)    
+     \MarkPLoc(1)  \Line(50,0,0)   \MarkPLoc(2) \Line(0,50,0)
+     \MarkPLoc(3)  \Line(-50,0,0)  \MarkPLoc(4) \Line(0,-50,0)
+     \Move(0,0,50)  \MarkPLoc(1') 
+...

@@ -1,0 +1,36 @@
+  \def\blankbox{\hbox{\hskip1pt\vbox{\vskip1pt\blank\vskip1pt}\hskip1pt}}
+  \def\blackbox{\hbox{\hskip1pt\vbox{\vskip1pt\black\vskip1pt}\hskip1pt}}
+  \def\x{\blackbox}%
+  \def\o{\blankbox}%
+  \begin{tabular}{cc}
+    {\def\arraystretch{0}\tabcolsep=0pt%
+     \def\blank{\hbox to 18pt{\vbox to 18pt{\vfill}\hfill}}%
+     \def\black{\hbox to 18pt{\vbox to 18pt{%
+                \hrule width 18pt depth 0pt height 18pt}}}%
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+      \blackbox & \blackbox & \blackbox & \blackbox & \blankbox \\ \hline
+      \blackbox & \blankbox & \blankbox & \blackbox & \blackbox \\ \hline
+      \blackbox & \blankbox & \blankbox & \blankbox & \blackbox \\ \hline
+      \blackbox & \blackbox & \blackbox & \blackbox & \blackbox \\ 
+      \hline
+    \end{tabular}
+    } & %
+    {\def\arraystretch{0}\tabcolsep=0pt%
+     \def\blank{\hbox to 8pt{\vbox to 8pt{\vfill}\hfill}}%
+     \def\black{\hbox to 8pt{\vbox to 8pt{%
+                \hrule width 8pt depth 0pt height 8pt}}}%
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+      \x & \x & \x & \x & \x & \x & \x & \x & \o & \o \\ \hline
+      \x & \x & \x & \x & \x & \x & \x & \x & \o & \o \\ \hline
+      \x & \x & \o & \o & \o & \o & \x & \x & \x & \x \\ \hline
+      \x & \x & \o & \o & \o & \o & \x & \x & \x & \x \\ \hline
+      \x & \x & \o & \o & \o & \o & \o & \o & \x & \x \\ \hline
+      \x & \x & \o & \o & \o & \o & \o & \o & \x & \x \\ \hline
+      \x & \x & \x & \x & \x & \x & \x & \x & \x & \x \\ \hline
+      \x & \x & \x & \x & \x & \x & \x & \x & \x & \x \\ 
+      \hline
+    \end{tabular}
+    }%
+  \end{tabular}

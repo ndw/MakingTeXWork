@@ -1,0 +1,16 @@
+\newbox\pcmnubox
+\newdimen\pcmnuwd
+\font\pcmnua=pcmnua at 72.27truept
+\setbox\pcmnubox=\vbox{\hbox{%
+\pcmnua\char0\char1\char2\char3\char4}}
+\pcmnuwd=\wd\pcmnubox
+\setbox\pcmnubox=\hbox{\vbox{\hsize=\pcmnuwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\pcmnua\char0\char1\char2\char3\char4}
+\hbox{\pcmnua\char5\char6\char7\char8\char9}
+\hbox{\pcmnua\char10\char11\char12\char13\char14}}}
+\ifx\parbox\undefined
+    \def\setpcmnu{\box\pcmnubox}
+\else
+    \def\setpcmnu{\parbox{\wd\pcmnubox}{\box\pcmnubox}}
+\fi

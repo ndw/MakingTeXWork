@@ -1,0 +1,1333 @@
+<chapter id="chap.running">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>Running &TeX;</title>
+
+<para>The heart of processing a document with &TeX; is 
+running<indexterm><primary sortas="tex">&TeX;</primary><secondary>running</secondary></indexterm><indexterm><primary sortas="running tex">running &TeX;</primary></indexterm> the &TeX; program.
+In this chapter, you'll learn what happens between the time you first start
+the &TeX; program and the time it finishes.
+You'll also learn what files &TeX; really needs (in addition to
+your document) and what to do when &TeX; finds things in your document that
+it doesn't understand.
+</para>
+
+<section id="run.sec.formatfiles"><title>What Do You Run?</title>
+
+<para>The first thing you have to know is what program to run.
+Unfortunately, the actual file you have to execute varies between
+platforms and implementations. If you have built and/or installed
+&TeX; yourself, you probably already know what program to run.  
+You'll have to ask your system administrator for help if you can't
+figure out what the name of the &TeX; executable is on your computer.
+The rest of this chapter assumes that the command <filename>tex</filename>
+runs &TeX;.  You should substitute the name of the executable
+program on your own system for <filename>tex</filename><indexterm><primary>tex command</primary></indexterm> in 
+the examples that follow.
+</para>
+
+<para>Most implementations of &TeX; have some hard-coded memory limits<indexterm><primary>memory limits</primary></indexterm>.
+These limitations may cause problems if you are trying to run a very
+complex document through &TeX;.
+To combat this problem, some distributions include two versions
+of the &TeX; executable.  One version is 
+a <quote>small</quote> &TeX;<indexterm><primary sortas="small tex">small &TeX;</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>small</secondary></indexterm> that generally runs
+faster but has less memory available to process your
+documents.  The other
+version, a <quote>big</quote> &TeX;<indexterm><primary sortas="big tex">big &TeX;</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>big</secondary></indexterm>, 
+can process more complex documents
+but may run more slowly.  If you get a <quote>&TeX; capacity exceeded</quote>
+error, and you have a big &TeX; available on your system, try
+processing your document with the big &TeX;.
+</para>
+
+<para>If you still get an error, you have a document that is simply too
+complex for your implementation of &TeX; to handle, or you have an
+error in one of the macros in your document.  By examining the error
+log, described later in this chapter in the section 
+<quote><xref role="label" linkend="sec.logfiles"/>,</quote> you can determine what macro &TeX; is
+interpreting when the error occurs.  If the error occurs in a macro
+that you wrote, check to make sure the macro functions the way
+you intended by using it in a small test document.
+</para>
+
+</section>
+<section><title>What Files Does &TeX; Need?</title>
+
+<para>Naturally, &TeX; needs your input file in order to process it.
+However, &TeX; must be able to find several
+other files<indexterm><primary sortas="files for tex">files for &TeX;</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>file requirements</secondary></indexterm> as 
+well.  The files that &TeX; needs are normally created
+during the installation process.  Here is a common directory layout for
+&TeX; on a &unix; system:
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+  <entry><filename>/usr/local/lib/tex/formats</filename></entry>
+  <entry>Format files</entry>
+</row>
+<row>
+  <entry><filename>/usr/local/lib/tex/pool</filename></entry>
+  <entry>Pool files</entry>
+</row>
+<row>
+  <entry><filename>/usr/local/lib/tex/formats</filename></entry>
+  <entry>Format files</entry>
+</row>
+<row>
+  <entry><filename>/usr/local/lib/tex/inputs</filename></entry>
+  <entry><quote>System</quote> input files</entry>
+</row>
+<row>
+  <entry><filename>/usr/local/lib/tex/macros</filename></entry>
+  <entry>       (styles, macros, and miscellaneous</entry>
+</row>
+<row>
+  <entry><filename>/usr/local/lib/tex/lib</filename></entry>
+  <entry>       files distributed with &TeX;)</entry>
+</row>
+<row>
+  <entry><filename>/usr/local/lib/tex/ps</filename></entry>
+  <entry>PostScript support files</entry>
+</row>
+<row>
+  <entry><filename>/usr/local/lib/tex/fonts/pk</filename></entry>
+  <entry><filename role="extension">PK</filename> fonts</entry>
+</row>
+<row>
+  <entry><filename>/usr/local/lib/tex/fonts/vf</filename></entry>
+  <entry>Virtual fonts</entry>
+</row>
+<row>
+  <entry><filename>/usr/local/lib/tex/fonts/tfm</filename></entry>
+  <entry><filename role="extension">TFM</filename> metrics</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>A similar layout is frequently used on other operating systems,
+except that the &TeX; files are often stored in a top-level
+directory (for example, <filename>C:$\$TEX</filename> under MS-DOS).  Because &TeX; is
+very flexible and has many different implementations, the exact directory structure varies.  Pool files are sometimes
+placed in the format file directory (which is sometimes called
+<filename>fmt</filename> or <filename>fmts</filename>, rather than <filename>formats</filename>).
+Input files may occur in one or more of the standard places listed above
+<!-- in Figure&nbsp;<xref role="label" linkend="fig.run.dirlayout"/>  -->
+(<filename>inputs</filename>,
+<filename>macros</filename>, and <filename>lib</filename>) as well as a number of other
+places (<filename>texinputs</filename> is another common name).
+</para>
+
+<para>The files under the &TeX; tree usually come from outside distributions,
+so you don't have to change them often. (You definitely <emphasis>shouldn't</emphasis>
+put your personal macro files in that tree, even if you do have access
+to it.)
+</para>
+
+<para>The following sections describe, in more detail, each of the files that &TeX; needs.
+</para>
+
+<section><title>Pool Files</title>
+
+<para>Pool files contain string constants used by &TeX; at runtime.
+Each time &TeX; is compiled, it creates a pool file<indexterm><primary>pool files</primary></indexterm> unique
+to the version being compiled.  The pool file from one version of &TeX; will
+not work with a different version.
+</para>
+
+<para>In contrast to format files (discussed in the next section),
+if you don't have a pool file, there's nothing you can do about it.
+If you obtained precompiled programs (from the Internet, from a friend,
+or commercially) and you don't have a pool file, you received an
+incomplete distribution.
+</para>
+
+<para>If you did not install &TeX; yourself, but find that the pool file is
+missing, contact the system administrator who performed the
+installation.  He or she did something wrong.
+</para>
+
+</section>
+<section><title>Format Files</title>
+
+<para>As mentioned in the section <quote><xref role="label" linkend="sec.tex.controlsequences"/></quote> in
+Chapter&nbsp;<xref role="label" linkend="chap.tex"/>, <emphasis><xref role="title" linkend="chap.tex"/></emphasis>, all of the control
+sequences and macros that your document uses must be defined
+somewhere.  One way to do this is to use the <markup>\input</markup> command to
+load all of the definitions at the beginning of each document.
+However, with large macro packages like &LaTeX;, this process can be very time
+consuming.  Format files<indexterm><primary>format files</primary></indexterm> are a way of predefining control
+sequences and macros so they don't have to be interpreted by &TeX; every time they're used.  If &TeX; didn't use format files, you'd
+have to wait for &TeX; to interpret all of &LaTeX; every time you
+processed a document that used &LaTeX;.
+</para>
+
+<para id="run.sec.initexintro">Format files are created by a special version of &TeX;, usually called
+ini&TeX;<indexterm><primary sortas="initex">ini&TeX;</primary></indexterm>.  Some implementations combine &TeX; and ini&TeX; into
+one program.  In this case, you must select ini&TeX; with a special
+option when you run &TeX;.  Ini&TeX; interprets all the control
+sequences in a macro package and builds the in-memory data structures
+that the &TeX; program needs.  After loading the whole macro package,
+ini&TeX; writes the memory image it has constructed to a format
+file.  When &TeX; later loads the format file, it simply copies it
+into memory; no interpretation is necessary.  This is why loading a
+format file is such a fast way to define control 
+sequences<indexterm><primary>control sequences</primary><secondary>loading through format files</secondary></indexterm>.  This is
+also why format files are not usually portable from one system to
+another,<footnote><para>{The exception occurs in some &unix; versions of &TeX; where provisions are made for different architectures to share the
+same format files.  The exact same version of &TeX; must be running on
+both architectures for this to work.}</para></footnote> or even between different
+versions of &TeX; on the same system.  Different versions of &TeX; are stored differently 
+in memory, and this difference in loading makes the
+format files incompatible.  For this reason, you need a <quote>big</quote>
+ini&TeX; to make format files for a big &TeX; and a <quote>small</quote> ini&TeX; for
+a small &TeX;.
+</para>
+
+<para>You will find a complete discussion of macro packages and 
+instructions for building format files for many of the common macro 
+packages in Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>,
+<emphasis><xref role="title" linkend="chap.macpack"/></emphasis>.</para>
+
+</section>
+<section id="sec.userfiles"><title>User Files</title>
+
+<para>When you run &TeX;<indexterm><primary>user files</primary></indexterm>, you have to tell it what file to process.
+If you specify a complete pathname, &TeX; will load the specific file that you
+request.  For example, I could process the document <filename>myreport.tex</filename> in
+the directory <filename>/home/norm/tex/</filename> by running:
+</para>
+
+<screen>\$ <emphasis role="bold">tex /home/norm/tex/myreport</emphasis></screen>
+
+<para>This example applies to both &unix; and PC implementations of &TeX;.
+Even though MS-DOS and OS/2 typically use the backslash to separate
+directory names, <emphasis>always</emphasis> use a forward slash when entering filenames
+for &TeX;.
+</para>
+
+<para>
+If you specify a simple filename without a path, &TeX; looks for
+the file in several user-defined and, possibly, system-defined locations.
+In the following example, &TeX; will attempt to locate the file 
+<filename>myreport.tex</filename> in order to process it:
+</para>
+
+<screen>\$ <emphasis role="bold">tex myreport</emphasis></screen>
+
+<para>If the file <filename>myreport.tex</filename> exists in several directories, &TeX; will process the first file it finds without looking for any others.
+&TeX; always prints the complete name of the file it processes both
+on the display and in the log file, so you can always tell what file was
+really processed.
+</para>
+
+<para>The most common way to specify user-defined locations is by setting the
+<envar>TEXINPUTS</envar>
+environment variable<footnote><para>{The exact name of the
+environment variable<indexterm><primary>environment variables</primary><secondary>format</secondary></indexterm><indexterm><primary>variables</primary><secondary>environment</secondary><tertiary>format</tertiary></indexterm> differs between
+implementations.}</para></footnote>  to a list of subdirectories where &TeX; documents are kept.
+Setting <envar>TEXINPUTS</envar> specifies where &TeX; should look for
+<emphasis>documents</emphasis> (files that you input with <markup>\input</markup> or some other
+construct, style files, and macros).  To change where &TeX; looks for other
+kinds of files (fonts, formats, pool files, etc.), setting different
+environment variables or performing some other customization is required.  The
+format of the environment variable differs according to the platform you use.
+On &unix; systems, it is a list of directory names separated by colons.  Here
+is a typical example:
+</para>
+
+<screen>.:/usr/local/lib/tex/inputs:/home/norm/tex/inputs</screen>
+
+<para>On MS-DOS and OS/2 systems, it is a list of directory names separated by
+semicolons.  A typical example looks like this:<footnote><para>You will notice
+that I've used backslashes<indexterm><primary sortas="bs (backslash)">\ (backslash)</primary></indexterm>
+to separate directory components in the
+path.  Environment variables are handled by the system-dependent portions of
+&TeX;, so it's okay to use backslashes here.  You can also use forward slashes,
+but I use backslashes because that is more typical of MS-DOS and OS/2
+environments.</para></footnote></para>
+
+<screen>.;\tex\inputs;\tex\styles;\tex\macros</screen>
+
+<para>Consult the documentation for your particular implementation of &TeX; for more information about system-defined locations
+where &TeX; looks for input files.  Unfortunately, this is not always
+well documented.  For example, an undocumented
+feature of version 1.4s of &emTeX; always searches in the directory
+<filename>\emtex\texinputs</filename> even if
+it does not occur in the <envar>TEXINPUTS</envar> path.  In fact, there is
+no way to tell it <emphasis>not</emphasis> to look there, short of renaming the
+directory (which is what I did).
+</para>
+
+<para>If &TeX; cannot find a file you specify, for example
+<filename>rpt-data.tex</filename>, it displays a prompt like this one:
+</para>
+
+<screen>! I can't find file `rpt-data.tex'.
+&lt;*&gt; \input rpt-data
+
+Please type another input filename:
+</screen>
+
+<para>The general form of &TeX; error messages is discussed in
+the section called <quote><xref role="label" linkend="sec.errors"/></quote> later in this chapter.  &TeX; 
+announces an error by printing the error message on a line that begins with 
+an exclamation mark.  Below the error, &TeX; provides the context in which 
+the error occurred. In the example above, &TeX; encountered the command 
+<markup>\input rpt-data</markup> and tried to find the file 
+<filename>rpt-data.tex</filename> which
+it could not locate.
+</para>
+
+<para>Notice that &TeX; automatically added the 
+extension <filename>.tex</filename><indexterm><primary>tex files</primary></indexterm> to
+the name of the file it was looking for.  In any context where you
+specify a filename, &TeX; will append <filename>.tex</filename> unless you
+specify an alternate extension.
+</para>
+
+<para>&TeX; responds to a <quote>can't find file</quote> error by asking you to type
+the name of a different file.  Some implementations of &TeX; allow you
+to abort by typing Ctrl-C or Ctrl-D at this point,<footnote><para>{MS-DOS and
+OS/2 implementations of &TeX; may use Ctrl-Z (possibly followed by
+a carriage return) instead of Ctrl-C or Ctrl-D.}</para></footnote> but other
+implementations insist that you enter a filename.  In this case,
+you'll find it convenient to create an empty file called
+<filename>nul.tex</filename><indexterm><primary sortas="nultex files">nul.tex files</primary></indexterm> in 
+a directory in your <envar>TEXINPUTS</envar> path so
+you can get around this requirement by supplying a dummy answer to
+the prompt.  <filename>nul.tex</filename> is part of many standard distributions.
+</para>
+
+</section>
+</section>
+<section id="sec.clineopts"><title>The Command Line</title>
+
+<para>Except for the name of a document, &TeX; has very few command-line
+options<indexterm><primary>command line</primary><secondary>options</secondary></indexterm>.  The only 
+option that is regularly used is the name of a
+format file, but the use of this option is frequently buried inside
+a batch file or shell script.
+</para>
+
+<para>It is helpful to think of &TeX;, &LaTeX;, &SliTeX;, etc.&nbsp;as
+different text processors (they aren't really; they're all &TeX; with
+different format files).  This illusion is easy to provide with shell
+scripts or batch files.  For example, on an MS-DOS system, you could
+easily have three batch files called <filename>tex.bat</filename>, <filename>latex.bat</filename>,
+and <filename>slitex.bat</filename>:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> The <filename>tex.bat</filename> file runs the &TeX; executable
+        with the <filename>plain</filename>
+        format file specified as an option.
+  </para>
+</listitem>
+<listitem>
+<para> The <filename>latex.bat</filename> file runs &TeX; with the <filename>lplain</filename>
+        format file.
+  </para>
+</listitem>
+<listitem>
+<para> The <filename>slitex.bat</filename> file runs &TeX; with the <filename>splain</filename>
+        format file.
+  </para>
+</listitem>
+</itemizedlist>
+
+<para>Now typing <emphasis role="bold">tex <emphasis>filename</emphasis></emphasis> processes Plain &TeX; documents;
+typing <emphasis role="bold">latex <emphasis>filename</emphasis></emphasis> processes &LaTeX; documents; and
+typing <emphasis role="bold">slitex <emphasis>filename</emphasis></emphasis> processes &SliTeX; 
+documents.<footnote><para>{On &unix; systems, the same effect is often achieved 
+with symbolic links.  Most &unix; implementations look for different 
+standard format files based upon the name of the executable that starts 
+them.}</para></footnote>  The role of format files and macro packages is described
+fully in Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>, <emphasis><xref role="label" linkend="chap.macpack"/></emphasis>.
+</para>
+
+<section id="sec.runtex.cmdcautions"><title>Command-line Options</title>
+
+<para>A formal specification of the &TeX; command 
+line<indexterm><primary>command line</primary><secondary>options</secondary></indexterm> looks like this:
+</para>
+
+<informalexample>
+<screen>$ tex &lt;<emphasis>switches</emphasis>&gt; &lt;&amp;<emphasis>format</emphasis>&gt; &lt;|<emphasis>document</emphasis>&gt; &lt;<emphasis>tex-commands</emphasis>&gt;</screen>
+</informalexample>
+
+<para>If this looks confusing, have no fear. I'll explain what it means in
+English.
+</para>
+
+<para>After the name of the &TeX; program (or batch file), the first things
+that can go on the command line are implementation-dependent switches
+and options.  For example, implementations of &TeX; that combine
+ini&TeX; and &TeX; into a single program may use
+<emphasis role="bold">/I</emphasis> as the switch to specify that ini&TeX; 
+processing<indexterm><primary sortas="initex">ini&TeX;</primary><secondary>requesting on command line</secondary></indexterm> is 
+desired (ini&TeX;,
+you may remember, was described in the section
+<quote><xref role="label" linkend="run.sec.formatfiles"/>,</quote>
+earlier in this chapter).  There are
+no system-independent switches for &TeX;.  Consult the documentation
+that comes with your implementation for more information about
+system-dependent switches.
+</para>
+
+<para>After any system-dependent switches, the first thing that you can put
+on the &TeX; command line is the name of
+the format file<indexterm><primary>format files</primary><secondary>requesting on command line</secondary></indexterm> to use.  If
+you specify this option, you must include it before any other options,
+and you must put an ampersand (&amp;)<indexterm><primary>ampersand</primary></indexterm>
+in front of the format file name.
+If you do not specify a format file, &TeX; will use a default format,
+usually Plain &TeX;.
+</para>
+
+<para>After the format, &TeX; looks for the name of a document to process.
+If &TeX; finds a filename on the command line, it will process the
+document<indexterm><primary>documents</primary><secondary sortas="tex">&TeX;</secondary><tertiary>specifying on command line</tertiary></indexterm> contained 
+in that file before looking at any other options
+that may follow.
+</para>
+
+<para>Finally, you can insert arbitrary &TeX; commands on the command line
+by typing them just as you would in a document.  The section
+<quote><xref role="label" linkend="sec.texcomp"/></quote> in Chapter&nbsp;<xref role="label" linkend="chap.editing"/>,
+<emphasis><xref role="label" linkend="chap.editing"/></emphasis>, describes one particular instance where
+this is very useful, but it isn't something that you are likely to do
+very often.
+</para>
+
+</section>
+<section><title>Command-line Cautions</title>
+
+<para>There are some special restrictions on file names used on the command
+line and on the way &TeX; interprets the command line.  These
+restrictions are summarized here.
+</para>
+
+<section id="run.sec.misinterpret"><title>Misinterpretation of the command line</title>
+
+<para>Command lines that are typed at the operating system prompt are
+actually seen by your operating system's <quote>command processor</quote> before
+they are seen by &TeX;.  You must be aware of special processing that
+might be performed by the command processor.  Under &unix;, for example,
+the backslash<indexterm><primary sortas="bs (backslash)">\ (backslash)</primary><secondary>special meaning for</secondary></indexterm> is frequently interpreted 
+as a <emphasis>shell escape</emphasis>
+character<indexterm><primary>shell</primary><secondary>escape character</secondary></indexterm>, and 
+the ampersand<indexterm><primary>ampersand</primary></indexterm> has another special 
+meaning related to
+job control<indexterm><primary>job control</primary></indexterm>.  The ampersand is also special under some MS-DOS and OS/2
+command processors where it is the default command separation
+character and will not be passed to &TeX; as you would expect.
+</para>
+
+<para>To insert these troublesome characters literally, you must enclose the
+relevant sections of the command line 
+in quotation marks<indexterm><primary>quotation marks</primary><secondary>use with special characters</secondary></indexterm> or 
+use some
+form of shell escape mechanism.  Under &unix;, place the name of the
+format file, including the ampersand, in double or
+single quotes and
+use two backslashes in a row if you include &TeX; control sequences on
+the command line.  For example, type:
+</para>
+
+<informalexample>
+<screen>$ <emphasis role="bold">tex '&amp;lplain' \\nonstopmode \\input doc1</emphasis></screen>
+</informalexample>
+
+<para>instead of
+</para>
+
+<informalexample>
+<screen>$ <emphasis role="bold">tex &amp;lplain \nonstopmode \input doc1</emphasis></screen>
+</informalexample>
+
+<para>When using OS/2, place a ^ in front of an ampersand
+to prevent it from being interpreted as a command separator.
+</para>
+
+</section>
+<section id="sec.runtex.texwoopts"><title>Filenames and &TeX;</title>
+
+<para><indexterm><primary>filenames</primary></indexterm><indexterm><primary sortas="running tex">running &TeX;</primary><secondary>understanding filenames</secondary></indexterm>
+<indexterm><primary>command line</primary><secondary>specifying filenames</secondary></indexterm>
+It 
+is easy for &TeX; to recognize the presence of a format file on the
+command line; it must be the first option and it must begin with an
+ampersand.<footnote><para>{In the unlikely event that you have a &TeX; document
+stored in a file with a name beginning with an ampersand, use the following
+trick to process that file: instead of running <command>tex &amp;file</command>, run
+<command>tex \input &amp;file</command> (or even 
+<command>tex &amp;format \input &amp;file</command>).</para></footnote>
+After the format file,
+&TeX; determines whether the next option is a file name by looking at
+the first character of the option.  If the first character is not a
+backslash, it is a filename; otherwise it is a &TeX; command, and &TeX; assumes that no filename is present.
+</para>
+
+<para>On some systems, notably MS-DOS and OS/2, the 
+backslash<indexterm><primary sortas="bs (backslash)">\ (backslash)</primary><secondary>in MS-DOS and OS/2</secondary></indexterm>
+is
+used to delimit the subdirectory components of a file name.  On other
+systems, a forward slash is used.  Regardless of the system you use,
+filenames passed to &TeX; <emphasis>must</emphasis> use forward slashes to
+delimit filenames.
+</para>
+
+<para>For example, &TeX; will not process the file <filename>letter.tex</filename>
+in the <filename>\tex\docs</filename> directory of the current drive if
+you execute the following command line on an MS-DOS system:
+</para>
+
+<informalexample>
+<screen>\$ <emphasis role="bold">tex \tex\docs\letter</emphasis></screen>
+</informalexample>
+
+<para>Instead, you must type the following, regardless of the operating system
+you're using:
+</para>
+
+<informalexample>
+<screen>\$ <emphasis role="bold">tex /tex/docs/letter</emphasis></screen>
+</informalexample>
+
+<para>If you don't, &TeX; will complain that the control sequence
+<markup>\tex</markup> is undefined.  Even more confusing errors may result
+if the first subdirectory happens to be a valid control sequence.
+</para>
+
+<para>Unfortunately, filenames containing forward slashes are not always
+recognized by operating systems that use backslashes to delimit
+filenames.  For example, under MS-DOS, <literal>IF EXIST C:/CONFIG.SYS</literal>
+returns false,<indexterm><primary>forward slash in MS-DOS and OS/2</primary></indexterm>
+even when a file called <filename>config.sys</filename> exists in
+the root directory of drive C:.  Therefore, it is most convenient to
+use filenames with backslashes when other commands will be used (for
+example in a batch file).  Filenames in batch files must have any
+backslashes translated into forward slashes before being passed to
+&TeX;.  MS-DOS's command processor isn't really powerful enough, but
+the task is quite doable with JP Software<indexterm><primary>JP Software</primary></indexterm>'s <command>4DOS</command> command
+processor.  <command>4DOS</command><indexterm><primary>4DOS</primary><secondary>use in translating  backslashes</secondary></indexterm> is a replacement for MS-DOS's normal
+command processor; it offers many advantages over the normal
+processor.  You can get a shareware version of <command>4DOS</command> from
+many large MS-DOS archive sites on the Internet<footnote><para>{For example,
+<literal>oak.oakland.edu</literal> in the directory <filename>/pub/msdos/4DOS</filename>.}</para></footnote> as well
+as most large bulletin board systems.  The following lines, 
+written in <command>4DOS</command><indexterm><primary>4DOS</primary></indexterm>'s
+extended batch language, will translate all backslashes in the
+environment variable <envar>TEXFN</envar> to forward slashes:
+</para>
+
+<screen>:FixBacks
+  Set Count=%@Index[%TexFn,\]
+  If "%Count" eq "-1" Goto FixDone
+  Set Place=%@Eval[%Count+1]
+  Set TexFn=%@SubStr[%TexFn,0,%Count]/%@SubStr[%TexFn,%Place]
+  Goto FixBacks
+:FixDone</screen>
+
+<para>These lines also work under OS/2 with JP Software's <command>4OS2</command>
+command processor (akin to <command>4DOS</command>;
+shareware versions of <command>4OS2</command> are also available).  
+The same task can be completed in a single line
+with <command>REXX</command><indexterm><primary>REXX</primary></indexterm> under OS/2:
+</para>
+
+<screen>TEXFN = TRANSLATE(TEXFN, '\', '/')</screen>
+
+<para><command>REXX</command> is an interpreted systems-programming language distributed
+with OS/2.  <command>REXX</command> runs under many other IBM operating systems
+in addition to OS/2.  Several versions of <command>REXX</command> are available for
+MS-DOS and &unix; systems, too.
+</para>
+
+</section>
+<section><title>Multiple documents</title>
+
+<para>Keep in mind<indexterm><primary sortas="running tex">running &TeX;</primary><secondary>multiple documents</secondary></indexterm> that &TeX; 
+interprets only the first option after the
+format file name as a document name.  If you type the command line:
+</para>
+
+<informalexample>
+<screen>\$ <emphasis role="bold">tex doc1 doc2</emphasis></screen>
+</informalexample>
+
+<para>&TeX; will process only <filename>doc1.tex</filename> as a document.  The result
+of the above 
+command line<indexterm><primary>command line</primary><secondary>specifying multiple documents</secondary></indexterm> will 
+be exactly as if you had typed the
+literal word <quote>doc2</quote> at the very end of the file <filename>doc1.tex</filename>.
+</para>
+
+<para>To get &TeX; to process both <filename>doc1</filename> and <filename>doc2</filename> as documents,
+type a command like the following:
+</para>
+
+<informalexample>
+<screen>\$ <emphasis role="bold">tex doc1 \input doc2</emphasis></screen>
+</informalexample>
+
+<para>or, for complete clarity,
+</para>
+
+<informalexample>
+<screen>\$ <emphasis role="bold">tex \input doc1 \input doc2</emphasis></screen>
+</informalexample>
+
+<para>In either case, the structure of your document files must allow them
+to be concatenated together.  &TeX; does not process <filename>doc1</filename> and then
+process <filename>doc2</filename> separately.  Instead, it processes all of <filename>doc1</filename> and
+appends the text in the file <filename>doc2</filename> directly onto the end of
+<filename>doc1</filename>.
+</para>
+
+</section>
+</section>
+</section>
+<section><title>&TeX; Without Options</title>
+
+<para>If you run &TeX; without specifying any 
+options<indexterm><primary sortas="running tex">running &TeX;</primary><secondary>without options</secondary></indexterm> at all, it prints out some
+introductory information, then produces a <literal>**</literal> prompt<indexterm><primary sortas="** prompt"><literal>**</literal> prompt</primary></indexterm> and stops.  
+Here's what &emTeX;'s <filename>tex386</filename> produces:
+</para>
+
+<screen>This is emTeX (tex386), Version 3.141 [3c-beta8]
+**</screen>
+
+<para>This is the only situation where the <literal>**</literal> prompt occurs.  &TeX; now expects you to enter text.  &TeX; will interpret anything you type
+after the <literal>**</literal> prompt <emphasis>exactly</emphasis> as if you had typed it on
+the command line.  All of the rules regarding slashes (described
+in <quote><xref role="label" linkend="run.sec.misinterpret"/></quote> earlier) apply to commands that
+you type at the <literal>**</literal> prompt.  Remember, however, that input entered at the
+<literal>**</literal> prompt is not seen by the operating system, 
+so don't use quotation marks or doubled backslashes.
+</para>
+
+<!-- %%%this is not universally true. -->
+<!-- If you do enter options on the command line, &TeX; prints -->
+<!-- the <literal>**</literal> prompt followed by the options that it saw and then continues -->
+<!-- processing without waiting for input.  This is an -->
+<!-- easy way to tell if the operating system got in your way by -->
+<!-- interpreting part of the command line that you intended for &TeX;. -->
+
+<para>The last line of a document is usually a command telling &TeX; that the
+document is finished.  &TeX; responds by writing the last page of
+the document and ending (returning control to the operating system).
+If a document doesn't end with such a command,
+&TeX; will wait for more input.  When &TeX; runs out of input, it
+displays the <literal>*</literal> prompt<indexterm><primary sortas="* prompt"><literal>*</literal> prompt</primary></indexterm> (single asterisk).  Anything
+you type at the <literal>*</literal> prompt is interpreted exactly as if it
+occurred in the document that &TeX; was processing.  You cannot specify
+an alternate format or name a document at the <literal>*</literal> prompt.  You
+can, however, use \input to insert another file.
+</para>
+
+<para>If &emTeX; processes a document called <filename>unended.tex</filename>:
+</para>
+
+<screen>% This is UNENDED.TEX
+Now is the time for all good men
+to come to the aid of their country.
+% Note: there's no \bye command to end 
+% TeX's processing...</screen>
+
+<para>the following output appears on
+the terminal:
+</para>
+
+<screen>This is emTeX (tex386), Version 3.141 [3c-beta8]
+**unended
+(unended.tex)
+*</screen>
+
+<para>You can exit from the &TeX; program at the <literal>*</literal> prompt by telling
+&TeX; that it should stop processing the current document.  Exactly how
+you get out depends on the format file you use. The following table shows
+the stop commands for some &TeX; macro 
+packages<indexterm><primary sortas="Plain tex">Plain &TeX;</primary><secondary>stop command</secondary></indexterm><indexterm><primary sortas="latex">&LaTeX;</primary><secondary>stop command</secondary></indexterm><indexterm><primary sortas="SliTeX">&SliTeX;</primary><secondary>stop command</secondary></indexterm><indexterm><primary>Lollipop</primary><secondary>stop command</secondary></indexterm><indexterm><primary sortas="tex{}info stop command">&TeX;info stop command</primary></indexterm>.
+</para>
+
+<table>
+<title></title>
+<tgroup cols="2">
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>Package</entry>
+  <entry>Command </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>Plain &TeX;</entry>
+  <entry>\bye </entry>
+</row>
+<row>
+  <entry>&LaTeX;</entry>
+  <entry><markup>\end{document}</markup><indexterm><primary sortas="end"><literal>\end</literal></primary><secondary>document</secondary></indexterm> </entry>
+</row>
+<row>
+  <entry>&SliTeX;</entry>
+  <entry><markup>\end{document}</markup> </entry>
+</row>
+<row>
+  <entry>Lollipop</entry>
+  <entry>\Stop </entry>
+</row>
+<row>
+  <entry>&TeX;info</entry>
+  <entry><literal>@bye</literal> </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+<para>If you do not know which format is in use, you can almost always get out with
+the following steps:<footnote><para>{Typing the break character (<keycap>Ctrl-C</keycap>
+or <keycap>Ctrl-Break</keycap>, for example) sometimes works as well, but some 
+implementations of &TeX; don't respond to the break character at every
+prompt.  On &unix; systems, use <keycap>Ctrl-D</keycap>.  Em&TeX; responds to
+<keycap>Ctrl-Z</keycap> followed by <keycap>Return</keycap>.}</para></footnote> 
+</para>
+
+<orderedlist>
+  <listitem>
+<para> Type a control sequence that &TeX; will not recognize
+        (control sequences \undefined and 
+        \gobbledygook will work).
+        &TeX; will respond with the 
+        question mark prompt.
+</para>
+</listitem>
+<listitem>
+<para> Enter <emphasis role="bold">x</emphasis> at the prompt.
+        The question mark prompt is discussed fully in the section
+        <quote><xref role="label" linkend="sec.qprompt"/>,</quote> later in this chapter.
+</para>
+</listitem>
+</orderedlist>
+
+<para>To continue the above example, if I type \undefined at
+the <literal>*</literal> prompt, &TeX; will respond:
+</para>
+
+<screen>This is emTeX (tex386), Version 3.141 [3c-beta8]
+**unended
+(unended.tex)
+*<emphasis role="bold">\undefined</emphasis>
+! Undefined control sequence.
+&lt;*&gt; \undefined
+
+?</screen>
+
+<para>If I enter <emphasis role="bold">x</emphasis> at the question mark prompt, &TeX; will print
+several informative messages and then end, returning control to the
+operating system.
+</para>
+
+<screen>This is emTeX (tex386), Version 3.141 [3c-beta8]
+**unended
+(unended.tex)
+*\undefined
+! Undefined control sequence.
+&lt;*&gt; \undefined
+
+? <emphasis role="bold">x</emphasis>
+No pages of output.
+Transcript written on unended.log.</screen>
+
+<para>One word of caution: some macro packages redefine the meaning of the
+backslash (\)<indexterm><primary sortas="bs (backslash)">\ (backslash)</primary><secondary>redefining</secondary></indexterm> character so that it doesn't 
+function as the
+beginning of a control sequence (for example, the &TeX;info format
+uses the at-sign, <quote>@</quote>).  In this case, you must precede the
+undefined control sequence by the escape character, even if it
+isn't the backslash.
+</para>
+
+</section>
+<section id="sec.errors"><title>What About Errors?</title>
+
+<para>When you write &TeX; documents, you will occasionally make 
+mistakes<indexterm><primary sortas="tex">&TeX;</primary><secondary>errors</secondary></indexterm><indexterm><primary sortas="errors in tex">errors in &TeX;</primary></indexterm><indexterm><primary>error messages</primary></indexterm> and 
+as a result, &TeX; won't be able to process your document.
+There are six broad classes of mistakes you're likely to make:
+</para>
+
+<orderedlist>
+  <listitem>
+<para> Naming documents or files that &TeX; cannot find.
+  </para>
+</listitem>
+<listitem>
+<para> Misspelling the name of a &TeX; control sequence.
+  </para>
+</listitem>
+<listitem>
+<para> Failing to close an environment or forgetting to insert a
+        closing brace after an opening brace.
+  </para>
+</listitem>
+<listitem>
+<para> Using math operators outside of math mode or forgetting to close
+        an opened math environment.
+  </para>
+</listitem>
+<listitem>
+<para> Requesting a font that &TeX; cannot find.
+  </para>
+</listitem>
+<listitem>
+<para> Everything else.
+  </para>
+</listitem>
+</orderedlist>
+
+<para>&TeX; is legitimately criticized for having error messages that are
+very difficult to understand.  &TeX; frequently provides far more
+information than you really need or want, and the excess information
+often obscures the actual cause of the error.
+</para>
+
+<para>Nevertheless, understanding what &TeX; does when it encounters an error will
+help make error messages easier to understand.  Let's begin with an example.
+Example&nbsp;<xref role="label" linkend="ex.badfonttex"/> shows a simple &LaTeX; document using the New Font
+Selection Scheme (NFSS), which contains an error.<footnote><para>{The details of
+&LaTeX; and the NFSS are discussed in Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>, <emphasis><xref role="label" linkend="chap.macpack"/></emphasis>.  It is simply convenient to use a concrete example
+in this case.  Do not be concerned if you do not use &LaTeX; or the NFSS.}</para></footnote>
+The error is that the control sequence \Large, which has been redefined
+to request a 17pt font, contains a typo: \cs[fontsize]{fontsiz} should be
+\fontsize.<footnote><para>{In practice, redefining a control sequence like
+$\$<literal>Large</literal> in a document is a bad idea.  I've done it here
+only to provide an example of an error that occurs inside another macro.}</para></footnote>
+</para>
+
+<example id="ex.badfonttex"><title>The Document BADFONT.TEX</title>
+<screen>\documentstyle{article}
+% The following definition changes the font that LaTeX
+% uses for the 'Large' font.  I have introduced a typo
+% into the definition, <quote>\fontsiz</quote> should be <quote>\fontsize</quote>.
+% The  first time a \Large font is requested, an error will occur.
+\renewcommand{\Large}{\fontsiz{17}{20pt}\selectfont}
+\begin{document}
+
+This text precedes the first section header.
+
+% Note: LaTeX uses the \Large font in section
+% headers...this will fail in a confusing way
+% because the error is deep within the definition
+% of \section where \Large is used...
+\section{First Section}
+
+This is the first and only sentence of the first section.
+
+\end{document}</screen>
+</example>
+
+<para>When &TeX; processes this file, using &LaTeX; with the New Font
+Selection Scheme, it produces these error messages:
+</para>
+
+<screen><![CDATA[This is TeX, Version 3.1415 (C version 6.1)
+LaTeX Version 2.09 <25 March 1992> with NFSS2
+(badfont.tex (/work/nutshell/texguide/styles/latex/article.sty
+Standard Document Style `article' <14 Jan 92>.
+(/work/nutshell/texguide/styles/latex/art10.sty)) (badfont.aux)
+(/usr/local/lib/tex/inputs/nfss2/T1cmr.fd)
+! Undefined control sequence.
+\Large ->\fontsiz{17}{20pt}\selectfont 
+<argument> \reset@font \Large 
+                              \bf 
+\@sect ...x \ifdim \@tempskipa >\z@ \begingroup #6
+                                      \relax \@hangfrom {\hskip ...
+l.21 \end{section}
+\section{First Section}
+
+? ]]></screen>
+
+<para>These messages exemplify
+the kind of confusing error messages that &TeX; produces.  Remember
+the following rule:
+Always look at the first and last line of the &TeX; error message when trying to figure out what went wrong
+and where it went wrong.  In this case, the first line is:
+</para>
+
+<screen>! Undefined control sequence.</screen>
+
+<para>and the last line is:
+</para>
+
+<screen>l.21 \end{section}
+\section{First Section}
+</screen>
+
+<para>The error is that the control sequence \cs[fontsize]{fontsiz} is not defined and
+&TeX; was processing line 21 of the file when it occurred.
+</para>
+
+<section id="sec.logfiles"><title>Log Files</title>
+
+<para>You don't have to remember or write down the error messages that &TeX; produces.  When &TeX; processes a document, it produces 
+a transcript<indexterm><primary>log files</primary></indexterm> of 
+everything that occurs; you can refer to this transcript later if
+you need to recall what errors occurred when you processed your
+document.  &TeX; stores this transcript in a file which has the same
+name as the document and the extension <filename>.log</filename>.  
+For example,
+if you process <filename>main.tex</filename>, &TeX; produces a
+transcript in <filename>main.log</filename>.
+</para>
+
+<note>
+<para>Log files go in the current directory.
+&TeX; always places the log file in the current directory, even if
+you specify a path when you format your document.  
+For example,
+if you process <filename>lectures/main.tex</filename>, &TeX; produces a
+transcript in <filename>main.log</filename>, not in <filename>lectures/main.log</filename>
+as you might expect.
+</para>
+</note>
+
+</section>
+<section id="sec.qprompt"><title>Interpreting &TeX; Error Messages</title>
+
+<para>The first line of a &TeX; error message begins with an exclamation
+point followed by the text of the 
+message<indexterm><primary>error messages</primary><secondary>interpreting</secondary></indexterm>.  The lines that
+follow it show the context in which the error occurred.<footnote><para>{The number 
+of lines of context shown in the error message is determined by the value of the
+built-in parameter $\$<literal>errorcontextlines</literal>.}</para></footnote>  In
+the previous example, the error message indicates an
+<literal>Undefined control sequence</literal>.  This means that &TeX; encountered a control sequence which was not previously defined.
+</para>
+
+<para>The final line, which says
+<literal>l.21 \section{First Section}</literal>,
+occurs right above the question mark prompt.
+It identifies the line in your document that &TeX; was processing when it encountered the error.  The error occurred when &TeX; was at line 21 of the file, and that line began with
+<literal>\section{First Section}</literal>.
+</para>
+
+<para>Between the first and last lines, &TeX; prints a detailed description
+of how the error occurred.  This is necessary because the error may have
+occurred inside the replacement text of a macro that you used.  When
+&TeX; encounters a control sequence, like \section, it has to
+look up the definition to figure out how to
+typeset your document.  The definition of a control sequence may
+contain other control sequences which also have to be interpreted.  It
+is possible for &TeX; to be several levels deep, as it was in this
+case, when an error occurs.  To give the person who wrote the
+definition of the control sequence an opportunity to figure out what
+went wrong, &TeX; prints out a <emphasis>trace back</emphasis><indexterm><primary>trace back</primary></indexterm> of what happened
+before the error.  As you gain experience with a particular macro
+package, you'll find the intervening lines more
+meaningful.
+</para>
+
+<para>Correcting an error depends entirely on the nature of the error.  In
+this case, all you need to do is correct the typo.
+</para>
+
+<para>As stated above, there are six general classes of errors you might encounter
+when you run &TeX;.  The following sections briefly describe each class.
+</para>
+
+</section>
+<section><title>Naming a File &TeX; Cannot Find</title>
+
+<para>Missing documents are discussed in the section called
+<quote><xref role="label" linkend="sec.userfiles"/>,</quote>
+earlier in this chapter.
+</para>
+
+<para>If you request a format file<indexterm><primary>format files</primary><secondary>missing</secondary></indexterm> that 
+cannot be found, &TeX; issues the
+following warning message:
+</para>
+
+<screen>Sorry, I can't find that format; will try the default</screen>
+
+<para>&TeX; then attempts to typeset your document with Plain &TeX;.<footnote><para>{It
+is possible to make other formats the default, but in practice I've never
+seen it done.}</para></footnote>  To correct this problem, run &TeX; with the correct
+format file name.  If the format file isn't available, you will have
+to build it.  Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>, <emphasis><xref role="label" linkend="chap.macpack"/></emphasis>,
+describes how to build format files for several common macro packages.
+</para>
+
+</section>
+<section><title>Misspelling a Control Sequence Name</title>
+
+<para>Misspelling 
+a control sequence name<indexterm><primary>control sequences</primary><secondary>misspelling names of</secondary></indexterm> is 
+one of the most common errors.  
+For example, you might type
+<markup>\ipnut{chap1}</markup> in your document instead of
+<markup>\input{chap1}</markup>.  The solution is straightforward and usually
+easy to identify.  In many cases, you can simply proceed after
+encountering this error.  Although &TeX; may not typeset your document
+correctly, you can continue to look for other errors.  The section called
+<quote><xref role="label" linkend="sec.qprompt"/>,</quote> later in this chapter, describes how to
+continue after an error.
+</para>
+
+<para>In some cases, &TeX; may become badly confused by a misspelled control
+sequence name, in which case you should give up and fix the spelling error
+before trying to process your document further.  This may happen if
+you misspell a &LaTeX; environment name
+(<markup>\begin{itemze}</markup> instead of
+<markup>\begin{itemize}</markup>, for example),<footnote>
+<para>Technically, &LaTeX; environment names are not a control sequence
+names, but they behave in very
+much the same way in &LaTeX;.</para></footnote>
+which will make &LaTeX; misinterpret
+many of the control sequences which follow.
+</para>
+
+<para>Sometimes &TeX; will complain that a control sequence is undefined
+when you <emphasis>know</emphasis> that the control sequence is spelled correctly.
+When this occurs, make sure that you are using the correct format file
+(see the section <quote><xref role="label" linkend="sec.clineopts"/></quote> earlier in this chapter),
+loading the correct macro files, and using
+the correct style options.
+</para>
+
+</section>
+<section><title>Failure to Close an Environment</title>
+
+<para>Failure to close an environment<indexterm><primary>environment</primary><secondary>failing to close</secondary></indexterm> is 
+another very common error.  There
+are several distinct errors in this category:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Failure to insert a closing brace (<literal>}</literal>) for each opening
+        brace may cause a <quote>&TeX; capacity exceeded</quote> error when &TeX; 
+        processes
+        your document.  This happens because sometimes &TeX; tries to read 
+        everything
+        between braces into memory.  If the closing brace is absent, &TeX;         may run out of memory.
+</para>
+
+<para>        If the braces are supposed to enclose the argument to a macro,
+        you may also get this error:<indexterm><primary>braces</primary><secondary>forgetting a closing brace</secondary></indexterm></para>
+
+<screen>! Paragraph ended before <emphasis>macro</emphasis> was complete.</screen>
+
+<para>        In order to help detect errors of this type, &TeX; doesn't ordinarily
+        allow the argument of a macro to consist of more than one paragraph,
+        so the first blank line after the place where you failed to type
+        the closing brace may produce this error.
+</para>
+</listitem>
+<listitem>
+<para> Failure to close a begin/end environment pair
+        causes &LaTeX; to complain about a mismatch when it encounters
+        the next <markup>\end{</markup>\texttt{<replaceable>environment</replaceable>}<markup>}</markup>
+        command.<indexterm><primary sortas="end"><literal>\end</literal></primary><secondary>environment</secondary></indexterm>
+</para>
+</listitem>
+<listitem>
+<para> If your document ends with an open environment, &TeX; will warn
+        you that:
+</para>
+
+<screen>! (\end occurs inside a group at level <emphasis>n</emphasis>)</screen>
+
+<para>        where <literal><replaceable>n</replaceable></literal> is the number of open groups, usually 1.
+</para>
+</listitem>
+<listitem>
+
+<para>Failure to close a mathematics environment will result in the
+error:</para>
+
+<screen>! Missing $ inserted</screen>
+
+<para>when &TeX; reaches a macro that does not make sense in
+mathematics mode (like \section) or when a surrounding group
+ends.
+</para>
+</listitem>
+</itemizedlist>
+
+</section>
+<section><title>Math Outside of Math Mode</title>
+
+<para>&TeX; has a lot of operators for special treatment of mathematical
+formulas.  These operators must occur 
+inside <emphasis>mathematics mode</emphasis><indexterm><primary>mathematics mode</primary></indexterm>,<indexterm><primary>mathematics</primary><secondary>operators</secondary></indexterm>
+which is usually delimited by dollar signs in your 
+document.<indexterm><primary>mathematics</primary><secondary>minor mode</secondary><tertiary>using math operators outside</tertiary></indexterm></para>
+
+<para>If you attempt to use math operators, superscripts, subscripts, or other
+math-mode control sequences outside of mathematics mode, the following
+error will occur:<indexterm><primary sortas="\$"><literal>\$</literal></primary></indexterm></para>
+
+<screen>! Missing $ inserted </screen>
+
+<para>This is your clue that
+a mathematics environment has not been closed properly or that you failed
+to open one before using a math-mode operator. 
+</para>
+
+<para>For example, the underscore character is usually defined to be a
+math-mode operator which starts a subscript, in other words
+<literal>H${}_2$O</literal> produces <quote>H${}_2$O</quote> in your document.<footnote><para>{The empty curly
+braces are necessary in this example because otherwise there wouldn't
+be anything in front of the subscript command for &TeX; to subscript
+below.  Typically, another digit or symbol would come in front of the
+subscript command.  In this case, I didn't want the <quote>H</quote> and <quote>O</quote> in the
+math environment because letters are printed in math-italics in math 
+mode.}</para></footnote>  If you use the underscore outside of mathematics mode, such
+as in regular text:
+</para>
+
+<screen>The file <quote>test_one</quote> contains the ...</screen>
+
+<para>&TeX; will respond:
+</para>
+
+<screen>! Missing $ inserted
+&lt;inserted text&gt;
+                $
+&lt;to be read again&gt;
+                  _
+The file <quote>test_
+                one</quote> contains the ...
+?</screen>
+
+<para>In &LaTeX;, the easiest way around this problem is to enclose the offending
+text in a <quote>verbatim</quote> macro, like this:
+</para>
+
+<screen>  The file <quote><literal>test_one</literal></quote> contains the ...</screen>
+
+<para>Note that the argument to the <literal>macro</literal>is delimited by any two
+identical characters (in this case, two <quote><literal>+</literal></quote> signs).
+</para>
+
+<para>In Plain &TeX; or another format, the problem can be circumvented in
+similar ways; consult the reference for the format you are using.
+Also consult Table&nbsp;<xref role="label" linkend="tab.acttype"/> in 
+Chapter&nbsp;<xref role="label" linkend="chap.tex"/>, <emphasis><xref role="label" linkend="chap.tex"/></emphasis>,
+for a list of special characters and how to type them in your documents.
+</para>
+
+</section>
+<section><title>Missing Fonts</title>
+
+<para>The first<indexterm><primary>fonts</primary><secondary>missing</secondary></indexterm> time that 
+you use each font, &TeX; loads font metric
+information about the font.  The font metric information, stored in a
+<filename role="extension">TFM</filename> file, includes information about the sizes of each character
+as well as kerning and ligature information.  These topics are
+discussed fully in Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>, <emphasis><xref role="label" linkend="chap.fonts"/></emphasis>.
+</para>
+
+<para>If you request a font that does not exist, for example
+<filename>crm10</filename> (a misspelling of <filename>cmr10</filename>), 
+&TeX; cannot find a <filename role="extension">TFM</filename> file for the font and
+therefore displays:
+</para>
+
+<screen>Font \myfont=crm10 not loadable: Metric (TFM) file not found</screen>
+
+<para>This means that &TeX; attempted to associate the font described by the
+<filename role="extension">TFM</filename> file <filename>crm10.tfm</filename> with the control sequence
+\myfont, but the <filename role="extension">TFM</filename> file didn't exist.  You
+must have a <filename role="extension">TFM</filename> file for every font that you use.
+</para>
+
+<para>A second kind of error---actually, a warning---occurs when you are
+using the New Font Selection Scheme 
+(NFSS)<indexterm><primary>New Font Selection Scheme</primary><secondary>version 1 (NFSS)</secondary><tertiary>errors</tertiary></indexterm>.  The NFSS performs font
+substitution, if possible, when an unknown font is requested.  The
+NFSS is described in Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>,
+<emphasis><xref role="label" linkend="chap.macpack"/></emphasis>, in the <quote><xref role="label" linkend="sec.latex"/></quote> section.
+</para>
+
+</section>
+<section><title>Everything Else</title>
+
+<para>There are, unfortunately, lots of other errors that can occur.  Some
+of the errors are directly related to &TeX; while others are warning and
+error messages associated with particular macro packages.  There is
+no way to catalog every one of them or suggest what can be done in every
+case.  
+</para>
+
+<para>The best advice I can offer is to isolate the problem
+in as small a document as possible, consult the references you have available
+very carefully, and, if all else fails, forward your problem to one of the
+electronic forums that deal with &TeX; 
+(the <literal>Info-TeX</literal> mailing list<indexterm><primary sortas="Info-TeX mailing list"><literal>Info-TeX</literal> mailing list</primary></indexterm>
+and the <literal>comp.text.tex</literal> newsgroup<indexterm><primary sortas="comp.text.tex newsgroup"><literal>comp.text.tex</literal> newsgroup</primary></indexterm>, for example).
+</para>
+
+</section>
+</section>
+<section><title>The Question Mark Prompt</title>
+<indexterm><primary>? (question mark) prompt</primary></indexterm>
+
+<para>When &TeX; encounters an error, it displays an error message and a
+summary of the error, as described in the section called
+<quote><xref role="label" linkend="sec.errors"/></quote> earlier in this chapter.  Following the
+error, &TeX; normally stops and displays the question mark prompt.
+</para>
+
+<para>
+If you type a question mark of your own at the prompt, &TeX; displays
+the actions available to you:
+</para>
+
+<screen>? ?
+Type &lt;return&gt; to proceed,
+S to scroll future error messages,
+R to run without stopping, Q to run quietly,
+I to insert something, E to edit your file,
+1 or ... or 9 to ignore the next 1 to 9 tokens
+of input, H for help, X to quit.
+?</screen>
+
+<para>You can type any of the following responses at the question mark
+prompt:<indexterm><primary>? (question mark) prompt</primary></indexterm>
+</para>
+
+<variablelist>
+<varlistentry>
+<term>Type <keycap>Return</keycap> to proceed.</term>
+<listitem>
+<para>Simply typing Return will cause &TeX; to ignore the error and proceed.
+Depending on the nature of the error, this may cause more errors
+immediately or later on.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Type <keycap>S</keycap> to scroll future error messages.</term>
+<listitem>
+<para>Typing <keycap>S</keycap> tells &TeX; to continue and not to stop for most future errors.
+&TeX; will continue to print the error messages, both to the terminal
+and to the log file, but it will not display the question mark prompt
+again.
+</para>
+
+<para>&TeX; will still stop and ask about missing files.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Type <keycap>R</keycap> to run without stopping.</term>
+<listitem>
+<para>The <keycap>R</keycap> option is just like <keycap>S</keycap> except that it tells &TeX; to ignore
+missing files as well.  &TeX; will proceed blindly forward as best as it
+can.  You will still see all of the error messages scroll by as &TeX; proceeds.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Type <keycap>Q</keycap> to run quietly.</term>
+<listitem>
+<para>This option is just like <keycap>R</keycap> except that error messages are not
+displayed on the screen.  The messages are saved in the log
+file, however, even though they are not displayed.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Type <keycap>I</keycap> to insert something.</term>
+<listitem>
+<para>If you notice a simple typo, you can correct it with the <keycap>I</keycap> command.
+For example, suppose that &TeX; complains of an undefined control
+sequence: <markup>\cte{kn:art1}</markup>.
+You recognize that this should have 
+been <markup>\cite{kn:art1}</markup>.
+You can insert the correct control sequence by responding
+<literal>i\cite</literal> to the question mark prompt.  &TeX; will ignore the
+misspelled control sequence and insert the (correct) sequence \cite
+in its place.
+</para>
+
+<para>Inserting words or commands at the question mark prompt <emphasis>does not</emphasis>
+change your input file.  It simply instructs &TeX; to <emphasis>pretend</emphasis> that your
+file contained a different sequence of words and commands.  You must change
+the input file with an editor, or the same error will occur the next time
+you format the document.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Type <keycap>E</keycap> to edit your file.</term>
+<listitem>
+<para>This option terminates &TeX;.  If your system is configured appropriately,
+an editor will be loaded automatically, and the cursor will be placed
+at the offending line in your input file.  This is not possible in
+all environments.  
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Type <keycap><replaceable>n</replaceable></keycap>, where <replaceable>n</replaceable> is a number between 1 and 9.</term>
+<listitem>
+<para>This option tells &TeX; to ignore some of the input.  After skipping
+over the number of <emphasis>tokens</emphasis> you request, &TeX; returns to the
+question mark prompt so that you can delete more tokens.  
+</para>
+
+<para>What's a token<indexterm><primary>token</primary></indexterm>?  When &TeX; reads an input file, it breaks each
+line down into the smallest, indivisible chunks that have meaning.
+These are called tokens.  For the most part, tokens are individual characters.
+The exceptions are control sequences<indexterm><primary>control sequences</primary><secondary>as tokens</secondary></indexterm>, which are single tokens, and white
+spaces which are also single tokens.  There <emphasis>are</emphasis> other exceptions
+(and more technical definitions of <quote>token</quote>), but that's the gist of it.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Type <keycap>H</keycap> for help.</term>
+<listitem>
+<para>Typing <keycap>H</keycap> displays a slightly more verbose description of the error
+that occurred and, usually, suggests the nature of the corrective action
+that you might take.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Type <keycap>X</keycap> to quit.</term>
+<listitem>
+<para>Typing <keycap>X</keycap> tells &TeX; to stop immediately and ends the &TeX; program.
+If there are any completed pages (pages processed before the error,
+in other words), they are written to the <filename role="extension">DVI</filename> file before &TeX; ends.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</section>
+</chapter>

@@ -1,0 +1,21 @@
+\nopagenumbers
+
+\font\textfont=grlg
+\textfont
+
+\font\foo=cmr5 at 150pt
+\font\bar=cmr17 at 150pt
+
+\setbox0=\hbox{\foo R}
+
+\dimen0\wd0
+\setbox1=\hbox{\vbox{\box0\hbox to \dimen0{\hfil (a)\hfil}}}
+
+\setbox0=\hbox{\bar R}
+
+\dimen0\wd0
+\setbox2=\hbox{\vbox{\box0\hbox to \dimen0{\hfil (b)\hfil}}}
+
+\hbox{\box1\hskip.75in\box2}
+
+\bye

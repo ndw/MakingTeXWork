@@ -1,0 +1,19 @@
+\newbox\bibdbbox
+\newdimen\bibdbwd
+\font\bibdba=bibdba at 72.27truept
+\font\bibdbb=bibdbb at 72.27truept
+\font\bibdbc=bibdbc at 72.27truept
+\setbox\bibdbbox=\vbox{\hbox{%
+\bibdba\char0\char1\char2\char3\char4}}
+\bibdbwd=\wd\bibdbbox
+\setbox\bibdbbox=\hbox{\vbox{\hsize=\bibdbwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\bibdba\char0\char1\char2\char3\char4}
+\hbox{\bibdba\char5\bibdbb\char0\char1\char2\char3}
+\hbox{\bibdbb\char4\char5\bibdbc\char0\char1\char2}
+\hbox{\bibdbc\char3\char4\char5\char6\char7}}}
+\ifx\parbox\undefined
+    \def\setbibdb{\box\bibdbbox}
+\else
+    \def\setbibdb{\parbox{\wd\bibdbbox}{\box\bibdbbox}}
+\fi

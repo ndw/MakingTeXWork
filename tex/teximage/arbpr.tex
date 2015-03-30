@@ -1,0 +1,17 @@
+\newbox\arbprbox
+\newdimen\arbprwd
+\font\arbpra=arbpra at 72.27truept
+\setbox\arbprbox=\vbox{\hbox{%
+\arbpra\char0\char1\char2\char3\char4}}
+\arbprwd=\wd\arbprbox
+\setbox\arbprbox=\hbox{\vbox{\hsize=\arbprwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\arbpra\char0\char1\char2\char3\char4}
+\hbox{\arbpra\char5\char6\char7\char8\char9}
+\hbox{\arbpra\char10\char11\char12\char13\char14}
+\hbox{\arbpra\char15\char16\char17\char18\char19}}}
+\ifx\parbox\undefined
+    \def\setarbpr{\box\arbprbox}
+\else
+    \def\setarbpr{\parbox{\wd\arbprbox}{\box\arbprbox}}
+\fi

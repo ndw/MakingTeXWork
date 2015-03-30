@@ -1,0 +1,27 @@
+\documentstyle{article}
+
+% The following definition changes the font that
+% LaTeX uses for the 'Large' font.  I have
+% introduced a typo into the definition, ``\fontsiz''
+% should be ``\fontsize''.
+%
+% The  first time a \Large font is requested, an error
+% will occur.
+%
+\renewcommand{\Large}{\fontsiz{17}{20pt}\selectfont}
+
+\begin{document}
+
+This text precedes the first section header.
+
+% Note: LaTeX uses the \Large font in section
+% headers...this will fail in a confusing way
+% because the error is deep within the definition
+% of \section where \Large is used...
+%
+\section{First Section}
+
+This is the first and only sentence of the
+first section.
+
+\end{document}

@@ -1,0 +1,1459 @@
+<chapter id="chap.tex">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>The Big Picture</title>
+
+<section id="sec.texforbeginners"><title>What Is &TeX;?</title>
+
+<para>&TeX;<indexterm><primary sortas="tex">&TeX;</primary><secondary>introduction</secondary></indexterm><indexterm><primary>typesetting</primary><secondary sortas="tex">&TeX;</secondary></indexterm> is 
+a <emphasis>typesetting system</emphasis>.  It is a collection of
+programs, files, and procedures for producing professional quality
+documents with minimum effort.
+</para>
+
+<para>&TeX;'s job is to translate the text you type into a 
+beautiful<indexterm><primary>beauty of text</primary></indexterm>
+typeset page.  The key word here is <quote>beautiful,</quote> and it is a very
+lofty goal.<footnote><para>Before I proceed, the notion of beautiful in this context
+needs some explanation.  Several people have pointed out that the logo
+type used by many &TeX;-related programs (including &TeX; itself) is
+intrinsically ugly.  These same folks argue that a sentence like
+<quote>&TeX; is designed to typeset beautiful pages</quote> is self-contradictory
+because it begins with such an ugly construction. Obviously, &TeX; can't
+<emphasis>prevent</emphasis> you from typesetting ugly things. But &TeX; can
+typeset beautiful things too. We at O'Reilly &amp; Associates think that
+this book, typeset completely in &TeX;, is an excellent example.</para>
+</footnote>
+What I mean by beautiful is that &TeX;, when presented with several
+paragraphs of plain text and left to its own devices, produces a remarkably
+aesthetic page.  Despite the fact that &TeX; may have to contend with
+multiple fonts<indexterm><primary>fonts</primary><secondary>multiple</secondary></indexterm> and mathematics<indexterm><primary>mathematics</primary></indexterm>, it still
+manages to typeset pages in which each of the following aesthetic principles
+hold <emphasis>simultaneously:</emphasis></para>
+
+<itemizedlist>
+  <listitem>
+<para> The right margin is justified<indexterm><primary>justification</primary></indexterm>.
+  </para>
+</listitem>
+<listitem>
+<para> Proper justification is achieved without letterspacing<indexterm><primary>letterspacing</primary></indexterm>.
+  </para>
+</listitem>
+<listitem>
+<para> Interword spacing is neither too tight nor too 
+        loose.<indexterm><primary>spacing between words</primary></indexterm>
+  </para>
+</listitem>
+<listitem>
+<para> The page is evenly gray.
+  </para>
+</listitem>
+<listitem>
+<para> The baselines<indexterm><primary>baselines</primary></indexterm><indexterm><primary>fonts</primary><secondary>baselines</secondary></indexterm> of multiple fonts 
+        are properly aligned.
+  </para>
+</listitem>
+<listitem>
+<para> Hyphenation<indexterm><primary>hyphenation</primary></indexterm> is automatic, if required, and usually correct.
+  </para>
+</listitem>
+<listitem>
+<para> Ladders<indexterm><primary>ladders</primary></indexterm> are avoided.
+  </para>
+</listitem>
+</itemizedlist>
+
+<para>&TeX; processes documents a paragraph at a time, rather than a line
+at a time like most other programs.  Internally, &TeX; computes a value 
+called <emphasis>badness<indexterm><primary>badness</primary></indexterm></emphasis> for each
+line of the paragraph<indexterm><primary>paragraphs (building)</primary></indexterm>.  Anything that
+detracts from the appearance of a line (tight or loose spacing, a
+hyphen, etc.) increases the badness associated with that line.  Every
+paragraph that &TeX; produces is optimal in terms of the total amount
+of badness present.  Because &TeX; searches for an optimal
+solution, changing the last word of a paragraph can affect
+the spacing of the first line of the paragraph.
+After you've gained a little bit of experience with &TeX;, you'll be
+able to override any one, or all, of the rules it uses to compute
+badness, but in most situations you won't want to.  I will describe more
+of &TeX;'s approach to text formatting and how it differs from that
+of word processors, desktop publishers, and other markup languages in
+the following sections.
+</para>
+
+<para>&TeX; is not a simple program, but a set of
+programs, tools, fonts, and other types of files. 
+Two programs form the core of the &TeX; typesetting
+system.  One of them is &TeX; itself, the program that reads
+your input files and transforms them into typeset form.  The other
+program is &MF;, a tool for creating fonts. 
+Producing &TeX; documents involves a series of steps, including
+editing the document, running &TeX; itself, and processing &TeX;'s
+output in various ways.
+</para>
+
+<para>Over the years, &TeX; has been made available on almost every computer
+platform<indexterm><primary sortas="tex">&TeX;</primary><secondary>platforms</secondary></indexterm>, so it is probably available for the
+computer system that you use.  Compiling &TeX; on different systems
+has been possible, in large part, because &TeX; is a text formatter and
+not a word processor. 
+Unlike a word processor, &TeX; never deals directly with displaying
+text on the screen or interacting with input from the keyboard (except in a
+very basic way).  These features of an application are
+typically the most difficult to port from one system to another.
+</para>
+
+<para>Beyond the technical details that make translation from one system to
+another possible, Donald Knuth<indexterm><primary>Knuth, Donald</primary></indexterm> added an 
+important stipulation to
+the free distribution of &TeX;: in order for any program to be called
+<quote>&TeX;,</quote> it must pass a rigorous test suite<indexterm><primary>test suite</primary></indexterm>.  This means that
+the &TeX; you use behaves exactly like the &TeX; I use.<footnote><para>This
+is not a whole-truth. Implementors of &TeX; may make some system-dependent 
+alterations as long as the resulting program still passes
+the test suite; so our &TeX;s may not behave <emphasis>exactly</emphasis> the
+same way.  They will, however, produce identical documents given
+identical input (unless the input relies on system-dependent features
+not available in both &TeX;s, naturally. ;-)</para></footnote> This feature has
+contributed greatly to &TeX;'s success.  It means that a large
+community of &TeX; users can transparently
+share<indexterm><primary>documents</primary><secondary>sharing</secondary></indexterm> documents.
+</para>
+
+</section>
+<section><title>&TeX; for Beginners</title>
+
+<para>If you are already familiar with &TeX;, you may find some of the
+material in this section repetitive.  If so, just skim it quickly.
+This section will help you understand how &TeX; interprets the things
+you type into your input file.  When you understand the concepts
+discussed here, you'll be ready to write really, really simple
+documents in &TeX;.
+</para>
+
+<section id="sec.tex.controlsequences"><title>Boxes and Glue</title>
+
+<indexterm id="boxes.start"><primary>boxes</primary></indexterm>
+
+<para>Despite the apparent complexity of &TeX;'s job, it uses a very simple
+metaphor: all typographic elements are boxes<indexterm><primary>boxes</primary></indexterm>.  The simplest boxes,
+individual characters<indexterm><primary>characters</primary><secondary>as boxes</secondary></indexterm><indexterm><primary>boxes</primary><secondary>characters</secondary></indexterm> have 
+a set shape
+defined by the font they come from.  There are three parameters
+that define a box: 
+width<indexterm><primary>boxes</primary><secondary>width</secondary></indexterm><indexterm><primary>width</primary><secondary>of box</secondary></indexterm>, 
+height<indexterm><primary>boxes</primary><secondary>height</secondary></indexterm><indexterm><primary>height of box</primary></indexterm>,
+and depth<indexterm><primary>boxes</primary><secondary>depth</secondary></indexterm><indexterm><primary>depth of box</primary></indexterm>.   
+The distinction between height and
+depth is a bit subtle.  When a row of characters is typeset,
+every character rests on an imaginary line called the <emphasis>baseline</emphasis>.  
+Some characters, like the lowercase <quote>g,</quote> 
+descend below the baseline<indexterm><primary>baselines</primary></indexterm>.
+The distance from the baseline to
+the top of a box is its height; the distance from the baseline to the
+bottom is its depth.  
+</para>
+
+<para>Figure&nbsp;<xref role="label" linkend="fig.charbox"/> shows the character boxes formed by the Computer Modern<indexterm><primary>Computer Modern fonts</primary></indexterm> Roman letters <quote>g</quote> and <quote>h.</quote>  The <emphasis>x-y</emphasis>
+distance of each box is its height and the <emphasis>y-z</emphasis> distance is its depth.
+The <emphasis>reference point</emphasis><indexterm><primary>reference point (of boxes)</primary></indexterm> of the box,
+marked with an <emphasis>r</emphasis>, is on the leftmost edge of the box where the height
+and depth meet.  Characters that have no <emphasis>descenders<indexterm><primary>descenders</primary></indexterm></emphasis> 
+(no elements that go below the baseline), have a depth of zero.  
+&TeX; uses the character box metrics, but font designers are free to allow 
+glyphs to extend outside the box (for example, at the top of the <quote>g</quote>).
+</para>
+
+<figure id="fig.charbox">
+<title>The Letters <quote>g</quote> and <quote>h</quote> inside their boxes.</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/g-h.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/g-h.png"/>
+</imageobject>
+<textobject>
+<phrase>The Letters 'g' and 'h' inside their boxes</phrase>
+</textobject>
+</mediaobject>
+</figure>
+
+<para>The following paragraph demonstrates how &TeX; uses the metrics from
+the physical dimensions of each character to build word, line, and
+paragraph boxes. 
+</para>
+
+<para role="box">&TeX; <quote>glues</quote><indexterm><primary>glue</primary></indexterm>
+character boxes together to form words.  When boxes are joined, they
+are always joined so their reference points are horizontally aligned
+as shown in <xref linkend="ex.csexample"/>.<footnote>
+<para>This is subtly different from saying that they are joined at the
+baseline.  There are &TeX; commands which can change the position of
+the reference point in a box, whereas the baseline is an imaginary
+line that depends solely on the shape of the character.
+</para></footnote> Character-boxes (like <phrase role="box">t</phrase><phrase role="box">h</phrase><phrase role="box">i</phrase><phrase role="box">s</phrase>) are
+joined to form words,
+word-boxes<indexterm><primary>boxes</primary><secondary>word</secondary></indexterm>
+(like <phrase role="box">this</phrase>) are joined to form lines, and line-boxes<indexterm>
+<primary>boxes</primary>
+<secondary>line</secondary>
+</indexterm>
+form paragraphs. &TeX; accomplishes the task of forming a justified
+paragraph by allowing the glue between words to
+stretch<indexterm><primary>stretching</primary></indexterm> and
+shrink<indexterm><primary>shrinking</primary></indexterm> a little bit
+and by occasionally breaking the glue between characters to insert a
+hyphen.  Although the rules are slightly different, &TeX; builds a
+page out of vertical boxes (paragraphs, figures, etc.) in an analogous
+manner.
+</para>
+
+<para>This is a very generalized overview.  In reality, a lot of subtlety
+is required to capture all of the nuances of typographical appearance.
+</para>
+<indexterm startref="boxes.start"/>
+</section>
+<section><title>Control Sequences</title>
+
+<para>A <emphasis>control sequence<indexterm><primary>control sequences</primary></indexterm></emphasis> 
+is a special <quote>word</quote> that you put in your
+document.  These extra words are instructions for &TeX;, and they do
+not usually appear in your typeset document.
+Example&nbsp;<xref role="label" linkend="ex.csexample"/> shows a contrived example of a &TeX; document that uses several control sequences.
+</para>
+
+<example id="ex.csexample"><title>An Example of a &TeX; Document</title>
+<screen><![CDATA[\def\ora{O'Reilly \& Associates}
+\font\orafont=grlg10
+\parskip=\baselineskip
+\parindent=0pt
+\pageno=5
+This book is published by \ora in
+the \textit{Nutshell} series.
+\bye]]></screen>
+</example>
+
+<para>In most macro packages, a control sequence is
+a backslash followed by a sequence of letters.<footnote><para>Technically,
+it's any character defined to be in the <quote>escape</quote> category followed
+by any sequence of characters defined to be in the <quote>letter</quote> category or
+a single character in the <quote>other</quote> category.</para></footnote> &TeX; is case-sensitive, 
+so the control sequence
+<markup>\large</markup> is different from <markup>\Large</markup> (these control
+sequences switch to large and very large fonts in the
+&LaTeX; macro package).  Control sequences end with the first
+non-letter, even if it isn't a space.  For example,
+<markup>\parskip0pt</markup> is the control sequence <markup>\parskip</markup>
+followed by <literal>0pt</literal>. This control sequence tells &TeX; to
+insert zero points of extra space between paragraphs.
+</para>
+
+<para>Unless instructed otherwise (with control sequences),
+&TeX; builds rectangular paragraphs out of lines of words.
+Changing fonts, building tables, and typesetting 
+mathematical equations<indexterm><primary>mathematics</primary></indexterm>
+are examples of situations in your document where &TeX; needs 
+extra information.  
+</para>
+
+<para>The number of control sequences used in a &TeX; document may seem
+overwhelming at first.  Luckily, every
+control sequence falls into one of several categories:
+</para>
+
+<variablelist>
+<varlistentry>
+<term>Macro control sequences</term>
+<listitem>
+<para>Macro control sequences<indexterm><primary>control
+sequences</primary><secondary>macro</secondary></indexterm> associate
+a name with an arbitrary string of text (including other control
+sequences).  They are interpreted by replacing the control sequence
+with the text of its definition.<footnote><para>Actually, macro
+expansion differs from pure textual replacement in a number of
+technical ways, but they aren't important here.</para>
+</footnote></para>
+
+<para>Macro control sequences are the root of &TeX;'s tremendous
+flexibility.  By defining control sequences with meaningful names,
+like <markup>\chapter</markup> and <markup>\footnote</markup>, &TeX;
+can present a reasonably simple interface to the user.  By redefining
+those control sequences, the typeset output can be modified without
+requiring you to retype large quantities of text.
+</para>
+
+<para>In <xref linkend="ex.csexample"/>, the macro control sequence
+<markup>\ora</markup> is defined as a shortcut for typing
+<quote>O'Reilly &amp; Associates.</quote> This is a simple example of
+how a macro control sequence can be used.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Font control sequences<indexterm><primary>control sequences</primary><secondary>font</secondary></indexterm></term>
+<listitem>
+
+<para>In <xref linkend="ex.csexample"/>, the line
+<markup>\font\orafont=grlg10</markup> creates a font control sequence
+called <markup>\orafont</markup>.  When <markup>\orafont</markup> is
+used, &TeX; will begin typesetting in the font
+<literal>grlg10</literal>.  The name of the font,
+<literal>grlg10</literal> in this case, refers to an external file
+that contains font metric information.  Fonts are discussed in
+Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>,
+<emphasis><xref role="label" linkend="chap.fonts"/></emphasis>.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Registers</term>
+<listitem>
+
+<para>Registers<indexterm><primary>control
+sequences</primary><secondary>use of registers
+by</secondary></indexterm> are like variables in a programming
+language.  They hold a single value of a particular type.  Many types
+of values can be stored: numbers (also called <quote>count</quote>
+values because they are simple counting numbers like 1, 2, 17, or -5),
+dimensions (also called <quote>lengths</quote>; they are distances
+like 3.5pt or 2in), boxes, glue, and token lists (an internal
+representation of your document used by
+&TeX;).<footnote><para>Technically, several other kinds of values are
+stored this way as well, but they are less common and won't be
+discussed in this book at all.</para></footnote></para>
+
+<para>If you are unfamiliar with computer programming, think of these
+registers as place holders.  When &TeX; needs to save a piece of
+information, like how much space should be inserted between
+paragraphs, it stores the information in a register.  When the
+information is needed again, in this case when &TeX; has finished
+typesetting one paragraph and is about to start another, it can
+retrieve that information from the register.  Registers are usually
+given names that at least hint at how they are used.  This helps
+people read and modify the rules that &TeX; uses to typeset documents.
+</para>
+
+<para>In Example&nbsp;<xref role="label" linkend="ex.csexample"/>,
+<markup>\parskip</markup>, <markup>\baselineskip</markup>, and
+<markup>\parindent</markup> are dimension registers.  The
+<markup>\pageno</markup> control sequence is a count register.
+</para>
+
+<para>There are only 256 registers of each type. The type of
+information (number, dimension, or token list) that a register can
+contain is defined when the control sequence is created.  Once a
+variable like <markup>\parindent</markup> is created to hold a
+dimension, it can never hold a number or a token list.<footnote>
+<para>Most control sequences can be redefined to hold different kinds
+of values, but they can never hold different kinds of values at the
+same time.  A dimension register can be redefined to hold tokens, for
+example, but then it can't hold dimensions anymore (unless it is
+redefined again).</para></footnote>
+</para>
+
+<para>Registers may seem unnecessary now that you know about macro
+control sequences, which can store arbitrary information.  However,
+registers differ from macro control sequences not only in the types of
+values they can hold, but also in the types of operations that can be
+performed on them.  There is a &TeX; command called
+<markup>\advance</markup>, for example, that can increment the value
+stored in a register by an arbitrary amount.  You can't
+<markup>\advance</markup> a macro control sequence.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Built-in commands</term>
+<listitem>
+
+<para>A number of control<indexterm><primary>control
+sequences</primary><secondary>built-in
+commands</secondary></indexterm> sequences are built into &TeX;.
+These <quote>primitive</quote> operations form the basis for all
+higher-level functionality.  There are a wide variety of control
+sequences of this type.  Everything that can be done in &TeX; can be
+reduced to a sequence of primitive operations.
+</para>
+
+<para>There is no way to know, simply by inspection, if a control
+sequence is one of the built-in sequences or not.  Luckily, it doesn't
+matter very often; it really only matters when you are writing complex
+macros.
+</para>
+
+<para>The <markup>\font</markup> control sequence in <xref
+linkend="ex.csexample"/> is a built-in control sequence.  So is
+<markup>\advance</markup>, mentioned above.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>The number and kind of control sequences available depends upon
+the macro package that you are using. (Macro packages are discussed
+fully in Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>,
+<emphasis><xref role="label" linkend="chap.macpack"/></emphasis>.)
+For the rest of this chapter, the default settings of Plain
+&TeX;<indexterm><primary sortas="Plain tex">Plain
+&TeX;</primary></indexterm> are assumed.<footnote>
+<para>Plain &TeX; is the name of a particular macro package.  I
+selected it for the purpose of example in this chapter because it is
+always installed with &TeX;.  Most of what follows in this chapter is
+true in other macro packages as well, but some of the details are
+different.  See Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>
+for more information.</para></footnote> There are other macro
+packages, like &LaTeX;, Lollipop, and &TeXinfo;, which have different
+default values.
+</para>
+
+</section>
+<section id="sec.textformVSwordproc"><title>Special Characters</title>
+
+<indexterm><primary>special characters</primary></indexterm>
+
+<para>In addition to control sequences, &TeX; reserves several
+characters <indexterm><primary>special
+characters</primary></indexterm> for special purposes.  Most of them
+do not occur very frequently in ordinary text, but you must be aware
+of them because there will be very surprising consequences if you use
+them incorrectly.
+</para>
+
+<para>Table&nbsp;<xref role="label" linkend="tab.activechars"/> shows all of the special characters in
+Plain &TeX;.<footnote>
+<para>All of these special characters are configurable, but most macro
+packages use the Plain &TeX; defaults.</para></footnote>
+Most of these characters are special in other macro packages as well.
+Font-specific characters are not reserved by &TeX;, but they don't
+produce the results you would expect when typeset in Computer Modern
+because of the way &TeX; expects fonts to be laid out.  Fonts are
+discussed in detail in Chapter&nbsp;<xref role="label"
+linkend="chap.fonts"/>, <emphasis><xref role="label"
+linkend="chap.fonts"/></emphasis>.
+</para>
+
+<table id="tab.activechars">
+<title>Special Characters in Plain &TeX;
+<indexterm><primary>characters</primary>
+<secondary>special</secondary>
+<tertiary>typesetting</tertiary>
+</indexterm></title>
+<tgroup cols="2">
+<colspec colwidth="1in" align="center" colsep="1"/>
+<thead>
+<row rowsep="1">
+  <entry>Character</entry>
+  <entry>Meaning</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry><markup>#</markup></entry>
+  <entry>Used for parameter definition in macros and tables</entry>
+</row>
+<row>
+  <entry><markup>$</markup></entry>
+  <entry>Toggles in and out of math mode</entry>
+</row>
+<row>
+  <entry><markup>%</markup></entry>
+  <entry>A comment (&TeX; ignores everything to the end of the line)</entry>
+</row>
+<row>
+  <entry><markup>&amp;</markup></entry>
+  <entry>The column separator in tables</entry>
+</row>
+<row>
+  <entry><markup>~</markup></entry>
+  <entry>The active space (an unbreakable space)</entry>
+</row>
+<row>
+  <entry><markup>_</markup></entry>
+  <entry>Marks a subscript (valid only in math mode)</entry>
+</row>
+<row>
+  <entry><markup>^</markup></entry>
+  <entry>Marks a superscript (valid only in math mode)</entry>
+</row>
+<row>
+  <entry><markup>\</markup></entry>
+  <entry>Begins a control sequence</entry>
+</row>
+<row>
+  <entry><markup>{</markup></entry>
+  <entry>Begins a group</entry>
+</row>
+<row>
+  <entry><markup>}</markup></entry>
+  <entry>Ends a group</entry>
+</row>
+<row>
+  <entry><markup>|</markup></entry>
+  <entry>Produces an em-dash (&mdash;) (font-specific)</entry>
+</row>
+<row>
+  <entry><markup>&lt;</markup></entry>
+  <entry>Produces an upside down exclamation mark (&iexcl;) (font-specific)</entry>
+</row>
+<row>
+  <entry><markup>&gt;</markup></entry>
+  <entry>Produces an upside down question mark (&iquest;) (font-specific)</entry>
+</row>
+<row>
+  <entry><markup>"</markup></entry>
+  <entry>Incorrect for quoted text; use <quote> and </quote> instead (font-specific)</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>It is best to avoid these characters until you are familiar with
+&TeX;.  If you need to typeset<indexterm><primary>special
+characters</primary><secondary>typesetting</secondary></indexterm> one
+of these characters, <xref linkend="tab.acttype"/> shows what to put
+in your document. You should also avoid characters outside the
+standard printable ASCII character set<indexterm><primary>ASCII
+character set</primary></indexterm> (characters with ASCII values
+below 32 and above 126).  &TeX; can be configured to accept characters
+outside the printable ASCII range, to support non-English languages,
+for example, but it is not configured to do so <quote>out of the
+box.</quote> Chapter&nbsp;<xref role="label" linkend="chap.foreign"/>,
+<emphasis><xref role="label" linkend="chap.foreign"/></emphasis>,
+discusses the issues of typesetting in different languages.
+</para>
+
+<table id="tab.acttype">
+<title>How to Typeset Special Characters<indexterm>
+<primary>special characters</primary>
+<secondary>typesetting</secondary>
+</indexterm></title>
+<tgroup cols="2">
+<colspec colwidth="1in" align="center" colsep="1"/>
+<thead>
+<row rowsep="1">
+  <entry>To Get</entry>
+  <entry>Put This in Your Document</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>#</entry>
+  <entry><markup>\#</markup> </entry>
+</row>
+<row>
+  <entry>$</entry>
+  <entry><markup>\$</markup> </entry>
+</row>
+<row>
+  <entry>%</entry>
+  <entry><markup>\%</markup> </entry>
+</row>
+<row>
+  <entry>&amp;</entry>
+  <entry><markup>\&amp;</markup> </entry>
+</row>
+<row>
+  <entry>&ldquo;</entry>
+  <entry><markup>``</markup> </entry>
+</row>
+<row>
+  <entry>&rdquo;</entry>
+  <entry><markup>''</markup> </entry>
+</row>
+<row>
+  <entry>~</entry>
+  <entry><markup>\~</markup> </entry>
+</row>
+<row>
+  <entry>{</entry>
+  <entry><markup>$\{$</markup> </entry>
+</row>
+<row>
+  <entry>}</entry>
+  <entry><markup>$\}$</markup> </entry>
+</row>
+<row>
+  <entry>&lt;</entry>
+  <entry><markup>$&lt;$</markup> </entry>
+</row>
+<row>
+  <entry>&gt;</entry>
+  <entry><markup>$&gt;$</markup> </entry>
+</row>
+<row>
+  <entry>|</entry>
+  <entry><markup>$|$</markup> </entry>
+</row>
+<row>
+  <entry>_</entry>
+  <entry><markup>$\underbar{\hbox{\ }}$</markup> </entry>
+</row>
+<row>
+  <entry>^</entry>
+  <entry><markup>$\hat{\hbox{ }}$</markup> </entry>
+</row>
+<row>
+  <entry>\</entry>
+  <entry><markup>$\backslash$</markup> </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+<sidebar>
+<para>Some of the suggestions in <xref linkend="tab.acttype"/> will
+not always produce exactly what you want.  The entry for
+<quote>~</quote> really produces a tilde accent, not a tilde
+character and the entries for <quote>{</quote> through
+<quote>\</quote> all get the actual characters from &TeX;'s math
+fonts.  The Computer Modern text fonts don't include these characters
+so it is necessary to get them from the math fonts.  However, if you
+are using PostScript or other kinds of fonts, you may very well have
+curly braces, angle brackets, underscores, etc. in the font.  You can
+access these characters directly with the <markup>\char</markup>
+primitive.  I strongly recommend that you always define macros for
+this purpose, so that you can easily switch to some other method if
+you change fonts.  Introducing <markup>\char</markup> primitives makes
+your document less portable.  To use the <markup>\char</markup>
+primitive, simply put the decimal ASCII value of the character that
+you want to print.  For example, this book is typeset with PostScript
+fonts that include a backslash character at position 92, so I defined
+<markup>\bs</markup> to print a backslash like this:
+</para>
+
+<screen>
+\def\bs{\char92\relax}
+</screen>
+
+<para>Using <markup>\relax</markup> after the decimal value assures
+that &TeX; won't get confused if I put a backslash in front of other
+digits like this <markup>\bs300dpi</markup>.</para>
+</sidebar>
+
+<para>The braces<indexterm><primary>curly braces</primary></indexterm>
+<quote>{</quote> and <quote>}</quote> are a very special case.  &TeX; uses
+curly braces to delimit arguments and make changes (like switching
+fonts) that are local to a small section of the document.  These are
+called <emphasis>grouping characters<indexterm><primary>grouping
+characters</primary></indexterm></emphasis><indexterm><primary>characters</primary><secondary>grouping</secondary></indexterm>
+in &TeX; jargon.  For example, to typeset a single word in boldface,
+you put <markup>{\bf word}</markup> into your input file.  The
+<markup>\bf</markup> control sequence switches to boldface type, and
+the curly braces localize the effect to the single word
+<phrase role="bold">word</phrase>.  As a result, it is very important
+that you avoid braces (except when you use them as delimiters) and
+that you carefully match all opening and closing braces.  One of the
+most common errors in &TeX; is to forget a closing brace.
+</para>
+
+<para>One last special character is the blank
+space<indexterm><primary>blank space</primary></indexterm>.  For the
+most part, &TeX; doesn't care how you space your lines of text.  Any
+space that occurs is simply a word break to &TeX;, and inserting
+multiple spaces doesn't influence how &TeX; typesets the line.  &TeX;
+also considers the end of a line an implicit space.  If you are trying
+to control the layout of your input text and want to break a line
+without introducing a space, place a comment character (% in most
+macro packages)<indexterm><primary>comments</primary><secondary
+sortas="in tex">in &TeX;</secondary></indexterm> at the very end of
+the line.  If the last character of a line is the comment character,
+&TeX; ignores the line break and all the leading spaces on the
+following line.  This allows you to use
+indentation<indexterm><primary>indentation</primary></indexterm> to
+make your input file more readable.  \goodbreak
+</para>
+
+<para>For example, the following lines in your input file:
+</para>
+
+<screen>
+<quote>This                      is some ex
+      ample text.</quote>
+</screen>
+
+<para>and this line:
+</para>
+
+<screen>
+<quote>This is some example text.</quote>
+</screen>
+
+<para>both produce:
+</para>
+
+<literallayout><quote>This is some example text.</quote></literallayout>
+
+<para>in your typeset document.
+</para>
+
+</section>
+</section>
+<section><title>Text Formatting Versus Word Processing</title>
+
+<para>For many people, writing documents with a computer implies using a
+word processor like <application>WordPerfect</application><indexterm><primary>WordPerfect</primary></indexterm> or <application>Microsoft Word</application><indexterm><primary>Microsoft Word</primary></indexterm>.<indexterm><primary sortas="tex">&TeX;</primary><secondary>vs. word processing</secondary></indexterm><indexterm><primary>word processing</primary><secondary sortas="vs. tex text processing">vs. &TeX; text processing</secondary></indexterm>
+The word processing program controls
+every aspect of what you do: it's where you type your text, where you
+see what it will look like, where you print, and where you do
+everything else.  Some of these environments, the so-called 
+WYSIWYG<indexterm><primary>WYSIWYG programs</primary></indexterm>
+(what-you-see-is-what-you-get) programs, attempt to show you what the
+printed document will actually look like <emphasis>while</emphasis> you edit
+it.<footnote><para>&TeX; pundits, and other folks who have been frustrated by
+the limitations of these environments, frequently refer to this as
+WYSIAYG&mdash;what you see is <emphasis>all</emphasis> you get.</para>
+</footnote>
+</para>
+
+<para>If WYSIWYG environments are what you're used to, or what you expect, &TeX;'s approach may
+seem very strange at first because &TeX; is 
+a <emphasis>text formatter</emphasis>,<indexterm><primary sortas="tex">&TeX;</primary><secondary>as  a text formatter</secondary></indexterm><indexterm><primary>text formatting</primary></indexterm>
+not a word processor.  Instead of trying to show you what your
+document will look like while you type, &TeX; expects you to do all
+the typing somewhere else, and then pass it a source file
+containing all of your text plus control sequences that tell
+&TeX; how you'd like it printed.
+</para>
+
+<para>In <emphasis>The Psychology of Everyday Things</emphasis>&nbsp;<xref linkend="dn:psyeveryday"/>,
+Donald Norman<indexterm><primary>Norman, Donald</primary></indexterm> describes these 
+two modes of interaction as first person
+and third person.  First person interaction provides the user with
+the ability to directly manipulate the elements of a task, whether it's
+flying an airplane or resizing text.  Third person interaction, on the
+other hand, occurs where the user is expected to type commands to the
+computer in an appropriate command language; the shell prompt is a good
+example of third person interaction.
+</para>
+
+<para>Is first person interaction really better?  Well, it depends.  Norman 
+writes, <quote>Although
+they [WYSIWYG environments] are often easy to use, fun, and entertaining, it is often difficult
+to do a really good job with them.</quote> The
+problem which arises is that the user is required to do the task, and he
+or she may not be very good at it.  Third person systems are better when
+the computer program can be trusted to do a better job of the task than
+the user.
+</para>
+
+<para>Is &TeX; really better than a word processor?  Well, it depends on the
+task and the person doing it.  &TeX; probably isn't better for designing
+one page flyers with lots of fonts and graphics (although I've done it).
+But for longer documents, &TeX; offers all of these advantages: 
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> &TeX; has a precise understanding of the rules of 
+        typesetting,<indexterm><primary>typesetting</primary><secondary>rules</secondary></indexterm> so you don't have to.
+  </para>
+</listitem>
+<listitem>
+<para> Predefined styles allow experts to extend (or bend) the rules
+        of typesetting without burdening the user.
+  </para>
+</listitem>
+<listitem>
+<para> Journals and magazines can achieve consistency of appearance
+        much more reliably because the consistency is in the style files.
+  </para>
+</listitem>
+<listitem>
+<para> &TeX; runs on cheap systems (old PCs with monochrome monitors and
+        no graphics capability, for example).
+  </para>
+</listitem>
+<listitem>
+<para> Although complex and difficult to learn, &TeX; offers incredibly flexible table
+        construction tools.
+  </para>
+</listitem>
+<listitem>
+<para> Few, if any, word processors can provide running headers and footers
+        as flexibly as &TeX;.  Imagine the task of writing a dictionary: the
+        left and right hand side headers change on each page, each time a 
+        new entry is added.
+  </para>
+</listitem>
+<listitem>
+<para> &TeX; offers flexible bibliography layouts.
+  </para>
+</listitem>
+<listitem>
+<para> &TeX; is extensible.<indexterm><primary sortas="extensibility of tex">extensibility of &TeX;</primary></indexterm> Its behavior 
+        can be modified by defining new commands and environments 
+        without changing the actual program.
+  </para>
+</listitem>
+</itemizedlist>
+
+<para>There are some other good reasons to separate document creation from
+text formatting:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> Documents are portable.<indexterm><primary sortas="portability of tex">portability of &TeX;</primary></indexterm>  Because the 
+        source files are just plain
+        text without any nonprintable characters, they can easily be
+        copied from one system to another.
+  </para>
+</listitem>
+<listitem>
+<para> &TeX; is portable.  
+        &TeX; runs everywhere.  You can
+        process your documents with &TeX; on &unix; workstations; personal
+        computers running MS-DOS, OS/2, and Windows; IBM mainframes
+        running VM/CMS; workstations running VAX/VMS; Macintoshes; Amigas;
+        Ataris; and just about every other computer with a reasonable
+        amount of memory.  And the typeset output will be the same!
+        This adds another dimension of portability to your documents.
+  </para>
+</listitem>
+<listitem>
+<para> &TeX; is free.  You can afford to have it on every system
+        you use.  Several sources of &TeX; software are listed in
+        the preface of this book.  
+</para>
+
+
+</listitem>
+<listitem>
+<para> &TeX; allows you to separate markup and output.
+        Logical divisions in the text (chapters,
+        sections, itemized lists, etc.) are identified by control sequences.
+        An entirely different page layout can result from simply changing the
+        definition of a few control sequences.
+</para>
+
+<para>        This means that the look of your documents
+        can be changed (to fit the style guidelines of a particular
+        journal or publisher, for example) without changing the text
+        of your documents at all.  
+</para>
+
+
+</listitem>
+<listitem>
+<para> Plain text files are easier to manipulate with other tools than
+        specially encoded word processor files are.  This
+        means that you can use standard utilities on your documents:
+        revision control, grep, shell scripts, etc.  This is a less common
+        practice in non-&unix; environments, but it is still convenient.
+</para>
+
+
+</listitem>
+<listitem>
+<para> You can continue to use your favorite editing tools.  The extent
+        to which you find this advantageous is dependent, naturally, on the
+        extent to which you have a favorite editing program.
+        Nevertheless, this can be a considerable advantage.  For example, 
+        users familiar with <command>emacs</command><indexterm><primary>GNU Emacs</primary></indexterm> can 
+        continue to rely on all of the
+        features they are used to, including interactive spellchecking,
+        access to online services like Webster's dictionary, customized
+        editor macros, and convenient services like reading mail.
+</para>
+
+
+</listitem>
+<listitem>
+<para> You get better looking output.  &TeX; gives you far more precise
+        control
+        over the placement of elements on the page than most word processing
+        programs.  And &TeX; is very intelligent about typesetting (paragraph
+        breaking, kerning<indexterm><primary>kerning</primary></indexterm>, ligatures<indexterm><primary>ligatures</primary></indexterm>, etc.).
+  </para>
+</listitem>
+</itemizedlist>
+
+<section id="sec.howtexworks"><title>What About Desktop Publishing?</title>
+
+<para>Desktop publishing systems<indexterm><primary sortas="tex">&TeX;</primary><secondary>vs. desktop publishing</secondary></indexterm><indexterm><primary>desktop publishing</primary><secondary sortas="vs. tex text  processing">vs. &TeX; text  processing</secondary></indexterm> like <application>Ventura Publisher</application><indexterm><primary>Ventura Publisher</primary></indexterm> and
+<application>Aldus PageMaker</application><indexterm><primary>Aldus PageMaker</primary></indexterm> are noted for their ability to incorporate
+multiple fonts and graphics into a document.  As word processors
+become more sophisticated, the line between word processing and desktop
+publishing is becoming blurry.
+</para>
+
+<para>This book shows you many ways that &TeX; can provide access to the same
+sophisticated features.  &TeX; can incorporate pictures and figures in
+a number of ways
+(just take a look at the way I've wrapped text around this kiwi),<footnote>
+<para>&TeX; doesn't do this sort of thing automatically, but it isn't hard to 
+do.  Why the kiwi?  It was on my business card at the time.</para></footnote>
+and &TeX; can use almost any font that another 
+program can use---it can certainly use <emphasis>all</emphasis> of the popular types
+of fonts.  Like typical word processors, desktop publishing programs
+force you to
+use a single application to create your entire document, and they lack
+the flexibility required to combine just the pieces that you want.  All of the
+advantages of text formatting over word processing also apply to desktop
+publishing programs.  I'll grant, however, that WYSIWYG
+environments are easier for first-time users.  But that doesn't make 
+them better, it just makes them more popular.
+</para>
+
+</section>
+<section><title>What About troff?</title>
+
+<para><command>troff</command><indexterm><primary sortas="tex">&TeX;</primary><secondary>vs. troff</secondary></indexterm>
+<indexterm><primary>troff</primary><secondary sortas="vs. tex text processing">vs. &TeX; text processing</secondary></indexterm>
+is the <quote>other</quote> text formatting system.  If you've ever
+tried to read a &unix; reference page without formatting it first,
+you've seen <command>troff</command>.  For a long time it was distributed as part of all
+&unix; systems.  Now it is more likely an extra-cost option.  
+The Free Software Foundation's <indexterm><primary>Free Software Foundation (FSF)</primary></indexterm><command>groff</command><indexterm><primary>groff</primary></indexterm> processor is a free,
+<command>troff</command>-compatible system.
+</para>
+
+<para>On the surface, it is easier to compare &TeX; and &troff; than to
+compare &TeX; to the other
+document preparation systems described in this chapter.  In reality,
+the differences are subtle: &TeX; and &troff; have the same
+general paradigm; they are equally powerful to a large extent,
+and both have advantages and disadvantages.
+</para>
+
+<para><command>troff</command> is similar to &TeX; in many ways.  Like &TeX;, &troff; processes a plain text file and produces a typeset document.  &TeX; and &troff; differ in the way that formatting information is inserted
+into the text.  &TeX; uses control sequences<indexterm><primary>control sequences</primary></indexterm>, where &troff; uses a
+mixture of control sequences<footnote>
+<para>Although it has a very different
+notion of what constitutes a control sequence.</para>
+</footnote> and <quote>dot</quote> commands
+(lines of text that begin with a period and contain typesetting
+commands).
+</para>
+
+<para>Although I am inclined to say that &troff; documents are far more cryptic
+than &TeX; documents, I am certain that there are plenty of &troff; users
+who would disagree (strongly).  
+</para>
+
+<para>Objectively, &TeX; handles mathematical  typesetting<indexterm><primary>typesetting</primary><secondary>mathematics</secondary></indexterm> far better than
+&troff; and probably has better support 
+for multilingual documents<indexterm><primary>typesetting</primary><secondary>multilingual documents</secondary></indexterm><indexterm><primary>international</primary><secondary>typesetting</secondary></indexterm>.
+The <command>nroff</command><indexterm><primary>nroff</primary></indexterm> processor, which produces plain text output
+from a &troff; document, at one time provided a strong argument in favor of
+&troff; for typesetting documents required in both typeset and plain
+text formats.  However, the &TeXinfo;<indexterm><primary sortas="texinfo">&TeXinfo;</primary></indexterm> macro package for &TeX; has largely defeated that argument.  In &troff;'s defense, &TeXinfo; is
+very, very different from other &TeX; macro packages, so it really is
+necessary to plan ahead and learn a very different set of macros to
+typeset both plain text and typeset documents with &TeXinfo;.
+Chapter&nbsp;<xref role="label" linkend="chap.online"/>, <emphasis><xref role="label" linkend="chap.online"/></emphasis>, discusses this
+issue further.
+</para>
+
+<para>In my experience, there is more free support for &TeX; than &troff;.
+&TeX; is supported by a large community of users actively producing
+new, useful document-preparation formats, styles, and tools.
+In addition, &TeX; is more widely available than &troff;:
+a &TeX; port exists for almost every practical computer system, whereas
+&troff; is still mostly confined to &unix; systems (although the Free
+Software Foundation's <command>groff</command> package has been ported to similar
+systems like MS-DOS, Windows NT, and OS/2).
+</para>
+
+<para>The following fragments show a side-by-side comparison of &TeX; commands, on the left, and &troff; commands, on the right:
+</para>
+
+<screen>
+\begin{figure}                    .(z
+ \begin{center}                   .hl
+   \hrule                         Text to be floated.
+   \vspace{8pt}                   .sp
+   Text to be floated.            .ce
+   \hrule                         .hl
+   \caption{Example figure...}    Figure \*[fig]: Example figure...
+   \vspace{8pt}                   .)z
+ \end{center}
+\end{figure}
+</screen>
+
+<para>Both examples
+produce a floating figure that looks like this:
+</para>
+
+<figure>
+<title>Example figure produced by both &TeX; and <command>troff</command></title>
+<informaltable frame="topbot" pgwide="1">
+<tgroup cols="1">
+<tbody>
+<row><entry>Text to be floated.</entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+</figure>
+</section>
+<section><title>What About SGML?</title>
+
+<para>The Standard Generalized Markup Language (SGML)<indexterm><primary>Standard Generalized Markup Language (SGML)</primary></indexterm> is a document
+description language.  SGML aims to separate the content of a document
+from its presentation.  In other words, SGML identifies the features
+of a document (chapter headings, paragraphs, etc.) without specifying
+how they are to be presented.
+</para>
+
+<para>This means that all SGML documents must interact with a
+document formatter of some sort.  Many people are finding that &TeX; is a natural choice when selecting a document formatter for their SGML
+environment.  In fact, &LaTeX;<indexterm><primary sortas="latex">&LaTeX;</primary><secondary>use with SGML</secondary></indexterm> 
+already provides many SGML-like
+commands because it was designed to separate markup from presentation.
+  One of the specific goals of an effort (currently
+underway) to develop a new version of &LaTeX; is to make SGML and
+&LaTeX; work together easily, cleanly, and efficiently.  For more
+information about the goals of this project and information about what
+you can do to help, please read <emphasis>The &LaTeX3; Project</emphasis>&nbsp;<xref linkend="l3:project"/>.
+</para>
+
+</section>
+</section>
+<section><title>How &TeX; Works</title>
+
+<para>A functioning &TeX; system<indexterm><primary sortas="tex">&TeX;</primary><secondary>overview of operations</secondary></indexterm> in 
+which you are producing documents of
+medium size and complexity is really a collection of tools and files
+that are related to each other in well defined (if somewhat subtle)
+ways.
+</para>
+
+<para>One of the fundamental goals of this book is to shed light on these
+relationships and allow you to put together a &TeX; system that quickly 
+and easily does the jobs you need to accomplish.
+</para>
+
+<section id="subsubsec.runningtex"><title>&TeX;ing a Simple Document</title>
+
+<para>This section briefly describes what you need to know about how &TeX; processes a simple document (that is, one that does not contain complex
+document elements like a table of contents, indexes, bibliographies, etc.).
+Figure&nbsp;<xref role="label" linkend="fig.wholesimple"/> shows how the standard &TeX; tools fit
+together at the most basic level.
+</para>
+
+<figure id="fig.wholesimple">
+<title>A high-level view of &TeX;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.01.03.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.01.03.png"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<para>Figure&nbsp;<xref role="label" linkend="fig.wholething"/> expands on Figure&nbsp;<xref role="label" linkend="fig.wholesimple"/>,
+showing additional tools and files that you'll often need to use.
+</para>
+
+<figure id="fig.wholething">
+<title>High-level view of &TeX; including more detail</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.01.04.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.01.04.png"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<section><title>Editing your document</title>
+
+<para>The most tangible and important part of your &TeX; system is 
+your document<indexterm><primary>documents</primary><secondary sortas="tex">&TeX;</secondary></indexterm>.
+This is the file (or files) in which you write down what you want to typeset with
+&TeX;.  In addition to the actual text, you include 
+control sequences to describe how you want the final text
+to appear (size, font, justification, etc.).  The section
+<quote><xref role="label" linkend="sec.texforbeginners"/></quote> earlier in this chapter tells you briefly
+what goes into your document file.
+</para>
+
+<para>The most common way to create a document is with 
+an editor<indexterm><primary>editors</primary></indexterm><indexterm><primary sortas="editing tex">editing &TeX;</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>editing</secondary></indexterm>, which can provide you with a number of features to
+make typing &TeX; documents easier.  For example, an editor can help you insert
+common control sequences<indexterm><primary>control sequences</primary></indexterm> automatically, run &TeX; automatically 
+(from within
+the editor), and keep you from making common mistakes (like typing a left
+brace, but not the matching right one).  These features and how they
+work in editors including GNU Emacs, &auctex;, and Multi-Edit are
+described in Chapter&nbsp;<xref role="label" linkend="chap.editing"/>, <emphasis><xref role="label" linkend="chap.editing"/></emphasis>.
+</para>
+
+</section>
+<section><title>Running &TeX;</title>
+
+<para>Once you have prepared your document file, it is time 
+to run<indexterm><primary sortas="running tex">running &TeX;</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>running</secondary></indexterm> the &TeX; program itself.  This may not be as easy as it sounds.  You need to determine
+the name of the &TeX; program at your site, to make sure
+all of the files &TeX; needs are available to it; you also need to specify the correct
+command-line options.  Chapter&nbsp;<xref role="label" linkend="chap.running"/>, <emphasis><xref role="label" linkend="chap.running"/></emphasis>,
+describes everything you need to know.
+</para>
+
+<para>&TeX; may find errors in your document (places where &TeX; doesn't
+understand the instructions you used; not spelling or grammatical
+errors, unfortunately ;-). Chapter&nbsp;<xref role="label" linkend="chap.running"/> also describes
+the most common errors you're likely to make and gives advice for
+interpreting error messages.
+</para>
+
+<para>
+If &TeX; is successful in formatting your document (i.e., your 
+document doesn't contain any errors), it produces a <filename role="extension">DVI</filename>
+(DeVice Independent)<indexterm><primary>DVI files</primary></indexterm> file.  The <filename role="extension">DVI</filename> file 
+is a device-independent
+representation of the typeset output of your document.  <filename role="extension">DVI</filename>
+files are transitory.  Although there are a few programs that can
+manipulate them (to rearrange the order of the pages in the output,
+for example), most of the time you will immediately transform
+them into something else---either printed output or previewed output
+on the screen.  (See the following section <quote><xref role="label" linkend="subsubsec.printpreview"/>.</quote>)
+</para>
+
+</section>
+<section id="subsubsec.printpreview"><title>Using macros</title>
+
+<para>The control sequences<indexterm><primary>control sequences</primary><secondary>macro</secondary></indexterm> that you 
+insert in your document are 
+defined by a macro package<indexterm><primary>macro packages</primary></indexterm>.<footnote><para>Well, 
+actually, they're
+&TeX; primitives, are defined by a macro package,
+defined in a file loaded by a macro package, or defined in
+your document.</para></footnote>
+Macro packages are collections of &TeX; commands (macros) that extend &TeX;.  Macro packages are frequently
+stored in format files, specially compiled versions of the macro
+package.  The ini&TeX;<indexterm><primary sortas="initex">ini&TeX;</primary></indexterm> program interprets all of the control sequences
+in a macro package to create a format file that &TeX; reads when it runs.
+</para>
+
+<para>
+Many macro packages are particularly effective in implementing
+particular document styles or supporting particular types of writing.
+Two of the most common are Plain &TeX;<indexterm><primary sortas="Plain tex">Plain &TeX;</primary></indexterm> and &LaTeX;<indexterm><primary sortas="latex">&LaTeX;</primary></indexterm>.
+Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>, <emphasis><xref role="label" linkend="chap.macpack"/></emphasis>, describes Plain
+&TeX;, &LaTeX;, and a number of other macro packages that extend the power
+and ease of &TeX;.
+</para>
+
+</section>
+<section><title>Using fonts</title>
+
+<para>One of &TeX;'s strengths is its support for a myriad 
+of predefined fonts<indexterm><primary>fonts</primary><secondary sortas="tex">&TeX;</secondary></indexterm>  and its
+ability to let you create fonts of your own.  
+In addition to your document and the format file, when &TeX; runs it
+needs font information as well.  This is provided in the form of a set
+of <filename role="extension">TFM</filename> (&TeX; Font Metric)<indexterm><primary>TFM files</primary></indexterm> files 
+that tell &TeX; the size and
+shape (roughly speaking, at least) of each character, as well as
+some other information about how characters are related to each other.
+</para>
+
+<para>Historically, the &MF;<indexterm><primary sortas="metafont">&MF;</primary></indexterm> program was the way a &TeX; user created fonts.
+Like &TeX; itself, &MF; is about ten years old.  Ten years ago, it was
+a unique program that was indispensible for creating the type of
+output &TeX; produces.  Today there are many competing font
+technologies, all of them more common than &MF;, and &MF;'s role is
+diminishing.  Many people use &TeX; today without ever using &MF; at
+all.  Nevertheless, &MF; still has some importance, and we describe
+how to run and use it in Chapter&nbsp;<xref role="label" linkend="chap.mf"/>,
+<emphasis><xref role="label" linkend="chap.mf"/></emphasis>.  Because the standard fonts that come
+with &TeX; are still the fonts produced by &MF;, it will also be
+mentioned elsewhere in this book.
+</para>
+
+<para>If you are writing complex documents, you may need to learn a lot about
+fonts and how to define and use them.  Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>,
+<emphasis><xref role="label" linkend="chap.fonts"/></emphasis>,
+tells you everything you need to know, including information about 
+the New Font Selection Scheme,
+a new way of describing and selecting fonts in &TeX;.
+</para>
+
+</section>
+<section><title>Previewing or printing &TeX; documents</title>
+
+<para>After you have produced a <filename role="extension">DVI</filename> file, as described in the section
+<quote><xref role="label" linkend="subsubsec.runningtex"/>,</quote> later in this chapter, you run another program (generically
+called a &dvidriver;)<indexterm><primary>DVI drivers</primary></indexterm> to 
+translate the <filename role="extension">DVI</filename> file so you can either preview
+or print your document.  Driver programs need your <filename role="extension">DVI</filename> file and some
+collection of fonts 
+(usually <filename role="extension">PK</filename> (packed)<indexterm><primary sortas="PK fonts"><filename role="extension">PK</filename> fonts</primary></indexterm><indexterm><primary>fonts</primary><secondary>PK</secondary></indexterm><indexterm><primary sortas="PK files"><filename role="extension">PK</filename> files</primary></indexterm> font 
+files).<footnote><para>Some
+drivers may also benefit from loading the
+<filename role="extension">TFM</filename> files used to create your
+document.</para></footnote>  Many different kinds of fonts are described in
+Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.printing"/>, <emphasis><xref role="label" linkend="chap.printing"/></emphasis>, tells you
+how to print<indexterm><primary>printing</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>printing</secondary></indexterm> your 
+documents and deal with the problems you may
+encounter using bitmapped or scalable fonts, printing pictures and figures,
+and other printing issues.
+</para>
+
+<para>Often you will want to look at your document before you actually print it.
+Because &TeX; is not a WYSIWYG system,<footnote><para>&Textures; for the Mac
+and <command>Scientific Word</command> offer WYSIWYG-like environments, but that's
+not the point ;-)</para></footnote> you cannot do this until you have processed the 
+<filename role="extension">DVI</filename> file.  There are a number of 
+good previewing products<indexterm><primary>previewing</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>previewing</secondary></indexterm>,
+including &xdvi;<indexterm><primary>xdvi</primary></indexterm>, <command>dvimswin</command><indexterm><primary>dvimswin</primary></indexterm>, 
+and <command>dviscr</command><indexterm><primary>dviscr</primary></indexterm>, that let you look at
+your processed document on the screen before you decide whether to print it.
+See Chapter&nbsp;<xref role="label" linkend="chap.preview"/>, <emphasis><xref role="label" linkend="chap.preview"/></emphasis>, for complete
+information.
+</para>
+
+</section>
+</section>
+<section><title>&TeX;ing More Complex Documents</title>
+
+<para>This section briefly describes how &TeX; processes a more complex
+document (that is, one that includes elements like a
+table of contents, indexes, bibliographies, etc.).
+</para>
+
+<para>Many &TeX; formats implement sophisticated cross-referencing schemes.  
+Cross references<indexterm><primary>cross references</primary></indexterm> may sound 
+rather esoteric, but they occur
+frequently.  Tables of contents, figure and table numbers, indexes,
+and bibliographic references are all flavors of cross referencing.
+</para>
+
+<para>Cross references make your document more complex because they require more
+information than is immediately available when &TeX; initially
+processes your document.
+For example, if you refer to a figure which occurs later in the document,
+&TeX; has no way of knowing what figure number to insert into the text at the
+point of the reference.  These are called <emphasis>forward references</emphasis><indexterm><primary>forward references</primary></indexterm>.
+</para>
+
+<para>&TeX; macro packages that support cross referencing overcome the difficulty of
+forward references by requiring you to process your document more than once.
+Each time your document is processed, the necessary reference information is
+stored into a separate file.  If that file exists when you process your
+document, the information saved <emphasis>last time</emphasis> is loaded so that it is
+available <emphasis>this time</emphasis>.  The practical implication of this functionality is
+that documents with cross references frequently have to be processed twice.
+Occasionally, you may have to process a document three times.  This occurs
+when the inserted reference causes &TeX; to format a paragraph differently,
+which in turn causes &TeX; to change a page break.<footnote><para>With extreme
+cleverness or extreme bad luck you can create a document which will <emphasis>never</emphasis> format correctly.</para></footnote> Because most changes  are incremental
+while revising
+a document,
+this is normally only an issue the first
+time you process a document.
+</para>
+
+<para>The following sections describe the &LaTeX; methods for constructing a
+table of contents, figure references, an index, and a bibliography.
+&LaTeX; is used in this example because it is a very common macro
+package and is typical of the way macro packages provide these
+features.  Similar mechanisms exist in most formats, except Plain &TeX;.
+</para>
+
+<para>Figure&nbsp;<xref role="label" linkend="fig.texcmplx"/> shows the relationships between many of the
+components described in the following sections.  &LaTeX; creates several
+sorts of auxiliary files depending on the kind of cross references required
+by your document and the style files you use.  These auxiliary files may
+be modified (and others may be created) by other sorts of post-processing
+programs (like <command>MakeIndex</command><indexterm><primary>MakeIndex</primary></indexterm> for 
+constructing indexes or &BibTeX;<indexterm><primary sortas="bibtex">&BibTeX;</primary></indexterm>
+for constructing bibliographies).   &LaTeX; uses these auxiliary files,
+if they exist, to update your document when it is processed again.
+</para>
+
+<figure id="fig.texcmplx">
+<title>&TeX;ing a More Complex Document</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="figures/tex.01.05.eps"/>
+</imageobject>
+<imageobject>
+<imagedata fileref="figures/tex.01.05.png"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+</section>
+<section><title>Building a Table of Contents</title>
+
+<para>A table of contents<indexterm><primary>table of contents</primary></indexterm> is the simplest form of 
+cross reference.  In &LaTeX;, you
+request a table of contents by 
+inserting the <markup>\tableofcontents</markup> command wherever you want it to 
+appear in your document.  If you request the
+table of contents at the end of your document rather than the
+beginning, your document can be printed with only one pass through &TeX;.
+</para>
+
+<para>&LaTeX; uses a file with the same name as your document and the extension
+<filename>.toc</filename> to hold the table of contents entries.  You can control the
+level of detail in your table of contents by setting 
+the <markup>\secnumdepth</markup> counter.  A value of zero includes only chapters; one includes
+chapters and sections; two includes chapters, sections, and subsections, 
+and so on.
+</para>
+
+<para>The &LaTeX; 
+commands <markup>\listoftables</markup> and
+<markup>\listoffigures</markup> perform the same functions as
+<markup>\tableofcontents</markup> for lists of tables and figures.  They use
+external files with the 
+extensions <filename>.lot</filename><indexterm><primary sortas="lot files">.lot files</primary></indexterm> and
+<filename>.lof</filename><indexterm><primary sortas="lof files">.lof files</primary></indexterm>, respectively.  As 
+with the table of contents, your
+document can be correctly formatted in one pass if the
+<markup>\listoftables</markup> and <markup>\listoffigures</markup> commands are placed at
+the end of the document.
+</para>
+
+</section>
+<section><title>Figure References</title>
+
+<para>Figure references<indexterm><primary>figures</primary><secondary>references to</secondary></indexterm> are a
+special case of &LaTeX;'s cross referencing mechanism.
+The &LaTeX; command
+<markup>\label{<replaceable>string</replaceable>}</markup>
+creates a referent.
+You refer to the label with the command
+<markup>\ref{<replaceable>string</replaceable>}</markup>.
+In normal body text, the label refers to the current section or subsection.
+In a figure or table environment, the label refers to that figure or table.
+</para>
+
+<para>If your document contains no forward references<indexterm><primary>forward references</primary></indexterm> (if all
+<markup>\label</markup> commands occur before the <markup>\ref</markup>'s that refer
+to them) then it can be formatted in one pass.  Otherwise, &TeX; will 
+have to be run two or three times
+to make all of the references correct.
+</para>
+
+</section>
+<section><title>Indexes and Glossaries</title>
+
+<para>Indexes<indexterm><primary>indexes</primary></indexterm> and glossaries<indexterm><primary>glossaries</primary></indexterm> differ from the preceding 
+forms of reference in that they
+must be processed by a separate program.  In general, this is true
+regardless of the macro package or format you use.
+An external program is required because indexes and glossaries must be 
+alphabetized, and in indexes, 
+consecutive page numbers have to be converted into ranges, and so on.
+</para>
+
+</section>
+<section><title>Bibliographies</title>
+
+<para>&LaTeX; works in conjunction with another program, called &BibTeX;<indexterm><primary sortas="bibtex">&BibTeX;</primary></indexterm>, 
+to provide
+a flexible, convenient way to construct bibliographies<indexterm><primary>bibliographies</primary></indexterm>.  The <markup>\cite</markup>
+commands allows you to refer to other documents in much the same way that the
+<markup>\ref</markup> command allows you to refer to other portions of the same
+document.
+</para>
+
+<para>You make a citation by placing the command
+<markup>\cite{<replaceable>string</replaceable>}</markup>
+where you wish the citation to occur.  The <emphasis>string</emphasis> is a
+key that refers to the document in your bibliography database that
+you wish to cite.  Example&nbsp;<xref role="label" linkend="ex.knuthbbl"/> is a
+typical entry in a bibliography database.  It 
+describes Knuth's<indexterm><primary>Knuth, Donald</primary></indexterm> classic 
+book <emphasis>The &TeX;book</emphasis>&nbsp;<xref linkend="kn:texbook"/>.  The key for this
+entry is <quote>kn:texbook.</quote>
+</para>
+
+<example id="ex.knuthbbl"><title>A typical bibliography database entry</title>
+<screen>
+@Book{kn:texbook,
+  author    = "Donald E. Knuth",
+  title     = "The {&TeX;}book",
+  publisher = "Addison-Wesley",
+  year      = 1989,
+  edition   = "Fifteenth",
+  isbn      = "0-201-13447-0"
+  note      = "Paperback ISBN: 0-201-13448-9"
+}
+</screen>
+</example>
+
+<para>Each entry in the database consists of a type (book, article, magazine, etc.),
+a key, and a number of fields.  The number and names of the fields depend
+on the type of entry.  The database is simply a plain ASCII file containing
+any number of entries.  You can have multiple databases.
+</para>
+
+<para>These are the commands you use, in addition to
+<markup>\cite</markup>, to include a bibliography in your document:
+</para>
+
+<screen>
+<!-- The bibliography goes here. -->
+\bibliographystyle{plain}
+\bibliography{textools,refbooks}
+</screen>
+
+<para>The <markup>\bibliographystyle</markup> command tells &BibTeX; how to format the
+bibliography, and the <markup>\bibliography</markup> command identifies which
+bibliographic databases contain the citations that you have made.  The
+<quote>plain</quote> style of bibliography is selected, and the
+<filename>textools</filename> and <filename>refbooks</filename> files contain the
+bibliographic information for the documents cited.  Document styles
+can be used to alter the format of citations in your text.
+The default extension for bibliographic 
+styles is <filename>.bst</filename><indexterm><primary sortas="bst files">.bst files</primary></indexterm>. The 
+default extension 
+for database files is <filename>.bib</filename><indexterm><primary sortas="bib files">.bib files</primary></indexterm>. 
+</para>
+
+<para>&LaTeX; places citations and bibliography information into 
+the <filename>.aux</filename> file<indexterm><primary sortas="aux files">.aux files</primary></indexterm>.  &BibTeX; 
+reads the <filename>.aux</filename><indexterm><primary sortas="aux files">.aux files</primary></indexterm> file 
+and constructs a bibliography,
+which it places into a file with the 
+extension <filename>.bbl</filename><indexterm><primary sortas="bbl files">.bbl files</primary></indexterm>, using the
+entries you cited and the bibliography style you selected.
+</para>
+
+</section>
+<section><title>Special Things</title>
+
+<para>Sometimes, producing a complex document requires the ability to interface
+with objects outside of &TeX; (pictures or figures created by high-end
+graphics packages, special features of a particular printer, etc.).  To
+support this kind of communication, &TeX; provides a control sequence
+called <markup>\special</markup>.  The arguments passed to the <markup>\special</markup>
+command are written directly to the <filename role="extension">DVI</filename> file for the &dvidriver;.
+It is the responsibility of the &dvidriver; to handle them.  &dvidriver;s
+typically ignore <markup>\special</markup> commands that they do not recognize.
+</para>
+
+<para>You will find <markup>\special</markup> commands of various kinds described throughout
+this book, particularly when discussing color typesetting in 
+Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>, <emphasis><xref role="label" linkend="chap.macpack"/></emphasis>, and graphics
+in Chapter&nbsp;<xref role="label" linkend="chap.pictures"/>, <emphasis><xref role="label" linkend="chap.pictures"/></emphasis>.
+</para>
+</section>
+</section>
+</chapter>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: xml
+sgml-parent-document: "book.xml"
+ispell-skip-sgml: t
+End:
+-->

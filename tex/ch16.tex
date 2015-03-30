@@ -1,0 +1,1208 @@
+\extrachapspace=1pc
+\chapter{\protect\TeX\ Utilities} 
+\RCSID$Id: ch16.tex,v 1.1 2002/08/23 14:58:46 nwalsh Exp $
+\label{chap:utils}
+
+% tex-archive/systems/amiga
+% tex-archive/systems/atari
+% tex-archive/systems/common_tex
+
+\ifincludechapter\else\endinput\fi
+
+\chardef\ubarcatcode=\catcode`\_
+\catcode`\_=\active\relax
+\def_{\ttunder}
+
+\def\package#1#2#3#4{%
+% #1 = printable name
+% #2 = exec name
+% #3 = implementation
+% #4 = directory
+  \par\goodbreak
+  {\it\bf\fontsize{11}{13pt}\selectfont #1}\par\vskip-\parskip\nopagebreak
+  Directory: \textit{#4}\par\vskip-\parskip\nopagebreak
+%  \vbox{
+%    \hrule width \textwidth height .5pt depth 0pt
+%    \vskip2pt
+%    \hbox to \textwidth{\program{#1}\hss\filename{#4}}
+%    \vskip-.4\baselineskip
+%  }
+  \nopagebreak}
+
+\def\obsolete#1#2#3#4{}%do nothing!
+\def\undescribed#1#2#3#4{}%do nothing!
+
+This chapter offers a brief summary of a large number of \TeX\ utilities
+(some more commonly used than others).
+Some of these programs are mentioned elsewhere in this book in connection
+with the particular tasks that they perform.  
+
+Although many programs are described in this chapter, there is no way that it
+can be entirely complete.  There are just too many programs on CTAN for me to
+be familiar with {\em all\/} of them.  This list is
+representative of the collection of programs present in the archives during
+the winter of 1993.  Regrettably, programs not documented in English
+are not included at this time.
+Take the time to explore the CTAN archives yourself; you won't be
+disappointed.
+
+\begin{sidebar}{Use the Web, Luke!}
+One of the most convenient online tools for searching the archives is the
+World Wide Web (WWW) interface available at
+\filename{http://jasper.ora.com/ctan.html}.  The WWW interface is constructed
+automatically from the most recent list of files in the CTAN archives with
+annotations taken from this chapter from the \filename{TeX-index}, and from
+the \filename{ctan.dat} descriptions maintained by the CTAN archivists.
+\end{sidebar}
+
+This chapter attempts to describe only part of the archives.  Here are some
+of the things that are {\em not\/} described in this chapter:
+
+\begin{itemize}
+  \item The thirty or more packages in the \filename{archive-tools} directory.
+        This directory contains sources and executables for almost every 
+        archiving tool imaginable.  If you retrieve a file from an FTP site
+        and you don't have the tool necessary to unpack it, you'll probably
+        find it in here.  You'll also find other archive-related programs
+        like an FTP server and the \program{Gopher} sources.
+  
+  \item Files from the \filename{digests}, \filename{documentation}, and
+        \filename{help} directories.  These are collections of electronic
+        digests, documents, and articles that discuss aspects of \TeX.
+        They are recommended reading.
+
+  \item Files from the \filename{fonts} directory.  These are summarized in
+        Chapter~\ref{chap:fonts}, {\it \nameref{chap:fonts}}.
+
+  \item Files from the \filename{languages} directory.  These are summarized
+        in Chapter~\ref{chap:foreign}, {\it \nameref{chap:foreign}}.
+
+  \item The many special macro files in the \filename{macros} subtree.
+        Many macro formats are described in Chapter~\ref{chap:macpack},
+       {\it \nameref{chap:macpack}}.
+
+  \item Architecture-specific applications from the \filename{systems} 
+        subtree.  These include applications for Amiga, Atari, 
+        Macintosh, MS-DOS, OS/2, \Unix, VMS, and Xenix systems.  The
+        Common-\TeX\ distribution is also available under this directory,
+        as well as the standard \TeX\ distributions by Knuth.
+\end{itemize}
+
+\section{List of Tools}
+
+These tools are available in the CTAN archives in the directories specified.
+This list is sorted by CTAN path name so that related utilities appear near
+each other.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\package{bib2dvi}{bib2dvi}{sh}{biblio/bibtex/utils/bib2dvi}
+
+\program{bib2dvi} is a shell script that creates a printable listing
+of an entire \BibTeX\ database.
+
+\package{bibcard}{bibcard}{C}{biblio/bibtex/utils/bibcard}
+
+\program{bibcard} is an X11 based database editor for \BibTeX\ databases.
+This is an OpenWindows application requiring the \filename{xview} and
+\filename{olgx} libraries.
+
+\package{bibclean}{bibclean}{}{biblio/bibtex/utils/bibclean}
+
+\program{bibclean} syntax-checks
+and pretty-prints a \BibTeX\ database.
+
+\package{bibextract}{bibextract}{}{biblio/bibtex/utils/bibextract}
+
+\program{bibextract} extracts bibliographic entries from a list of
+\BibTeX\ databases based upon a user-supplied regular expression.
+
+\package{citefind}{citefind}{}{biblio/bibtex/utils/bibextract}
+
+\program{citefind} extracts bibliographic entries from a list of
+\BibTeX\ databases based upon a user-supplied list of keys.
+
+\newpage
+\package{citetags}{citetags}{}{biblio/bibtex/utils/bibextract}
+
+\program{citetags} extracts citation tags from a list of \LaTeX\
+source files.  These tags can be fed to \program{citefind} to produce
+a bibliography database customized for a particular document.
+
+\package{bibindex}{bibindex}{}{biblio/bibtex/utils/bibindex}
+
+\program{bibindex} creates a bibliographic index for the \program{biblook}
+program.
+
+\package{biblook}{biblook}{}{biblio/bibtex/utils/bibindex}
+
+\program{biblook} uses a binary index constructed by \program{bibindex} to 
+perform very fast lookups into \BibTeX\ databases.
+
+\package{bibsort}{bibsort}{}{biblio/bibtex/utils/bibsort}
+
+\program{bibsort} sorts a \BibTeX\ database.
+
+\package{bibtool}{bibtool}{}{biblio/bibtex/utils/bibtool}
+
+\program{bibtool} performs a number of operations on \BibTeX\ databases.
+It can pretty-print and syntax-check a database, automatically build
+new keys, extract particular entries, sort a database, and perform a number
+of other operations.  The operation of \program{bibtool} can be customized
+with one or more resource files.
+
+\package{aux2bib}{aux2bib}{}{biblio/bibtex/utils/bibtools}
+
+\program{aux2bib} extracts citations from a \LaTeX\ \ext{AUX} file and
+constructs a bibliography that contains only the entries required by
+the document.
+
+\package{bibify}{bibify}{}{biblio/bibtex/utils/bibtools}
+
+\program{bibify} attempts to generate an \ext{AUX} file that contains
+appropriate references for citations.  This eliminates one \LaTeX\
+pass over the document and may be much faster for large documents.
+\program{bibify} cannot handle documents that use multiple \ext{AUX}
+files.
+
+\package{bibkey}{bibkey}{}{biblio/bibtex/utils/bibtools}
+
+Lists all entries in a \BibTeX\ database that contain
+a particular keyword in the keyword field.
+
+\package{cleantex}{cleantex}{}{biblio/bibtex/utils/bibtools}
+
+Deletes temporary files (\ext{AUX}, \ext{LOF}, etc.) created by \LaTeX.
+
+\newpage
+\package{looktex}{looktex}{}{biblio/bibtex/utils/bibtools}
+
+Lists all \BibTeX\ database entries that match a specified regular
+expression.
+
+\package{makebib}{makebib}{}{biblio/bibtex/utils/bibtools}
+
+\program{makebib} creates a ``portable'' \BibTeX\ database by performing
+string substitutions, removing comments, and optionally discarding all
+entries that do not match a given list of keys.
+
+\package{printbib}{printbib}{}{biblio/bibtex/utils/bibtools}
+
+\program{printbib} creates a printable listing of an entire \BibTeX\ database.
+\program{printbib} is also available in the
+\filename{biblio/bibtex/utils/printbib} directory.
+
+\package{bibview}{bibview}{Perl}{biblio/bibtex/utils/bibview}
+
+\program{bibview} is an interactive Perl script that allows you to view
+and search through a \BibTeX\ database.
+
+\package{HyperBibTeX}{HyperBibTeX}{}{biblio/bibtex/utils/hyperbibtex}
+
+\program{HyperBibTeX} is a Macintosh tool for manipulating \BibTeX\ databases.
+
+\package{bibdestringify}{bibdestringify}{}{biblio/bibtex/utils/lookbibtex}
+
+\program{bibdestringify} performs \BibTeX\ string substitution on a 
+\BibTeX\ database.
+
+\package{lookbibtex}{lookbibtex}{}{biblio/bibtex/utils/lookbibtex}
+
+Lists all \BibTeX\ database entries that match a specified regular
+expression.
+
+\package{r2bib}{r2bib}{C}{biblio/bibtex/utils/r2bib}
+
+\program{r2bib} converts \program{refer} databases into \BibTeX\
+databases.
+
+\package{ref2bib}{ref2bib}{Perl}{biblio/bibtex/utils/ref2bib}
+
+\program{ref2bib} converts \program{refer} databases into \BibTeX\
+databases.
+
+\package{xbibtex}{xbibtex}{}{biblio/bibtex/utils/xbibtex}
+
+\program{xbibtex} is an X11 program for manipulating \BibTeX\ databases.
+
+\newpage
+\package{Public Doman DVI Driver Family}{*}{C}{dviware/beebe}
+
+A collection of \ext{DVI} drivers.  This code has been used as the basis
+for many other \ext{DVI}-aware programs.  Table~\ref{tab:util:beebedr}
+summarizes the drivers included in this package.
+
+\begin{xtable}{l|l}
+  \caption{The Public Doman DVI Driver Family\label{tab:util:beebedr}}\\
+  \bf Driver & \bf Description\\[2pt]
+  \hline
+  \endfirsthead
+  \caption[]{The Public Doman DVI Driver Family (continued)}\\
+  \bf Driver & \bf Description\\[2pt]
+  \hline
+  \endhead
+  \tstrut
+  \it dvialw & PostScript (Apple LaserWriter laser printer) \\
+  \it dvibit & Version 3.10 BBN BitGraph terminal \\
+  \it dvica2 & Canon LBP-8 A2 laser printer \\
+  \it dvican & Canon LBP-8 A2 laser printer \\
+  \it dvidjp & Hewlett-Packard Desk Jet plus (from LaserJet) \\
+  \it dvie72 & Epson 9-pin family 240/216-dpi dot matrix printer \\
+  \it dvie72 & Epson 9-pin family 60/72-dpi dot matrix printer \\
+  \it dvieps & Epson 9-pin family 240/216-dpi dot matrix printer \\
+  \it dvieps & Epson 9-pin family 60/72-dpi dot matrix printer \\
+  \it dvigd  & Golden Dawn Golden Laser 100 laser printer \\
+  \it dviimp & imPRESS (Imagen laser printer family) \\
+  \it dvijep & Hewlett-Packard LaserJet Plus laser printer \\
+  \it dvijet & Hewlett-Packard 2686A Laser Jet laser printer \\
+  \it dvil3p & Digital LN03-PLUS 300 dpi laser printer \\
+  \it dvil3p & Digital LN03-PLUS 150 dpi laser printer \\
+  \it dvil75 & DEC LA75 144h x 144v dot matrix printer \\
+  \it dvil75 & DEC LA75 72h x 72v dot matrix printer \\
+  \it dvim72 & Apple ImageWriter 144 dpi dot matrix printer \\
+  \it dvim72 & Apple ImageWriter 72 dpi dot matrix printer \\
+  \it dvimac & Apple ImageWriter 144 dpi dot matrix printer \\
+  \it dvimac & Apple ImageWriter 72 dpi dot matrix printer \\
+  \it dvimpi & MPI Sprinter 144h x 144v dot matrix printer \\
+  \it dvimpi & MPI Sprinter 72h x 72v dot matrix printer \\
+  \it dvio72 & OKIDATA Pacemark 2410 144 dpi dot matrix printer \\
+  \it dvio72 & OKIDATA Pacemark 2410 72 dpi dot matrix printer \\
+  \it dvioki & OKIDATA Pacemark 2410 144 dpi dot matrix printer \\
+  \it dvioki & OKIDATA Pacemark 2410 72 dpi dot matrix printer \\
+  \it dviprx & Printronix 300/600 60h x 72v dpi dot matrix printer \\
+  \it dvitos & Toshiba P-1351 180h x 180v dpi dot matrix printer \\[2pt]
+  \hline
+\end{xtable}
+
+\package{bitpxl}{bitpxl}{C}{dviware/bitpxl}
+
+Converts HP LaserJet bitmaps into PXL files.
+
+\package{cdvi}{cdvi}{}{dviware/cdvi}
+
+MS-DOS \ext{DVI} file previewer.  Does not support external fonts, but
+has 16 Computer Modern fonts built in.  
+
+\package{Crudetype}{crudetype}{Web}{dviware/crudetype/version3}
+
+A \ext{DVI}-to-text translator.  \program{Crudetype} attempts to make a
+readable \ext{DVI} file.  An interactive mode is available on some platforms.
+A 132-column display is expected for most output.
+
+\package{DVItoVDU}{dvgt, dvitovdu, dvi2vdu}{C}{dviware/dvgt}
+
+\program{DVItoVDU} is a terminal previewer for \ext{DVI} files.  The
+\program{dvgt} version supports graphics preview using various graphics
+terminals and limited typeset preview on other terminals such
+as the VT100 and VT220.  Tektronix emulation allows
+remote previewing of
+\ext{DVI} files through Telnet or using Kermit from a PC, for example.
+
+\package{DVI2PCL}{dvi2pcl}{C}{dviware/dvi2pcl}
+
+Translates \ext{DVI} files into HP LaserJet format.  
+
+\package{dvi2ps}{}{C}{dviware/dvi2ps}
+
+There are a number of translators called \program{dvi2ps}.  Some appear
+to be older \ext{DVI} to PostScript translators supporting the MIT
+\filename{printcap} entries and Apple LaserWriter printers, while
+others offer support for Asian fonts compatible with the tools used by
+the Japanese \TeX\ User's Group and the \program{chfont} program,
+better support for built-in printer features, and faster execution.
+
+\package{psdvi}{psdvi}{C}{dviware/dvi2ps/psdvi}
+
+This program translates \ext{DVI} files into resolution-independent 
+PostScript files.  This allows the PostScript output to be printed on
+high-resolution phototypesetting equipment.  Many other 
+\ext{DVI}-to-PostScript converters assume that the output resolution is 
+300dpi, which makes the PostScript more difficult, or impossible, to print
+on high-resolution devices.
+
+Because bitmapped fonts are inherently resolution-dependent, documents
+that use them cannot be translated with this driver.  This means
+that none of the Computer Modern or \AmS\ fonts can be used unless
+you have them in PostScript Type~1 format.
+
+\package{DVI2QMS}{dvi2qms}{C}{dviware/dvi2qms}
+
+Translates \ext{DVI} files into output suitable for QMS 800/1200/2400 
+printers.
+
+\package{DVI2TTY}{dvi2tty}{C}{dviware/dvi2tty}
+
+Translates \ext{DVI} files into plain ASCII text.
+
+\newpage
+\package{dvi2xx}{dvilj2, dvilj2p, dvilj, dviljp, dvi3812}{C}{dviware/dvi2xx}
+
+Translates \ext{DVI} files into output suitable for the HP LaserJet
+family of printers and compatible printers.  It also supports output
+to the IBM 3812 printer.
+MS-DOS and OS/2 executables are provided.
+
+\package{dviapollo}{dviapollo}{C}{dviware/dviapollo}
+
+A screen previewer for Apollo workstations.
+
+\package{dvibit}{dvibit}{C}{dviware/dvibit}
+
+A screen previewer for BBN BitGraph terminals.
+
+\package{dvibook}{dvibook}{C}{dviware/dvibook}
+
+Rearranges \ext{DVI} file pages into a sequence suitable for
+printing and folding into a book.  Actually, it produces signatures,
+which are small groups of pages that can be folded together.  A signature
+is composed of several folded pages; a book is composed of many signatures
+bound together.
+
+\package{DVIChk}{dvichk}{C}{dviware/dvichk}
+
+\program{DVIChk} examines a \ext{DVI} file and prints out the page numbers
+that occur in the document in the order in which they occur.  Pages in a 
+\ext{DVI} file do not have to occur in any particular order.
+
+\package{DVICOPY}{dvicopy}{Web}{dviware/dvicopy}
+
+This program copies a \ext{DVI} file that contains references to virtual
+fonts and creates an equivalent \ext{DVI} file with all references to
+virtual fonts translated into references to the appropriate non-virtual
+fonts.
+
+\package{DVIDIS}{dvidis}{C}{dviware/dvidis}
+
+A \ext{DVI} file previewer for VaxStations running VMS.
+
+\package{dvidoc}{dvidoc}{C}{dviware/dvidoc}
+
+Translates \ext{DVI} files into plain ASCII.  Although it does not attempt
+to form the same page breaks, it does claim to get the interword spacing
+correct.
+
+\newpage
+\package{DVIDVI}{dvidvi}{C}{dviware/dvidvi}
+
+Rearranges pages in a \ext{DVI} file.  The resulting file is a new \ext{DVI}
+file containing only the selected pages.  A Macintosh executable is
+available in \ctandir{dviware/dvidvi/mac}.
+
+\package{DVIEW}{dview}{}{dviware/dview}
+
+A very old previewer for MS-DOS.  This program relies on \ext{PXL} files
+and requires the antique Almost Modern fonts to print the user
+manual.
+
+\package{DVIIMP}{dviimp}{Web}{dviware/dviimp}
+
+Translates \ext{DVI} files into a format suitable for printing
+on an Imagen printer.  This program reads \ext{GF} files rather
+than \ext{PK} files.
+
+\package{dvimerge}{dvimerge}{{\it sh}}{dviware/dvimerge}
+
+\program{dvimerge} is a shell script (written in \program{sh}) that
+uses \program{dvidvi} and \program{dviconcat} to merge two \ext{DVI}
+files together.
+
+\package{DVIMSWin}{dvimswin}{}{dviware/dvimswin}
+
+A \ext{DVI} previewer for MS-DOS running Windows 3.1.  This program
+uses \ext{PK} fonts at screen resolution.  These can be generated
+by \MF\ or obtained from the \program{dvivga} distribution.
+
+\package{dvipage}{dvipage}{C}{dviware/dvipage}
+
+A \ext{DVI} previewer for workstations running SunView version 3.0 or
+later.
+
+\package{dvipj}{dvipj}{C}{dviware/dvipj}
+
+This program is a modification of the \program{dvijet} driver that
+supports color printing on the HP PaintJet printer.  To build
+this program, you need source from the Public Doman DVI Driver Family.
+
+\package{dvips}{afm2tfm, dvips}{C}{dviware/dvips}
+
+The \program{dvips} program is the de facto standard \ext{DVI} to
+PostScript translator.  Several versions are available, although the
+most recent release seems to offer a superset of the features provided by 
+all the other versions.
+
+\newpage
+\package{dvipsk}{afm2tfm, dvipsk}{C}{dviware/dvipsk}
+
+\program{dvipsk} is a modification of \program{dvips} version 5.516 that
+supports an extended path searching algorithm for \ext{PK} fonts.
+
+\package{DVISUN}{dvisun}{C}{dviware/dvisun}
+
+A \ext{DVI} previewer for Sun II terminals.
+
+\package{dvitodvi}{dvitodvi}{C}{dviware/dvitodvi}
+
+Rearranges pages in a \ext{DVI} file, producing a new \ext{DVI} file.
+
+\package{dvitool}{dvitool}{C}{dviware/dvitool}
+
+A \ext{DVI} previewer for workstations running SunView.
+
+\package{dvitops}{psfont, pfbtops, aftopl, dvitops}{C}{dviware/dvitops/dvitops}
+
+\program{dvitops} is a \ext{DVI}-to-PostScript translator.  \program{psfont}
+can be used to download PostScript fonts.  \program{pfbtops} decodes
+printer font binary files into printer font ASCII files.  \program{aftopl}
+builds a \ext{PL} file from a PostScript \ext{AFM} file.  \ext{PL} files
+can be further translated into \ext{TFM} files with the standard 
+\program{PLtoTF} utility.
+
+\package{dvitovdu}{dvitovdu}{C}{dviware/dvitovdu}
+
+A \ext{DVI} previewer for terminals.  \program{dvitovdu} handles plain ASCII
+terminals as well as some graphics terminals.  Includes VMS and \Unix\
+ports.
+
+\package{dvitovdu}{dvitovdu}{C}{dviware/dvitovdu32}
+
+Another version of the \program{dvitovdu} \ext{DVI} previewer for
+terminals.  \program{dvitovdu} handles plain ASCII terminals as well
+as some graphics terminals.  This version seems to read only \ext{PXL}
+files.
+
+\package{dvitty}{dvitty}{Pascal}{dviware/dvitty}
+
+A simple previewer for ASCII display of \ext{DVI} files.
+
+\package{DVIVGA}{dvivga}{}{dviware/dvivga}
+
+The \program{DVIVGA} distribution includes a program for previewing
+\ext{DVI} files on PCs with EGA, VGA, or MCGA displays.
+\program{DVIVGA} is derived from the Public Doman DVI Driver Family.
+\pagebreak
+The \program{DVIVGA} distribution also includes a full set of \ext{PK}
+fonts at many resolutions: 70, 76, 84, 92, 100, 110, 121, 132, 145,
+174, 208, 250, and 300dpi.  Other previewers that require \ext{PK}
+fonts at screen resolution (typically near 100dpi) can also use these
+fonts.
+
+\package{DVIWIN}{dviwin}{}{dviware/dviwin}
+
+A screen previewer for MS-DOS running Windows 3.1.  This program includes
+the ability to use \emTeX\ \ext{FLI} font libraries.
+
+\goodbreak
+\package{eps}{eps}{C}{dviware/epson/eps-0.2}
+
+Prints a \ext{DVI} file on an Epson dot-matrix printer.  Some \ext{PK}
+fonts at the appropriate resolutions are included in
+\ctandir{dviware/epson/epson}.
+
+\package{ivd2dvi}{ivd2dvi}{C}{dviware/ivd2dvi}
+
+The \TeX-\XeT\ driver produces \ext{IVD} files, which are like \ext{DVI}
+files except that they use some special commands to perform reflection,
+which allows them to print {\em right-to-left}.
+
+This program translates an \ext{IVD} file into a standard \ext{DVI} file
+by replacing all of the special commands with standard \ext{DVI} file
+commands.
+
+\package{dvijep}{dvijep}{C}{dviware/kane}
+
+Another \ext{DVI}-to-HP LaserJet+ driver.
+
+\package{dvijep\_p}{dvijep\_p}{C}{dviware/kane}
+
+A modified version of \program{dvijep} with Centronics PP8 workarounds
+\textit{removed} where they might confuse a real LaserJet+ printer.
+
+\package{dvi2kyo}{dvi2kyo}{C}{dviware/kyocera}
+
+A \ext{DVI} translator that produces Kyocera's native Prescribe
+command language rather than relying on Kyocera's somewhat limited
+HP LaserJet compatibility mode.
+
+\package{kyodev}{kyodev}{C}{dviware/kyocera}
+
+This \dvidriver\ produces output in Kyocera's native Prescribe format.
+
+\package{dviplus}{dviplus}{Web}{dviware/laserjet}
+
+An old \ext{DVI}-to-HP LaserJet Plus translator that uses \ext{PXL}
+files.
+
+\package{LN03 Driver}{ln03dvi}{C}{dviware/ln03}
+
+Translates \ext{DVI} files into a format suitable for printing on
+a Digital LN03 printer.
+
+\package{PSPrint}{psprint}{Pascal}{dviware/psprint}
+
+A PostScript printing program that can handle \ext{DVI} files, raw
+PostScript files, or text files.  This program is a combined 
+\ext{DVI}-to-PostScript translator and file-printing utility.
+
+\Unix\ and VMS sources are provided, but a Pascal compiler is required.
+
+\package{QMS}{dvilg8, dviqms12, ddviqms8}{}{dviware/qms}
+
+An old VMS \ext{DVI} driver for QMS printers.
+
+\package{QuicSpool}{pktoch, tfm2difont, tfm2ofont, dumpdesc, cati}{C}{dviware/quicspool}
+
+This is a collection of programs for printing files to QMS and Talaris laser
+printers.  Support for \ext{DVI} files is included.
+
+\package{SCREENVIEW}{crude}{Web}{dviware/screenview}
+
+A VMS tool based on \program{Crudetype} for previewing \ext{DVI} files
+at an ASCII terminal.
+
+\package{See\protect\TeX}{xtex, texsun, texx, iptex, mftops}{C}{dviware/seetex}
+
+The \program{See\TeX} package contains a number of tools for working
+with \ext{DVI} files.  The most substantial of these tools are the
+\program{xtex} and \program{texsun} previewers for workstations
+running the X Window system and the SunView window system, respectively.
+
+\program{xtex} is unique among X11 previewers because it uses X Window
+fonts.  This makes \program{xtex} quite fast.  It also means that 
+\program{xtex} has to build a lot of new X Window fonts the first
+few times that you use it.  The \program{mftops} program converts
+\TeX\ \ext{PK} fonts into X Window fonts.  \program{xtex} uses the
+\program{MakeTeXPK} program to build new \ext{PK} fonts at the
+necessary resolutions.
+\program{xtex} also uses \program{Ghostscript} to display the PostScript
+figures in your document.  This is typically much faster than using
+\program{GhostView} to preview the entire document. 
+The \program{texx} previewer is a much simpler X Window previewer.
+It cannot interpret PostScript, but it does recognize most of the 
+\program{tpic} specials.
+\program{See\TeX} also includes 
+% a \program{dviselect} utility for
+% selecting specific pages from a \ext{DVI} file, \program{dviconcat}
+% for concatenating \ext{DVI} files together, and 
+\program{iptex},
+an Imagen printer driver.
+
+\obsolete{symbolics}{symbolics}{}{dviware/symbolics}
+
+\package{\TeX{}tool}{textool}{}{dviware/textool}
+
+This is a \TeX\ previewer for the SunView window system.
+
+\package{umddvi}{dvidmd, dvipr, dviselect, iptex}{C}{dviware/umddvi}
+
+\program{dvidmd} is a \ext{DVI} previewer for DMD 5620 displays.
+\program{dvipr} is a \ext{DVI} driver for Versatec printers.
+\program{iptex} is a \ext{DVI} driver for Imagen printers.  Finally,
+\program{dviselect} extracts pages from a \ext{DVI} file and produces
+a new \ext{DVI} file containing the selected pages.
+
+\newpage
+\package{VU\protect\TeX}{vutex}{Web}{dviware/vutex}
+
+Another VMS \ext{DVI} previewer for ASCII terminals.
+
+\package{xdvi}{xdvi}{C}{dviware/xdvi}
+
+A screen previewer for workstations running the X11 Window System.
+MS-DOS executables, useful only if you have an X11 Window system running
+on your PC, are available in the \ctandir{dviware/xdvi-dos} directory.
+
+\package{xdvik}{xdvik}{C}{dviware/xdvik}
+
+\program{xdvik} is a modification of \program{xdvi} that
+supports an extended path searching algorithm for \ext{PK} fonts.
+
+\package{bit2spr}{bit2spr}{C}{graphics/bit2spr}
+
+\program{bit2spr} converts X11 \ext{XBM} bitmaps into a ``sprite'' format
+that can be included directly in \TeX\ documents.  The resulting sprites
+are fully portable, although they require a lot of memory, which may make
+large bitmaps impractical.
+
+\package{bm2font}{bm2font}{C/Pascal}{graphics/bm2font}
+
+The \program{bm2font} program converts bitmapped images into \TeX,
+\ext{TFM}, and \ext{PK} files.  
+\program{bm2font} also generates the Plain \TeX\ or
+\LaTeX\ statements necessary to insert the figure into your document.
+Color images can be dithered in a number of different ways.  This
+is one of the most portable ways to insert pictures into a document;
+almost every available \dvidriver\ can print \TeX\ \ext{PK} fonts.
+
+\package{fig2MF}{fig2mf}{C}{graphics/fig2mf}
+
+Translates Fig code into \MF\ source.  This allows you to use interactive
+drawing tools like \program{xfig} to construct diagrams that can be
+included into your document in a portable manner with \program{fig2MF}.
+
+\package{gnuplot}{gnuplot}{C}{graphics/gnuplot}
+
+\program{gnuplot} is an interactive function plotting program.  Several
+different types of output are supported and can be included directly
+into your document.
+
+\newpage
+\package{hpgl2ps}{hpgl2ps}{C}{graphics/hpgl2ps}
+
+This program translates HPGL Plotter language commands into encapsulated
+PostScript.
+
+\package{mactotex}{mactotex}{C}{graphics/mactotex}
+
+This program cleans up Macintosh PostScript so it can be included
+into your documents with \program{psfig}.  (Some printers have difficulty
+printing PostScript output generated on a Macintosh because the PostScript
+is tailored towards the Apple LaserWriter series of printers.)
+
+\package{MFPic}{mfpic}{C}{graphics/mfpic}
+
+\program{MFPic} is a flexible replacement for the \LaTeX\ \verb|picture|
+environment.  Instead of relying on special fonts to generate pictures,
+\program{MFPic} writes \MF\ code, which generates a font containing the picture
+specified.  This makes \program{MFPic} more flexible than the standard
+\verb|picture| environment without losing portability.
+
+\package{pbmtopk}{pbmtopk}{C}{graphics/pbmtopk}
+
+Translates \ext{PBM} files into \TeX\ \ext{PK} fonts.
+
+\package{PiCTeX}{pictex}{C}{graphics/pictex}
+
+A sophisticated macro package that works on top of Plain \TeX\
+and \LaTeX.  It provides a device-independent way of producing many kinds
+of figures.  The \PiCTeX\ implementation frequently generates documents that
+are too complex for ``small'' versions of \TeX\ to render.  The \PiCTeX\
+manual is not freely available and must be purchased before \PiCTeX\ can
+be used.
+
+\package{Glo+Index}{idxtex, glotex}{C}{indexing/glo+index}
+
+These are tools for automatic construction of indexes and glossaries.  The
+glossary building tool uses \verb|\glossary| entries from your document
+in conjunction with a database of word definitions to automatically construct
+a glossary.  The \program{idxtex} program provides many of the same features
+as the \program{MakeIndex} program.
+
+\package{MakeIndex}{makeindex, makeindx}{C}{indexing/makeindex}
+
+This is the standard tool for processing \verb|\index| entries
+from \LaTeX\ documents.  \program{MakeIndex} reads the entries, sorts
+them, handles a number of useful features (multilevel indexes, special
+sorting criteria, etc.) and produces \LaTeX\ source code, which produces
+a typeset index.
+
+\newpage
+\package{RTF Translator}{rtf2text, rtf2troff, *}{C++}{support/RTF-1_06a1}
+
+The \program{RTF Translator} package includes several programs for converting
+RTF (Rich Text Format) files.  RTF files contain information about the 
+structure as well as the content of a document.  Microsoft Word and
+several NeXT tools can produce RTF files.
+
+Table~\ref{tab:rtfxlate} summarizes the translators provided.  Note that
+there is no \TeX\ or \LaTeX\ translator in this package at present.
+
+\begin{xtable}{l|l}
+  \caption{RTF Translators\label{tab:rtfxlate}}\\
+  \bf Program  & \bf Translation \\[2pt]
+  \hline
+  \tstrut
+  \it rtf2null   & Removes RTF codes \\
+  \it rtf2text   & Translates to ASCII text \\
+  \it rtf2troff  & Translates to \program{ms} macros in \program{troff}\\
+  \it rtfwc      & Counts actual words in an RTF document \\
+  \it rtfdiag    & Verifies the RTF parser (or the RTF document) \\
+  \it rtfskel    & A skeleton for producing new translators \\[2pt]
+  \hline
+\end{xtable}
+
+\package{accents}{accents}{Web}{support/accents}
+
+\program{accents} generates a virtual font containing accented letters
+arranged according to the KOI8-CS character set.  This program 
+constructs the accented letters from characters
+and accent marks, if necessary.  If the input font is in
+Adobe Standard Encoding, \program{accents} can rearrange it into
+\TeX\ Text encoding.
+
+\package{addindex}{addindex}{C}{support/addindex}
+
+\program{addindex} inserts \LaTeX\ \verb|\index| commands into your
+document.  Presented with a list of words and index entries,
+\program{addindex} reads your \LaTeX\ files and indexes every word
+from the list that occurs in your document. 
+
+\package{amSpell}{amspell}{}{support/amspell}
+
+The \program{amSpell} program is an interactive MS-DOS spellchecker
+for plain ASCII and \TeX\ documents.  
+
+\package{atops}{atops}{}{support/atops}
+
+A simple program to convert ASCII text files into PostScript.
+
+\package{\auctex}{}{elisp}{support/auctex}
+
+A comprehensive \TeX\ editing environment for GNU emacs.
+
+\newpage
+\package{basix}{basix}{tex}{support/basix}
+
+\program{basix} is a BASIC interpreter written entirely in \TeX.
+Honest. ;-)
+
+\package{BibDB}{bibdb}{}{support/bibdb}
+
+An MS-DOS program for editing \BibTeX\ bibliographic databases.
+
+\package{brief_t}{}{}{support/brief_t}
+
+The \program{brief_t} package is a \LaTeX\ editing environment for
+Borland International's \program{Brief} editor.
+
+\package{c++2latex}{c2latex, c++2latex}{C}{support/c++2LaTeX-1_1}
+
+This program parses your C or C++ programs and creates \LaTeX\ source
+code for pretty-printing them.  The syntactic elements of the source
+(keywords, identifiers, comments, etc.) can be set in different fonts.
+Compiling this program requires \program{flex}.
+
+\package{C2\LaTeX}{c2latex}{}{support/c2latex}
+
+\program{C2\LaTeX} is a filter designed to provide simple literate programming
+support for C programming.  This filter massages \LaTeX-coded C comments 
+and source code into a \LaTeX\ document.
+
+\package{chi2tex}{chi2tex}{}{support/chi2tex}
+
+\program{chi2tex} is an MS-DOS program for converting \program{ChiWriter}
+documents into \TeX.
+
+\package{detex}{detex, texspell}{C}{support/detex}
+
+\program{detex} removes \TeX\ control sequences from a document.  The
+\program{texspell} script pipes the resulting output through a spell
+checker.  
+
+\package{bibtex-mode, web-mode}{bibtex-mode.el, web-mode.el}{elisp}{support/emacs-modes}
+
+GNU emacs macros that provide an enhanced editing environment for
+\BibTeX\ databases and \program{Web} source files.  Another substantial
+set of modes for editing \LaTeX\ documents is provided by \auctex,
+listed separately.
+
+\package{flow}{flow}{C}{support/flow}
+
+\program{flow} reads a plain text description of a flow chart and 
+produces the appropriate \LaTeX\ \verb|picture| environment for
+printing the flow chart.
+
+\newpage
+\package{byte2tex}{byte2tex}{C}{support/foreign/byte2tex}
+
+A translator for multilingual documents that use the upper range of
+the ASCII character set as a second alphabet.  The translation performed
+is controlled by a plain text description of the alphabet.  See also
+\program{EDI} and \program{cyrlatex}.
+
+\package{cyrlatex}{cyrlatex}{tex}{support/foreign/cyrlatex}
+
+A \LaTeX\ style for using the \AmS\ Cyrillic fonts as a second alphabet
+under \LaTeX.  See also \program{EDI} and \program{byte2tex}.
+
+\package{EDI}{edi}{}{support/foreign/edi}
+
+An MS-DOS editor for multilingual (particularly Cyrillic) documents.
+\program{EDI} uses the upper range of the ASCII character
+set as a programmable second alphabet.  See also \program{byte2tex}
+and \program{cyrlatex}.  MS-DOS and Atari executables are available.
+
+\package{genfam}{genfam, modern}{Perl}{support/genfam}
+
+The \program{genfam} script reads a configuration file that describes
+a set of fonts and then runs the appropriate
+\MF\ commands to produce them.  A sample configuration file,
+\filename{modern}, is provided for the Computer Modern Roman family.
+
+\package{Ghostview}{ghostview}{C}{support/ghostview}
+
+\program{Ghostview} provides an interactive interface to \program{Ghostscript},
+the GNU PostScript interpreter.  \program{Ghostview} requires X11, but 
+there are ports to Microsoft Windows and OS/2.
+
+\package{Stanford GraphBase}{}{CWeb}{support/graphbase}
+
+This is a collection of \program{CWeb} programs for studying combinatorial
+algorithms.  It is related to \TeX\ only because \program{CWeb} files are
+part \TeX.
+
+\package{HPTFM2PL}{hptfm2pl, showsym}{}{support/hp2pl}
+
+This program reads Hewlett-Packard Tagged Font Metric files and
+creates \TeX\ \ext{PL} files.  The \ext{PL} files can be further
+translated into \TeX\ \ext{TFM} files with the standard utility
+\program{PLtoTF}.
+
+Hewlett-Packard distributes metric information about LaserJet built-in
+fonts and font cartridges in Tagged Font Metric format, so this program
+gives you a way of getting \TeX\ metrics for those fonts.
+To actually use them, you must have both the metrics and a \dvidriver\
+that can use built-in fonts.
+
+\newpage
+\package{HP2\protect\TeX}{hp2tex, hpopt}{}{support/hp2tex}
+
+\program{HP2\TeX} translates HPGL files into \TeX\ documents that use
+the \verb|\special| commands found in \emTeX\ for drawing lines at arbitrary
+angles.  This makes diagrams in HPGL format that use only straight lines 
+printable directly with \TeX.  See also \program{HP2XX}.
+
+\package{HP2XX}{hp2xx}{}{support/hp2xx}
+
+\program{HP2XX} converts HPGL diagrams into PostScript or one of several
+bitmapped formats.  It can also translate some diagrams directly into
+\TeX\ if \verb|\special| commands are available for drawing lines at
+any angle.
+
+MS-DOS, Sparc, Convex 210, and HP9000 executables are available.
+A Windows front-end is also available for MS-DOS.
+
+\package{HPtoMF}{hptomf}{}{support/hptomf}
+
+\program{HPtoMF} converts HPGL (Hewlett-Packard's plotter language) into
+a variety of other vector and raster formats.
+
+\undescribed{HTML}{html}{}{support/html}
+
+\package{HTMLto\LaTeX}{html2latex}{}{support/html2latex}
+
+This program converts HTML documents into \LaTeX\ source for printing.
+
+\package{Icons}{}{}{support/icons}
+
+This is a collection of icons for \TeX\ and \MF.  They were designed by
+Donald Knuth for OpenWindows and have subsequently been translated into
+Microsoft Windows, OS/2, and X11 XBM format.
+
+\package{Imake-\TeX}{imaketex}{}{support/imaketex}
+
+\program{Imake-\TeX} helps you create an Imakefile for \TeX\ documents.
+Imakefiles are used to generate custom makefiles for an application,
+in this case a \LaTeX\ document.
+
+\package{ispell}{ispell}{C}{support/ispell}
+
+An interactive spellchecker.  \program{ispell} is intelligent about
+\TeX\ documents and can handle languages other than English.
+\editorial{there are two!}
+
+\package{jspell}{jspell}{C}{support/jspell}
+
+\program{jspell} is an MS-DOS spellchecker.  It includes special support
+for \TeX\ documents.
+
+\newpage
+\package{\TeX{}Tools}{textools}{}{support/kamal}
+
+The \program{\TeX{}Tools} package includes several tools for manipulating
+\TeX\ documents. \program{detex} strips \TeX\ commands from a file.
+\program{texeqn} extracts displayed equations from a document. 
+\program{texexpand} merges documents loaded with \verb|\input| or
+\verb|\include| into a single file. \program{texmatch} checks for
+matching delimiters.  \program{texspell} uses \program{detex} to 
+spellcheck the filtered version of a document.
+
+\package{LaCheck}{lacheck}{C}{support/lacheck}
+
+\program{LaCheck} reads a \LaTeX\ document and reports any syntax
+errors it finds.  This is faster than running the document through
+\TeX\ if you are only interested in finding \TeX{}nical mistakes.
+
+\package{\LaTeX2HTML}{latex2html}{}{support/latex2html}
+
+Converts \LaTeX\ documents into HTML documents, suitable for
+browsing with a WWW browser.  Many complex document elements are handled
+automatically.
+
+\package{\LaTeX{}Mk}{latexmk}{}{support/latexmk}
+
+\LaTeX{}Mk is a \program{Perl} script that attempts to determine what operations
+need to be performed on a document to produce a complete 
+\ext{DVI} file.  \LaTeX{}Mk\ runs \LaTeX, \BibTeX, etc. until a complete
+document has been built.
+
+\package{lgrind}{lgrind}{}{support/lgrind}
+
+\program{lgrind} formats program sources using \LaTeX.  Syntactic elements
+are identified by typographic changes in the printed sources.
+
+\package{LSEdit}{}{}{support/lsedit}
+
+This is an add-on package for the VAX/VMS Language Sensitive Editor
+(\program{LSEDI}).  It provides an editing environment for \LaTeX\
+documents.
+
+\package{make\_\hskip.25pt latex}{make\_latex}{}{support/make\_latex}
+
+Provides a set of \program{make} rules for \LaTeX\ documents.
+
+\package{MakeProg}{makeprog}{Web}{support/makeprog}
+
+\program{MakeProg} is a system for doing Literate Programming in \TeX.
+It provides a mechanism for combining documentation with \TeX\ macros.
+Donald Knuth's original articles on Literate Programming are included
+with the documentation.
+
+\package{MathPad}{mathpad}{}{support/mathpad}
+
+MathPad is an X11 editor for \TeX\ sources.  It was not available (or known
+to me) in time for review in this edition of \textit{Making \TeX\ Work}.
+
+\package{MC\TeX}{}{tex}{support/mctex}
+
+A \TeX\ macro package for pretty-printing \program{Lisp}
+code.
+
+\package{MEW\LaTeX}{}{}{support/mewltx}
+
+An extension to \program{microEMACS} for Windows.
+It provides a \LaTeX\ editing environment that allows you to write,
+spellcheck, process, and view your document from within \program{microEMACS}.
+
+\package{MNU}{}{DOS}{support/mnu}
+
+\program{MNU} is an MS-DOS menu system written with batch files.  It was
+designed for running \TeX\ but can be extended to other applications.
+
+\package{pbm2\TeX}{pbm2tex}{}{support/pbm2tex}
+
+\program{pbm2\TeX} converts PBM files into \LaTeX\ \texttt{picture} environments.  This
+provides a portable way to include bitmap images in documents.  The
+documents take a long time to typeset, however, and may require a 
+big \TeX.
+
+\package{PCWri\TeX}{}{}{support/pcwritex}
+
+Adds \TeX\ to \program{PC-Write} as a special kind of printer.  Documents
+``printed'' to the \TeX\ printer can be processed with \TeX\ to get
+typeset output.
+
+\package{PM\TeX}{pmtex}{}{support/pmtex}
+
+An OS/2 Presentation Manager application that provides a shell around
+common \TeX-related activities (editing, \TeX{}ing, previewing, printing,
+etc.).  
+
+\package{PP}{pp}{}{support/pp}
+
+A Pascal or Modula-2 pretty-printer.  It translates code into a 
+Plain \TeX\ or \LaTeX\ document.  An MS-DOS executable is provided.
+
+\package{PS2EPS}{ps2eps}{c}{support/ps2eps}
+
+Attempts to convert PostScript output from other programs into
+encapsulated PostScript output suitable for including in \TeX\
+documents with \program{dvips}, for example.  Support is included for
+converting output from \program{GEM} 3.0, \program{DrawPerfect} 1.1, 
+\program{PSpice} 4.05, \program{OrCAD} 3.11, \program{PrintGL} 1.18, 
+\program{Mathcad} 3.0, and \program{GNUPlot} 3.0.
+
+\package{PS Utils}{psbook, psselect, pstops, psnup, epsffit}{C}{support/psutils}
+
+A collection of utilities for transforming PostScript output files in
+various ways.  \program{psbook} rearranges pages into signatures.
+\program{psselect} selects ranges of pages. \program{pstops} performs
+arbitrary rearrangement and selection of pages. \program{psnup}
+prints multiple pages on a
+single sheet of paper.  \program{epsffit} rescales an encapsulated
+PostScript figure to fit within a specified bounding box.
+These programs can be used to rearrange the output from PostScript
+\dvidriver{}s like \program{dvips}.
+
+\program{PS Utils} also includes scripts for displaying character
+information and ``fixing'' PostScript output from other sources.
+(Some PostScript output is nonstandard and must be fixed-up before
+it can be used with the \program{PS Utils}.)
+These scripts are summarized in Table~\ref{tab:psutils:scripts}.
+
+\begin{xtable}{l|l}
+  \caption{Additional Scripts in PS Utils 
+    \label{tab:psutils:scripts}}\\
+  \bf Script     & \bf Purpose \\[2pt]
+  \hline
+  \tstrut
+  \it getafm   & Retrieves font metrics from the printer \\
+  \it showchar & Prints a character and its metrics \\
+  \it fixfmps  & Fixes output from \program{FrameMaker} \\
+  \it fixwpps  & Fixes output from \program{WordPerfect} \\
+  \it fixwfwps & Fixes output from \program{Word} for Windows \\
+  \it fixmacps & Fixes Macintosh PostScript \\
+  \it fixpsditps & Fixes \program{Transcript} \filename{psdit} files \\
+  \it fixpspps & Fixes output from \program{PSPrint} \\[2pt]
+  \hline
+\end{xtable}
+
+\package{rtf2\LaTeX}{rtf2latex}{C}{support/rtf2LaTeX}
+
+A conversion program to translate RTF sources into \LaTeX.
+
+\package{rtf2\TeX}{rtf2tex}{C}{support/rtf2TeX}
+
+A conversion program to translate RTF sources into \TeX.
+
+\package{RTF-to-\LaTeX}{rtflatex}{Pascal}{support/rtflatex}
+
+Another conversion program to translate RTF sources into \LaTeX.
+
+\package{S2\LaTeX}{s2l}{C}{support/s2latex}
+
+A \program{Scribe}-to-\LaTeX\ converter.  Requires \program{lex}
+and \program{yacc} to compile.
+
+\newpage
+\package{Scheme\TeX}{schemetex}{C}{support/schemetex}
+
+\program{Scheme\TeX} provides support for Literate Programming in 
+\program{Scheme}.  \program{Lex} is required to build \program{Scheme\TeX}.
+
+\package{\TeX{}OrTho}{texortho}{C}{support/spelchek}
+
+\program{\TeX{}OrTho} is a spellchecking filter for text files.  It 
+was designed for spellchecking \TeX\ and \LaTeX\ documents, but it
+is parameter-file driven so it may be possible to extend it to other
+formats.
+
+\package{Tek2EEPIC}{tek2eepic}{C}{support/tek2eepic}
+
+A filter for Tektronix 4015 escape sequences that allows graphics output
+designed for a Tektronix 4015 display to be included in a \TeX\
+document.  The resulting \ext{DVI} file must be processed by a \dvidriver\
+that recognizes the \textit{tpic} \verb|\special| commands.
+
+\package{\TeX{}calc}{}{}{support/texcalc}
+
+\program{\TeX{}calc} is an \program{InstaCalc} spreadsheet for calculating
+\TeX\ typeface design sizes based upon magnification and scaling factors.
+
+\package{\TeXinfo{}2HTML}{texi2html}{Perl}{support/texi2html}
+
+Translates GNU \TeXinfo\ sources into HTML. 
+
+\package{\TeX{}i2roff}{texi2roff}{C}{support/texi2roff}
+
+This is a \TeXinfo-to-\program{nroff} converter (although it should
+be possible to process most documents with \program{troff} as well).
+
+\package{\TeX{}it}{texit}{Perl}{support/texit}
+
+A \program{Perl} script for processing \TeX\ documents intelligently.
+
+\package{texproc}{texproc}{C}{support/texproc}
+
+\program{texproc} is a filter that inserts the output from a
+command into your document.  This can be used, for example, to 
+automatically insert the output from \program{GNUPlot} directly
+into your \TeX\ document (assuming that you use one of the
+\TeX-compatible output terminals in \program{GNUPlot}).
+
+\newpage
+\package{tgrind}{tgrind}{C}{support/tgrind}
+
+\program{tgrind} is a source code pretty-printer modelled after the
+standard BSD \Unix\ \program{vgrind} utility.  It produces a \TeX\
+or \LaTeX\ document that typesets an attractive program listing
+from your source code.
+
+\package{tr2\LaTeX}{tr2latex}{C}{support/tr2latex}
+
+Translates \program{troff} sources into \LaTeX.
+
+\package{tr2\TeX}{tr2tex}{C}{support/tr2tex}
+
+Translates \program{troff} sources into Plain \TeX.
+
+\package{TRANSLIT}{translit}{C}{support/translit}
+
+\program{TRANSLIT} transliterates ASCII character codes.  Single characters
+can be translated into multiple characters and vice versa, in addition
+to simple permutations.  This program allows files written in one 
+national character set to be translated into another character set
+without losing characters or meaning.
+
+\package{TSpell}{tspell, chk, putback}{C}{support/tspell}
+
+A spellchecking filter for \TeX\ documents.  It strips \TeX\ and
+\LaTeX\ macros out of a document, runs the document through a spellchecker,
+and restores the \TeX\ and \LaTeX\ macros.  It looks like it was designed
+for VAX machines.
+
+\package{umlaute}{umlaute}{\protect\TeX}{support/umlaute}
+
+A collection of style files for processing \TeX\ documents with accented
+characters using machine-native character encodings.  Support for the
+ISO standard character set (ISO Latin1) and the MS-DOS code page 437
+character set is provided.
+
+\package{undump}{undump}{C}{support/undump}
+
+\program{undump} combines a core dump and an executable program to
+build a new executable using the core dump to provide initial values
+for all of the program's static variables.  One use of this program
+is to construct \TeX\ executables with macro packages preloaded.
+This is unnecessary on most modern computers (they're fast enough
+to simply load the format files).  \program{undump} is no longer
+a supported program.
+
+\newpage
+\package{untex}{untex}{C}{support/untex}
+
+Removes all \LaTeX\ control sequences from a document.  Can optionally
+remove arguments to control sequences, as well as all math-mode text.
+Replaces many accented characters with their IBM OEM character set
+equivalents.
+
+\package{VMSSpell}{vmsspell}{}{support/vmsspell}
+
+A VMS spellchecking tool.  Distributed in a VMS-style archive package.
+
+\package{Vor\TeX}{}{Emacs lisp}{support/vortex}
+
+A GNU emacs editing mode for \TeX\ documents.  Also provides support for
+\BibTeX\ databases.
+
+\package{windex}{windex}{C}{support/windex}
+
+\program{windex} is an aid for building indexes in \LaTeX\ documents.
+It modifies the \LaTeX\ indexing macros to produce a different output
+format.  The \program{windex} program can then sort the terms and
+construct an index for you.
+
+\package{WP2\protect\LaTeX}{wp2latex}{C/Pascal}{support/wp2latex-5_1}
+
+This program attempts to translate WordPerfect v5.1 documents into
+\LaTeX.
+
+\package{xet}{xet}{C}{support/xet}
+
+The \program{xet} program removes all commands and mathematical formulae
+from Plain \TeX\ and \LaTeX\ documents.  \program{xet} has a number of options
+for handling different aspects of a document (such as accents and
+\LaTeX\ environments) and claims to be useful as a simple syntax checker
+for \TeX\ files.
+
+\package{xetal}{xetal}{C}{support/xetal}
+
+This is a more recent version of \program{xet}, described above.
+
+\package{xlatex}{xlatex}{C}{support/xlatex}
+
+An X11 Windows application that ties together several
+aspects of \TeX{}ing a document.  It provides a ``push button'' interface
+to editing, processing, previewing, and printing your document.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\catcode`\_=\ubarcatcode \let\ubarcatcode\relax
+

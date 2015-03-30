@@ -1,0 +1,440 @@
+\chapter{Filename Extension Summary} 
+\RCSID$Id: ap01.tex,v 1.1 2002/08/23 14:58:45 nwalsh Exp $
+\label{chap:fileext}
+
+\def\extitem[#1]{%
+  {\fontsize{11}{13pt}\selectfont%
+  \ipitem [ \textit{\textbf{\uppercase{#1}}} ]
+  }
+}
+
+\ifincludechapter\else\endinput\fi
+
+This chapter summarizes many common filename extensions.  The extensions
+are listed in alphabetical order.  All extensions can be shortened
+to three letters for consistency with operating systems that do not allow
+longer file extensions.  On other file systems, they may be slightly 
+different.  For example, \ext{EPS} files are sometimes called 
+\ext{EPSF} files on \Unix\ systems, which allow longer filenames.
+
+\begin{iplist}{.25in}
+
+\extitem [abf] An Adobe binary screen font file contains a binary encoding
+of a BDF (bitmap distribution format) file.  Binary encoding makes the 
+files smaller, but it also makes
+them less portable and unintelligible to humans.  The binary format is
+described in Adobe's ABF Format Specification~\cite{abffiles}.
+BDF files are described below.
+
+\extitem [afm] Adobe font metrics files are ASCII files distributed with
+\ps\ Type~1 fonts.  Type~1 fonts are the linearly scalable fonts that
+\ps\ printer users are most familiar with.  Bounding boxes, an encoding
+vector (what characters go where),
+kerning,
+and
+ligature
+information
+are among the things described in this file.  The AFM file format is
+described completely in Adobe's AFM Format 
+Specification~\cite{afmfiles}.
+
+\ps\ fonts (available through commercial vendors or from the
+Internet) are supplied with AFM files.  Generally, the only occasion
+that you would have to modify an AFM file would be to change the
+encoding vector.
+
+\extitem [aux] Auxiliary files are built by \LaTeX\ each time it formats
+a document.  \LaTeX\ writes information about cross references, citations,
+etc., to the auxiliary file for post-processing by other tools, or
+for \TeX\ processing the next time this document is formatted.
+
+\newpage
+\extitem [bbl] Bibliography files are created by \BibTeX\ from the citations in
+your document, the bibliography databases (BIB) that you specify, and the
+bibliography style (BST) you use.  \BibTeX\ writes the resulting
+bibliography to the BBL file, which is automatically included in your \LaTeX\
+document at the place where you define the bibliography.
+
+\extitem [bdf] Bitmap distribution format files are ASCII files that describe
+a bitmap font.  They are frequently used to distribute bitmap versions of
+scalable fonts in screen resolution at common sizes.  They are resolution
+specific, but they are portable from one architecture to another.  The BDF
+file format is described completely in Adobe's BDF Format
+Specification~\cite{bdffiles}.
+
+Some fonts packages are distributed with BDF files.
+Other BDF files are created as part of the conversion process from native
+format to X11 format.  It is unlikely that you would ever create one purely
+by hand.
+
+\extitem [bib] Bibliography databases contain bibliographic information.
+These are generally handwritten and may contain bibliographic information
+for all of the sources that you are (ever) likely to cite.  The \BibTeX\
+program reads information about each work that you \verb|\cite{}| from
+the BIB file.  Consult the documentation for \BibTeX\ for more information
+about the format of BIB files.
+
+\extitem [blg] \BibTeX\ log files record the status of the last run of
+\BibTeX.
+
+\extitem [bst] Bibliography style files are used by \BibTeX\ to define the layout
+of the citations.  \BibTeX\ produces \LaTeX\ commands in the BBL file that
+define the citations in the format specified by the BST file.  
+
+You may eventually write or modify a bibliography style file, but it is less
+common than modifying \LaTeX\ style files because bibliographies
+have a more rigidly defined format.  Consult the documentation for \BibTeX\ for
+more information about the format of BST files.
+
+\extitem [bzr] The GNU fontutils define the BZR format to hold
+generic scalable font data.  The file actually contains the specification
+for a series of bezier curves.  The BZR file format is defined in
+the \TeXinfo\ pages that accompany the GNU fontutils.
+The GNU fontutils create BZR files.
+
+\newpage
+\extitem [dvi] \TeX\ produces device-independent output in the DVI file.
+This file describes the \TeX{}ed document in a simple stack language that can
+be rendered on any device.  The format of DVI files is described in the
+\web\ documentation for \program{DVItype}, or in {\em The DVI Drivers
+Standard}~\cite{dvi:standard}. 
+
+\TeX\ (and some \program{MFware} utilities) produces DVI files.
+
+\hyphenation{encap-sulated}
+\extitem [epsf] Encapsulated \ps\ files contain scalable \ps\ images and extra information (such as the size of
+the image's bounding box) that is necessary to scale the image appropriately
+for printing, unlike generic \ps.  Using encapsulated \ps\ images in your \TeX\ document
+requires a DVI driver that understands \ps\ \verb|\special|s.  How to include
+pictures and figures via encapsulated PostScript is described
+in detail in Chapter~\ref{chap:pictures}, {\it \nameref{chap:pictures}}.
+
+You are unlikely to create encapsulated \ps\ files by hand, but many
+drawing and drafting programs can create them for you.
+
+\extitem [fig] FIG files are created by the \program{XFig} program (and
+possibly other programs).  The scalable representation of a collection of
+graphics objects is stored in ASCII form in FIG files.  The 
+\program{transfig} program can translate FIG files into a number of
+other formats including EPSF, HPGL, and a variety of \LaTeX\ environments.
+
+\extitem [fli] Font libraries are distributed with \emTeX.  They contain a
+collection of PK files.  Font libraries have several advantages over
+a directory full of PK files: they are easier to maintain (because you
+don't have to deal with hundreds of files); they are faster to search (because
+they are indexed more efficiently than a directory); they are smaller
+(because {\em each} PK file wastes an average of half a cluster of
+disk space); and the name of each font is not limited to eight characters as
+it is under MS-DOS file naming conventions.
+
+Note: \program{dvips} can also use \emTeX\ FLI files.
+
+\extitem [gf] Generic font files contain bitmap data for the characters of a
+font.  The GF format is very simple, and many \TeX\ related programs that
+create fonts produce GF files.  The disadvantage of GF files is that they are
+very large (because no compression is performed).  The format of GF files is
+described in the \web\ documentation for \program{GFtoPK} (or any of the
+GF-related \program{MFware} programs).  
+
+\MF\ is the primary source for GF files.  Some other programs (some
+of the GNU fontutils, for example) also produce GF files.
+
+\extitem [gif] Graphics interchange format is a CompuServe bitmap graphics
+standard.  GIF files are very popular, and a number of converters (e.g.,
+\program{BM2FONT}) can translate GIF files into a format usable by \TeX.
+
+\extitem [glo] Glossary files are produced by the \LaTeX\ \verb|\glossary|
+command. They are analogous to the IDX files produced by the \verb|\index|
+commands.  The glossary is inserted in your document wherever the
+\verb|\makeglossary| command occurs.
+
+\extitem [gsf] Ghostscript fonts are scalable fonts very similar
+to \ps\ Type~1 fonts.  Theoretically, \program{Ghostscript} can
+use \ps\ Type~1 fonts directly, although I have never tried.
+Several GSF fonts are distributed with \program{Ghostscript}.
+
+\extitem [hpgl] Hewlett-Packard GL is a plotter language.  Many programs can
+produce vector graphics in HPGL format.
+
+\extitem [hptfm] Hewlett-Packard tagged font metric files are a lot like \TeX\
+TFM files.  It is unfortunate that both files have the extension TFM
+because they are completely incompatible.  You can generate \TeX\ TFM files
+from HPTFMs with the \program{HPTFM2PL} program.
+
+\extitem [idx] Index files are produced automatically when you use the
+\verb|\index| commands in \LaTeX.  The IDX file contains raw indexing data
+that will be used by the \program{MakeIndex} program to build an index for
+your document.  You must include the \filename{makeidx} style in your
+\verb|documentstyle| command, and you must turn on indexing with
+\verb|\makeindex| in the preamble of your document if you wish to (re)build
+the index.  See the entry for IND files below for more information.
+
+\extitem [ilg] \program{MakeIndex} log files record the status of the last run of
+\program{MakeIndex}.
+
+\extitem [img] The IMG format is a particular bitmapped image
+format used by the GEM Window System (a PC-based windowed desktop
+interface product).  The GNU fontutils read IMG files as their default
+format. 
+The \program{PBMplus} utilities\footnote{The
+\program{PBMplus} utilities are a collection of programs that allow conversion between
+different graphic formats by using the PBM format as a transition step.}
+can convert between many graphics file formats, including IMG.
+
+\newpage
+Some scanning software produces IMG files directly.  Other IMG files
+are distributed by the Free Software Foundation as part of an ongoing
+project to produce high-quality, free typefaces.  
+
+\extitem [ind] Index files are produced by the \program{MakeIndex} and
+automatically get included into your \LaTeX\ document wherever you
+put the \verb|\printindex| command.  The \verb|\index| commands in your
+\LaTeX\ document write raw indexing data to the IDX file.  \program{MakeIndex}
+reads the IDX file, sorts and formats the index according to the IST file,
+and produces an IND file for your document.  
+
+\extitem [ist] Index specification files are used by \program{MakeIndex} to 
+format the index file.  Consult the documentation for \program{MakeIndex}
+for more information.
+
+\extitem [jpeg] JPEG files are compressed bitmap images.  Because JPEG files
+use a ``lossy'' compression algorithm, they are frequently much smaller
+than other formats.
+
+\extitem [lof] List of figures files are produced by the \verb|\listoffigures|
+command in \LaTeX.  After seeing \verb|\listoffigures|, \LaTeX\ writes
+figure captions to the LOF file.  The next time the document is formatted,
+\LaTeX\ will insert the LOF file at the point where you issue the 
+\verb|\listoffigures| command.
+
+\extitem [log] Log files are always produced by \TeX\ and \MF.  The LOG file is
+generally uninteresting.  Status and warning messages deemed too trivial (or
+too detailed) for the display are written to the log file (all messages
+written to the display are also written to the log).
+
+\extitem [lot] List of tables files are exactly analogous to LOF files.
+
+\extitem [mf] Just as \TeX\ reads TEX files, which are  plain ASCII
+descriptions of a typeset document, \MF\ reads MF files, which are  plain
+ASCII descriptions of a typeface.  \MF\ and MF files are the topic of
+Knuth's \MFbook~\cite{kn:mfbook}.  Unlike \ps\ fonts, \MF\ fonts are
+not linearly scaled.\footnote{Linear versus non-linear scaling is a typographic
+issue better discussed elsewhere.  I mention it here just for
+completeness.}
+
+The standard \TeX\ distribution contains the MF files for the Computer
+Modern fonts.  Knuth has produced several more MF files to demonstrate \MF.
+The American Mathematical Society has extended Computer Modern with several
+more.  The \program{MFpic} macro package produces MF files from a picture-like
+environment in \TeX.  \TheMFbook\ describes how to create your own fonts
+with \MF.
+
+The {\em List of MetaFonts}~\cite{lreq:metafonts} is posted
+occasionally to the newsgroups \path|comp.text.tex| and \path|comp.fonts|.
+
+Chapter~\ref{chap:mf}, {\it \nameref{chap:mf}}, describes \MF\ in more detail.
+The \TeX\ fonts available in \MF\ format are listed in
+Chapter~\ref{chap:fonts}, {\it \nameref{chap:fonts}}.
+
+\extitem [mfj] MFjob files are plain ASCII files that contain instructions for
+\program{MFjob}, an \emTeX\ program that builds groups of
+\MF\ fonts.  MFJ files can be created by hand to automate the process of
+building a set of fonts.  They are also created by the \emTeX\ DVI drivers if
+automatic font generation is being used.
+
+\extitem [msp] Microsoft Paint files contain bitmapped graphic images.  They
+can be included in a \TeX\ document with \verb|\special| commands recognized
+by the \emTeX\ DVI drivers.
+
+\extitem [pbm] The portable bitmap format is a flexible bitmap
+representation introduced by the \program{PBMplus} package.  The \program{PBMplus}
+utilities allow for the conversion of PBM format files to and from
+almost anything else.  The PBM format (and all the utilities) are
+described in the manpages that accompany the \program{PBMplus} toolkit
+distribution.
+
+The PBM toolkit and many other X11 graphics utilities can read and
+write PBM files (e.g. XV).
+
+\extitem [pcf] The PCF format is one of several X11 bitmap font formats.
+Architecture-specific versions of X11 use PCF files.  Other architectures use
+one of a number of other architecture-specific formats (e.g., SNF).  PCF files
+are used by at least the DEC versions of the X11 server.  The X11
+distribution for your architecture includes a program that will convert BDF
+files to the standard adopted for your architecture.
+
+PCF files are almost invariably created from some other source.
+It is unlikely that you will ever create one by hand.
+
+\extitem [pcl] PCL files contain printer commands for HP LaserJet printers.
+DVI drivers for HP LaserJet printers create PCL files.  It is possible to
+get information out of some PCL files with \program{pcltomsp}.
+
+\extitem [pcx] PCX files contain bitmapped graphic images.  They
+can be included in a \TeX\ document with \verb|\special| commands recognized
+by the \emTeX\ DVI drivers.
+
+\extitem [pfa] Printer font ASCII files contain scalable outline data that
+describes each character in a Type~1 font.  A large portion of this file is
+encrypted, so it is an ASCII file only in the sense that the binary portion
+is represented as a string of hexadecimal ASCII digits.  This is
+traditional \ps\ because it is pure ASCII.  See PFB below.
+
+Type~1 outline fonts are created by special font editing programs or
+conversion tools (e.g. the GNU fontutils).
+
+\extitem [pfb] Printer font binary files, like PFA files, contain the
+outline data for \ps\ Type~1 fonts.  The binary format was adopted to save
+space (they are generally about half the size of their PFA
+counterparts).\footnote{The proof is left as an exercise to the reader (I
+always wanted to say that).}
+Because they are binary files, it is more difficult to transfer them from
+one architecture to another (endian-ness, binary transmission, etc.).  \ps\
+purists are apt to disparage them.
+
+\extitem [pfm] Printer font metric files are a Microsoft Windows standard.
+They are encountered frequently in archives that contain Type~1 fonts.
+Unfortunately, these archives occasionally fail to include AFM files,
+which are more standard outside of the Windows community.  Even more
+unfortunately, PFM files do not contain all of the information that is
+in an AFM file.  However, the \program{PFM2AFM} program can construct a
+partial AFM file.  I believe that the PFM file format is described
+in a Microsoft technical note; however, I have never seen it.
+
+Unless you use Microsoft Windows, PFM files are likely to be
+useless.  If you need PFM files, the MS-DOS program \program{Refont} can
+create them from AFM files.
+
+\extitem [pk] Most \TeX\ DVI conversion programs read packed bitmap font
+files.  The PK font format defines a clever scheme that allows
+bitmap fonts to be compressed significantly.  The format of PK files is
+described in the \web\ documentation for \program{PKtype} (or any of the
+PK-related \program{MFware} programs).
+
+You are unlikely to create PK files by hand, per se, but there are a number
+of utility programs that ultimately create PK files (e.g., \program{GFtoPK},
+\MF, \program{MFpic}, \program{PS2PK}).
+
+\extitem [pl] A property list file contains an ASCII representation of a
+binary file.  The property list format was created during \TeX\ development to
+allow binary files (specifically TFM files) to be hand-coded.  Most users have
+no reason to create PL files; however, some programs create PL files that must
+be converted into TFM files with the \TeX{}ware program \program{PLtoTF}.  The
+PL format is described in the \web\ documentation for \program{PLtoTF}.
+
+If you need to edit \TeX\ font metric information for a particular
+font, you will almost certainly do so by editing the PL file.  You can create
+a PL file from a TFM file with the \program{TFtoPL} utility.
+
+\extitem [ps] \ps\ is a page description language.  The \ps\ language
+is described in a series of volumes from Adobe Systems.  PS is a
+common extension for \ps\ files.
+
+Unless you are inclined to enter the Obfuscated \ps\ Contest, you
+are unlikely to create \ps\ files by hand.  \ps\ files are created by many
+common tools.
+
+\extitem [pxl]  This format is obsolete.  It has been completely superseded
+by the PK format.  If you still have PXL files, you can convert
+them to PK format with the \program{PXtoPK} program.  If you are still
+using a DVI driver that needs PXL files, you need an upgrade.
+
+\extitem [sfl] These files contain HP LaserJet softfonts in landscape
+orientation.  LaserJet softfonts are device specific bitmap representations of
+a typeface.  The bitmap versions are described thoroughly in the {\em LaserJet
+Technical Reference Manual\/}~\cite{pcl5:techref} for each of the HP LaserJet
+printers.  Newer laser printers can perform automatic rotation of fonts (in 90
+degree increments, at least), so the distinction between landscape and portrait
+font files is disappearing.
+
+\extitem [sfp] These files contain HP LaserJet softfonts in portrait
+orientation.  See the entry for SFL files, above.
+
+\extitem [sfs] Scalable softfonts are HP LaserJet softfonts for the
+new (HPLJ III and higher) LaserJet printers.  These are really in AGFA
+IntelliFont Scalable format~\cite{intellifont}.
+
+\extitem [snf] Server native format fonts are another version of X11
+bitmap font.  See the entry for PCF files, above, for more information.
+
+\extitem [sty] Style files are used by \LaTeX\ to define the layout of
+a \LaTeX\ document (by redefining the meaning of commands like
+\verb+\section{}+, for example).  They are also used commonly to extend
+\LaTeX.  See the \LaTeX{} manual~\cite{ll:latexbook} for more information.
+
+Style files are really just \TeX\ files that perform specific tasks.  You
+will eventually write or modify a style file, but it isn't something you
+are likely to do every day.
+
+\newpage
+\extitem [tex] TEX files describe the layout of a typeset document in the
+\TeX\ programming language,\footnote{You already knew this, didn't you?}
+as defined by {\em The \TeX{}book}~\cite{kn:texbook}.  Most
+people use some form of macro package on top of \TeX\ to make the language
+easier to swallow.  If a \TeX\ file begins with \verb+\documentstyle{}+ or has
+\verb+\begin{document}+ somewhere near the top, it is probably a \LaTeX\
+document.  Otherwise, look for the \verb+\input+ commands to see what macro
+packages are being included.
+
+Documents that do not appear to be \LaTeX\ documents and do not appear to
+\verb|\input| special macro packages may be using a special {\em format}.
+Formats are fast-loading precompiled macro packages.  If you know the name
+of the format file, you can tell \TeX\ to use it by typing \&{\em
+format-name\/} as a parameter to \TeX.
+
+\extitem [tiff] TIFF files contain bitmapped or vector graphic images in a 
+very flexible form.  The ``T'' in TIFF stands for ``tagged.''  All of the
+different kinds of information (regarding number of colors, compression,
+etc.) that might appear in a TIFF file are given unique tags that allow
+a TIFF file reader to skip over information that it does not 
+understand.
+
+\extitem [tfm] \TeX\ font metric files contain information about fonts.
+\TeX\ doesn't know anything about the intrinsic shape of the
+characters that it lays down on the page.  \TeX\ deals entirely with boxes.
+Every character is described by the rectangular box that (usually)
+surrounds it.  The TFM file for a font describes the size of each
+character's box, as well as ligature and kerning information for the font.
+A human-readable version of a
+TFM file can be produced with the \program{TFtoPL} program.  The format of
+TFM files is described thoroughly in the \web\ documentation for
+\program{TFtoPL}. 
+
+If you have reason to modify a TFM file, you will almost certainly do
+so by converting it to PL format first.  You can convert it back into a TFM
+file with the \program{PLtoTF} utility.
+
+See also HPTFM files.
+
+\extitem [toc] Table of contents files are produced by the
+\verb|\tableofcontents| command in \LaTeX.  After seeing
+\verb|\tableofcontents|, \LaTeX\ writes chapter, section, subsection, etc.,
+names to the TOC file.  The next time the document is formatted, \LaTeX\ will
+insert the TOC file at the point where you issue the \verb|\tableofcontents|
+command.
+
+\extitem [txt] Generic ASCII text.
+
+\extitem [vf]  Virtual font files.  They are described in more detail in
+Chapter~\ref{chap:fonts}, {\it\nameref{chap:fonts}}.  In short, a virtual
+font maps a character to an arbitrary sequence of \ext{DVI} file commands.
+This may be another character in a different font, a different character
+in the same font, or something else entirely.
+
+\extitem [vpl] The virtual property list is a property list file for virtual
+fonts (as opposed to being some sort of property list file that was itself
+virtual ;-).  VPL files serve the same purpose for VF files that PL files
+serve for TFM files.  The VPL format is defined in the \web\ documentation
+for \program{VPtoVF}.  
+
+\extitem [xbm] X11 bitmap files contain a bitmapped image. X11 icons are
+frequently stored in XBM files.  They also occur in {\tt .icon} files and
+files without extensions (e.g., in \filename{/usr/include/X11/bitmaps}).  I mention them here only because I like to use 
+icons on my X11 desktop, and I have used \program{PKtoBM} to create several 
+nice ones from \TeX\ PK files.
+
+X11 bitmap files are used for all bitmap displays in the X11 server
+(not just icons).  Because they are ASCII and not binary, they are
+architecture independent, which makes them very portable.\par
+
+\end{iplist}

@@ -1,0 +1,52 @@
+{ % begin a group...
+
+\font\dcr=cmr12
+\font\tiny=cmr5
+
+\newcount\colcount
+\def\charbox{%
+  \leavevmode\vbox to 18pt{%
+    \vss%
+    \hbox to 14pt{%
+      \hss%
+      \begin{tabular}{c}
+        \dcr\char\colcount\\
+        \tiny\number\colcount
+       \end{tabular}
+       \hss%
+       }%
+     }%
+   \global\advance\colcount by 1}
+
+\def\row{%
+  \charbox&\charbox&\charbox&\charbox&\charbox&\charbox&\charbox&\charbox}
+
+\def\colnum#1{\vbox to 0pt{\vbox to 7pt{\vfill}\vbox{\hbox{\textbf{#1}}}\vss}}
+
+\typeout{Setting CMR Encoding table}
+
+\begin{xtable}{r|c|c|c|c|c|c|c|c|}
+  \caption{The Computer Modern Roman Font Encoding\label{tab:cmrencode}}\\
+  \colcount=0
+             & \bf 0 & \bf 1 & \bf 2 & \bf 3 & \bf 4 & \bf 5 & \bf 6 & \bf 7\strut \\ \hline
+  \colnum{0} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{1} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{2} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{3} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{4} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{5} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{6} & \row \\ \cline{2-9}
+             & \row \\ \hline
+  \colnum{7} & \row \\ \cline{2-9}
+             & \row \\ \hline
+             & \bf 8 & \bf 9 & \bf A & \bf B & \bf C & \bf D & \bf E & \bf F\strut \\ 
+\end{xtable}
+
+} % end the group...
+

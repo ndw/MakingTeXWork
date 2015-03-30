@@ -1,0 +1,9 @@
+\documentstyle[epic,bezier]{article}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\input{tex.06.04.tex}
+
+\end{document}

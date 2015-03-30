@@ -1,0 +1,16 @@
+\newbox\xbitmapbox
+\newdimen\xbitmapwd
+\font\xbitmapa=xbitmapa at 72.27truept
+\setbox\xbitmapbox=\vbox{\hbox{%
+\xbitmapa\char0\char1\char2}}
+\xbitmapwd=\wd\xbitmapbox
+\setbox\xbitmapbox=\hbox{\vbox{\hsize=\xbitmapwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\xbitmapa\char0\char1\char2}
+\hbox{\xbitmapa\char3\char4\char5}
+\hbox{\xbitmapa\char6\char7\char8}}}
+\ifx\parbox\undefined
+    \def\setxbitmap{\box\xbitmapbox}
+\else
+    \def\setxbitmap{\parbox{\wd\xbitmapbox}{\box\xbitmapbox}}
+\fi

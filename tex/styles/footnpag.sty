@@ -1,0 +1,476 @@
+% $Id: footnpag.sty,v 1.1 2002/08/23 14:59:16 nwalsh Exp $
+%----------------------------------------------------------------------
+% Copyright (c) 1987-1991 by J.Schrod <schrod@iti.informatik.th-darmstadt.de>.
+%       Distributed under the terms of the GNU General Public License.
+
+%
+% LaTeX style option footnpag
+% numbers footnotes subsequently per page.
+%
+% [LaTeX in MAKEPROG]
+% (history at end)
+
+
+
+%%%%
+%%%%
+%%%% These TeX macros were documented with the documentation system
+%%%% MAKEPROG and automatically converted to the current form.
+%%%% If you have MAKEPROG available you may transform it back to
+%%%% the original input: Remove every occurence of three percents
+%%%% and one optional blank from the beginning of a line and remove
+%%%% every line which starts with four percents.  The following lex
+%%%% program will do this:
+%%%%
+%%%%    %%
+%%%%
+%%%%    ^%%%\ ?   ;
+%%%%    ^%%%%.*\n ;
+%%%%
+%%%% If you just want to print out the documentation you may fetch
+%%%% the archive print-makeprog.tar.Z from ftp.th-darmstadt.de (directory
+%%%% pub/tex/latex). It contains *all* used styles -- but beware, they
+%%%% may not be documented since parts of them are still in alpha release...
+%%%%
+%%%% MAKEPROG itself may be obtained via ftp from ftp.th-darmstadt.de
+%%%% (directory pub/tex/src-webware).
+%%%%
+%%%%
+%%% \documentstyle[progltx,a4-9,rcs,names]{article}
+
+
+%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% %
+%%% % local macros
+%%% %
+
+%%% \def\<#1>{%             % syntactic element
+%%%    \leavevmode
+%%%    \hbox{$\langle$\rm #1$\rangle$}%
+%%%    }
+
+%%% %
+%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%% \nofiles            % don't need an aux file
+
+
+%%% \begin{document}
+
+
+%%% \title{The {\tt footnpag\/} Style Option}
+%%% \author{%                   % LaTeX does not discard unnecessary glue...
+%%%    Joachim Schrod%
+%%%    \thanks{%
+%%%       TU~Darmstadt, Alexanderstr.~10, D-6100 Darmstadt, Germany.\newline
+%%%       Email: {\tt schrod@iti.informatik.th-darmstadt.de}.%
+%%%       }%
+%%%    }
+%%% \RCSdate $Date: 2002/08/23 14:59:16 $
+
+%%% \maketitle
+
+
+
+%%% \chap What's this style option for?.
+
+%%% This style option is appropriate for numbering footnotes seperately
+%%% on each page. It may be used with all standard document style (and I
+%%% assume with all other well written ones). `Numbering' here does not
+%%% only mean supplying arabic numbers, if your style sets up appropriate
+%%% symbols, they are used instead.
+
+%%% You just have to specify the |footnpag| style option, the rest will
+%%% happen automagically. You will need two \LaTeX{} runs, as with cross
+%%% references or citations.
+
+
+%%% \sect {\bf Caveat\/}: Unlike with references \LaTeX{} will not issue
+%%% a warning if a footnote number is incorrect due to new page breaks.
+%%% Thus run \LaTeX{} always another time if you want a final document.
+
+%%% Another problem is that you cannot use the optional argument of
+%%% |\footnote| anymore; but with this style option this is not of any use
+%%% anyhow.
+
+%%% Of course, this should change in a future revision\,\dots
+
+
+%%% \sect An auxiliary file is used, named {\it jobname}|.fot|. This is
+%%% not necessary by itself, it would have been better to use the
+%%% |aux|-file. But it has happened, that's life.
+
+
+%%% \sect This program is free software; you can redistribute it and/or
+%%% modify it under the terms of the GNU General Public License as
+%%% published by the Free Software Foundation; either version~2, or (at your
+%%% option) any later version.
+
+%%% This program is distributed in the hope that it will be useful, but
+%%% {\bf without any warranty\/}; without even the implied warranty of
+%%% {\bf merchantability\/} or {\bf fitness for a particular purpose}.  See
+%%% the GNU General Public License for more details.
+
+%%% You should have received a copy of the GNU General Public License
+%%% along with this program; if not, write to the Free Software Foundation,
+%%% Inc., 675~Mass Ave, Cambridge, MA~02139, USA.
+
+
+%%% \sect This style option is supported. Send bug reports, comments and
+%%% repairs. (But, please, read the documentation first\,\dots)
+
+%%% The reference version may be retrieved via anonymous ftp from
+%%% |ftp.th-darmstadt.de| [130.83.55.75], directory |pub/tex/latex|. It's
+%%% placed there as a compressed tar file. (The information on the
+%%% IP~number is dated February~2,~1993. It might have changed, also this
+%%% is very unlikely. Use your friendly nameserver.)
+
+
+%%% \sect Please note, that this style option was written originally for
+%%% the use with Plain \TeX{}. It was set up here for \LaTeX{}, but the
+%%% two minor changes to achieve this can easily be rechanged. These
+%%% changes are clearly flagged in the code.
+
+%%% By the way, this is the reason why I don't use the |aux|-file, in
+%%% Plain there is none. It would be better to use the \LaTeX{}
+%%% facilities, such making this style a piece of pure \LaTeX{} code.
+%%% Then we would also be able to warn the user if a footnote number
+%%% changes and he needs to reprocess his document. In addition, then we
+%%% would be able to allow the optional |\footnote| argument again -- also
+%%% I think that it does not make much sense while using this style.
+
+
+
+
+%%% \chap Implementation.
+
+%%% But let's regard first the implementation strategy. Because   
+%%% the contents of one page is determined at (nearly) random places
+%%% with an asynchronous invogation of the output routine, we can not
+%%% give numbers to every footnote subsequently between output and
+%%% output: a footnote at the top of a page will perhaps get a number
+%%% before the output is triggered and there is no way to change this
+%%% number. The problem is like forward references to text places and it
+%%% is solved in a similar fashion. We need two \TeX{} runs to get the
+%%% numbering right but this is acceptable (who's got a finished text
+%%% after one run?!). In the first run we gather up in a file the
+%%% information where the footnotes are standing and in the second run
+%%% we use this information.
+
+%%% We must identify all footnotes if we write their numbers to the
+%%% footnote file, so each footnote gets an unary name built with the
+%%% counter |\foot_name_no|. The name is `|f@|\<footno>', where \<footno>
+%%% is the footnote name number. This name building scheme has several
+%%% disadvantages, e.g.\ the insertion of a new footnote destroys the
+%%% knowledge of the former run about the following footnotes. If we would
+%%% have some knowledge about the document type we are using and the macro
+%%% set which is in effect we could insert other counters (e.g.\ the
+%%% chapter numbers) as well.
+
+
+%%% \sect Before we start we declare some shorthands for category codes.
+%%% By declaring the underscore~`(|_|)' as letter we can use it in our
+%%% macros. (I agree with {\sc D.~Knuth} that
+%%% |\identifier_several_words_long| is more readable than
+%%% |\IdentifierSeveralWordsLong| and in every case better than
+%%% |\p@@@s|.) As this is a \LaTeX{} style option the at sign is a letter
+%%% anyhow; so we can use the ``private'' Plain and \LaTeX{} macros; and
+%%% with the underscore we can make our own macros more readable.  But as
+%%% we have to restore this category code at the end of this macro file
+%%% we store its former value in the control sequence |\uscode|. This
+%%% method is better than to use a group because not all macros have to
+%%% be defined global this way.
+
+%%% \beginprog
+\chardef\escape=0
+\chardef\open=1
+\chardef\close=2
+\chardef\ignore=9
+\chardef\letter=11
+\chardef\other=12
+%\chardef\active=13             % is defined in Plain already
+
+%% \chardef\atcode=\catcode`\@  % Plain TeX: use this, too
+\chardef\uscode=\catcode`\_     % top level macro file!
+
+%% \catcode`\@=\letter          % Plain TeX: use this, too
+\catcode`\_=\letter
+%%% \endprog
+
+
+%%% \sect Let's start with the initialization of the macro
+%%% set. We need a file descriptor, |\foot_file|, which we use for the
+%%% file interaction. The name of the file is built from the jobname and
+%%% the suffix `|.fot|' (I hope that no macro package uses this suffix).
+%%% The |\init_footnote| macro reads the contents
+%%% of the footnote file if it exists (|\ifeof| returns true if the file
+%%% doesn't exist). The description of the reading of this file
+%%% (|\read_foot_file|) is deferred until we know the structure of the
+%%% contents. After reading, the file is closed and we can open it for
+%%% writing. For security, i.e.\ to have a defined minimal contents, we
+%%% immediately write |\relax| to the file. In the end the macro defines
+%%% itself to |\relax| to allow calling it again. 
+
+%%% \beginprog
+\newread\old_foot_file
+\newwrite\foot_file
+\def\foot_file_name{\jobname.fot\relax}
+\def\init_footnote{%
+   \openin\old_foot_file\foot_file_name
+   \ifeof\old_foot_file  \closein\old_foot_file
+   \else  \closein\old_foot_file
+      \read_foot_file
+   \fi
+   \immediate\openout\foot_file\foot_file_name
+   \immediate\write\foot_file{\relax}%
+   \global\let\init_footnote\relax
+   }
+%%% \endprog
+
+
+%%% \sect Now comes the first real macro package dependent part. We want
+%%% to set the footnote with a number in the superscript position (or
+%%% with a corresponding symbol for that number). This is done with the
+%%% macro |\foot_note|, which gets the number as its parameter. Below are
+%%% the definitions for Plain \TeX{} and \LaTeX{}, the Plain part is
+%%% commented out. To activate it, simply comment the \LaTeX{} part out
+%%% and remove the other `|%|'-signs. 
+
+%%% \beginprog
+\let\@@footnote=\footnote        % original meaning of \footnote
+%\def\foot_note#1{%              % set footnote with mark #1 (Plain)
+%   \@@footnote{\hbox{$^{#1}$}}%
+%   }
+ \def\foot_note#1{%              % set footnote with mark #1 (LaTeX)
+    \@xfootnote[#1]%
+    }
+%%% \endprog
+
+
+
+
+
+%%% \chap Realization.
+
+%%% Remember, that we use |\foot_name_no| for the generation of a name for
+%%% each footnote.
+%%% The actual number of the footnote mark is stored in |\footno|. This 
+%%% counter is not used within this macro package, it is first needed at 
+%%% run time when the footnote file is read in. Nevertheless we must 
+%%% define it---and here seems to be the best place.
+
+%%% In the beginning of every footnote |\init_footnote| is called to
+%%% guarantee that the handling is initialized (this especially means
+%%% that the footnote numbers are read in by the first footnote). 
+
+%%% \beginprog
+\newcount\foot_name_no  % for generating footnote mark names
+\newcount\footno        % numbers of footnotes
+%%% \endprog
+
+
+%%% \sect It remains an open problem how to get the numbers there. The
+%%% footnote numbering must be initialized to zero in the output routine
+%%% and every footnote must increment this footnote number. The only
+%%% thing that is expanded during the output process is the output
+%%% routine itself and the |\write|'s, but the expanded tokens of
+%%% |\write| are written out, not interpreted. Well, the idea is simple:
+%%% We defer the counting to the second run and write the instructions
+%%% that do this to the file. The counting is then done while reading
+%%% the footnote file. 
+
+%%% \noindent That means that the output routine adds entries like
+%%% %
+%%%  \begin{quote}
+%%%  |\footno = 0|
+%%%  \end{quote}
+%%% %
+%%%  and every footnote adds an entry that looks like
+%%% %
+%%%  \begin{quote}
+%%%  |\advance\footno by 1 \xdef\csname f@|\<footno> |\endcsname{\number\footno}|
+%%%  \end{quote}
+%%% %
+%%%  where \<footno> is replaced by the current footnote name number.
+%%% The expansion of |\foot_name_no| must be made in |\footnote|, therefore we
+%%% first define the macro |\do_write| which contains the |\write| and the
+%%% expanded tokens which are to be put out. Every token that should not
+%%% be expanded is prefixed by |\string| (resulting in character tokens
+%%% that represent the token name) and a |\space| must be inserted to
+%%% separate |\csname| from |f|. The |\xdef| in the (written) definition
+%%% code of |f@|\<footno> is needed because the footnote file will be read
+%%% in within a group.
+
+%%% After writing the entry to the footnote file the |\footnote| macro
+%%% defines the footnote mark to `|0|' if it is not already defined (from
+%%% a previous run). To build the token name first and test afterwards an
+%%% |\expandafter| is needed. At the end the |\foot_note| command is
+%%% issued. 
+
+%%% \beginprog
+\def\footnote{%
+   \init_footnote
+   \global\advance\foot_name_no\@ne
+   \edef\do_write{%
+      \write\foot_file{%
+         \string\advance\footno\@ne
+         \string\expandafter\xdef
+                  \string\csname\space f@\number\foot_name_no \endcsname{%
+            \string\number\footno
+            }%
+         }%
+      }%
+   \do_write
+   \expandafter\ifx \csname f@\number\foot_name_no \endcsname \relax
+      \expandafter\gdef \csname f@\number\foot_name_no \endcsname {0}%
+   \fi
+   \foot_note{\csname f@\number\foot_name_no \endcsname}%
+   }
+%%% \endprog
+
+
+%%% \sect Now let's look at the intervention in the output routine. The
+%%% goal is to be (almost) independent from the used output routine. This
+%%% is done by forming a layer around the originial output routine, but
+%%% relies on the fact that the output routine is not altered by itself.
+%%% For macro packages doing so an expansion of the output routine has to
+%%% be made.
+
+%%% Output routines serve for two purposes: they put out text to the file
+%%% and they collect information. Usually macro packages communicate with
+%%% the output routine by inserting special penalties. This macro set
+%%% assumes that penalties above $-|\@maxpenalty|$ are used to output text
+%%% and penalties below $-|\@maxpenalty|$ do other things (look at
+%%% |latex.tex| if you wonder what one can do in the output routine\dots).
+%%% For every macro package |\@maxpenalty| has to be adjusted. If the
+%%% precondition of one range of penalties for text output doesn't hold
+%%% the following algorithm has to be altered. As with the definition of
+%%% |\foot_note|, both the values for Plain \TeX{} and for \LaTeX{} are
+%%% given, the Plain value is commented out.
+
+%%% \beginprog
+%\mathchardef\@maxpenalty=20000 % maximal used penalty for text pages (Plain)
+ \mathchardef\@maxpenalty=10000 % maximal used penalty for text pages (LaTeX)
+%%% \endprog
+
+
+%%% \sect We must insert a |\write| in front of the output iff a new page
+%%% begins, i.e., iff the output routine is triggered with an
+%%% |\outputpenalty| less than $-|\maxpenalty|$. In a former version of
+%%% this macro package this has been done by triggering the output routine
+%%% two times and playing around with penalties. Thanks to Chris Thompson,
+%%% in a mail he has pointed out that I have overlooked the most simple
+%%% solution: An |\immediate\write| just have to be made at the very
+%%% beginning of the output routine! The following output routine evolves:
+%%% %
+%%%  \begin{quote}
+%%%  \parskip=0pt \obeylines
+%%%  |\output={|
+%%%  \qquad $\langle\,$Write the \TeX{} code to the footnote file that
+%%%  \qquad \qquad resets the footnote name counter %
+%%%           if a new text page is finished$\,\rangle$
+%%%  \qquad \<Perform the original output routine>
+%%%  \qquad |}|
+%%%  \end{quote}
+
+%%% We have to insert the actual contents of the output token register
+%%% into the new one. To do this the old output register must be evaluated
+%%% before the assignment is done. We use |\expandafter| to skip over
+%%% preceding tokens. 
+
+%%% \beginprog
+\output=\expandafter{%
+   \expandafter\perhaps_write_reset_code
+   \the\output
+   }
+%%% \endprog
+
+
+%%% \sect Now comes the section where we pay tribute to the fact that most 
+%%% people use \LaTeX{}: If we just write the reset code every time text 
+%%% is output the footnotes are numbered {\it on every column\/}! Looking 
+%%% at the \LaTeX{} code one discovers the switch |@firstcolumn| which is 
+%%% always true in one-column documents and which is true at the first 
+%%% column (i.e.\ at the very start of the text page) in a two-column 
+%%% document. Therefore we can use this switch to decide if we must write 
+%%% the reset code. For the Plain users this switch is just defined. (The 
+%%% proposal for this enhancement is due to Olivier Nicole.)
+
+%%% \beginprog
+\def\define_if@firstcolumn{%
+   \let\if@firstcolumn\iftrue
+   }
+\ifx \if@firstcolumn\undefined
+   \define_if@firstcolumn
+\fi
+
+\def\perhaps_write_reset_code{%
+   \ifnum \outputpenalty<-\@maxpenalty \else
+      \if@firstcolumn
+         \immediate\write\foot_file{\footno\z@}%
+      \fi
+   \fi
+   }
+%%% \endprog
+
+
+%%% \sect It remains the reading of the footnote file. We have to read in
+%%% macros with names containing `|@|' characters. This will be done in
+%%% horizontal mode, so we ignore lineends to discard undesired spaces. 
+
+%%% \beginprog
+\def\read_foot_file{%
+   \begingroup
+      \catcode`\@\letter \catcode`\^^M\ignore
+      \input \foot_file_name
+   \endgroup
+   }
+%%% \endprog
+
+
+%%% \sect We are already finished: the only thing which remains is the 
+%%% restore of the category codes.
+
+%%% \beginprog
+%% \catcode`\@=\atcode          % Plain TeX: use this, too
+\catcode`\_=\uscode
+
+\endinput
+%%% \endprog
+
+
+
+
+%%% \end{document}
+
+
+%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% %
+%%% % $Log: footnpag.sty,v $
+%%% % Revision 1.1  2002/08/23 14:59:16  nwalsh
+%%% % Initial checkin
+%%% %
+%%% % Revision 2.2  1993/02/02  11:04:18  schrod
+%%% %     If the first footnote was within a group, the footnote mechanism
+%%% % was initialized a second time by the first footnote outside the group.
+%%% % With this second initialization all information about previous
+%%% % footnotes was discarded.
+%%% %     (Bug reported on 01 Feb 93 by John Lu <luj@ecn.purdue.edu>.)
+%%% %
+%%% % Revision 2.1  1991/11/07  19:58:34  schrod
+%%% % set up for a new distribution, documentation is now in LaTeX.
+%%% % added first chapter where uif and problems are explained.
+%%% %
+%%% % Revision 1.2  1989/04/21  00:00:00  schrod
+%%% % advances the usability in LaTeX (\twocolumn),
+%%% % uses an own stream for reading,
+%%% % resets the counter with \immediate\write.
+%%% %
+%%% %
+%%% %   PRE-RCS VERSION HISTORY
+%%% %
+%%% % Version 1.0 was released in August, 1987
+%%% % Version 1.1 removed the \begingroup.                             (88-10-20)
+%%% %

@@ -1,0 +1,18 @@
+\newbox\bbedbox
+\newdimen\bbedwd
+\font\bbeda=bbeda at 72.27truept
+\font\bbedb=bbedb at 72.27truept
+\setbox\bbedbox=\vbox{\hbox{%
+\bbeda\char0\char1\char2\char3\char4}}
+\bbedwd=\wd\bbedbox
+\setbox\bbedbox=\hbox{\vbox{\hsize=\bbedwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\bbeda\char0\char1\char2\char3\char4}
+\hbox{\bbeda\char5\char6\char7\bbedb\char0\char1}
+\hbox{\bbedb\char2\char3\char4\char5\char6}
+\hbox{\bbedb\char7\char8\char9\char10\char11}}}
+\ifx\parbox\undefined
+    \def\setbbed{\box\bbedbox}
+\else
+    \def\setbbed{\parbox{\wd\bbedbox}{\box\bbedbox}}
+\fi

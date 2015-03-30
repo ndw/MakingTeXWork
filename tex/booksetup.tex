@@ -1,0 +1,92 @@
+% Beginning a document ends the group started by the \documentstyle command.
+% This makes the font changes from style files disappear, so we need to
+% reassert that we want the ``light'' fonts...
+
+\fontfamily{garamond}
+\fontshape{n}
+\normalsize
+
+% Relies on the 'nutshell.sty' file or a book-related style that
+% defines a \partmark...
+
+\headrulewidth=0.25pt
+\footrulewidth=0pt
+\plainheadrulewidth=0pt
+\plainfootrulewidth=0pt
+\pagestyle{fancy}
+
+\makeatletter  
+\def\partmark#1{%
+  \markboth{Part\space\thepart:\space#1}{Part\space\thepart:\space#1}%
+  \gdef\@currentlabellevel{1}%
+  \gdef\@currentlabeltext{#1}} % remember part title
+\def\chaptermark#1{%
+  \ifnum\c@chapter=0\relax%
+    \markboth{#1}{#1}%
+  \else%
+    \markboth{\@chapapp\space\thechapter:\space#1}%
+    {\@chapapp\space\thechapter:\space#1}%
+  \fi%
+  \gdef\@currentlabellevel{1}%
+  \gdef\@currentlabeltext{#1}}% remember chapter title
+\def\sectionmark#1{%
+  \gdef\@currentlabellevel{2}%
+  \gdef\@currentlabeltext{#1}} % forget about sections ...
+\def\subsectionmark#1{%
+  \gdef\@currentlabellevel{3}%
+  \gdef\@currentlabeltext{#1}} % and subsections
+\def\subsubsectionmark#1{%
+  \gdef\@currentlabellevel{4}%
+  \gdef\@currentlabeltext{#1}} % and subsubsections
+\makeatother
+
+\def\headfont{\rm\it\bf\size{9}{10pt}\selectfont}
+\lhead[\fancyplain{}{\headfont\thepage}]{\fancyplain{}{\headfont\rightmark}}
+\chead{}
+\rhead[\fancyplain{}{\headfont\booktitle}]{\fancyplain{}{\headfont\thepage}}
+
+\lfoot{}
+\ifdraft
+  \cfoot{\fancyplain{\headfont\curRCSID}{(draft)}}
+\else
+  \cfoot{}
+\fi
+\rfoot{}
+
+\includechaptertrue
+
+% --- the cover page for the technical review copies
+%\hbox{}\vfill
+%\thispagestyle{empty}
+%Copyright \copyright\ 1993 by O'Reilly \& Associates, Inc.
+%All Rights Reserved.
+%
+%\vskip1in
+%
+%Editor: Deborah Russell
+%
+%\vskip.5in
+%
+%Return comments to:
+%
+%\begin{center}
+%  \begin{tabular}{l}
+%    O'Reilly \& Associates \\
+%    90 Sherman Street\\
+%    Cambridge, MA 02140\\
+%    (617) 354-5800\\
+%    FAX: (617) 661-1116\\
+%    Email: $\langle${\tt debby@ora.com}$\rangle$, 
+%           $\langle${\tt norm@ora.com}$\rangle$
+%  \end{tabular}
+%\end{center}
+%
+%\vskip1in
+%
+%This copy is for review only.  The copying or excerption of material
+%from this work is prohibited without explicit permission from the
+%publisher.
+%
+%\vfill
+%\newpage 
+

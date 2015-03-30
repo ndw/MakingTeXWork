@@ -1,0 +1,19 @@
+\newbox\hypbtbox
+\newdimen\hypbtwd
+\font\hypbta=hypbta at 72.27truept
+\font\hypbtb=hypbtb at 72.27truept
+\font\hypbtc=hypbtc at 72.27truept
+\setbox\hypbtbox=\vbox{\hbox{%
+\hypbta\char0\char1\char2\char3\char4}}
+\hypbtwd=\wd\hypbtbox
+\setbox\hypbtbox=\hbox{\vbox{\hsize=\hypbtwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\hypbta\char0\char1\char2\char3\char4}
+\hbox{\hypbta\char5\hypbtb\char0\char1\char2\char3}
+\hbox{\hypbtb\char4\char5\char6\hypbtc\char0\char1}
+\hbox{\hypbtc\char2\char3\char4\char5\char6}}}
+\ifx\parbox\undefined
+    \def\sethypbt{\box\hypbtbox}
+\else
+    \def\sethypbt{\parbox{\wd\hypbtbox}{\box\hypbtbox}}
+\fi

@@ -1,0 +1,26 @@
+\begin{figure}
+  \begin{center}
+    \font\foo=cmr5 at 150pt
+    \font\bar=cmr17 at 150pt
+%    \font\faz=cmr10 at 10pt
+%    \font\baz=cmr17 at 10pt
+    \setbox0=\hbox{\foo R}
+    \dimen0=\wd0
+    \begin{tabular}{cc}
+      \hbox{\foo R} & \hbox{\bar R} \\
+%      \hbox{\faz R} & \hbox{\baz R} \\
+%      \parbox{\dimen0}{The Computer Modern Roman letter ``R'' at 150pt
+%      from a 5pt design and 10pt from a 10pt design.}
+%      &
+%      \parbox{\dimen0}{The same letter ``R'' at 150pt and 10pt from
+%      a 17pt design.}
+      \parbox{\dimen0}{The Computer Modern Roman letter ``R'' at 150pt
+      from a 5pt design.}
+      &
+      \parbox{\dimen0}{The same letter ``R'' at 150pt from a 17pt design.}
+      \\
+    \end{tabular}
+    \caption{The Effect of Design Size on Character Shape}
+    \label{fig:Rs}
+  \end{center}
+\end{figure}

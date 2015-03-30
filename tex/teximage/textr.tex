@@ -1,0 +1,22 @@
+\newbox\textrbox
+\newdimen\textrwd
+\font\textra=textra at 72.27truept
+\font\textrb=textrb at 72.27truept
+\font\textrc=textrc at 72.27truept
+\font\textrd=textrd at 72.27truept
+\setbox\textrbox=\vbox{\hbox{%
+\textra\char0\char1\char2\char3\char4}}
+\textrwd=\wd\textrbox
+\setbox\textrbox=\hbox{\vbox{\hsize=\textrwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\textra\char0\char1\char2\char3\char4}
+\hbox{\textra\char5\char6\textrb\char0\char1\char2}
+\hbox{\textrb\char3\char4\char5\char6\char7}
+\hbox{\textrc\char0\char1\char2\char3\char4}
+\hbox{\textrc\char5\char6\char7\textrd\char0\char1}
+\hbox{\textrd\char2\char3\char4\char5\char6}}}
+\ifx\parbox\undefined
+    \def\settextr{\box\textrbox}
+\else
+    \def\settextr{\parbox{\wd\textrbox}{\box\textrbox}}
+\fi

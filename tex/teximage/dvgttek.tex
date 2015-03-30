@@ -1,0 +1,16 @@
+\newbox\dvgttekbox
+\newdimen\dvgttekwd
+\font\dvgtteka=dvgtteka at 72.27truept
+\setbox\dvgttekbox=\vbox{\hbox{%
+\dvgtteka\char0\char1\char2\char3}}
+\dvgttekwd=\wd\dvgttekbox
+\setbox\dvgttekbox=\hbox{\vbox{\hsize=\dvgttekwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\dvgtteka\char0\char1\char2\char3}
+\hbox{\dvgtteka\char4\char5\char6\char7}
+\hbox{\dvgtteka\char8\char9\char10\char11}}}
+\ifx\parbox\undefined
+    \def\setdvgttek{\box\dvgttekbox}
+\else
+    \def\setdvgttek{\parbox{\wd\dvgttekbox}{\box\dvgttekbox}}
+\fi

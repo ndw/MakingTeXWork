@@ -1,0 +1,94 @@
+# anything in the control character range
+for ($byte = 0; $byte < 32; $byte++) {
+    $char = sprintf("%c", $byte);
+    $badchars{$char} = "\\c{$byte}";
+}
+
+# and anything over 126
+for ($byte = 127; $byte < 256; $byte++) {
+    $char = sprintf("%c", $byte);
+    $badchars{$char} = "\\c{$byte}";
+}
+
+$badchars{"\%"} = '\%';
+$badchars{"\$"} = '\$';
+$badchars{"\&"} = '\&';
+$badchars{"\#"} = '\#';
+$badchars{"\{"} = '\c{123}';
+$badchars{"\}"} = '\c{125}';
+$badchars{"\\"} = '\c{92}';
+$badchars{"\_"} = '\c{95}';
+$badchars{"\^"} = '\c{94}';
+
+open (CAPTFILE, $capturefile) || die "Can't open capture file: $capturefile\n";
+open (TEXFILE, ">$texfile")   || die "Can't open TeX file: $texfile\n";
+while ($line = &get_line()) {
+    print STDERR "." if $texfile ne "-" && !$VERBOSE && !$QUIET;
+    print STDERR "$line\n" if $VERBOSE;
+
+    $outputbuf = "";
+    while (length($line) > 0) {
+	$char = substr($line,0,1);
+	$line = substr($line,1);
+
+	if (defined($badchars{$char})) {
+	    $outputbuf .= $badchars{$char};
+	} else {
+	    $outputbuf .= $char;
+	}
+    }
+    print TEXFILE "$outputbuf\n";
+}
+
+close(CAPTFILE);
+close(TEXFILE);
+
+exit 0;
+
+sub get_text_line {
+    local($line);
+    
+    if ($line = scalar(<CAPTFILE>)) {
+	chop($line);
+    }
+
+    $line;
+}
+
+sub get_data_line {
+    local($datalen, $line);
+
+    if ($datalen = read(CAPTFILE, $line, $LINELENGTH)) {
+	# if we got a complete line, look to see if the next 
+	# characters in the file are CR, CR/LF, or LF.  If so, remove
+	# them (assume the are line breaks in the file)
+	if ($datalen = $LINELENGTH) {
+	    $place = tell(CAPTFILE);
+	    $datalen = read(CAPTFILE, $line, 1);
+	    if ($line eq "\015") {
+		$place++;
+		$datalen = read(CAPTFILE, $line, 1);
+		if ($line ne "\012") {
+		    seek(CAPTFILE, $place, 0);
+		}
+	    } elsif ($line ne "\012") {
+		seek(CAPTFILE, $place, 0);
+	    }
+	}
+    } else {
+	return undef;
+    }
+
+    $line;
+}
+
+sub get_line {
+    local($line);
+    if ($FILEOFLINES) {
+	$line = &get_text_line();
+    } else {
+	$line = &get_data_line();
+    }
+
+    $line;
+}

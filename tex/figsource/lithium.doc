@@ -1,0 +1,16 @@
+\input chemstruct
+
+% ChemStruct
+% A lithium cation surrounded by two hydration spheres
+
+\nopagenumbers
+ 
+\vbox{
+\centerline{
+\input{lithium.tex}
+}}
+
+\bye
+ 
+ 
+

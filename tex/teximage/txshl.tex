@@ -1,0 +1,17 @@
+\newbox\txshlbox
+\newdimen\txshlwd
+\font\txshla=txshla at 72.27truept
+\font\txshlb=txshlb at 72.27truept
+\setbox\txshlbox=\vbox{\hbox{%
+\txshla\char0\char1\char2\char3}}
+\txshlwd=\wd\txshlbox
+\setbox\txshlbox=\hbox{\vbox{\hsize=\txshlwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\txshla\char0\char1\char2\char3}
+\hbox{\txshla\char4\char5\txshlb\char0\char1}
+\hbox{\txshlb\char2\char3\char4\char5}}}
+\ifx\parbox\undefined
+    \def\settxshl{\box\txshlbox}
+\else
+    \def\settxshl{\parbox{\wd\txshlbox}{\box\txshlbox}}
+\fi

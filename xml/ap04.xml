@@ -1,0 +1,125 @@
+<appendix id="app.examples">
+<appendixinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</appendixinfo>
+<title>Long Examples</title>
+
+<para>This appendix contains the source for several scripts that seemed
+too long to place in the running text.  These scripts are provided
+as examples only, they may not run on your system without some 
+modification.
+</para>
+
+<para>These examples are available online,
+see the Preface for more information about retrieving online examples.
+</para>
+
+<para>The \program{MakeTeXPK.pl} script builds PK files from &MF; and
+PostScript fonts.</para>
+
+<example id="ex.maketexpk">
+<title>MakeTeXPK.pl</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="MakeTeXPK.pl"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>The \program{MakeTeXTFM.pl} script builds TFM files from \MF\
+and PostScript (\ext{AFM} file) fonts.</para>
+
+<example id="ex.maketextfm">
+<title>MakeTeXTFM.pl</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="MakeTeXTFM.pl"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>The \program{dvidxx.btm} script is written in \program{4DOS}'s
+extended batch language.  It performs automatic font generation for
+\MF\ and PostScript fonts using \emTeX's drivers (version 1.4s).</para>
+
+<example id="ex.dvidxx">
+<title>dvidxx.btm</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="dvidxx.btm"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>The \program{makepk.btm} script is used by \program{dvidxx.btm}, shown
+in Example~\ref{ex:dvidxx} in this appendix.</para>
+
+<example id="ex.makepk">
+<title>makepk.btm</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="makepk.btm"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>The \program{enc-afm.pl} script changes the encoding vector in an
+\ext{AFM} file.</para>
+
+<example id="ex.encafmpl">
+<title>enc-afm.pl</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="enc-afm.pl"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>The \program{TeXtoXfont} script is a \Unix\ shell script
+(written in \program{bash}) which builds an X11 font from a \MF\ or
+PostScript font.</para>
+
+<example id="ex.textoxfont">
+<title>TeXtoXfont</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="TeXtoXfont"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>The \program{PStoXfont} script is used by \program{TeXtoXfont},
+shown in Example~\ref{ex:textoxfont} in this appendix.</para>
+
+<example id="ex.pstoxfont">
+<title>PStoXfont</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="PStoXfont"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+<para>The \program{txt2verb.pl} script translates arbitrary text lines
+into a format suitable for including in \verb|\verbatim| material in
+\TeX.</para>
+
+<example id="ex.txt2verb">
+<title>txt2verb.pl</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="txt2verb.pl"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</example>
+
+</appendix>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: xml
+sgml-parent-document: "book.xml"
+ispell-skip-sgml: t
+End:
+-->

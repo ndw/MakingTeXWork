@@ -1,0 +1,1080 @@
+<chapter id="chap.bibtex">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>Bibliographies, Indexes, and Glossaries</title>
+
+<para>Bibliographies<indexterm><primary>bibliographies</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>bibliographies</secondary></indexterm> and 
+indexes<indexterm><primary>indexes</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>indexes</secondary></indexterm> are typically difficult to 
+incorporate into
+a document.  Bibliographies have 
+stringent, but varying, presentation requirements (the MLA wants
+bibliographies to look one way, the Association of Computing Machinery
+wants them another, etc.).
+Indexes don't vary that much, but they are tedious to put together.
+</para>
+
+<para>&BibTeX; provides a powerful mechanism for handling bibliographies
+and citations.  <command>Tib</command> is another bibliography package for &TeX;. 
+The <command>MakeIndex</command> program helps manage the construction
+of one or more indexes for a document.  Glossaries are also constructed
+with the <command>MakeIndex</command> 
+program<indexterm><primary>glossaries</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>glossaries</secondary></indexterm>.
+</para>
+
+<section id="sec.indexeslooklike"><title>&BibTeX;</title>
+
+<para><indexterm><primary sortas="bibtex">&BibTeX;</primary></indexterm>What's wrong with doing 
+bibliographies by hand?  Two things.  First,
+it is tedious to typeset each bibliography entry according to the strict
+requirements of the publisher.  Chances are, you'll have to look up the
+requirements each time, and you're bound to make mistakes.  Second, no 
+matter what field you work in, it's likely that you'll cite some of the
+same articles and books in more than one publication.   Computers are 
+supposed to reduce effort, not replicate it.
+</para>
+
+<para>&BibTeX; provides a powerful mechanism for dealing with bibliographies
+in a mechanical way, considerably reducing effort on your part.  Rather
+than formatting each bibliography entry, you build a database of 
+bibliography information<indexterm><primary>database (bibliographic)</primary></indexterm>.  Each 
+time you want to make a citation, you
+simply use &BibTeX; to build the bibliography from your database
+into your document.  That's easy to
+do, as you'll see in a few minutes.
+</para>
+
+<para>The idea of a bibliography database is introduced in Appendix&nbsp;B of
+<emphasis>&LaTeX;: A Document Preparation System</emphasis>&nbsp;<xref linkend="ll:latexbook"/> and
+is described in more detail in <emphasis>\BibTeX{}ing</emphasis>&nbsp;<xref linkend="op:btxdoc"/> 
+and <emphasis>Designing &BibTeX; Styles</emphasis>&nbsp;<xref linkend="op:btxhak"/>.  
+The purpose of this chapter is to
+familiarize you with the concepts of a bibliography database and to describe
+many of the freely available tools for manipulating databases.  It is
+not intended to replace any of the preceding documents.
+</para>
+
+<section><title>How &BibTeX; Works</title>
+
+<para>The &LaTeX; command <markup>\cite</markup> inserts 
+citations<indexterm><primary>citations</primary><secondary sortas="in BibTeX">in &BibTeX;</secondary></indexterm> into your
+document.<footnote><para>{For Plain &TeX; and other formats derived from Plain,
+the <filename>btxmac.tex</filename> macros provide these commands.}</para></footnote>  
+You use a short <emphasis>key</emphasis><indexterm><primary>key for bibliographic document</primary></indexterm> to 
+identify the publication
+you cite.  For example, in this book, when I want to
+cite <emphasis>The &TeX;book</emphasis>&nbsp;<xref linkend="kn:texbook"/>, I use the command
+<literal>FIXME:</literal>.  The string <literal>kn:texbook</literal> is the
+key.  When you build your bibliography database, you assign a key
+to each document in the database.  
+</para>
+
+<para>When &LaTeX; processes your document, it stores information about the
+documents that you cite (including the key for each document) in
+the <filename role="extension">AUX</filename> file<indexterm><primary sortas="aux files">.aux files</primary></indexterm>.  The following commands
+identify how the bibliography should be formatted and what bibliography
+databases contain the publications you cite.  &LaTeX; also
+writes this information to the <filename role="extension">AUX</filename> file:
+</para>
+
+<screen>
+\bibliographystyle{abbrv}
+\bibliography{texpubs}
+</screen>
+
+<para>&BibTeX; examines the <filename role="extension">AUX</filename> file and extracts
+the appropriate entries from the bibliography database.  It then formats
+those entries according to the <emphasis>bibliography style</emphasis> that you specify.
+The bibliography style (stored in a plain text file with the extension
+<filename role="extension">BST</filename>)<indexterm><primary sortas="bst files">.bst files</primary></indexterm> tells &BibTeX; exactly 
+how each entry should be formatted.
+After formatting the entries, &BibTeX; writes 
+a <filename role="extension">BBL</filename> file<indexterm><primary sortas="bbl files">.bbl files</primary></indexterm> that
+&LaTeX; incorporates into your document (at the place where the 
+<markup>\bibliography</markup> command occurs) the next time 
+you process it.
+</para>
+
+<para>Sometimes it seems confusing to use &LaTeX; to create a bibliography.
+If &LaTeX; keeps warning you about <quote>unknown citations</quote> for documents
+that you <emphasis>know</emphasis> are in the database, try the following: run
+&LaTeX;, then &BibTeX;, then &LaTeX;, and then &LaTeX; again.
+</para>
+
+<para>The first time you run &LaTeX;, it writes the citation keys to the 
+<filename role="extension">AUX</filename> file (but it doesn't know what publications they refer to).
+&BibTeX; writes the <filename role="extension">BBL</filename> file, which includes the printable,
+formatted bibliography and information about
+what publication corresponds to each citation.  The second time
+you run &LaTeX;, it still doesn't know what publication
+each citation refers to because it hasn't seen the <filename role="extension">BBL</filename> file
+yet (bibliographies are usually at the end of a document).  During
+the second pass, &LaTeX; writes the citation referents to the <filename role="extension">AUX</filename>
+file.  Finally, on the third &LaTeX; pass, it knows what
+each citation refers to, so it can typeset the citations as well
+as the bibliography!
+</para>
+
+</section>
+<section><title>Building a Bibliography Database</title>
+
+<para>A bibliography 
+database<indexterm><primary>database (bibliographic)</primary></indexterm><indexterm><primary>bibliographies</primary><secondary>building  a database</secondary></indexterm> is 
+a plain text file that contains information
+about a collection of publications.  Bibliography databases generally
+have the extension <filename>.bib</filename>.  Example&nbsp;<xref role="label" linkend="ex.bib.bibexample"/>
+is an example of a single database entry.  This entry is from a database
+of &TeX;-related publications that I put together while writing this book.
+</para>
+
+<example id="ex.bib.bibexample"><title>A Sample &BibTeX; entry</title>
+<screen>
+@book{kn:texbook,
+  author =  "Donald E. Knuth",
+  title =   "The {&TeX;}book",
+  publisher =   "Addison-Wesley",
+  year =  1989,
+  edition =   "Fifteenth",
+}
+</screen>
+</example>
+
+<para>The entry in Example&nbsp;<xref role="label" linkend="ex.bib.bibexample"/> describes <emphasis>The {&TeX;}book</emphasis>
+by Donald Knuth<indexterm><primary>Knuth, Donald</primary></indexterm>.  The key for 
+this entry is <literal>kn:texbook</literal>.
+</para>
+
+<note>
+<para>All of the keys in a &BibTeX; database must be unique.  If you use
+multiple databases for a single document, all of the keys in all of the
+databases must be unique.
+</para>
+</note>
+
+<para>In database jargon, the bibliography database contains a collection
+of records describing publications.  There may be several
+types of records in the same database.  Each record contains
+several fields, some of which are required and some optional.  The
+required fields vary according to the type of record.  
+</para>
+
+<para>In English, this means that each entry in the database describes a
+specific type of publication (book, article, technical report,
+etc.).  Every publication is described by its characteristics.  For
+example, books have a title, an author or editor, a publisher, and a
+year of publication.  Some books also have a publisher's address, a
+volume or number, a series, edition, or month of publication (or some
+combination of these elements).  These characteristics are called
+<emphasis>fields</emphasis>, and they are identified by their name.
+</para>
+
+<section><title>Database entries</title>
+
+<para>This is the general 
+structure<indexterm><primary>database (bibliographic)</primary><secondary>structure</secondary></indexterm><indexterm><primary>bibliographies</primary><secondary>entries</secondary></indexterm> of 
+an entry in a bibliography database:
+</para>
+
+<screen>
+<literal>@</literal><emphasis>type</emphasis><literal>{</literal><emphasis>key</emphasis>,
+    <emphasis>field1</emphasis> = "<emphasis>value1</emphasis>",
+    <emphasis>field2</emphasis> = "<emphasis>value2</emphasis>",
+    . . .
+    <emphasis>fieldn</emphasis> = "<emphasis>valuen</emphasis>"
+<literal>}</literal>
+</screen>
+
+<para>Always enter complete bibliography information in mixed
+case.  Never abbreviate or set field values in all upper or all lowercase, 
+even if the bibliography style that you most frequently use
+specifies, for example, that book titles appear in uppercase or that only
+the author's first initial should appear.  &BibTeX; will take care
+of formatting the entry according to the style.  If you store incomplete
+information in the database, &BibTeX; can't work correctly if you change
+styles.
+</para>
+
+</section>
+<section><title>Entry types</title>
+
+<para>Table&nbsp;<xref role="label" linkend="tab.bib.entries"/> shows the required and optional fields for
+article and book entries.  Similar lists exist for the other standard
+entry types: booklet, conference, inbook, incollection, inproceedings,
+manual, mastersthesis, phdthesis, proceedings, techreport, unpublished,
+and a catch-all miscellaneous type.
+</para>
+
+<table id="tab.bib.entries">
+<title>Types of Entries with Required and Optional 
+    Fields</title>
+<tgroup cols="3">
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>\bf Type</entry>
+  <entry>\bf Required Fields</entry>
+  <entry>\bf Optional Fields </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>article</entry>
+  <entry>author</entry>
+  <entry>month </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry>journal</entry>
+  <entry>number </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry>title</entry>
+  <entry>pages </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry>year</entry>
+  <entry>volume </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry></entry>
+  <entry>note </entry>
+</row>
+<row>
+  <entry>book</entry>
+  <entry>author or editor</entry>
+  <entry>address </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry>publisher</entry>
+  <entry>edition </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry>title</entry>
+  <entry>month </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry>year</entry>
+  <entry>volume or number </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry></entry>
+  <entry>series </entry>
+</row>
+<row>
+  <entry></entry>
+  <entry></entry>
+  <entry>note </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+<para>Fields that are neither required nor optional are ignored.  Therefore,
+you can and should associate arbitrary information about a
+publication in its entry.  Abstracts and
+keywords, for example, are two additional pieces of information that
+you might keep for some publications.  They can be stored in 
+<literal>abstract</literal> and <literal>keyword</literal> fields in each entry, even
+though it is unlikely that they will ever occur in a bibliography.
+</para>
+
+<note>
+<para>The types of records that are valid, and the required and optional
+fields they contain are determined solely by the bibliography
+style.  There is nothing in the &BibTeX; program that makes 
+<emphasis>book</emphasis> and <emphasis>article</emphasis> entries more legitimate than
+<emphasis>reptile</emphasis> or <emphasis>cartoon</emphasis> entries.  
+</para>
+</note>
+
+</section>
+<section><title>Abbreviations</title>
+
+<para><indexterm><primary>abbreviations in bibliographic databases</primary></indexterm>The 
+database entry structure that I've shown isn't entirely accurate.  
+In my example, every field has a quoted string value.  The truth is, every
+value is either a quoted string or an abbreviation or a number.  An
+abbreviation is created with the <literal>@string</literal> command.  Typically,
+<literal>@string</literal> commands are placed at the top of the bibliography
+database.  For
+example, the following command defines <literal>ora</literal> to be an 
+abbreviation for O'Reilly &amp; Associates.
+</para>
+
+<screen>
+<literal>@string{ora = "O'Reilly &amp; Associates, Inc."}</literal>
+</screen>
+
+<para>The months of the year should always be specified with abbreviations
+so that bibliography styles can redefine how they appear in the
+bibliography (for this reason, three-letter abbreviations
+for the months are defined in the standard styles---you don't have to
+define them yourself).  The names of journals that you cite frequently are
+also obvious candidates for abbreviation.
+</para>
+
+</section>
+<section><title>Preamble</title>
+
+<para><indexterm><primary>preambles</primary><secondary>in bibliographic databases</secondary></indexterm>Sometimes 
+it is helpful to define &TeX; control sequences in a
+bibliography database.  &BibTeX; provides a <literal>@preamble</literal> entry for
+this purpose.
+</para>
+
+<para>Consider the following example, paraphrased
+from <emphasis>\BibTeX{}ing</emphasis>&nbsp;<xref linkend="op:btxdoc"/>: You have a database which contains entries
+for each volume of a two-volume set by the same author.  It happens that
+Volume One has been reprinted, so it has a more recent date than Volume Two.
+The standard styles sort by author and then date, so as it stands, the
+bibliography would list Volume Two before Volume One.
+</para>
+
+<para>To correct this problem, you could specify the dates for Volume One as:
+</para>
+
+<screen>
+year = "{\noopsort{1990a}}1992"
+</screen>
+
+<para>and for Volume Two:
+</para>
+
+<screen>
+year = "{\noopsort{1990b}}1990"
+</screen>
+
+<para>&BibTeX; will sort <quote>1990a</quote> before <quote>1990b,</quote> so they
+will appear in the correct order, and the following definition for
+<markup>\noopsort</markup> will simply discard its argument, so nothing extra
+will appear in the bibliography:<footnote><para>{This example uses Plain &TeX; syntax rather than a &LaTeX; <literal>\bs newcommand</literal>, because &BibTeX; databases can be used from Plain &TeX; as well as &LaTeX;.}</para></footnote>
+</para>
+
+<screen>
+\def\noopsort#1{}
+</screen>
+
+<para>The best place to put this definition is in the database that uses it
+(so that it will always be present when that database is used).  The
+<literal>@preamble</literal> command simply copies its argument to the top of the
+<filename role="extension">BBL</filename> file, so this definition at the top of the database will
+do exactly what we want:
+</para>
+
+<screen>
+@preamble{"\def\noopsort#1{}"}
+</screen>
+
+</section>
+<section><title>Comments</title>
+
+<para><indexterm><primary>comments</primary><secondary>in bibliographic databases</secondary></indexterm>Anything that 
+does not appear inside a <literal>@</literal><emphasis><literal>type</literal></emphasis><literal>{}</literal>
+command is a comment. However, many programs that manipulate
+bibliography databases will misplace comments appearing before or
+after an entry if the entries are reordered.
+</para>
+
+<para>&BibTeX; includes a <literal>@comment</literal> entry for backwards compatibility
+with older systems.
+Unlike &TeX;, the percent sign (\%) is <emphasis>not</emphasis> a
+comment character in &BibTeX;.
+</para>
+
+</section>
+<section><title>Special characters</title>
+
+<para>Inserting &TeX; control sequences<indexterm><primary>characters</primary><secondary>special</secondary><tertiary>in bibliographic databases</tertiary></indexterm><indexterm><primary>special characters</primary><secondary>in bibliographic databases</secondary></indexterm><indexterm><primary>control sequences</primary><secondary>in bibliographic databases</secondary></indexterm> (to 
+form accented characters, for example)
+into a bibliography entry requires special care.  Some styles specify
+that entries should be shifted to upper or lowercase, and shifting
+the case control sequence names would make them different.
+</para>
+
+<para>&BibTeX; is aware of the case sensitivity of &TeX; control sequence names
+and will not change them.  To specify accents or other special characters,
+always enclose them in <literal>{</literal> and <literal>}</literal> braces.  The same
+treatment should be given to portions of an author's name that should
+remain in lowercase even if the rest of the name is shifted to uppercase.
+</para>
+
+</section>
+</section>
+<section><title>Bibliography Styles</title>
+
+<para>&BibTeX; styles<indexterm><primary>bibliographies</primary><secondary>styles</secondary></indexterm> are really 
+programs written in a simple but powerful
+stack-based language and interpreted by &BibTeX;.<footnote><para>{A complete
+description of &BibTeX;'s programming language can be found in
+<emphasis>Designing &BibTeX; Styles</emphasis>&nbsp;<xref linkend="op:btxhak"/>.}</para></footnote>  Don't confuse
+bibliography styles (<filename role="extension">BST</filename> files)<indexterm><primary sortas="bst files">.bst files</primary></indexterm> 
+with &LaTeX; styles (<filename role="extension">STY</filename> files<indexterm><primary>STY files</primary></indexterm>); they are unrelated.  
+Although a complete description of the &BibTeX; language is not presented
+here, a short example will help give you a sense of
+the language.  
+</para>
+
+<para>Each <filename role="extension">BST</filename> file defines a number of functions. The highest
+level functions determine how each entry is formatted: when &BibTeX; needs to format a <quote>book</quote> entry, it executes the <literal>book</literal> function,
+which must be defined by the <filename role="extension">BST</filename> file in use or an error will
+result.
+</para>
+
+<para>Let's consider part of the task of formatting a book entry.  These code
+fragments are from the standard bibliography style <filename>plain.bst</filename>.
+When the <literal>book</literal> function is ready to output the book title, it calls
+the <literal>format.btitle</literal> function, shown here:
+</para>
+
+<screen>
+FUNCTION {format.btitle}
+{ title emphasize
+}
+</screen>
+
+<para>This function places the <emphasis>title</emphasis> field on
+top of the stack and calls <literal>emphasize</literal>:
+</para>
+
+<screen>
+FUNCTION {emphasize}
+{ duplicate$ empty$
+    { pop$ "" }
+    { "<emphasis>" swap$ * "</emphasis>" * }
+  if$
+}
+</screen>
+
+<para>This is what <literal>emphasize</literal> will do when the <emphasis>title</emphasis>
+is not an empty field:
+</para>
+
+<orderedlist>
+  <listitem>
+<para> Duplicate what is on the top of the stack.
+  </para>
+</listitem>
+<listitem>
+<para> Test the value on the top of the stack.  The <literal>empty$</literal> function
+        removes the top value from the stack and places a boolean <quote>true</quote> 
+        value there if what it removed was an empty field, 
+        and a <quote>false</quote> value otherwise.
+  </para>
+</listitem>
+<listitem>
+<para> Push <literal>{ pop$ "" }</literal> onto the stack.
+  </para>
+</listitem>
+<listitem>
+<para> Push <literal>{ "&lt;emphasis&gt;" swap$ * "&lt;/emphasis&gt;" * }</literal> onto the stack.
+  </para>
+</listitem>
+<listitem>
+<para> Test the condition.  The <literal>if$</literal> function takes three values
+        from the stack: a boolean value, something to do if that value
+        is true, and something to do if that value is false.  In this
+        case, the title is not an empty field, so the value is false.
+        The <literal>{ pop$ "" }</literal> value is discarded, and 
+        <literal>{ "&lt;emphasis&gt;" swap$ * "&lt;/emphasis&gt;" * }</literal> is evaluated.
+  </para>
+</listitem>
+<listitem>
+<para> Push <literal>{\em</literal>&nbsp; onto the top of the stack.
+  </para>
+</listitem>
+<listitem>
+<para> Swap the top two items on the stack.  Now <markup>\em</markup>&nbsp; is
+        below the book title on the stack.
+  </para>
+</listitem>
+<listitem>
+<para> Concatenate the top two items on the stack.  Now the top of the
+        stack holds the value <literal>\bs em&nbsp;<replaceable>book title</replaceable></literal>.
+  </para>
+</listitem>
+<listitem>
+<para> Push <literal>}</literal> onto the top of the stack.
+  </para>
+</listitem>
+<listitem>
+<para> Concatenate the top two items on the stack.  Now the top of the
+        stack holds the value <literal>{\ttopenbrace\bs em&nbsp;<replaceable>{book
+        title}</replaceable><literal>}</literal>}</literal>.
+</para>
+</listitem>
+</orderedlist>
+
+<para>The resulting value left on top of the stack when <literal>emphasize</literal> 
+is finished is the &TeX; code required to print the book title with
+emphasis.
+</para>
+
+<section><title>Special-purpose styles</title>
+
+<para>A number of styles<indexterm><primary>bibliographies</primary><secondary>special-purpose styles</secondary></indexterm> have 
+been written to allow you to develop special-purpose
+bibliographies.  A few of them are listed here:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> <filename>bibunits</filename> supports multiple bibliographies in 
+          different sections of a single document.
+  </para>
+</listitem>
+<listitem>
+<para> <filename>chapterbib</filename> supports separate bibliographies 
+          in each chapter of a single document.
+  </para>
+</listitem>
+<listitem>
+<para> <filename>makebst</filename> asks a number of 
+          questions about the bibliography style you need and constructs an
+          appropriate &BibTeX; style.
+  </para>
+</listitem>
+</itemizedlist>
+
+</section>
+</section>
+<section><title>Bibliography Database Tools</title>
+
+<para><indexterm><primary>bibliographies</primary><secondary>database tools</secondary></indexterm><indexterm><primary>database (bibliographic)</primary><secondary>tools</secondary></indexterm>There 
+are a lot of programs designed to help you extract information
+from bibliography databases, sort the entries,
+build subset-bibliographies that contain only some of the entries
+from a larger bibliography, and enter or edit information in an existing
+or new database.
+A lot of these programs are written in &unix; shell<indexterm><primary>shell</primary><secondary>UNIX</secondary></indexterm> script 
+languages and
+rely on existing text-processing tools like <command>awk</command>,
+<command>sed</command>, <command>sort</command>, and <command>grep</command>.  Of
+course, many of these text-processing tools have been ported to other
+operating systems.  Most of the utilities written in shell script
+languages can be modified to work in other environments by an
+ambitious individual.
+</para>
+
+<section><title>bibsort</title>
+
+<para>The <command>bibsort</command><indexterm><primary>bibsort</primary></indexterm> shell script reorders the 
+entries in a bibliography
+database into alphabetical order by entry key name.  <literal>@string</literal> commands
+are reordered by macro name.
+This program cannot deal correctly with
+comments that appear outside of an entry.  These comments are always
+associated with the preceding entry, which is frequently incorrect.
+</para>
+
+<para>Consider carefully before you reorder the entries in a database.  &BibTeX; places some restrictions on the available orderings.  Cross references,
+for example, must appear before the entry to which they refer.
+</para>
+
+</section>
+<section><title>biblook</title>
+
+<para><command>biblook</command><indexterm><primary>biblook</primary></indexterm> is an interactive program that
+searches rapidly through a bibliography database for key words in specified
+fields.  Compound conditions (using <quote>and</quote> and <quote>or</quote>) can be specified.
+The entries located by a search can be saved into a separate file.
+</para>
+
+<para>To use <command>biblook</command>, you must preprocess the database
+with <command>bibindex</command><indexterm><primary>bibindex</primary></indexterm>, which builds a binary index of
+the entries.  Differences in case are removed, &TeX; control sequences are stripped out, and non-alphanumeric characters
+are removed.  This increases the likelihood of correct matches.
+</para>
+
+</section>
+<section><title>bibclean</title>
+
+<para><command>bibclean</command><indexterm><primary>bibclean</primary></indexterm> is a syntax checker for bibliography
+databases.  Running <command>bibclean</command> before using <command>bibsort</command>,
+<command>biblook</command>, or any other programs described here can eliminate a lot of
+the problems these programs may encounter.  Although bibliography databases
+are plain text files with a very loose structure, some tools are more easily
+confused than others.
+</para>
+
+<para><command>bibclean</command> identifies possible problems in the database and
+pretty-prints it in a standard way.  The following formatting changes
+are made by <command>bibclean</command>:
+</para>
+
+<itemizedlist>
+  <listitem>
+<para> The structure of each database entry is made consistent with 
+        respect to the following criteria: the <quote>@</quote> sign that begins
+        the entry type is moved into column 1; each line in the entry
+        is changed to contain exactly one <quote>field = value</quote> pair; and
+        the closing right brace is placed in column 1 on a line of
+        its own.  Additionally, outer parentheses are converted into
+        braces; tabs are expanded into blanks; hyphens in a sequence
+        of pages are converted into en-dashes; and month names are converted
+        into standard abbreviations.
+</para>
+
+<para>  </para>
+</listitem>
+<listitem>
+<para> Long string values are split at a blank and continued on the following
+        line.  The continuation lines are indented.
+</para>
+
+<para>  </para>
+</listitem>
+<listitem>
+<para> Individual names in the author and editor fields are 
+        normalized.  A single space is placed after periods that separate
+        initials, and all entries are converted into <quote>first-name middle-name
+        last-name</quote> form (instead of <quote>last-name, first-name</quote> form, for 
+        example).
+</para>
+
+<para>  </para>
+</listitem>
+<listitem>
+<para> The checksums of ISBN and ISSN numbers are verified.
+</para>
+
+<para>
+  </para>
+</listitem>
+<listitem>
+<para> Uppercase letters that appear outside of braces are enclosed in
+        braces to prevent them from being erroneously shifted to lowercase
+        by some bibliography styles.
+</para>
+</listitem>
+<listitem>
+<para> Text outside of entries is not changed.  Entries are separated by
+        a single blank line.
+</para>
+</listitem>
+</itemizedlist>
+
+</section>
+<section><title>citetags</title>
+
+<para><indexterm><primary>citetags</primary></indexterm>When 
+documents must be transmitted in <quote>source</quote> form (meaning that the 
+actual &TeX; files will be shipped around), it's generally
+unnecessary to include entire bibliography databases.  In these
+cases, it would be more convenient to send only the bibliography
+entries that are actually used.
+</para>
+
+<para>The <command>citetags</command> program extracts the citations from an <filename role="extension">AUX</filename>
+file.  This list of citations can be passed to the <command>citefind</command>
+program to build a small bibliography database of just the required entries.
+</para>
+
+</section>
+<section><title>citefind</title>
+
+<para><command>citefind</command><indexterm><primary>citefind</primary></indexterm> processes a list of citations and a list of
+bibliography databases and writes out a new database containing just the
+entries required to match the citations present.  This provides a minimal
+database that can be shipped with the document if the &TeX; files must be
+processed on another computer.
+</para>
+
+</section>
+<section><title>bibextract</title>
+
+<indexterm><primary>bibextract</primary></indexterm>
+
+<para>Given a list of fields and values (specified as regular expressions),
+<command>bibextract</command> creates a new database containing only the entries
+that match one or more of the specified values in one or more of the
+specified fields.  The necessary <literal>@string</literal> and <literal>@preamble</literal> commands
+are also included in the new database.
+</para>
+
+</section>
+<section><title>lookbibtex</title>
+
+<para><command>lookbibtex</command><indexterm><primary>lookbibtex</primary></indexterm> offers the same features as
+<command>bibextract</command>.  However, <command>lookbibtex</command> is written in
+<command>Perl</command> rather than a shell script language.
+</para>
+
+</section>
+<section><title>bibdestringify</title>
+
+<para>As the name implies, <command>bibdestringify</command><indexterm><primary>bibdestringify</primary></indexterm> replaces
+all <literal>@string</literal> macros in a database by their textual expansions.
+</para>
+
+</section>
+<section><title>edb</title>
+
+<para><command>edb</command><indexterm><primary>edb</primary></indexterm>, or the <quote>Emacs Database</quote> is a powerful database
+programming system built on top of GNU Emacs Lisp<indexterm><primary>GNU Emacs</primary><secondary>List for bibliographies</secondary></indexterm>.  <command>edb</command> has been used to write a database-editing mode
+for &BibTeX; databases.  It can be extended to handle new entry types.
+</para>
+
+</section>
+<section><title>Emacs &BibTeX; mode</title>
+
+<para>&BibTeX; mode<indexterm><primary sortas="bibtex">&BibTeX;</primary><secondary>mode in GNU Emacs</secondary></indexterm><indexterm><primary>GNU Emacs</primary><secondary sortas="BibTeX mode">&BibTeX; mode</secondary></indexterm> is a 
+mode for editing &BibTeX; databases in emacs.  It provides some template
+expansion and alignment features, but is essentially a text-editing mode
+(as opposed to <command>edb</command>, which is specifically a database-entry editor).
+</para>
+
+</section>
+<section><title>bibview</title>
+
+<para><command>bibview</command><indexterm><primary>bibview</primary></indexterm> is an X Window-based program for editing
+bibliography databases.  Figure&nbsp;<xref role="label" linkend="fig.bib.bibview"/> shows an example of
+<command>bibview</command> editing a database entry.
+</para>
+
+<figure id="fig.bib.bibview">
+<title>Editing an article entry with \program{bibview}</title>
+<screen>FIXME:</screen>
+</figure>
+
+<para>Unlike the <command>xbibtex</command> program, <command>bibview</command> can handle optional
+and ignored fields in bibliography entries.
+It does not handle new entry types.
+</para>
+
+</section>
+<section><title>xbibtex</title>
+
+<para><command>xbibtex</command><indexterm><primary>xbibtex</primary></indexterm> is an X Window-based program for creating
+bibliography databases.  Figure&nbsp;<xref role="label" linkend="fig.bib.xbibtex"/> shows an example of
+<command>xbibtex</command> creating a bibliography entry.
+</para>
+
+<figure id="fig.bib.xbibtex">
+<title>Editing an article entry with \program{xbibtex}</title>
+<screen>FIXME:</screen>
+</figure>
+
+<para>It does not appear that <command>xbibtex</command> can edit existing entries.
+It also does not handle unexpected fields or
+new entry types.
+</para>
+
+</section>
+<section><title>bibdb</title>
+
+<para>The <command>bibdb</command><indexterm><primary>bibdb</primary></indexterm> program is an MS-DOS-based bibliography
+database editor.  The screen capture in Figure&nbsp;<xref role="label" linkend="fig.bib.bibdb"/> shows an
+example of <command>bibdb</command> editing a bibliography entry.  <command>bibdb</command>
+displays only fields that have values.
+</para>
+
+<figure id="fig.bib.bibdb">
+<title>Editing an article entry with \program{bibdb}</title>
+<screen>FIXME:</screen>
+</figure>
+
+<para>Although it does not handle arbitrary fields, <command>bibdb</command> has a large
+selection of optional fields.
+It does not handle new entry types.
+</para>
+
+</section>
+</section>
+</section>
+<section><title>Tib</title>
+
+<para><command>Tib</command><indexterm><primary>Tib</primary></indexterm> is another tool for maintaining bibliography databases.  The
+format of a <command>Tib</command> database is the same as the format for the
+<command>troff</command> <command>refer</command>
+processor.<footnote><para>{<emphasis>refer</emphasis> databases can reportedly be
+converted to and from &BibTeX; format.}</para></footnote>  An example entry for
+<emphasis>The &TeX;book</emphasis> is shown in Example&nbsp;<xref role="label" linkend="ex.tibdb"/>.
+</para>
+
+<example id="ex.tibdb"><title>A Tib style database entry</title>
+<screen>
+<!-- A Donald E. Knuth -->
+<!-- T The &TeX;book -->
+<!-- I Addison-Wesley -->
+<!-- D 1989 -->
+</screen>
+</example>
+
+<para>Unlike &BibTeX;, which relies on the citation macros to 
+format citations correctly, <command>Tib</command> actually replaces the 
+citations<indexterm><primary>citations</primary><secondary sortas="in Tib">in \Tib</secondary></indexterm> with 
+the appropriate information.  In other words, <command>Tib</command>-style citations
+are not control sequences; they are just text strings.  The <command>Tib</command> 
+processor creates an entirely new document file that should be passed
+to &TeX;.
+</para>
+
+<para>The general format of a <command>Tib</command> citation is
+<literal>[.</literal><literal><replaceable>citation key(s)</replaceable></literal><literal>.]</literal>.
+<command>Tib</command> databases do not contain a key field; instead,
+the citation keys can come from any fields in the
+database entry (you can exclude some fields
+if you wish).
+The punctuation around citations in square brackets is adjusted by
+<command>Tib</command>.  An alternate form of citation using angle brackets inserts
+a citation without adjusting any of the surrounding punctuation.
+</para>
+
+<para>The bibliography is inserted into your document wherever the string
+<quote><literal>.[]</literal></quote> occurs at the beginning of a line.  Analogous to &BibTeX;,
+the format of the reference list is controlled by a <command>Tib</command> style.
+Styles for roughly fifteen technical journals are provided.
+</para>
+
+</section>
+<section><title>Making Indexes</title>
+
+<para>Constructing an index<indexterm><primary>indexes</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>indexes</secondary></indexterm> for 
+a &TeX; document is relatively straightforward.
+First, you must identify each occurrence of each word or concept that you want
+indexed.  To do this, you must insert <markup>\index</markup> entries into your
+document.<footnote><para>{The format you use must also provide support for
+indexing.  In &LaTeX;<indexterm><primary sortas="latex">&LaTeX;</primary><secondary>indexes</secondary></indexterm>, most of the 
+support is built in, but you must use the
+makeidx style option<indexterm><primary>makeidx style option</primary></indexterm>.  In Plain &TeX; and other Plain-derived
+formats, input the <filename>idxmac.tex</filename> macros at the top of your document.
+The rest of this section assumes that you use &LaTeX;, although the
+principles hold for any macro package that supports indexing.}</para></footnote>  When you
+format your document containing the 
+index entries, an <filename role="extension">IDX</filename> file<indexterm><primary>IDX files</primary></indexterm> is
+created that contains all of the entries along with the page number where each
+entry occurred.
+</para>
+
+<para>The <command>MakeIndex</command><indexterm><primary>MakeIndex</primary><secondary>for indexes</secondary></indexterm> 
+program<footnote><para>{Frequently called <filename>makeidx</filename> 
+on MS-DOS systems.}</para></footnote> reads the <filename role="extension">IDX</filename> file, sorts and collates the entries,
+and writes an <filename role="extension">IND</filename> file<indexterm><primary>IND files</primary></indexterm>.  The <command>MakeIndex</command> 
+program can also 
+load an index style file, discussed in the next section.
+</para>
+
+<para>When &LaTeX; processes your document, it inserts
+the contents of the <filename role="extension">IND</filename> file into your document at the point where you
+use the <markup>\printindex</markup> control sequence.
+</para>
+
+<section><title>Index Entries</title>
+
+<para>Index entries<indexterm><primary>indexes</primary><secondary>entries</secondary></indexterm><indexterm><primary>special characters</primary><secondary>in indexes</secondary></indexterm><indexterm><primary>characters</primary><secondary>special</secondary><tertiary>in indexes</tertiary></indexterm> use special 
+characters to identify different types of entries
+(simple entries, multiple-level entries, see-also's, etc.).  The exact
+characters used are controlled by the index style file, and it may be
+convenient to select an alternate style.  For example,
+<command>MakeIndex</command> uses the double-quote character by default to identify literal
+characters in the index entry, but the German<indexterm><primary>German</primary></indexterm> Babel style makes the literal
+double quote character a shortcut for the umlaut accent; this use makes it
+unavailable as the quotation character in index entries.
+</para>
+
+<para>Another point to consider when coding index entries is that the arguments
+to the index macros are expanded by &TeX;.  This makes it difficult to insert
+some control sequences<indexterm><primary>control sequences</primary><secondary>in indexes</secondary></indexterm> in 
+an index entry (for example <literal><indexterm><primary sortas="TeX">&TeX;</primary></indexterm></literal>).
+In &LaTeX;, you can combat this problem by using the <literal></literal> control
+sequence: <literal><indexterm><primary sortas="TeX">&TeX;</primary></indexterm></literal>.
+</para>
+
+<para>A complete list of the different kinds of index entries that can be
+created is included in <emphasis>{MakeIndex: An Index Processor for 
+&LaTeX;}</emphasis>&nbsp;<xref linkend="ll:makeindex"/>.
+</para>
+
+<!-- <section><title>Simple index entries</title>
+ -->
+<!-- The simplest index entries identify a single top-level term.  This form -->
+<!-- of entry is simply: -->
+<!-- <screen> -->
+<!-- \bs index\{<emphasis>frogs</emphasis>\} -->
+<!-- </screen> -->
+<!-- </section>
+<section><title>Multi-level entries</title>
+ -->
+<!-- To mark second and third level indexing terms, separate the levels with -->
+<!-- an exclamation point: -->
+<!-- <screen> -->
+<!-- \bs index\{<emphasis>amphibians</emphasis>!<emphasis>frogs</emphasis>\} -->
+<!-- </screen> -->
+<!-- This will create a top level heading called <quote>pets</quote> with a subheading -->
+<!-- for <quote>dogs</quote>.   To create deeper nesting, use more exclamation points: -->
+<!-- <screen> -->
+<!-- \bs index\{<emphasis>pets</emphasis>!<emphasis>amphibians</emphasis>!<emphasis>frogs</emphasis>\} -->
+<!-- </screen> -->
+<!-- </section>
+<section><title>Page ranges</title>
+ -->
+<!-- To identify an entry that spans a range of pages, simply mark the ends of -->
+<!-- the range.  To mark the beginning of the range, use: -->
+<!-- <screen> -->
+<!-- \bs index\{<emphasis>amphibians</emphasis>|(\} -->
+<!-- </screen> -->
+<!-- and to mark the end: -->
+<!-- <screen> -->
+<!-- \bs index\{<emphasis>amphibians</emphasis>|)\} -->
+<!-- </screen> -->
+<!-- Both ends of the range should fall on pages with the same numbering -->
+<!-- scheme (i.e. roman, arabic, etc.). -->
+<!-- </section>
+<section><title>Cross references</title>
+ -->
+<!-- To make a cross-reference entry, use the  -->
+
+</section>
+</section>
+<section><title>Index Format</title>
+
+<para>The format of the index is controlled by both the index style (which
+specifies whether or not headings should be present, what the delimiters
+should be, etc.) and the definition of several control sequences:<footnote><para>{In
+&LaTeX;, these control sequences have default definitions that you may not
+need to change.}</para></footnote>
+</para>
+
+<variablelist>
+  <varlistentry>
+<term>\bs\texttt{theindex}</term>
+<listitem>
+<para> Controls what happens just before the index
+    is printed.  This sequence should establish a new page, set up 
+    running headers and footers, select multiple columns, and do whatever
+    other global setup is desired.
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>\bs\texttt{item}</term>
+<listitem>
+<para> Executed just before a first-level entry.
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>\bs\texttt{subitem}</term>
+<listitem>
+<para> Executed just before a second-level entry.
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>\bs\texttt{subsubitem}</term>
+<listitem>
+<para> Executed just before a third-level entry.
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>\bs\texttt{indexspace}</term>
+<listitem>
+<para> Executed between alphabetical sections.
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>\bs\texttt{endtheindex}</term>
+<listitem>
+<para> Controls what happens just after the index
+   is printed.  This sequence should undo anything that was started by
+   <markup>\theindex</markup>.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</section>
+<section><title>Special-purpose styles</title>
+
+<para>A number of styles
+<!-- \indexes{special-purpose styles} -->
+have been written 
+to allow you to develop special-purpose
+indexes.  <command>multind</command> and <command>index</command> are described here.
+</para>
+
+<para><filename>multind</filename> supports multiple indexes in a single document.
+</para>
+
+<para><filename>index</filename> is a reimplementation of the &LaTeX; indexing
+  commands.  It
+  stores index entries in the <filename role="extension">AUX</filename> files so that portions of 
+  a document can be reformatted without losing the entire index.
+  It also provides support for multiple indexes and replaces the
+  <emphasis>makeidx</emphasis> style option.
+</para>
+
+</section>
+<section><title>Making Glossaries</title>
+ 
+<para><indexterm><primary>glossaries</primary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>glossaries</secondary></indexterm>The &LaTeX; 
+command <markup>\glossary</markup> can be used to accumulate words
+and concepts for a document glossary.  The output, stored in a
+<filename role="extension">GLO</filename> file<indexterm><primary>GLO files</primary></indexterm>, is very similar 
+to an <filename role="extension">IDX</filename> file<indexterm><primary>IDX files</primary></indexterm>.  Like an index,
+the glossary file can be processed by <command>MakeIndex</command><indexterm><primary>MakeIndex</primary><secondary>for glossaries</secondary></indexterm> to produce
+a sorted list of terms.  To produce a glossary, you must 
+create an index style for the glossary.  Here is a minimal 
+<filename>glossary.ist</filename>:
+</para>
+
+<screen>
+keyword "\\glossaryentry"
+preamble "\n\\begin{theglossary}\n"
+postamble "\n\\end{theglossary}\n"
+</screen>
+
+<para>The output file that <command>MakeIndex</command> creates will have to be edited
+by hand, naturally, in order to incorporate the definitions of the entries.
+You will also have to define an appropriate glossary environment by 
+defining the control sequences<indexterm><primary>control sequences</primary><secondary>for glossaries</secondary></indexterm> used to make the glossary:
+</para>
+
+<variablelist>
+  <varlistentry>
+<term>\bs\texttt{theglossary}</term>
+<listitem>
+<para> Controls what happens just before the glossary
+    is printed.  This sequence should establish a new page, set up 
+    running headers and footers, and do whatever
+    other global setup is desired.
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>\bs\texttt{item}</term>
+<listitem>
+<para> Executed just before a glossary item.
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>\bs\texttt{endtheglossary}</term>
+<listitem>
+<para> Controls what happens just after the glossary
+   is printed.  This sequence should undo anything that was started by
+   <markup>\theglossary</markup>.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Finally, you will have to <markup>\input</markup> or <markup>\include</markup> the glossary in
+your document.
+</para>
+
+</section>
+</chapter>

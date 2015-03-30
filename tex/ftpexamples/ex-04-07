@@ -1,0 +1,7 @@
+\initial
+\len=4
+\def\H{\hbox{\rm H}}
+\def\C{\hbox{\rm C}}
+\def\O{\hbox{\rm O}}
+
+\[ \purine{$\H_3\C$}{$\O$}{$\C\H_3$}{Q}{$\O$}{Q}{Q}{D}{$\C\H_3$}  \]

@@ -1,0 +1,42 @@
+% Format: Lollipop
+\DefineHeading:Chapter
+   breakbefore:yes whiteafter:12pt
+   line:start PointSize:20 Style:bold
+      literal:Chapter Spaces:1  ChapterCounter
+      line:stop
+   vwhite:36pt
+   line:start PointSize:24 Style:bold title
+      line:stop
+   vwhite:24pt
+   Stop
+\DefineHeading:Section
+   whitebefore:{20pt plus 2pt} whiteafter:14pt
+   line:start PointSize:14 Style:bold
+      ChapterCounter . SectionCounter
+      Spaces:1 title line:stop
+   label:start ChapterCounter . SectionCounter
+      label:stop
+   Stop
+\GoverningCounter:Section=Chapter
+\AlwaysIndent:no
+\Distance:parskip=12pt
+\Distance:hoffset=.75in
+\Distance:voffset=.5in
+\Start
+\Chapter Unsolved Problems
+
+\Section Odd Perfect Numbers
+
+A number is said to be {\it perfect\/} if it
+is the sum of its divisors.  For example, $6$ is
+perfect because $1+2+3 = 6$, and $1$, $2$, and $3$
+are the only numbers that divide evenly into $6$ 
+(apart from $6$ itself).
+
+It has been shown that all even perfect numbers
+have the form $$2^{p-1}(2^{p}-1)$$ where $p$
+and $2^{p}-1$ are both prime.
+
+The existence of {\it odd\/} perfect numbers is 
+an open question.
+\Stop

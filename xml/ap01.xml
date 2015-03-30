@@ -1,0 +1,778 @@
+<appendix id="chap.fileext">
+<appendixinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</appendixinfo>
+<title>Filename Extension Summary</title>
+
+<para>This chapter summarizes many common filename extensions.  The extensions
+are listed in alphabetical order.  All extensions can be shortened
+to three letters for consistency with operating systems that do not allow
+longer file extensions.  On other file systems, they may be slightly 
+different.  For example, <filename role="extension">EPS</filename> files are sometimes called 
+<filename role="extension">EPSF</filename> files on &unix; systems, which allow longer filenames.
+</para>
+
+<variablelist>
+<varlistentry>
+<term>abf</term>
+<listitem>
+<para> An Adobe binary screen font file contains a binary encoding
+of a BDF (bitmap distribution format) file.  Binary encoding makes the 
+files smaller, but it also makes
+them less portable and unintelligible to humans.  The binary format is
+described in Adobe's ABF Format Specification&nbsp;<xref linkend="abffiles"/>.
+BDF files are described below.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>afm</term>
+<listitem>
+<para> Adobe font metrics files are ASCII files distributed with
+\ps Type&nbsp;1 fonts.  Type&nbsp;1 fonts are the linearly scalable fonts that
+\ps printer users are most familiar with.  Bounding boxes, an encoding
+vector (what characters go where),
+kerning,
+and
+ligature
+information
+are among the things described in this file.  The AFM file format is
+described completely in Adobe's AFM Format 
+Specification&nbsp;<xref linkend="afmfiles"/>.
+</para>
+
+<para>\ps fonts (available through commercial vendors or from the
+Internet) are supplied with AFM files.  Generally, the only occasion
+that you would have to modify an AFM file would be to change the
+encoding vector.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>aux</term>
+<listitem>
+<para> Auxiliary files are built by &LaTeX; each time it formats
+a document.  &LaTeX; writes information about cross references, citations,
+etc., to the auxiliary file for post-processing by other tools, or
+for &TeX; processing the next time this document is formatted.
+</para>
+
+<para>
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>bbl</term>
+<listitem>
+<para> Bibliography files are created by &BibTeX; from the citations in
+your document, the bibliography databases (BIB) that you specify, and the
+bibliography style (BST) you use.  &BibTeX; writes the resulting
+bibliography to the BBL file, which is automatically included in your &LaTeX; document at the place where you define the bibliography.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>bdf</term>
+<listitem>
+<para> Bitmap distribution format files are ASCII files that describe
+a bitmap font.  They are frequently used to distribute bitmap versions of
+scalable fonts in screen resolution at common sizes.  They are resolution
+specific, but they are portable from one architecture to another.  The BDF
+file format is described completely in Adobe's BDF Format
+Specification&nbsp;<xref linkend="bdffiles"/>.
+</para>
+
+<para>Some fonts packages are distributed with BDF files.
+Other BDF files are created as part of the conversion process from native
+format to X11 format.  It is unlikely that you would ever create one purely
+by hand.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>bib</term>
+<listitem>
+<para> Bibliography databases contain bibliographic information.
+These are generally handwritten and may contain bibliographic information
+for all of the sources that you are (ever) likely to cite.  The &BibTeX; program reads information about each work that you FIXME: from
+the BIB file.  Consult the documentation for &BibTeX; for more information
+about the format of BIB files.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>blg</term>
+<listitem>
+<para> &BibTeX; log files record the status of the last run of
+&BibTeX;.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>bst</term>
+<listitem>
+<para> Bibliography style files are used by &BibTeX; to define the layout
+of the citations.  &BibTeX; produces &LaTeX; commands in the BBL file that
+define the citations in the format specified by the BST file.  
+</para>
+
+<para>You may eventually write or modify a bibliography style file, but it is less
+common than modifying &LaTeX; style files because bibliographies
+have a more rigidly defined format.  Consult the documentation for &BibTeX; for
+more information about the format of BST files.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>bzr</term>
+<listitem>
+<para> The GNU fontutils define the BZR format to hold
+generic scalable font data.  The file actually contains the specification
+for a series of bezier curves.  The BZR file format is defined in
+the &TeXinfo; pages that accompany the GNU fontutils.
+The GNU fontutils create BZR files.
+</para>
+
+<para>
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>dvi</term>
+<listitem>
+<para> &TeX; produces device-independent output in the DVI file.
+This file describes the &TeX;ed document in a simple stack language that can
+be rendered on any device.  The format of DVI files is described in the
+\web documentation for <command>DVItype</command>, or in <emphasis>The DVI Drivers
+Standard</emphasis>&nbsp;<xref linkend="dvi:standard"/>. 
+</para>
+
+<para>&TeX; (and some <command>MFware</command> utilities) produces DVI files.
+</para>
+
+<para>\hyphenation{encap-sulated}
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>epsf</term>
+<listitem>
+<para> Encapsulated \ps files contain scalable \ps images and extra information (such as the size of
+the image's bounding box) that is necessary to scale the image appropriately
+for printing, unlike generic \ps.  Using encapsulated \ps images in your &TeX; document
+requires a DVI driver that understands \ps <markup>\special</markup>s.  How to include
+pictures and figures via encapsulated PostScript is described
+in detail in Chapter&nbsp;<xref role="label" linkend="chap.pictures"/>, <emphasis><xref role="label" linkend="chap.pictures"/></emphasis>.
+</para>
+
+<para>You are unlikely to create encapsulated \ps files by hand, but many
+drawing and drafting programs can create them for you.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>fig</term>
+<listitem>
+<para> FIG files are created by the <command>XFig</command> program (and
+possibly other programs).  The scalable representation of a collection of
+graphics objects is stored in ASCII form in FIG files.  The 
+<command>transfig</command> program can translate FIG files into a number of
+other formats including EPSF, HPGL, and a variety of &LaTeX; environments.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>fli</term>
+<listitem>
+<para> Font libraries are distributed with &emTeX;.  They contain a
+collection of PK files.  Font libraries have several advantages over
+a directory full of PK files: they are easier to maintain (because you
+don't have to deal with hundreds of files); they are faster to search (because
+they are indexed more efficiently than a directory); they are smaller
+(because <emphasis>each</emphasis> PK file wastes an average of half a cluster of
+disk space); and the name of each font is not limited to eight characters as
+it is under MS-DOS file naming conventions.
+</para>
+
+<para>Note: <command>dvips</command> can also use &emTeX; FLI files.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>gf</term>
+<listitem>
+<para> Generic font files contain bitmap data for the characters of a
+font.  The GF format is very simple, and many &TeX; related programs that
+create fonts produce GF files.  The disadvantage of GF files is that they are
+very large (because no compression is performed).  The format of GF files is
+described in the \web documentation for <command>GFtoPK</command> (or any of the
+GF-related <command>MFware</command> programs).  
+</para>
+
+<para>&MF; is the primary source for GF files.  Some other programs (some
+of the GNU fontutils, for example) also produce GF files.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>gif</term>
+<listitem>
+<para> Graphics interchange format is a CompuServe bitmap graphics
+standard.  GIF files are very popular, and a number of converters (e.g.,
+<command>BM2FONT</command>) can translate GIF files into a format usable by &TeX;.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>glo</term>
+<listitem>
+<para> Glossary files are produced by the &LaTeX; <markup>\glossary</markup>
+command. They are analogous to the IDX files produced by the <markup>\index</markup>
+commands.  The glossary is inserted in your document wherever the
+<markup>\makeglossary</markup> command occurs.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>gsf</term>
+<listitem>
+<para> Ghostscript fonts are scalable fonts very similar
+to \ps Type&nbsp;1 fonts.  Theoretically, <command>Ghostscript</command> can
+use \ps Type&nbsp;1 fonts directly, although I have never tried.
+Several GSF fonts are distributed with <command>Ghostscript</command>.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>hpgl</term>
+<listitem>
+<para> Hewlett-Packard GL is a plotter language.  Many programs can
+produce vector graphics in HPGL format.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>hptfm</term>
+<listitem>
+<para> Hewlett-Packard tagged font metric files are a lot like &TeX; TFM files.  It is unfortunate that both files have the extension TFM
+because they are completely incompatible.  You can generate &TeX; TFM files
+from HPTFMs with the <command>HPTFM2PL</command> program.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>idx</term>
+<listitem>
+<para> Index files are produced automatically when you use the
+<markup>\index</markup> commands in &LaTeX;.  The IDX file contains raw indexing data
+that will be used by the <command>MakeIndex</command> program to build an index for
+your document.  You must include the <filename>makeidx</filename> style in your
+<literal>documentstyle</literal> command, and you must turn on indexing with
+<markup>\makeindex</markup> in the preamble of your document if you wish to (re)build
+the index.  See the entry for IND files below for more information.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>ilg</term>
+<listitem>
+<para> <command>MakeIndex</command> log files record the status of the last run of
+<command>MakeIndex</command>.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>img</term>
+<listitem>
+<para> The IMG format is a particular bitmapped image
+format used by the GEM Window System (a PC-based windowed desktop
+interface product).  The GNU fontutils read IMG files as their default
+format. 
+The <command>PBMplus</command> utilities<footnote><para>{The
+<command>PBMplus</command> utilities are a collection of programs that allow conversion between
+different graphic formats by using the PBM format as a transition step.}</para></footnote>
+can convert between many graphics file formats, including IMG.
+</para>
+
+<para>
+Some scanning software produces IMG files directly.  Other IMG files
+are distributed by the Free Software Foundation as part of an ongoing
+project to produce high-quality, free typefaces.  
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>ind</term>
+<listitem>
+<para> Index files are produced by the <command>MakeIndex</command> and
+automatically get included into your &LaTeX; document wherever you
+put the <markup>\printindex</markup> command.  The <markup>\index</markup> commands in your
+&LaTeX; document write raw indexing data to the IDX file.  <command>MakeIndex</command>
+reads the IDX file, sorts and formats the index according to the IST file,
+and produces an IND file for your document.  
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>ist</term>
+<listitem>
+<para> Index specification files are used by <command>MakeIndex</command> to 
+format the index file.  Consult the documentation for <command>MakeIndex</command>
+for more information.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>jpeg</term>
+<listitem>
+<para> JPEG files are compressed bitmap images.  Because JPEG files
+use a <quote>lossy</quote> compression algorithm, they are frequently much smaller
+than other formats.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>lof</term>
+<listitem>
+<para> List of figures files are produced by the <markup>\listoffigures</markup>
+command in &LaTeX;.  After seeing <markup>\listoffigures</markup>, &LaTeX; writes
+figure captions to the LOF file.  The next time the document is formatted,
+&LaTeX; will insert the LOF file at the point where you issue the 
+<markup>\listoffigures</markup> command.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>log</term>
+<listitem>
+<para> Log files are always produced by &TeX; and &MF;.  The LOG file is
+generally uninteresting.  Status and warning messages deemed too trivial (or
+too detailed) for the display are written to the log file (all messages
+written to the display are also written to the log).
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>lot</term>
+<listitem>
+<para> List of tables files are exactly analogous to LOF files.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>mf</term>
+<listitem>
+<para> Just as &TeX; reads TEX files, which are  plain ASCII
+descriptions of a typeset document, &MF; reads MF files, which are  plain
+ASCII descriptions of a typeface.  &MF; and MF files are the topic of
+Knuth's \MFbook&nbsp;<xref linkend="kn:mfbook"/>.  Unlike \ps fonts, &MF; fonts are
+not linearly scaled.<footnote><para>{Linear versus non-linear scaling is a typographic
+issue better discussed elsewhere.  I mention it here just for
+completeness.}</para></footnote>
+</para>
+
+<para>The standard &TeX; distribution contains the MF files for the Computer
+Modern fonts.  Knuth has produced several more MF files to demonstrate &MF;.
+The American Mathematical Society has extended Computer Modern with several
+more.  The <command>MFpic</command> macro package produces MF files from a picture-like
+environment in &TeX;.  \TheMFbook describes how to create your own fonts
+with &MF;.
+</para>
+
+<para>The <emphasis>List of MetaFonts</emphasis>&nbsp;<xref linkend="lreq:metafonts"/> is posted
+occasionally to the newsgroups \path|comp.text.tex| and \path|comp.fonts|.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.mf"/>, <emphasis><xref role="label" linkend="chap.mf"/></emphasis>, describes &MF; in more detail.
+The &TeX; fonts available in &MF; format are listed in
+Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>, <emphasis><xref role="label" linkend="chap.fonts"/></emphasis>.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>mfj</term>
+<listitem>
+<para> MFjob files are plain ASCII files that contain instructions for
+<command>MFjob</command>, an &emTeX; program that builds groups of
+&MF; fonts.  MFJ files can be created by hand to automate the process of
+building a set of fonts.  They are also created by the &emTeX; DVI drivers if
+automatic font generation is being used.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>msp</term>
+<listitem>
+<para> Microsoft Paint files contain bitmapped graphic images.  They
+can be included in a &TeX; document with <markup>\special</markup> commands recognized
+by the &emTeX; DVI drivers.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pbm</term>
+<listitem>
+<para> The portable bitmap format is a flexible bitmap
+representation introduced by the <command>PBMplus</command> package.  The <command>PBMplus</command>
+utilities allow for the conversion of PBM format files to and from
+almost anything else.  The PBM format (and all the utilities) are
+described in the manpages that accompany the <command>PBMplus</command> toolkit
+distribution.
+</para>
+
+<para>The PBM toolkit and many other X11 graphics utilities can read and
+write PBM files (e.g. XV).
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pcf</term>
+<listitem>
+<para> The PCF format is one of several X11 bitmap font formats.
+Architecture-specific versions of X11 use PCF files.  Other architectures use
+one of a number of other architecture-specific formats (e.g., SNF).  PCF files
+are used by at least the DEC versions of the X11 server.  The X11
+distribution for your architecture includes a program that will convert BDF
+files to the standard adopted for your architecture.
+</para>
+
+<para>PCF files are almost invariably created from some other source.
+It is unlikely that you will ever create one by hand.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pcl</term>
+<listitem>
+<para> PCL files contain printer commands for HP LaserJet printers.
+DVI drivers for HP LaserJet printers create PCL files.  It is possible to
+get information out of some PCL files with <command>pcltomsp</command>.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pcx</term>
+<listitem>
+<para> PCX files contain bitmapped graphic images.  They
+can be included in a &TeX; document with <markup>\special</markup> commands recognized
+by the &emTeX; DVI drivers.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pfa</term>
+<listitem>
+<para> Printer font ASCII files contain scalable outline data that
+describes each character in a Type&nbsp;1 font.  A large portion of this file is
+encrypted, so it is an ASCII file only in the sense that the binary portion
+is represented as a string of hexadecimal ASCII digits.  This is
+traditional \ps because it is pure ASCII.  See PFB below.
+</para>
+
+<para>Type&nbsp;1 outline fonts are created by special font editing programs or
+conversion tools (e.g. the GNU fontutils).
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pfb</term>
+<listitem>
+<para> Printer font binary files, like PFA files, contain the
+outline data for \ps Type&nbsp;1 fonts.  The binary format was adopted to save
+space (they are generally about half the size of their PFA
+counterparts).<footnote><para>{The proof is left as an exercise to the reader (I
+always wanted to say that).}</para></footnote>
+Because they are binary files, it is more difficult to transfer them from
+one architecture to another (endian-ness, binary transmission, etc.).  \ps purists are apt to disparage them.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pfm</term>
+<listitem>
+<para> Printer font metric files are a Microsoft Windows standard.
+They are encountered frequently in archives that contain Type&nbsp;1 fonts.
+Unfortunately, these archives occasionally fail to include AFM files,
+which are more standard outside of the Windows community.  Even more
+unfortunately, PFM files do not contain all of the information that is
+in an AFM file.  However, the <command>PFM2AFM</command> program can construct a
+partial AFM file.  I believe that the PFM file format is described
+in a Microsoft technical note; however, I have never seen it.
+</para>
+
+<para>Unless you use Microsoft Windows, PFM files are likely to be
+useless.  If you need PFM files, the MS-DOS program <command>Refont</command> can
+create them from AFM files.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pk</term>
+<listitem>
+<para> Most &TeX; DVI conversion programs read packed bitmap font
+files.  The PK font format defines a clever scheme that allows
+bitmap fonts to be compressed significantly.  The format of PK files is
+described in the \web documentation for <command>PKtype</command> (or any of the
+PK-related <command>MFware</command> programs).
+</para>
+
+<para>You are unlikely to create PK files by hand, per se, but there are a number
+of utility programs that ultimately create PK files (e.g., <command>GFtoPK</command>,
+&MF;, <command>MFpic</command>, <command>PS2PK</command>).
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pl</term>
+<listitem>
+<para> A property list file contains an ASCII representation of a
+binary file.  The property list format was created during &TeX; development to
+allow binary files (specifically TFM files) to be hand-coded.  Most users have
+no reason to create PL files; however, some programs create PL files that must
+be converted into TFM files with the &TeX;ware program <command>PLtoTF</command>.  The
+PL format is described in the \web documentation for <command>PLtoTF</command>.
+</para>
+
+<para>If you need to edit &TeX; font metric information for a particular
+font, you will almost certainly do so by editing the PL file.  You can create
+a PL file from a TFM file with the <command>TFtoPL</command> utility.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>ps</term>
+<listitem>
+<para> \ps is a page description language.  The \ps language
+is described in a series of volumes from Adobe Systems.  PS is a
+common extension for \ps files.
+</para>
+
+<para>Unless you are inclined to enter the Obfuscated \ps Contest, you
+are unlikely to create \ps files by hand.  \ps files are created by many
+common tools.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>pxl</term>
+<listitem>
+<para>  This format is obsolete.  It has been completely superseded
+by the PK format.  If you still have PXL files, you can convert
+them to PK format with the <command>PXtoPK</command> program.  If you are still
+using a DVI driver that needs PXL files, you need an upgrade.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>sfl</term>
+<listitem>
+<para> These files contain HP LaserJet softfonts in landscape
+orientation.  LaserJet softfonts are device specific bitmap representations of
+a typeface.  The bitmap versions are described thoroughly in the <emphasis>LaserJet
+Technical Reference Manual</emphasis>&nbsp;<xref linkend="pcl5:techref"/> for each of the HP LaserJet
+printers.  Newer laser printers can perform automatic rotation of fonts (in 90
+degree increments, at least), so the distinction between landscape and portrait
+font files is disappearing.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>sfp</term>
+<listitem>
+<para> These files contain HP LaserJet softfonts in portrait
+orientation.  See the entry for SFL files, above.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>sfs</term>
+<listitem>
+<para> Scalable softfonts are HP LaserJet softfonts for the
+new (HPLJ III and higher) LaserJet printers.  These are really in AGFA
+IntelliFont Scalable format&nbsp;<xref linkend="intellifont"/>.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>snf</term>
+<listitem>
+<para> Server native format fonts are another version of X11
+bitmap font.  See the entry for PCF files, above, for more information.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>sty</term>
+<listitem>
+<para> Style files are used by &LaTeX; to define the layout of
+a &LaTeX; document (by redefining the meaning of commands like
+<markup>\section</markup>, for example).
+They are also used commonly to extend
+&LaTeX;.  See the &LaTeX; manual&nbsp;<xref linkend="ll:latexbook"/> for more information.
+</para>
+
+<para>Style files are really just &TeX; files that perform specific tasks.  You
+will eventually write or modify a style file, but it isn't something you
+are likely to do every day.
+</para>
+
+<para>
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>tex</term>
+<listitem>
+<para> TEX files describe the layout of a typeset document in the
+&TeX; programming language,<footnote><para>You already knew this, didn't you?</para></footnote>
+as defined by <emphasis>The &TeX;book</emphasis>&nbsp;<xref linkend="kn:texbook"/>.  Most
+people use some form of macro package on top of &TeX; to make the language
+easier to swallow.  If a &TeX; file begins with <markup>\documentstyle{}</markup> or has
+<markup>\begin{document}</markup> somewhere near the top, it is probably a &LaTeX; document.  Otherwise, look for the <markup>\input</markup> commands to see what macro
+packages are being included.
+</para>
+
+<para>Documents that do not appear to be &LaTeX; documents and do not appear to
+<markup>\input</markup> special macro packages may be using a special <emphasis>format</emphasis>.
+Formats are fast-loading precompiled macro packages.  If you know the name
+of the format file, you can tell &TeX; to use it by typing &amp;<emphasis>format-name</emphasis> as a parameter to &TeX;.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>tiff</term>
+<listitem>
+<para> TIFF files contain bitmapped or vector graphic images in a 
+very flexible form.  The <quote>T</quote> in TIFF stands for <quote>tagged.</quote>  All of the
+different kinds of information (regarding number of colors, compression,
+etc.) that might appear in a TIFF file are given unique tags that allow
+a TIFF file reader to skip over information that it does not 
+understand.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>tfm</term>
+<listitem>
+<para> &TeX; font metric files contain information about fonts.
+&TeX; doesn't know anything about the intrinsic shape of the
+characters that it lays down on the page.  &TeX; deals entirely with boxes.
+Every character is described by the rectangular box that (usually)
+surrounds it.  The TFM file for a font describes the size of each
+character's box, as well as ligature and kerning information for the font.
+A human-readable version of a
+TFM file can be produced with the <command>TFtoPL</command> program.  The format of
+TFM files is described thoroughly in the \web documentation for
+<command>TFtoPL</command>. 
+</para>
+
+<para>If you have reason to modify a TFM file, you will almost certainly do
+so by converting it to PL format first.  You can convert it back into a TFM
+file with the <command>PLtoTF</command> utility.
+</para>
+
+<para>See also HPTFM files.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>toc</term>
+<listitem>
+<para> Table of contents files are produced by the
+<markup>\tableofcontents</markup> command in &LaTeX;.  After seeing
+<markup>\tableofcontents</markup>, &LaTeX; writes chapter, section, subsection, etc.,
+names to the TOC file.  The next time the document is formatted, &LaTeX; will
+insert the TOC file at the point where you issue the <markup>\tableofcontents</markup>
+command.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>txt</term>
+<listitem>
+<para> Generic ASCII text.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>vf</term>
+<listitem>
+<para>  Virtual font files.  They are described in more detail in
+Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>, <emphasis><xref role="label" linkend="chap.fonts"/></emphasis>.  In short, a virtual
+font maps a character to an arbitrary sequence of <filename role="extension">DVI</filename> file commands.
+This may be another character in a different font, a different character
+in the same font, or something else entirely.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>vpl</term>
+<listitem>
+<para> The virtual property list is a property list file for virtual
+fonts (as opposed to being some sort of property list file that was itself
+virtual ;-).  VPL files serve the same purpose for VF files that PL files
+serve for TFM files.  The VPL format is defined in the \web documentation
+for <command>VPtoVF</command>.  
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>xbm</term>
+<listitem>
+<para> X11 bitmap files contain a bitmapped image. X11 icons are
+frequently stored in XBM files.  They also occur in <literal>.icon</literal> files and
+files without extensions (e.g., in <filename>/usr/include/X11/bitmaps</filename>).  I mention them here only because I like to use 
+icons on my X11 desktop, and I have used <command>PKtoBM</command> to create several 
+nice ones from &TeX; PK files.
+</para>
+
+<para>X11 bitmap files are used for all bitmap displays in the X11 server
+(not just icons).  Because they are ASCII and not binary, they are
+architecture independent, which makes them very portable.\par
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</appendix>

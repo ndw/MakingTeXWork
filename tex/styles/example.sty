@@ -1,0 +1,262 @@
+%%% ====================================================================
+%%%  @LaTeX-package-file{
+%%%     author          = "Norman Walsh'',
+%%%     version         = "0.4",
+%%%     date            = "16 February 1994",
+%%%     time            = "15:06 EST",
+%%%     filename        = "example.sty",
+%%%     address         = "O'Reilly and Associates, Inc.
+%%%                        90 Sherman Street
+%%%                        Cambridge, MA 02140
+%%%                        USA",
+%%%     checksum        = "???",
+%%%     email           = "norm@ora.com",
+%%%     codetable       = "ISO/ASCII",
+%%%     keywords        = "example, verbatim, continuation, LaTeX",
+%%%     supported       = "yes",
+%%%     abstract        = "This LaTeX style sets verbatim material
+%%%                        with a caption and continuation captions
+%%%                        if multiple pages are required.  It also
+%%%                        provides a shortexample environment and
+%%%                        a modified version of the alltt environment
+%%%                        that uses the same font as examples.",
+%%%     docstring       = "The checksum field above contains a CRC-16
+%%%                        checksum as the first value, followed by the
+%%%                        equivalent of the standard UNIX wc (word
+%%%                        count) utility output of lines, words, and
+%%%                        characters.  This is produced by Robert
+%%%                        Solovay's checksum utility.",
+%%%     package         = "example.sty",
+%%%     dependencies    = "verbatim, vrbinput from MZ4",
+%%%  }
+%%% ====================================================================
+
+\def\fileversion{v0.4}
+\def\filedate{94/02/28}
+
+%% Style-option `verbatim' to use with LaTeX v2.09
+%% Copyright (C) 1994 by Norman Walsh, all rights reserved.
+
+\@ifundefined{start@example}{}{\endinput}
+\typeout{Style-Option: `example'
+   \fileversion \space <\filedate>  (ndw)}
+
+%%% External interface:
+%%%
+%%% \begin{example}{label}[loe caption]{caption}
+%%%   verbatim text 
+%%%   goes here
+%%% \end{example}
+%%%
+%%% This sets the verbatim text with the specified caption.  Because this
+%%% is a verbatim environment, the label and captions must be specified as
+%%% parameters.
+%%%
+%%% \exampleinput{filename}{label}[loe caption]{caption}
+%%%
+%%% Set the context of ``filename'' verbatim.  
+%%%
+%%% \begin{shortexample}
+%%%   verbatim text 
+%%%   goes here
+%%% \end{shortexample}
+%%%
+%%% This sets the verbatim text without a caption or label.  It is indented
+%%% from the margin by \shortexample@indent.
+%%%
+%%% Style designer interface:
+%%%
+%%% \example@font 
+%%%
+%%% The \verbatim@font is initialized to \example@font for examples.
+%%%
+%%% \shortexample@indent
+%%%
+%%% Distance to indent short examples
+%%%
+%%% \example@indent
+%%%
+%%% Distance to indent normal, captioned examples
+
+%%% Note: this code is rather primitive.  I hacked it together quickly
+%%%       because I needed it.  I didn't really try to do it right 
+%%%       because I didn't have the time.  Boy, that's a crummy excuse.
+
+%%% In order to be done right, this would have to be added to each base
+%%% style file (since not all styles use the same numbering scheme.
+%%% What's given here works for the book style and variants of it (basically
+%%% anything with chapters).
+
+\def\examplename{Example}
+\def\continuedname{(continued)}
+\def\listexamplename{List of Examples}
+
+\def\example@font{\tt}
+\newdimen\shortexample@indent
+\shortexample@indent=0.5in
+\newdimen\example@indent
+\example@indent=0.5in
+
+\def\listofexamples{\@restonecolfalse
+  \if@twocolumn\@restonecoltrue\onecolumn\fi
+  \chapter*{\listexamplename\@mkboth{\listexamplename}%
+    {\listexamplename}}\@starttoc{loe}\if@restonecol
+   \twocolumn\fi}
+\def\l@example{\@dottedtocline{1}{1.5em}{2.3em}}
+
+\newcounter{example}[chapter]
+\setcounter{example}{0}
+\def\theexample{\thechapter-\@arabic\c@example}
+
+\def\make@examplecaption#1#2{%
+   \setbox\@tempboxa\hbox{\rm\small\it #1: #2}
+   \ifdim \wd\@tempboxa >\hsize%
+       {\rm\small\it\raggedright #1: #2}%
+     \else%
+       \hbox to\hsize{\box\@tempboxa\hfil}%
+   \fi\par}
+
+\def\start@example#1[#2]#3{%
+% #1 = label
+% #2 = short caption
+% #3 = caption
+  \vskip 6\p@%
+  \refstepcounter{example}
+  %\@caption
+  {\par\addcontentsline{loe}{example}%
+    {\protect\numberline{\csname theexample\endcsname}%
+      {\ignorespaces #2}}}
+  \label{#1}
+  \make@examplecaption{\examplename~\theexample}{#3}%
+%  \vskip-6pt%
+%
+  \begingroup
+  \def\verbatim@font{\example@font}
+  \def\verbatim@processline{%
+    \setbox0=\hbox{\the\verbatim@line}%
+    \dimen@\pagetotal%
+    \advance\dimen@2\baselineskip\advance\dimen@\parskip%
+    \advance\dimen@-\pagegoal%
+    \ifdim \dimen@>\z@%
+      \vfill\break%
+      \make@examplecaption{\examplename~\theexample}{#3 \continuedname}%
+    \fi%
+    \hskip\example@indent\the\verbatim@line\par}
+  \verbatim}%
+
+\def\startb@example#1#2{\start@example{#1}[#2]{#2}}
+
+\def\example#1{\@ifnextchar [{\start@example{#1}}{\startb@example{#1}}}
+
+\def\endexample{\endverbatim\endgroup}
+
+\def\exampleinput#1#2{\@ifnextchar [%
+  {\example@input{#1}{#2}}
+  {\exampleb@input{#1}{#2}}}
+
+\def\exampleb@input#1#2#3{\exampleinput{#1}{#2}[#3]{#3}}
+
+\def\example@input#1#2[#3]#4{%
+% #1 = filename
+% #2 = label
+% #3 = output caption
+% #4 = caption
+  \@ifundefined{verbatim@readfile}%
+    {\@latexerr{The vrbinput style is unavailable}{The vrbinput style from the Mainze MZ4 distribution must be used as a document option in order for \string\exampleinput\space to function.}}%
+    {}%
+  \vskip 6\p@%
+  \refstepcounter{example}
+  %\@caption
+  {\par\addcontentsline{loe}{example}{\protect\numberline{\theexample}%
+      {\ignorespaces #3}}}
+  \label{#2}
+  \make@examplecaption{\examplename~\theexample}{#4}%
+  \begingroup
+  \def\verbatim@font{\example@font}
+  \def\verbatim@processline{%
+    \setbox0=\hbox{\the\verbatim@line}%
+    \dimen@\pagetotal%
+    \advance\dimen@2\baselineskip\advance\dimen@\parskip%
+    \advance\dimen@-\pagegoal%
+    \ifdim \dimen@>\z@%
+      \vfill\break%
+      \make@examplecaption{\examplename~\theexample}{#4 (continued)}%
+    \fi%
+    \hskip\example@indent\the\verbatim@line\par}
+  \verbatiminput{#1}
+  \endgroup}
+
+\def\shortexample{
+  \begingroup
+  \def\verbatim@font{\example@font}
+  \def\verbatim@processline{%
+    \leavevmode\hskip\shortexample@indent\the\verbatim@line\par}
+  \verbatim}%
+
+\def\endshortexample{\endverbatim\endgroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Modified version of ALLTT.  Modified by Norm Walsh, 24 Feb 94
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ALLTT DOCUMENT-STYLE OPTION - released 17 December 1987
+%    for LaTeX version 2.09
+% Copyright (C) 1987 by Leslie Lamport
+% Modified by norm walsh 24 Feb 94
+
+% Defines the `alltt' environment, which is like the `verbatim'
+% environment except that `\', `\{', and `\}' have their usual meanings.
+% Thus, other commands and environemnts can appear within an `alltt'
+% environment.  Here are some things you may want to do in an `alltt'
+% environment:
+% 
+% * Change fonts--e.g., by typing `{\em empasized text\/}'.
+% 
+% * Insert text from a file foo.tex by typing `input{foo}'.  Beware that
+%   each <return> stars a new line, so if foo.tex ends with a <return>
+%   you can wind up with an extra blank line if you're not careful.
+% 
+% * Insert a math formula.  Note that `$' just produces a dollar sign,
+%   so you'll have to type `\(...\)' or `\[...\]'.  Also, `^' and `_'
+%   just produce their characters; use `\sp' or `\sb' for super- and
+%   subscripts, as in `\(x\sp{2}\)'.
+
+\def\docspecials{\do\ \do\$\do\&%
+  \do\#\do\^\do\^^K\do\_\do\^^A\do\%\do\~}
+
+\def\alltt{\trivlist \item[]\if@minipage\else\vskip\parskip\fi
+\leftskip\@totalleftmargin\rightskip\z@
+\parindent\z@\parfillskip\@flushglue\parskip\z@
+\@tempswafalse \def\par{\if@tempswa\hbox{}\fi\@tempswatrue\@@par}
+\obeylines \example@font \catcode``=13 \@noligs \let\do\@makeother \docspecials
+ \frenchspacing\@vobeyspaces}
+
+\let\endalltt=\endtrivlist
+
+\endinput
+
+% an example
+
+\documentstyle{book}
+
+\begin{document}
+
+\chapter{first chapter}
+
+normal text
+
+What is Example~\ref{x:label} and Example~\ref{x:label2}?
+
+\begin{example}{x:label}{This is some example text}
+  this 
+is 
+   some verbatim
+   some verbatim
+   some verbatim
+   some verbatim
+\end{example}
+
+\exampleinput{example.sty}{x:label2}{this is the caption for my example}
+
+more normal text
+
+\end{document}

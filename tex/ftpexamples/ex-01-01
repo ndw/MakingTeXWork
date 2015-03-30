@@ -1,0 +1,8 @@
+\def\ora{O'Reilly \& Associates}
+\font\orafont=grlg10
+\parskip=\baselineskip
+\parindent=0pt
+\pageno=5
+This book is published by \ora\ in
+the \textit{Nutshell} series.
+\bye

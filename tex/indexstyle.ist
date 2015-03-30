@@ -1,0 +1,3 @@
+heading_prefix "{\\fontsize{16}{18pt}\\bf\\it "
+heading_suffix "\\hfil}\\nopagebreak\n"
+headings_flag  1

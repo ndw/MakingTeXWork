@@ -1,0 +1,207 @@
+%% 
+%% This is file `tabularx.sty', generated 
+%% on <1992/11/20> with the docstrip utility (2.0r).
+%% 
+%% The original source files were:
+%% 
+%% tabularx.doc  (with options: `style')
+%% 
+%% This file is part of the array package. 
+%% --------------------------------------- 
+%% 
+%% It is a contributed file. 
+%% In case of errors please inform the original author. 
+%% 
+%% The checksum in the header refers to the documented version of 
+%% the file. 
+%% 
+
+
+%%% ====================================================================
+%%%  @LaTeX-style-file{
+%%%     author          = "David Carlisle",
+%%%     version         = "1.04",
+%%%     date            = "02 September 1992",
+%%%     time            = "14:14:27 BST",
+%%%     filename        = "tabularx.sty",
+%%%     address         = "Computer Science Department
+%%%                        Manchester University
+%%%                        Oxford Road
+%%%                        Manchester
+%%%                        England
+%%%                        M13 9PL",
+%%%     telephone       = "+44 61 275 6139",
+%%%     FAX             = "+44 61 275 6236",
+%%%     checksum        = "26599 791 3987 29287",
+%%%     email           = "carlisle@cs.man.ac.uk (Internet)",
+%%%     codetable       = "ISO/ASCII",
+%%%     keywords        = "LaTeX, tabular, tabularx",
+%%%     supported       = "yes",
+%%%     docstring       = "
+%%%
+%%%     tabularx.sty
+%%%
+%%%     A LaTeX style option defining the tabularx environment. This is
+%%%     like tabular*, except that the widths of certain `p' columns are
+%%%     modified to achieve the desired total width, rather than the
+%%%     width of the inter-column space.
+%%%
+%%%          \begin{tabularx}{final width}{tabular-preamble}
+%%%              tabular body
+%%%          \end{tabularx}
+%%%
+%%%     In the {tabular-preamble} argument, X should be used to denote a
+%%%     column that gets the final specification of p{<whatever width is
+%%%     needed>}. So for example
+%%%          \begin{tabularx}{250pt}{|cXcX|} ...
+%%%     is equivalent to
+%%%          \begin{tabular*}{250pt}{|cp{??}cp{??}|} ...
+%%%     where the ?? is chosen automatically.
+%%%
+%%%     This style requires array.sty.
+%%%
+%%%     Documentation requires Mittelbach's doc.sty.
+%%%
+%%%     The checksum field above was produced by
+%%%     Robert Solovay's checksum utility.",
+%%%  }
+%%% ====================================================================
+\def\fileversion{v1.04}
+\def\filedate{92/09/02}
+\def\docdate {92/09/02}
+\@ifundefined{TX@target}{}{\endinput}
+\wlog{Style-Option: `tabularx' \fileversion
+         \space\space <\filedate> (D.P.C.)}
+\wlog{English documentation dated \space <\docdate> (D.P.C.)}
+
+\@ifundefined{newcolumntype}{\input array.sty}{}
+\newdimen\TX@col@width
+\newdimen\TX@old@table
+\newdimen\TX@old@col
+\newdimen\TX@target
+\newdimen\TX@delta
+\newcount\TX@cols
+\newif\ifTX@
+\def\tabularx#1#2{%
+  {\ifnum0=`}\fi
+  \TX@target=#1
+  \TX@typeout{Target width: #1 = \the\TX@target.}%
+  \@temptokena={#2}\toks@={}\TX@get@body}
+\long\def\TX@get@body#1\end
+  {\toks@=\expandafter{\the\toks@#1}\TX@find@end}
+\def\TX@find@end#1{%
+  \def\@tempa{#1}%
+  \ifx\@tempa\TX@\expandafter\TX@endtabularx
+  \else\toks@=\expandafter
+    {\the\toks@\end{#1}}\expandafter\TX@get@body\fi}
+\def\TX@{tabularx}
+\def\TX@endtabularx{%
+  \expandafter\TX@newcol\expandafter{\tabularxcolumn{\TX@col@width}}%
+  \let\verb\TX@verb
+  \global\count@=\csname c@\@mpfn\endcsname
+  \TX@old@table=\maxdimen
+  \TX@col@width=\TX@target
+  \global\TX@cols=\@ne
+  \TX@typeout
+    {\@spaces Table Width\@spaces Column Width\@spaces X Columns}%
+  \TX@trial{\def\NC@rewrite@X{%
+          \global\advance\TX@cols\@ne\NC@find p{\TX@col@width}}}%
+  \loop
+    \TX@arith
+    \ifTX@
+    \TX@trial{}%
+  \repeat
+  \global\csname c@\@mpfn\endcsname=\count@
+  {\let\@footnotetext\TX@ftntext\let\@xfootnotenext\TX@xftntext
+    \csname tabular*\expandafter\endcsname\expandafter\TX@target
+       \expandafter{\the\@temptokena}%
+      \the\toks@
+    \csname endtabular*\endcsname}%
+  \global\TX@ftn\expandafter{\expandafter}\the\TX@ftn
+  \ifnum0=`{\fi}%
+  \end{tabularx}}
+\def\TX@arith{%
+  \TX@false
+  \ifdim\TX@old@table=\wd\@tempboxa
+    \TX@col@width=\TX@old@col
+    \TX@typeout{Reached minimum width, backing up.}%
+  \else
+    \dimen@=\wd\@tempboxa
+    \advance\dimen@ -\TX@target
+    \ifdim\dimen@<\TX@delta
+      \TX@typeout{Reached target.}%
+    \else
+      \ifnum\TX@cols>\@ne
+        \advance\TX@cols by \m@ne
+      \fi
+      \divide\dimen@ by \TX@cols
+      \advance\dimen@ by -\TX@col@width
+      \ifdim \dimen@ > \z@
+        \TX@typeout{Columns too narrow.}%
+      \else
+        \TX@old@col=\TX@col@width
+        \TX@old@table=\wd\@tempboxa
+        \TX@col@width=-\dimen@
+        \TX@true
+      \fi
+    \fi
+  \fi}
+\TX@delta=\hfuzz
+\newcolumntype{X}{}
+\def\tabularxcolumn#1{p{#1}}
+\def\TX@newcol{\newcol@{X}[0]}
+\def\TX@trial#1{%
+  \setbox\@tempboxa=\hbox{%
+    #1\relax
+  \let\@footnotetext\TX@trial@ftn
+  \global\csname c@\@mpfn\endcsname\count@
+  \let\TX@vwarn\@empty
+   \expandafter\let\expandafter\tabularx\csname tabular*\endcsname
+   \expandafter\let\expandafter\endtabularx\csname endtabular*\endcsname
+    \hbadness=\@M\hfuzz=\maxdimen
+    \let\hbadness=\@tempcnta\let\hfuzz=\@tempdima
+    \expandafter\tabular\expandafter{\the\@temptokena}%
+      \the\toks@
+    \endtabular}%
+  \TX@typeout{\@spaces
+     \the\wd\@tempboxa\@spaces\the\TX@col@width\@spaces\the\TX@cols}}%
+\def\arraybackslash{\let\\=\@arraycr}
+\def\tracingtabularx{\let\TX@typeout\typeout}
+\let\TX@typeout\@gobble
+\newtoks\TX@ftn
+\long\def\TX@ftntext#1{%
+  \edef\@tempa{\the\TX@ftn\noexpand\footnotetext
+                    [\the\csname c@\@mpfn\endcsname]}%
+  \global\TX@ftn\expandafter{\@tempa{#1}}}%
+\long\def\TX@xftntext[#1]#2{%
+  \global\TX@ftn\expandafter{\the\TX@ftn\footnotetext[#1]{#2}}}
+\long\def\TX@trial@ftn#1{}
+{\uccode`\*=`\ %
+\uppercase{\gdef\TX@verb{%
+  \leavevmode\null\TX@vwarn
+  {\ifnum0=`}\fi\tt\let\\\ignorespaces
+  \@ifstar{\let~*\TX@vb}{\TX@vb}}}}
+\def\TX@vb#1{\def\@tempa##1#1{\toks@{##1}\edef\@tempa{\the\toks@}%
+    \expandafter\TX@v\meaning\@tempa\\ \\\ifnum0=`{\fi}}\@tempa!}
+\def\TX@v#1!{\afterassignment\TX@vfirst\let\@tempa= }
+\begingroup
+\catcode`\*=\catcode`\#
+\catcode`\#=12
+\gdef\TX@vfirst{%
+  \if\@tempa#%
+    \def\@tempb{\TX@v@#}%
+  \else
+    \let\@tempb\TX@v@
+    \if\@tempa\space~\else\@tempa\fi
+  \fi
+  \@tempb}
+\gdef\TX@v@*1 *2{%
+  \TX@v@hash*1##\relax\if*2\\\else~\expandafter\TX@v@\fi*2}
+\gdef\TX@v@hash*1##*2{*1\ifx*2\relax\else#\expandafter\TX@v@hash\fi*2}
+\endgroup
+\def\TX@vwarn{%
+  \@warning{\noexpand\verb may be unreliable inside tabularx}%
+  \global\let\TX@vwarn\@empty}
+\endinput
+%% 
+%% End of file `tabularx.sty'.

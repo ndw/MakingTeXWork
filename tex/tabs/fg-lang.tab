@@ -1,0 +1,47 @@
+{
+\tabcolsep=3pt\fontsize{9}{10pt}\selectfont\def\b{\ttbackslash\tt\small}
+\caption{Language Switch Macros Proposed by TUG}
+\label{tab:langswitch}
+\begin{tabular}{c|l||c|l||c|l||c|l}
+ \bf\tiny Macro &      & \bf\tiny Macro &         & \bf\tiny Macro &          & \bf\tiny Macro & \\
+ \bf\tiny Switch & \bf Language & \bf\tiny Switch & \bf Language & \bf\tiny Switch & \bf Language & \bf\tiny Switch & \bf Language \\[2pt]
+\hline
+\tstrut
+  \b AB & Abkhazian    & \b FY & Frisian     & \b MG & Malagasy     & \b SB & Sorbian    \\
+  \b OM & Afan Oromo   & \b GL & Galician    & \b ML & Malayalam    & \b ES & Spanish    \\
+  \b FF & Afar         & \b KA & Georgian    & \b MS & Malay        & \b SU & Sudanese   \\
+  \b AF & Afrikaans    & \b DE & German      & \b MT & Maltese      & \b SW & Swahili    \\
+  \b SQ & Albanian     & \b EL & Greek       & \b MI & Maori        & \b SV & Swedish    \\
+  \b AM & Amharic      & \b KL & Greenlandic & \b MR & Marathi      & \b TL & Tagalog    \\
+  \b AR & Arabic       & \b GN & Guarani     & \b MO & Moldavian    & \b TG & Tajik      \\
+  \b HY & Armenian     & \b GU & Gujarati    & \b NA & Nauru        & \b TA & Tamil      \\
+  \b AS & Assamese     & \b HA & Hausa       & \b NE & Nepali       & \b TT & Tatar      \\
+  \b AY & Aymara       & \b HE & Hebrew      & \b NO & Norwegian    & \b TE & Telugu     \\
+  \b AZ & Azerbaijani  & \b HI & Hindi       & \b OC & Occitan      & \b TY & Thai       \\
+  \b BA & Bashkir      & \b HU & Hungarian   & \b OR & Oriya        & \b BO & Tibetan    \\
+  \b EU & Basque       & \b IS & Icelandic   & \b PS & Pashto       & \b TI & Tigrinya   \\
+  \b BN & Bengali      & \b ID & Indonesian  & \b FA & Persian      & \b TO & Tonda      \\
+  \b DZ & Bhutani      & \b IA & Interlingua & \b PL & Polish       & \b TS & Tsonga     \\
+  \b BH & Bihari       & \b IE & Interlingue & \b PT & Portuguese   & \b TR & Turkish    \\
+  \b BI & Bislama      & \b IU & Inuktitut   & \b PA & Punjabi      & \b TK & Turkmen    \\
+  \b BR & Breton       & \b IK & Inupiak     & \b QU & Quechua      & \b TW & Twi        \\
+  \b BG & Bulgarian    & \b GA & Irish       & \b RM & Rhaeto-Roman & \b GB & U.K. English \\
+  \b MY & Burmese      & \b IT & Italian     & \b RO & Romanian     & \b US & U.S. English \\
+  \b BE & Byelorussian & \b JA & Japanese    & \b RU & Russian      & \b UG & Uigur      \\
+  \b KM & Cambodian    & \b JW & Javanese    & \b SE & Sami         & \b UK & Ukrainian  \\
+  \b CA & Catalan      & \b KN & Kannada     & \b SM & Samoan       & \b UR & Urdu       \\
+  \b ZH & Chinese      & \b KS & Kashmiri    & \b SG & Sangho       & \b UZ & Uzbek      \\
+  \b CO & Corsican     & \b KK & Kazakh      & \b GD & Scots Gaelic & \b VI & Vietnamese \\
+  \b HR & Croatian     & \b RW & Kinyarwanda & \b SR & Serbian      & \b VO & Volapuk    \\
+  \b CS & Czech        & \b KY & Kirghiz     & \b ST & Sesotho      & \b CY & Welsh      \\
+  \b DA & Danish       & \b RN & Kirundi     & \b TN & Setswana     & \b WO & Wolof      \\
+  \b NL & Dutch        & \b KO & Korean      & \b SN & Shona        & \b XH & Xhosa      \\
+  \b EO & Esperanto    & \b KU & Kurdish     & \b SD & Sindhi       & \b YI & Yiddish    \\
+  \b ET & Estonian     & \b LO & Laothian    & \b SI & Singhalese   & \b YO & Yoruba     \\
+  \b FO & Faroese      & \b LV & Latvian     & \b SS & Siswati      & \b ZA & Zhuang     \\
+  \b FJ & Fiji         & \b LN & Lingala     & \b SK & Slovak       & \b ZU & Zulu       \\
+  \b FI & Finnish      & \b LT & Lithuanian  & \b SL & Slovenian    &     &            \\
+  \b FR & French       & \b MK & Macedonian  & \b SO & Somali       &     &            \\[2pt]
+  \hline
+\end{tabular}
+}

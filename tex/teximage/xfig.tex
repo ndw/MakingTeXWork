@@ -1,0 +1,16 @@
+\newbox\xfigbox
+\newdimen\xfigwd
+\font\xfiga=xfiga at 72.27truept
+\setbox\xfigbox=\vbox{\hbox{%
+\xfiga\char0\char1\char2\char3}}
+\xfigwd=\wd\xfigbox
+\setbox\xfigbox=\hbox{\vbox{\hsize=\xfigwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\xfiga\char0\char1\char2\char3}
+\hbox{\xfiga\char4\char5\char6\char7}
+\hbox{\xfiga\char8\char9\char10\char11}}}
+\ifx\parbox\undefined
+    \def\setxfig{\box\xfigbox}
+\else
+    \def\setxfig{\parbox{\wd\xfigbox}{\box\xfigbox}}
+\fi

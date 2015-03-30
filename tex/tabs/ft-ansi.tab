@@ -1,0 +1,31 @@
+{ % begin a group...
+
+\font\dcr=grlgw at 12pt
+\font\tiny=cmr5
+
+\newcount\colcount
+\def\charbox{%
+  \leavevmode\vbox to 18pt{%
+    \vss%
+    \hbox to 14pt{%
+      \hss%
+      \begin{tabular}{c}
+        \dcr\char\colcount\\
+        \tiny\number\colcount
+       \end{tabular}
+       \hss%
+       }%
+     }%
+   \global\advance\colcount by 1}
+
+\def\row{%
+  \charbox&\charbox&\charbox&\charbox&\charbox&\charbox&\charbox&\charbox}
+
+\def\colnum#1{\vbox to 0pt{\vbox to 7pt{\vfill}\vbox{\hbox{#1}}\vss}}
+
+\typeout{Setting Windows ANSI Encoding table, part 1}
+\input{ft-ansi1.tab}
+\typeout{Setting Windows ANSI Encoding table, part 2}
+\input{ft-ansi2.tab}
+
+} % end the group...

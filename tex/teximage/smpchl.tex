@@ -1,0 +1,16 @@
+\newbox\smpchlbox
+\newdimen\smpchlw
+\font\smpchla=smpchla at 72.27truept
+\setbox\smpchlbox=\vbox{\hbox{%
+\smpchla\char0\char1}}
+\smpchlw=\wd\smpchlbox
+\setbox\smpchlbox=\hbox{\vbox{\hsize=\smpchlw
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\smpchla\char0\char1}
+\hbox{\smpchla\char2\char3}
+\hbox{\smpchla\char4\char5}}}
+\ifx\parbox\undefined
+    \def\setsmpchl{\box\smpchlbox}
+\else
+    \def\setsmpchl{\parbox{\wd\smpchlbox}{\box\smpchlbox}}
+\fi

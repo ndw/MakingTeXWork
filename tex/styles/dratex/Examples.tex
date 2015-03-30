@@ -1,0 +1,1573 @@
+%\def\TexFiles{}
+\def\ext{Changeable}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Compile this file with TeX and review the document.         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+%  Code of examples and exercises from                  %
+%                                                       %
+%     TeX and LaTeX: Drawing and Literate Programming   %
+%                                                       %
+%                            gurari@cis.ohio-state.edu  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\immediate\write16{<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<}
+\immediate\write16{<<< tex Examples.tex <<<<<<<<<<<}
+\immediate\write16{<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                %%
+                                                                %%
+\input ProTex.sty  %%%%%%%%%%%%%%%%%%%%
+
+\expandafter\def\csname :warn\endcsname#1{}
+\Code\top{}{\immediate\write16{<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<}
+\immediate\write16{<<<<< \op \name.\ext}
+\immediate\write16{<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<}
+
+% \com
+}
+
+       \ifx \TexFiles\empty        %%%%%%%%%%%%%%%%%%%%%%%%
+\def\tex{tex}
+
+\Code\Open{}{\files
+\startInput
+}
+
+\Code\Close{}{
+\endInput
+\\bye}
+       \else      %%%%%%%%%%%%%%%%%%%%%%%%
+\def\tex{latex}
+
+\Code\Open{}{\\documentstyle{book}
+\files
+\\begin{document}
+\startInput}
+
+\Code\Close{}{
+\endInput
+\\end{document}}
+       \fi        %%%%%%%%%%%%%%%%%%%%%%%%
+
+\Code\fileD{}{
+\\input DraTex.sty }
+
+\Code\fileAD{}{
+\\input DraTex.sty
+\\input AlDraTex.sty }
+
+\Code\fileP{}{
+\\input ProTex.sty }
+
+\Code\startInput{}{\\Draw}
+\Code\endInput{}{\\EndDraw}
+
+\AlProTex{\ext,<<<>>>,[],list,|,ShowFile,NoShow}  %%%%%%%%%%%%%%%%%%%%
+
+\let\SC=\ShowCode                                               
+\Code\execute{}<<<
+>>>
+
+\catcode`\^^M=13  \catcode`\#=12 %
+\def\<<<{%
+   \edef\temp{%
+      \noexpand\AppendCode\noexpand\execute<<<
+      \op\space\space \name.\ext\space\space\space   # \com 
+      xdvi\space\space \name.dvi
+      >>>}\ShowOff\temp\ShowOn%
+   \def\ShowCode{%
+      \expandafter\OutputCode\csname\name\endcsname \def\top
+      {} \global\let\ShowCode=\SC  \ShowCode}%
+   \expandafter\Code\csname\name\endcsname{}<<<
+   \top}%
+\catcode`\^^M=5   \catcode`\#=6
+
+\def\newpage{\def\newpage{\par\vfill\break}}        
+\newcount\1  \newcount\2  \newcount\3
+
+\def\ForTex{tex}
+
+\def\Ex#1#2#3{                \edef\op{#1}
+   \edef\For{for \ifx \op\ForTex \else La\fi TeX}
+   \def\com{#2}
+   \def\name{#3}      \hrule
+   \medskip\noindent$\underline{\hbox{#1\quad\name.\ext}}$
+       \qquad{\it #2\/} {\rm(\For)}\medskip}
+
+\def\Exr#1#2#3{\setbox0=\hbox{\global\1#1  \global\2#2  \global\3#3}
+    \Ex{\tex}{Exercise \the\1.\the\2.\the\3}{exr#1#2#3}}
+
+\def\Lib#1{\newpage\hrule
+   \noindent\hfil{\bf \strut#1}\hrule}
+
+\hbadness=10000     \vbadness=10000  \hfuzz=99in \vfuzz=99in
+                                                                %%
+                                                                %%
+                                                                %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent NOTES
+
+(a) If you want to get TeX files instead of LaTeX files, remove `\%'
+from the first line of file `{\tt Examples.tex}'.%%% first line of this file
+
+
+(b) If you want different extensions in the files' names, 
+change the definition of {\tt\string\ext} in the second line 
+of file `{\tt Examples.tex}'.%%% second line of this  file
+
+\medskip  \Lib{DraTeX}   \def\files{\fileD}
+
+\Ex{tex}{First example in section 6.2}{sec62a}
+
+\<<<
+\input DraTex.sty
+\Draw
+   \LineAt(0.1,  0,-18,-10)
+   \LineAt(-18,-10,- 6, 26)
+   \LineAt(- 6, 26, 18,- 4)
+   \LineAt( 18,- 4, 12,-40)
+   \LineAt( 18,- 4, 24,-40)
+   \LineAt( 18,- 4, 58,- 4)
+   \LineAt( 58,- 4, 52,-40) 
+   \LineAt(58,-4,64,-40) \LineAt(58,-4,66,4)
+\EndDraw
+\bye >>>
+
+\Ex{latex}{First example in section 6.2}{sec62b}
+
+\<<<
+\documentstyle{report}
+  \input DraTex.sty
+\begin{document}
+\Draw
+   \LineAt(0.1,  0,-18,-10)
+   \LineAt(-18,-10,- 6, 26)
+   \LineAt(- 6, 26, 18,- 4)
+   \LineAt( 18,- 4, 12,-40)
+   \LineAt( 18,- 4, 24,-40)
+   \LineAt( 18,- 4, 58,- 4)
+   \LineAt( 58,- 4, 52,-40) 
+   \LineAt(58,-4,64,-40) \LineAt( 58,-4,66,4)
+\EndDraw
+\end{document}>>>
+
+\Ex{latex}{First example in section 6.2---second version}{sec62c}
+
+\<<<
+\documentstyle[DraTex]{report}
+\begin{document}
+\Draw
+   \LineAt(0.1,  0,-18,-10)
+   \LineAt(-18,-10,- 6, 26)
+   \LineAt(- 6, 26, 18,- 4)
+   \LineAt( 18,- 4, 12,-40)
+   \LineAt( 18,- 4, 24,-40)
+   \LineAt( 18,- 4, 58,- 4)
+   \LineAt( 58,- 4, 52,-40) 
+   \LineAt(58,-4,64,-40) \LineAt(58,-4,66,4)
+\EndDraw
+\end{document}>>>
+
+
+
+\Exr672
+
+\<<<
+|Open 
+   \MarkLoc(a)    \Move(50,0)  
+   \MarkLoc(A)    \Move(50,0)    
+   \MarkLoc(b)    \Move(-30,30) 
+   \MarkLoc(B)    \Move(-30,30)
+   \MarkLoc(c)    \Move(-20,-30) 
+   \MarkLoc(C)    
+   \Curve(A,b,b,B) 
+   \Curve(B,c,c,C) 
+   \Curve(C,a,a,A)
+|Close>>>
+
+
+  \Ex{tex}{First example in section 6.1}{sec61}
+
+\<<<
+\input DraTex.sty 
+
+We can draw clocks of
+different styles and sizes.
+
+\Draw 
+  \Move(0,20)     \Line(0,-50) \Line(50,0)
+  \PenSize(1.5pt) \Line(0,50)  \Line(-50,0)
+  \Move(5,-25)    \Text(--9--)
+  \Move(20,-18)   \Text(--6--)
+  \Move(20,18)    \Text(--3--)
+  \Move(-20,18)   \Text(--12--)
+  \Move(0,-18)    {\RotateTo(60) \LineF(19)}
+  \RotateTo(210)  \LineF(14)
+\EndDraw
+
+We can draw people of 
+different shapes and looks.
+
+\Draw(0.6pt,0.6pt)
+  \DrawOvalArc(30,45)(0,180) 
+  \DrawOvalArc(30,12)(180,360) 
+  \DrawOvalArc(60,25)(140,400)
+  \Move(0,5)
+  \DrawOvalArc(30,60)(225,315)
+  \DrawOvalArc(20,52)(260,280)
+  \Move(-10,-37) {\Text(--$\cdotp$--)}  \Text(--o--)
+  \Move(20,0)    {\Text(--$\cdotp$--)}  \Text(--o--)
+\EndDraw
+
+And we can produce many other
+types of drawings.       \bye>>>
+
+
+
+\Ex{latex}{First example in section 6.1}{sec61a}
+
+\<<<
+\documentstyle{report}
+\input DraTex.sty 
+\begin{document}
+
+We can draw clocks of
+different styles and sizes.
+
+\Draw 
+  \Move(0,20)     \Line(0,-50) \Line(50,0)
+  \PenSize(1.5pt) \Line(0,50)  \Line(-50,0)
+  \Move(5,-25)    \Text(--9--)
+  \Move(20,-18)   \Text(--6--)
+  \Move(20,18)    \Text(--3--)
+  \Move(-20,18)   \Text(--12--)
+  \Move(0,-18)    {\RotateTo(60) \LineF(19)}
+  \RotateTo(210)  \LineF(14)
+\EndDraw
+
+We can draw people of 
+different shapes and looks.
+
+\Draw(0.6pt,0.6pt)
+  \DrawOvalArc(30,45)(0,180) 
+  \DrawOvalArc(30,12)(180,360) 
+  \DrawOvalArc(60,25)(140,400)
+  \Move(0,5)
+  \DrawOvalArc(30,60)(225,315)
+  \DrawOvalArc(20,52)(260,280)
+  \Move(-10,-37) {\Text(--$\cdotp$--)}  \Text(--o--)
+  \Move(20,0)    {\Text(--$\cdotp$--)}  \Text(--o--)
+\EndDraw
+
+And we can produce many other
+types of drawings.       \end{document}>>>
+
+\Ex{latex}{First example in section 6.1---second version}{sec61b}
+
+\<<<
+\documentstyle[DraTex]{report}
+\begin{document}
+
+We can draw clocks of
+different styles and sizes.
+
+\Draw 
+  \Move(0,20)     \Line(0,-50) \Line(50,0)
+  \PenSize(1.5pt) \Line(0,50)  \Line(-50,0)
+  \Move(5,-25)    \Text(--9--)
+  \Move(20,-18)   \Text(--6--)
+  \Move(20,18)    \Text(--3--)
+  \Move(-20,18)   \Text(--12--)
+  \Move(0,-18)    {\RotateTo(60) \LineF(19)}
+  \RotateTo(210)  \LineF(14)
+\EndDraw
+
+We can draw people of 
+different shapes and looks.
+
+\Draw(0.6pt,0.6pt)
+  \DrawOvalArc(30,45)(0,180) 
+  \DrawOvalArc(30,12)(180,360) 
+  \DrawOvalArc(60,25)(140,400)
+  \Move(0,5)
+  \DrawOvalArc(30,60)(225,315)
+  \DrawOvalArc(20,52)(260,280)
+  \Move(-10,-37) {\Text(--$\cdotp$--)}  \Text(--o--)
+  \Move(20,0)    {\Text(--$\cdotp$--)}  \Text(--o--)
+\EndDraw
+
+And we can produce many other
+types of drawings.       \end{document}>>>
+
+
+\Exr732
+
+\<<<
+|Open
+\font\ARROWS=line10 scaled\magstep5
+\font\CIRCLES=lcircle10 scaled\magstep5
+%   \newfont{\ARROWS}{line10 scaled\magstep5}
+%   \newfont{\CIRCLES}{lcircle10 scaled\magstep5}
+
+                             \Text(--\CIRCLES \char 10--)
+\Text(--\CIRCLES \char 11--) \Text(--\ARROWS \char 55--)  
+\Text(--\CIRCLES \char 110--)\EntryExit(-1,0,-1,0)
+\Text(--\CIRCLES \char 114--)|Close>>>
+
+\Exr741
+
+\<<<
+|Open
+\Ragged(8)
+\Line(10,-10) \Line(10,20)
+\LineTo(0,0) 
+|Close>>>
+
+\Ex{\tex}{First example in section 8.1}{sec81}
+
+\<<<
+|Open
+\ThreeDim(-150,-60,-600)
+   \Line(60,0,0)   \Line(0,0,60)
+   \Line(-60,0,0)  \Line(0,0,-60)
+   \LineTo(0,60,0) \Line(60,0,0)
+   \Line(0,-60,0)  
+   \LineAt(0,60,0,0,60,60)
+   \Line(0,-60,0)  
+\EndThreeDim |Close>>>
+
+
+\Ex{\tex}{Example of USA map in section 9.3}{usa}
+
+\<<<
+|Open(1.4pt,1.4pt)
+\Table\USA{       % California
+   -60,-35 & -77,-30 & -80,
+   -20 & -90,-15 & -100,40 &
+   % Oregon
+   -100,50 & -90,80 &
+   % Wash
+    -90,95 & -78,90 & -75,95 &
+   % Minn
+    100,70 & 85,60 &
+   % Wisc-Mich
+    95,60 & 105,65 & 102,63 & 110,60 & 125,60 & 110,55 & 110,30 &
+    115,25 & 120,30 & 115,40 & 115,50 & 120,55 & 130,55 & 140,40 &
+    135,25 &
+   % Ohio-NY-Vt
+    145,25 & 155,30 & 160,45 & 175,45 & 175,55 & 180,60 & 195,65 &
+   % Maine
+    200,75 & 200,85 & 205,90 & 210,90 & 215,80 & 220,75 & 205,60 & 205,50 &
+   % Mass--NY
+    210,43 & 208,47 & 215,43 & 190,30 & 202,35 &
+   % NJ--Va
+    197,25 & 190,18 & 185,20 & 190,15 & 190,5 & 182,18 & 182,0 & 185,0 &
+   % NC
+    190,-8 & 185,-4 & 183,-6 & 186,-6 & 182,-15 & 
+    190,-18 & 190,-10 & 192,-10 &
+    195,-18 &
+   % Ga-Fl
+    165,-40 & 160,-50 & 175,-80 & 175,-90 & 170,-100 & 165,-100 &
+    155,-80 & 155,-65 & 145,-60 & 140,-62 & 136,-62 & 120,-60 &
+   % Alaba--La
+    102,-63 & 107,-67 & 107,-72 & 110,-75 & 90,-65 &
+    78,-65 &
+   % Texas
+    62,-78 & 57,-78 & 50,-82 & 53,-92 & 48,-90 & 25,-65 & 15,-65 & 
+    15,-68 & -10,-50 &
+   % New Mexico
+    -40,-50 &
+   % Back to California
+   -60,-35 }
+{ \USA(0,0){\MoveTo} \USA(1,99){\LineTo} } \Text(--USA--) 
+\Scale(0.5,0.5) \USA(46,46){\MoveTo} \USA(47,92){\LineTo}
+\MoveTo(-30,0) \MarkLoc(a) \USA(0,0){\Move} \MarkLoc(b) 
+\USA(0,46){{\LineToLoc(b)} \MarkLoc(b) \MoveToLoc(a) \Move} 
+|Close>>>
+
+
+\Exr{10}1{1a}
+\<<<
+|Open
+\Text(--Government~%
+              Bonds (\%)--)  
+\Table\B{Britain,9.59 &
+ Canada,7.98 &  Japan,5.46 &
+ U.S.,  6.84 &  Mexico,14.9} 
+\B(0,4){\PutBar} 
+|Close >>>
+
+\Exr{10}1{1b}
+\<<<
+|Open
+\chick(0,75)  \Scale(-1,1) 
+\chick(0,140) 
+|Close >>>
+
+\Exr{10}1{1c}
+\<<<
+|Open
+\Table\x{ 30,40
+  & 15,60 & 27,15 & 35,35 
+  & 50,45 & 25,70 & 20,20 
+  & 25,75 }   \x(0,99){\Tr}  
+|Close >>>
+
+\Exr{10}1{1d}
+\<<<
+|Open
+\sqr(-24,0) 
+\sqr(0,32) 
+\sqr(24,-32)
+|Close >>>
+
+\Exr{10}1{1e}
+\<<<
+|Open
+\engine(90)  \MoveTo(50,0)  
+\engine(180) \MoveTo(100,0) 
+\engine(-30) 
+|Close >>>
+
+\Exr{10}1{1f}
+\<<<
+|Open
+\MarkLoc(A) 
+\spring(110) \Rotate(70) 
+\spring(60)  \MarkLoc(B)
+\DSeg\RotateTo(B,A)  
+\LSeg\spring(B,A)  
+|Close >>>
+
+\Exr{10}21
+\<<<
+|Open
+\new(BODY) \<BODY>(20)
+\LineF(20) \Rotate(55) \LineF(16) 
+\new(hand) \<BODY>(140) \LineF(35)  
+\new(hand) \<BODY>(90) \LineF(7)  
+\new(head) \<BODY>(-60) \LineF(19)  
+\new(left-leg) \<BODY>(210) \LineF(12) 
+\Rotate(30) \LineF(14) \new(right-leg)
+\Do(1,11){\I+15; \<head>(\Val\I) 
+\LineF(11)} 
+|Close >>>
+
+
+\Exr{10}22
+
+\<<<
+|Open
+\def\DefineSymbol#1{%
+   \Indirect\Define<#1>}
+
+\def\DrawText(--#1--){%
+     \let\xNextSym=\xDrawSym  \xNextSym#1{}}
+
+\def\xDrawSym#1{\def\temp{#1}%
+     \ifx \temp\empty  \let \xNextSym=\relax
+     \else \Indirect<#1>\fi   \xNextSym }
+
+\DefineSymbol A{{ \Line(21,60)
+   \Line(21,-60)  \Move(-7,20)
+   \Line(-28,0) } \Move(52,0)  }
+\DefineSymbol B{{ \DrawText(--P--)
+   \Move(-25,18)
+   \DrawOvalArc(15,18)(-90,90)
+   \Move(0,-18)   \Line(-25,0)}
+   \Move(50,0) }    \DefineSymbol P
+{{      \Line(0,60)    \Line(25,0)
+     \Move(0,-12) \DrawOvalArc(15,12)(-90,90)
+     \Move(0,-12)  \Line(-25,0) }      \Move(50,0)  }
+ \DefineSymbol C{{     \Move(20,30) 
+     \DrawOvalArc(20,30)(45,315) }    \Move(46.6,0)  }
+ \DefineSymbol D{{    \Line(0,60)    \Line(20,0)
+     \Move(0 ,-30) \DrawOvalArc(20,30)(-90,90) \Move(0,-30)
+     \Line(-20,0) }   \Move(50,0)  }
+ \DefineSymbol E{{  \DrawText(--F--)  \Move(-50,0)
+     \Line(40,0) }  \Move(50,0)      }
+ \DefineSymbol F{{   \Line(0,60)   \Line(40,0)
+     \Move(-40,-30) \Line(30,0)  }  \Move(50,0)     }
+ \DefineSymbol G{{ \DrawText(--C--)
+    \Move(-10,30) {\Line(-20,0)} \Line(0,-30)   } 
+    \Move(46.6,0)     }
+ \DefineSymbol H{{ \Line(0,60)  \Move(40,0) 
+    \Line(0,-60)  \Move(0,30)  \Line(-40,0)   }  \Move(50,0)     }
+ \DefineSymbol I{{ \Line(0,60)  }  \Move(10,0)     }
+ \DefineSymbol J{{ \Move(20,17) \DrawOvalArc(20,17)(180,360)
+    \Move(20,0) \Line(0,43)   }  \Move(50,0)     }
+ \DefineSymbol K{{ \Line(0,60)  \Move(0,-35)
+    \Line(40,35) \Move(-32,-28) \Line(32,-32) }  \Move(50,0)     }
+ \DefineSymbol L{{ { \Line(0,60) } \Line(40,0)  }  \Move(50,0)     }
+ \DefineSymbol M{{ \Line(0,60)  \Line(25,-60)
+    \Line(25,60) \Line(0,-60)   }  \Move(60,0)     }
+ \DefineSymbol N{{ \Line(0,60) \Line(40,-60)  
+    \Line(0,60)  }  \Move(50,0)     }
+ \DefineSymbol O{{ \Move(22,30)  \DrawOval(22,30)   }  \Move(54,0)     }
+ \DefineSymbol P{{      \Line(0,60)    \Line(25,0)
+     \Move(0,-12) \DrawOvalArc(15,12)(-90,90)
+     \Move(0,-12)  \Line(-25,0) }      \Move(50,0)  }
+ \DefineSymbol Q{{ \DrawText(--O--)  \Move(-10,-5)
+     \Line(-15,15)   }  \Move(55,0)     }
+ \DefineSymbol R{{ \DrawText(--P--) \Move(-10,0)
+     \Line(-15,36)   }  \Move(50,0)     }
+ \DefineSymbol S{{  \Move(20,18) \DrawOvalArc(20,18)(-140,90)
+     \Move(0,30)  \DrawOvalArc(20,12)(40,270)  }  \Move(50,0)     }
+ \DefineSymbol T{{ \Move(22,0) \Line(0,60)  \Move(-22,0)
+     \Line(44,0)   }  \Move(54,0)     }
+ \DefineSymbol U{{ \Move(20,15)  \DrawOvalArc(20,15)(180,360)
+     \Move(-20,0) \Line(0,45) \Move(40,0) \Line(0,-45)   }
+     \Move(50,0)     }
+ \DefineSymbol V{{ \Move(0,60) \Line(22,-60)
+     \Line(22,60)   }  \Move(54,0)     }
+ \DefineSymbol W{{  \Move(0,60) \Line(15,-60)
+     \Line(15,60)  \Line(15,-60) \Line(15,60)  }  \Move(70,0)     }
+ \DefineSymbol X{{ \Line(40,60)  \Move(-40,0)
+     \Line(40,-60)   }  \Move(50,0)     }
+ \DefineSymbol y{{ \Move(20,0) \Line(0,34) { \Line(-20,26)}
+     \Line(20,26)   }  \Move(50,0)     }
+ \DefineSymbol Z{{ \Move(0,60)  \Line(40,0) \Line(-40,-60)
+     \Line(40,0)   }  \Move(50,0)     }
+ \DefineSymbol 0{{ \Move(25,30) \DrawOval(25,30)   }  \Move(60,0)     }
+ \DefineSymbol 1{{ \Line(0,60)   }  \Move(10,0)     }
+ \DefineSymbol 2{{ \MarkLoc(a) \Move(0,10)
+    \MarkLoc(a')  \Move(40,30)  \MarkLoc(b)
+    \Move(0,-10)  \MarkLoc(b')  \Curve(a,a',b',b)
+    \Move(-20,10) \DrawOvalArc(20,20)(0,180)
+    \Move(-20,-40) \Line(40,0)   }  \Move(50,0)     }
+ \DefineSymbol 3{{ \MarkLoc(a')  \Move(0,10)  \MarkLoc(a)
+    \Move(20,-10) \MarkLoc(b) \Move(-10,0) \MarkLoc(b')
+    \Curve(a,a',b',b)  \Move(22,0) \MarkLoc(b')
+    \Move(8,8)  \MarkLoc(a')  \Move(0,10) \MarkLoc(a)
+    \Curve(a,a',b',b)  \Move(0,10)  \MarkLoc(a')
+    \Move(-8,8) \MarkLoc(b') \Move(-10,0)
+    \MarkLoc(b) \Curve(a,a',b',b) \Move(-5,0)
+    \MarkLoc(b') \Move(-5,-3) \MarkLoc(a')
+    \Move(0,-2)  \MarkLoc(a)  \Curve(a,a',b',b)
+    \Line(30,29) \Line(-40,0)   }  \Move(50,0)     }
+\DefineSymbol 4{{      \Move(35,0)  \Line(0,60)
+     \Line(-35,-35)     \Line(45,0)}    \Move(55,0)  }
+ \DefineSymbol 5{{ \Move(15,20) \DrawOvalArc(19,20)(-140,140)
+    \Move(-15,10) \Line(0,30) \Line(30,0)   }  \Move(44,0)     }
+ \DefineSymbol 6{{ \Move(22,30)  \DrawOvalArc(22,30)(70,270)
+    \Move(0,-10) \DrawOvalArc(22,15)(0,174)
+    \DrawOvalArc(22,20)(270,360)  }  \Move(54,0)     }
+ \DefineSymbol 7{{ \Move(0,60) \Line(40,0)
+    \MarkLoc(a) \Move(-20,-60) \MarkLoc(b)
+    \DSeg\RotateTo(b,a) \Rotate(20) \MoveF(10) \MarkLoc(b')
+    \MoveToLoc(a)
+    \DSeg\RotateTo(a,b) \Rotate(-20) \MoveF(10) \MarkLoc(a')
+    \Curve(a,a',b',b)  }  \Move(50,0)     }
+ \DefineSymbol 8{{  \Move(20,17) \DrawOval(20,17)
+    \Move(0,30)  \DrawOval(20,13)  }  \Move(50,0)     }
+ \DefineSymbol 9{{\Move(50,60) \Scale(-1,-1) \DrawText(--6--)   }  \Move(54,0)
+}
+
+\Scale(0.1,0.1) \Ragged(1) 
+\DrawText(--BOLD--)
+\PenSize(0.2pt) \MoveTo(0,-100)
+{ \Scale(-1,1)
+  \DrawText(--BACKWARD--) }
+\MoveTo(0,-200) \RotatedAxes(0,75)  \DrawText(--SLANTED--)
+\EndRotatedAxes \MoveTo(0,-300) \RotatedAxes(-45,45)
+\DrawText(--ROTATED--)          \EndRotatedAxes
+|Close>>>
+
+\Ex{\tex}{Last example in section 11.2}{boxes}
+
+\<<<
+|Open
+\Object\ch(1){\Text(--#1--)
+  \MoveToExit(-1,-1)
+  \FigSize\Q\R{\Text(--#1--)}
+  \DrawRect(\Val\Q,\Val\R) }
+\Define\chrs(1){\font\f=#1\space scaled\magstep4 \f
+  \Table\chrs{A & l & l & ~ & i & n & ~ &
+      b & o & x & e & s & .}   \chrs(0,99){\ch} }
+\PenSize(0.2pt) \EntryExit(-1,-1,1,-1)
+{\chrs(cmtt10)} \Move(0,-20) \chrs(cmsl10) 
+|Close>>>
+
+\Exr{11}21
+\<<<
+|Open
+\Define\side(3){ 
+  \ProjectedAxes(#1,#2)(#1,#3) 
+    \DrawRect(1,1)  \Move(0.5,0.5) 
+    \DrawCircle(0.5)  
+  \EndProjectedAxes }
+\ThreeDim(80,70,-40)    \MarkPLoc(a)
+  \Move(0,-50,0)   \MarkPLoc(b) 
+  \Move(0,50,25)   \MarkPLoc(c) 
+  \Move(-25,0,-25) \MarkPLoc(d) 
+  \side(a,b,d) \side(a,b,c) \side(a,c,d) 
+\EndThreeDim
+|Close >>>
+
+
+\Exr{11}24
+
+\<<<
+|Open
+\Define\Spline(1){
+  \MarkLoc(0) \MoveTo(0,0) \MarkLoc(00)
+  \Table\P{#1} \Define\Count(1){\K+1;} \K=-4;
+  \P(0,999){\Count}
+  \Do(0,\Val\K){ 
+    \GetCoefficients
+    \MoveTo(\Val\Ao,\Val\Bo)  \CSeg\Move(00,0)
+    \MarkLoc(o)   \f   \MarkLoc(x)
+    \Do(1,30){  
+       \T=\DoReg;  \T/30;
+       \X=\Aiii; \X*\T; \X+\Aii; \X*\T; \X+\Ai; \X*\T;
+       \Y=\Biii; \Y*\T; \Y+\Bii; \Y*\T; \Y+\Bi; \Y*\T;
+       \MoveToLoc(o)    \Move(\Val\X,\Val\Y)      \f
+       {\LineToLoc(x)}  \MarkLoc(x)    }}
+  \MoveToLoc(0)}
+
+\Define\f{}
+\DecVar\Ao \DecVar\Ai \DecVar\Aii \DecVar\Aiii \DecVar\X
+\DecVar\Bo \DecVar\Bi \DecVar\Bii \DecVar\Biii \DecVar\Y 
+
+\Define\GetCoefficients{
+   \I=\DoReg;  \P(\Val\I,\Val\I){\First}
+   \I+1;       \P(\Val\I,\Val\I){\Second}
+   \I+1;       \P(\Val\I,\Val\I){\Third}
+   \I+1;       \P(\Val\I,\Val\I){\Fourth}  }
+\Define\First(2){\Ao=#1; \Ai=-#1; \Aii=#1; \Aiii=-#1; 
+                 \Bo=#2; \Bi=-#2; \Bii=#2; \Biii=-#2;}
+\Define\Second(2){
+   \T=#1; \T* 4; \Ao +\T;   \T=#2; \T* 4; \Bo +\T;
+   \T=#1; \T*-2; \Aii+\T;   \T=#2; \T*-2; \Bii+\T;
+   \T=#1; \T* 3; \Aiii +\T; \T=#2; \T* 3; \Biii +\T;}
+\Define\Third(2){ \Ao +#1; \Ao /6;   \Bo +#2; \Bo /6;
+                  \Ai +#1; \Ai /2;   \Bi +#2; \Bi /2;
+                  \Aii+#1; \Aii/2;   \Bii+#2; \Bii/2;
+   \T=#1; \T*-3; \Aiii+\T;  \T=#2; \T*-3; \Biii+\T;}
+\Define\Fourth(2){
+   \Aiii+#1;  \Aiii/6;  \Biii+#2; \Biii/6;}
+
+\Spline(0,15 & 30,-70 
+  & 40,-50 & 10,0 &  15,30 
+  & 50,5 &60,10 & 8,45 & 
+  8,55 & 30,70 &  0,80 &
+ -30,70 &-8,55 & -8,45 &
+ -60,10 &-50,5 & -15,30 &
+ -10,0 &-40,-50 &-30,-70 & 
+  0,15 & 30,-70 & 40,-50 )
+\Define\ShowPoint(2){
+  \MoveToLoc(0) \Move(#1,#2)
+  \Text(--$\circ$--)}
+\P(0,99){\ShowPoint}
+
+\Define\TEX{
+  \Spline(0,-15 & 0,-15 & 
+          0,-15 & 0, 15 &
+          0, 15 & 0, 15 )
+  \Spline(-10,15 & 
+     -10,15 & -10,15 & 10,15 &
+      10,15 &  10,15)
+  \Move(12,0)
+   0,0 &  0,0 & 14,0 & 14,0 & 14,0)
+   \Spline(  20,15  &20,15  &20,15  & 0,15 & 0,15 
+   &   0,-15 & 0,-15 & 20,-15 &20,-15&20,-15)
+   \Move(32,0) \Spline(  -10,-15  &  -10,-15  &
+   -10,-15 & 10,15 & 10,15 & 10,15)
+   \Spline(  -10,15  &
+   -10,15 &    -10,15 & 10,-15 & 10,-15 & 10,-15) } 
+\TEX \MoveTo(0,0)   \F  
+\TEX \MoveTo(0,-35) \G  
+\TEX                 
+|Close >>>
+
+
+\Exr{11}31
+\<<<
+|Open
+\Define\put(2){
+   \IF \EqText(,#1) \THEN
+      \top  \Define\put(1){} 
+   \ELSE \push(#1) \FI  \put(#2)}
+\Define\stack(1){ 
+   {\put(#1,,)} \Move(0,-13)}  
+\Table\x{ &  1&  1, 2&
+1, 2, 3&        1, 2, 3, 4&
+1, 2, 3, 4, *&  1, 2, 12&
+1, 2, 12,+&  1, 14&  1, 14,+& 15} 
+\x(0,100){\stack} 
+|Close >>>
+
+
+\Exr{11}32
+\<<<
+|Open
+\Table\g{
+  16 & 8 & 4 & 2 & 1 & 
+  20 & 16 & 8 & 4 & 2 & 
+  17 & 12 & 16 & 8 & 4 & 
+  23 & 20 & 12 & 13 & 17 }  
+\ThreeDim(160,75,-70)
+  \Scale(20,5,20) 
+  \g(0,140){\surface}
+\EndThreeDim     
+|Close >>>
+
+
+
+
+
+\Lib{AlDraTeX} \def\files{\fileAD}
+
+
+\Ex{tex}{Example in section 13.2}{sec132}
+
+\<<<
+\input DraTex.sty
+\input AlDraTex.sty
+\Draw
+   \Scale(1,0.5)
+   \PieChartSpec(1,50,20)()
+   \PieChart(15 & 10 & 30)
+   \Move(0,-6)
+   \DrawOvalArc(50,50)(180,360)
+\EndDraw
+\bye>>>
+
+\Ex{tex}{Example in section 13.2---second version}{sec132a}
+
+\<<<
+\input DraTex.sty
+   \def\AlDraTex{pie}
+\input AlDraTex.sty
+\Draw
+   \Scale(1,0.5)
+   \PieChartSpec(1,50,20)()
+   \PieChart(15 & 10 & 30)
+   \Move(0,-6)
+   \DrawOvalArc(50,50)(180,360)
+\EndDraw
+\bye>>>
+
+
+\Ex{latex}{Example in section 13.2}{sec132b}
+
+\<<<
+\documentstyle{report}
+   \input DraTex.sty
+   \input AlDraTex.sty
+\begin{document}
+\Draw
+   \Scale(1,0.5)
+   \PieChartSpec(1,50,20)()
+   \PieChart(15 & 10 & 30)
+   \Move(0,-6)
+   \DrawOvalArc(50,50)(180,360)
+\EndDraw
+\end{document}>>>
+
+\Ex{latex}{Example in section 13.2---second version}{sec132c}
+
+\<<<
+\documentstyle[DraTex,AlDraTex]{report}
+\begin{document}
+\Draw
+   \Scale(1,0.5)
+   \PieChartSpec(1,50,20)()
+   \PieChart(15 & 10 & 30)
+   \Move(0,-6)
+   \DrawOvalArc(50,50)(180,360)
+\EndDraw
+\end{document}>>>
+
+\Ex{latex}{Example in section 13.2---third version}{sec132d}
+
+\<<<
+\documentstyle{report}
+   \input DraTex.sty
+      \def\AlDraTex{pie}
+   \input AlDraTex.sty
+\begin{document}
+\Draw
+   \Scale(1,0.5)
+   \PieChartSpec(1,50,20)()
+   \PieChart(15 & 10 & 30)
+   \Move(0,-6)
+   \DrawOvalArc(50,50)(180,360)
+\EndDraw
+\end{document}>>>
+
+\Ex{latex}{Example in section 13.2---forth version}{sec132e}
+
+\<<<
+\def\AlDraTex{pie}
+\documentstyle[DraTex,AlDraTex]{report}
+\begin{document}
+\Draw
+   \Scale(1,0.5)
+   \PieChartSpec(1,50,20)()
+   \PieChart(15 & 10 & 30)
+   \Move(0,-6)
+   \DrawOvalArc(50,50)(180,360)
+\EndDraw
+\end{document}>>>
+
+\Ex{\tex}{Chemical diagram in section 16.1}{sec161}
+
+\<<<
+|Open
+\Define\ChemEdge(3){{   
+  \MoveToNodeDir(#2,#1)  
+  \MarkLoc(b) \MoveToNodeDir(#1,#2)
+  \MarkLoc(a) \DSeg\RotateTo(a,b)  
+  \Rotate(-90)\Q=#3; \Q/2; \Q-0.5; 
+  \Q*2.2;  \MoveF(\Val\Q)
+  \Do(1,#3){ {\CSeg\Line(a,b)} 
+                 \MoveF(-2.2) } }} 
+\Do(1,6){ \MoveF(30) 
+  \Node(\DoReg)(--C--) \MoveF(20) \Node(x)(--H--) 
+  \ChemEdge(\DoReg,x,1) \MoveTo(0,0) \Rotate(60) }
+\ChemEdge(1,2,2) \ChemEdge(2,3,1) \ChemEdge(3,4,2)
+\ChemEdge(4,5,1) \ChemEdge(5,6,2) \ChemEdge(6,1,1)
+|Close >>>
+
+
+\Ex{\tex}{Finite automaton in last example of chapter 17}{FA}
+
+\<<<
+|Open
+\NewCIRCNode(\StateNode,106,)
+\NewCIRCNode(\AStateNode,106,103)
+\Define\StateAt(3){ \MoveTo(#2,#3)
+   \StateNode(#1)(--$q_{#1}$--)}
+\Define\AStateAt(3){
+   \MoveTo(#2,#3)
+   \AStateNode(#1)(--$q_{#1}$--)}
+\DiagramSpec(\StateAt&
+       \AStateAt&\TransEdge)
+\ArrowHeads(1)     \Diagram
+   ( 0,0,0    & 1,50,50  &
+     3,90,-50 & 4,20,-50 )(2,75,0)               
+   (0,1,a,b & 1,2,a, & 0,2, ,b & 2,2,0,b & 0,4,a,  & 4,3,a,b )  
+\CurvedEdgeAt(3,1,0,1,1,0)(20,0.3,0,0.5) \EdgeLabel[+](--a--)
+|Close>>>
+
+
+\Ex{\tex}{Commutative diagram in last example of section  18.3}{CM}
+
+\<<<
+|Open
+\GridDiagramSpec()(\MyEdge)
+\Define\L(4){,+#1..+#2\,L\,#3\,#4}
+\Define\D(4){,+#1..+#2\,D\,#3\,#4}
+\Define\MyEdge(5){
+   \IF \EqText(#3,D) \THEN\EdgeSpec(D)
+   \ELSE  \EdgeSpec(L)  \FI
+   \IF  \EqText(#1,#2)  \THEN
+      \RotateTo(#4) \CycleEdge(#1) 
+      \EdgeLabel(--$#5$--)
+   \ELSE\Edge(#1,#2)
+      \IF \EqText(,#4) \THEN \EdgeLabel(--$#5$--)
+      \ELSE \EdgeLabel[#4](--$#5$--) \FI
+   \FI}      
+\ArrowHeads(1)     
+\GridDiagram(3,3)()()({
+& T \D(0,1,,f) \D(2,0,,h) & N \L(2,0,,\sigma)//
+S \L(0,0,180,t) \L(-1,1,,f) \L(1,1,+,g\circ f)//
+& W \L(0,1,,f) & X \D(0,0,-45,r)//}) 
+|Close >>>
+
+
+\Ex{\tex}{Second example in section 20.2}{sec202}
+
+\<<<
+|Open
+\NewNode(\MyNode,\MoveToRect){
+   \Move(-24,-8) \DrawRect(48,16)
+   \Move(16,0) {\Line(0,16)}
+   \Move(16,0) \Line(0,16)  }
+\Define\MyEdge(2){
+   \CSeg\FindSign(#1,#2)
+   \EdgeAt(#1,\sign 0.66,0,#2,0,1)}
+\Define\FindSign(2){
+   \IF  \GtDec(#1,0)  \THEN
+        \Define\sign{}
+   \ELSE \Define\sign{-} \FI}
+\TextNode(2){ \Text(--$#2$--)
+   \IF \EqInt(#1,0) \THEN {
+     \Move(-16,0) \Text(--$\Lambda$--)
+     \Move(32,0) \Text(--$\Lambda$--)
+   }\FI }  
+\ArrowHeads(1)
+\TreeSpace(D,10,20) 
+\TreeSpec(\MyNode)()(\MyEdge)
+\Tree()(2,2,A// 0,0,B&2,2,C// 2,2,D&0,0,E// 0,0,F&0,0,G//)  
+|Close >>>
+
+
+\Ex{\tex}{Last example in section 20.2}{LR}
+
+\<<<
+|Open
+\GridDiagramSpec(\RNode)(\MyEdge) 
+\GridSpace(10,10) \ArrowSpec(F,5,3,3) 
+\ArrowHeads(1) \CycleEdgeSpec(-30,20)
+\NewNode(\RNode,\MoveToOval){ 
+  \GetNodeSize   \Va+4;  \Vb+4;
+  \SetMinNodeSize   \Move(0,3)
+  \DrawOval(\Val\Va,\Val\Vb) }
+\Define\MyEdge(3){ 
+  \IF \EqText(#1,#2) \THEN 
+    \RotateTo(45) \LabelPos(+0.5;,3)
+    \CycleEdge(#1)
+  \ELSE  \DSeg\Q(#1,#2)  
+    \IF \GtDec(\Q,180) \THEN 
+      \LabelPos(+0.4;,3) \ELSE \LabelPos(0.5;,3)
+    \FI \Edge(#1,#2) \FI \EdgeLabel(--$#3$--) }
+\baselineskip=9pt       \Define\NEXT(3){,#1..#2\,#3}
+\def\/#1/#2.#3;{\hbox{$\scriptstyle#1\rightarrow #2\cdotp#3$}~~}
+\GridDiagram(3,3)()()({
+&  \/S'/ S. ; \/A / S.a; $I_1$ \NEXT(+0,+1,a)
+&  \/A / Sa.;            $I_2$
+// \/S'/ .S ; \/S / .AS; \/  / .b  ;
+   \/A / .Sa; \/  / .a ; $I_0$ \NEXT(-1,+1,S) \NEXT(+0,+1,A)                                 \NEXT(+1,+1,b) \NEXT(+1,+0,a)  
+&  \/S /A.S ; \/S /.AS  ; \/  /.b   ;
+   \/A /.Sa ; \/  /.a   ; $I_3$ \NEXT(+0,+1,S) \NEXT(+0,+0,A)
+&   \/A/ S.a ;         $I_4$  \NEXT(+1,+0,a)
+//
+   \/A/a.;    $I_5$
+&  \/S/ b. ;   $I_6$
+&  \/A/ Sa. ;         $I_7$
+//
+}) 
+|Close >>>
+
+
+
+\Ex{\tex}{Last example in chapter 20}{TM}
+
+\<<<
+|Open
+\NewCIRCNode(\StateNode,104,)
+\NewCIRCNode(\AStateNode,104,102)
+\Define\StateAt(3){ \MoveTo(#2,#3)
+   \StateNode(#1)(--$q_{#1}$--)}
+\Define\AStateAt(3){\MoveTo(#2,#3)
+   \AStateNode(#1)(--$q_{#1}$--)}
+\LabelSpec(4){\PictLabel{
+   { \Move(1,-5) \Line(8,20) }
+   { \Move(4,10) { \EntryExit(1,0,0,0) 
+     \Text(--\strut$#1$--) }  \Move(6,0)   
+     \EntryExit(-1,0,0,0) \Text(--\strut$#3$--) }
+   { \EntryExit( 1,0,0,0) \Text(--\strut$#2$--) }
+   \Move(6,0)  \EntryExit(-1,0,0,0) \Text(--\strut$#4$--) }}
+\DiagramSpec(\StateAt&\AStateAt&\TransEdge)  \ArrowHeads(1) 
+\Diagram( 0,0,0 & 1,80,0 )(2,80,-60)(
+   0,0,90,{a,B,+1,a{,+}1}                 &
+   0,1,   {a,B,+1,a{,+}1}, {b,B,0,B{,-}1} &
+   1,2,   {\$,B,0,B{, }0},                ) 
+|Close >>>
+
+
+
+
+
+\Lib{ProTeX and AlProTex}  \def\files{\fileP}  \def\LLL{>>>}
+
+\let\startInput=\empty
+
+\let\endInput=\empty
+
+NOTE.  The La\TeX{} files of this part put the
+{\tt\string\AlProTex....} command after the {\tt\string\begin....}
+command. This is not a nice style for files.
+
+\Exr{22}2{2a}
+\<<<
+|Open
+\AlProTex{awk,<<<|LLL,@,%
+  list,title,[]}
+\catcode`\@=0
+
+An Awk program for deriving 
+the distribution of words.
+
+@<dist@><<<
+BEGIN {print"words\t lines"}
+@<count the words@>
+END { i=0 
+      while (i<=m)
+      {if (c[i]>0)
+       {print i "\t " c[i]}
+       i=i+1 }}
+|LLL 
+
+NF is a built-in variable 
+that holds the number of 
+words in the current input
+line.
+
+@<count the words@><<<
+{ c[NF]=c[NF]+1
+  {if (NF>m) m=NF} }
+|LLL \OutputCode@<dist@> 
+|Close >>>
+
+
+\Exr{22}2{2b}
+\<<<
+|Open
+\AlProTex{awk,<<<|LLL,@,%
+  list,title,[]}
+
+An Awk program for deriving 
+the distribution of words.
+
+\<dist\><<<
+BEGIN {print"words\t lines"}
+@<count the words@>
+END { i=0 
+      while (i<=m)
+      {if (c[i]>0)
+       {print i "\t " c[i]}
+       i=i+1 }}
+|LLL 
+
+NF is a built-in variable 
+that holds the number of 
+words in the current input
+line.
+
+\<count the words\><<<
+{ c[NF]=c[NF]+1
+  {if (NF>m) m=NF} }
+|LLL \OutputCode\<dist\> 
+|Close >>>
+
+
+\Exr{22}2{3}
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,%
+           title,list,[]}
+
+\<prog\><<<
+PROGRAM prog;|LLL
+
+\<body\><<<
+{ comment } |LLL
+
+\<prog\><<<
+BEGIN
+  \<body\>
+END.|LLL
+
+\OutputCode\<prog\>  
+|Close >>>
+
+\Exr{22}2{4a}
+
+\<<<
+|Open
+\AlProTex{p,list,%
+   <<<|LLL,title,[]}
+
+\<\><<<
+PROGRAM prog;|LLL
+
+\<body\><<<
+{ comment } |LLL
+
+\<\><<<
+BEGIN
+  \<body\>
+END.|LLL
+
+\OutputCode\<\> 
+|Close >>>
+
+\Exr{22}2{4b}
+
+\<<<
+|Open
+\AlProTex{p,%
+    <<<|LLL,title,[]}
+
+\<\><<<
+PROGRAM prog;|LLL 
+\ShowCode-\<\>
+
+\<body\><<<
+{ comment } |LLL 
+\ShowCode\<body\>
+
+\<\><<<
+BEGIN
+  \<body\>
+END.|LLL          
+\ShowCode\<\>
+\OutputCode\<\> 
+|Close >>>
+
+\Exr{22}2{4c}
+
+\<<<
+|Open
+\AlProTex{p,%
+   <<<|LLL,title,[]}
+
+\<\><<<
+PROGRAM prog;|LLL
+
+\<body\><<<
+{ comment } |LLL
+
+\<\><<<
+BEGIN
+  \<body\>
+END.|LLL
+
+\OutputCode\<\> 
+|Close >>>  
+
+
+
+\Exr{22}2{5a}
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,%
+          title,list,[]}
+
+\<myprog\><<<
+PROGRAM prog;|LLL
+
+\<body\><<<
+{ comment } |LLL
+
+\<myprog\><<<
+BEGIN
+  \<body\>
+END.|LLL
+\OutputCode\<myprog\> 
+
+|Close >>>
+
+\Exr{22}2{5b}
+
+\<<<
+|Open
+\AlProTex{p,title,list,[]}
+
+\<myprog\>{PROGRAM prog;}
+
+\<body\>{ \{ comment \} }
+
+\<myprog\>{BEGIN
+  \<body\>
+END.}
+\OutputCode\<myprog\>  
+
+|Close >>>
+
+
+
+
+\Exr{22}2{6a}
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,[],%
+             title,list}
+\<myprog\><<<
+PROGRAM prog;
+BEGIN
+  \<body\>
+END.|LLL  
+
+\<body\><<<
+{ comment: \\@||` } |LLL 
+|Close >>> 
+
+\Exr{22}2{6b}
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,[],%
+             title,list,@}
+\<myprog\><<<
+PROGRAM prog;
+BEGIN
+  @<body@>
+END.|LLL  
+
+\<body\><<<
+{ comment: \@@||` } |LLL 
+|Close >>> 
+
+\Exr{22}2{6c}
+
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,[],%
+             title,list,||}
+\<myprog\><<<
+PROGRAM prog;
+BEGIN
+  ||<body||>
+END.|LLL  
+
+\<body\><<<
+{ comment: \@||||` } |LLL 
+|Close >>> 
+
+
+\Exr{22}2{6d}
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,[],%
+             title,list,`}
+\<myprog\><<<
+PROGRAM prog;
+BEGIN
+  `<body`>
+END.|LLL  
+
+\<body\><<<
+{ comment: \@||`` } |LLL 
+|Close >>> 
+
+\Exr{22}2{7}
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,[],%
+               title,list,||}
+
+\<temp\><<<
+\<prog\><<<
+PROGRAM prog;
+BEGIN
+  ||||<body||||>
+END.>||empty>>  
+
+\<body\><<<
+{comment: \@||||||||} >||empty>>
+
+\OutputCode\<prog\>  |LLL  
+
+\OutputCode[prg]\<temp\>     
+\input temp.prg  
+|Close >>> 
+
+
+\Exr{22}2{8a}
+
+\<<<
+|Open
+\Code\myprog{my 
+   program}{PROGRAM prog;}
+\ShowCode-\myprog
+
+\AppendCode\myprog{BEGIN         
+  \body 
+END.}
+\Code\body{body}{}  
+\ShowCode-\myprog
+
+\AppendCode\body{\{comment\}}  
+\ShowCode\body
+
+Code of title \myprog{} 
+linearized within
+the paragraph: 
+`\ShowCode-\myprog'.
+
+\OutputCode\myprog 
+|Close >>>
+
+\Exr{22}2{8b}
+
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,list,@}
+
+\Code\myprog{my program}<<<
+PROGRAM prog;|LLL
+
+\Code\body{body}<<<
+|LLL
+\AppendCode\myprog<<<
+BEGIN         
+  @body 
+END.|LLL
+
+\AppendCode\body<<<
+ {comment} |LLL
+
+Code of title \myprog{} 
+linearized within the 
+paragraph: 
+`\ShowCode-\myprog'.
+
+\OutputCode\myprog
+|Close >>>
+
+
+\Exr{22}2{9}
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,%
+          title,list,[]}
+
+\<myprog\><<<
+PROGRAM prog;|LLL
+
+\<body\><<<
+{ comment } |LLL
+
+\<myprog\><<<
+BEGIN
+  \<body\>
+END.|LLL
+
+\OutputCode\<myprog\>
+|Close >>>
+
+\Exr{22}2{10a}
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,title,%
+         list,[],enumerate}
+
+See lines \RefLine[*].
+
+\<myprog\><<<
+PROGRAM prog;\TagLine[*] |LLL
+
+\<body\><<<
+{comment: see \RefLine[*]}|LLL
+
+\<myprog\><<<
+BEGIN         
+  \<body\>   \TagLine[*] |LLL
+
+\ResetLineCount 
+\<myprog\><<<
+END.|LLL \OutputCode\<myprog\> 
+|Close >>> 
+
+\Exr{22}2{10b}
+
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,title,%
+                 list,[]}
+\def\CodeRef[#1]{\Ref{#1}}
+\def\CodeTag[#1][#2]{%
+              \Tag{#1}{#2}}
+
+See lines \Ref{*}.
+
+\<myprog\><<<
+PROGRAM prog;\CodeTag[*][1]|LLL
+
+\<body\><<<
+{comment: see \CodeRef[*]}|LLL
+
+\<myprog\><<<
+BEGIN         
+  \<body\>   \CodeTag[*][2]|LLL
+
+\ResetLineCount \Tag{*}{3} 
+\<myprog\><<<
+END.|LLL \OutputCode\<myprog\> 
+|Close >>>
+
+
+
+
+\Exr{22}2{11}
+
+\<<<
+|Open   
+\AlProTex{p,<<<|LLL,title,%
+         list,[],ShowIndex}
+
+\<myprog\><<<
+PROGRAM prog;|LLL
+
+\<body\><<<
+{ comment } |LLL 
+\TextIndex{Tracing}
+\SecIndex{***} 
+
+\<myprog\><<<
+BEGIN 
+  \<body\>
+END.|LLL      
+
+\def\BeforeIndex{Index} 
+\ShowIndex   
+|Close >>>
+
+
+ \Exr{22}2{12}
+
+\<<<
+|Open   
+\AlProTex{p,<<<|LLL,%
+     title,[],ShowTop}
+
+\<my prog\><<<
+PROGRAM prog;
+BEGIN  \<body\>
+END.|LLL
+\<body\><<<
+{ comment 1} 
+|LLL
+\<body\><<<
+\<subbody\> 
+|LLL        
+\<subbody\><<<
+{ comment 2 } |LLL
+\ShowTop\<body\> 
+
+\def\ShowSep{(* ***** *)\par} 
+\ShowTop\<body\>    
+|Close >>> 
+
+ \Exr{22}2{13}
+
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,title,%
+            list,[],NoShow}
+
+First piece of text.
+
+\<myprog\><<<
+PROGRAM prog; |LLL
+
+\ShowOff Second piece of text.
+
+\<body\><<<
+{ comment } |LLL
+
+\Note  Third piece of 
+text. \EndNote\ShowOn
+
+\<myprog\><<<
+BEGIN
+  \<body\>
+END.|LLL
+
+Last piece of text.  
+|Close >>> 
+
+ \Exr{22}2{14}
+
+\<<<
+|Open
+\AlProTex{p,<<<|LLL,title,%
+   list,ShowIndex,ClearCode}
+
+Chapter 1
+
+\<progA\><<<
+PROGRAM prog;
+|LLL
+\<progA\><<<
+BEGIN
+  { comment 1 }
+END.|LLL    \ShowIndex 
+            \ClearCode
+\vfil\break Chapter 2
+
+\<progB\><<<
+PROGRAM prog;
+|LLL
+\<progB\><<<
+BEGIN
+  { comment 2 }
+END.|LLL  \ShowIndex  
+|Close >>>     
+
+ \Exr{22}2{15}
+
+
+
+\<<<
+\hsize=2.5in \noindent{\bf
+LITERATE PROGRAM IN  WEB}
+\medskip  We compute a 
+two-dimensional view of a
+three-dimensional point.
+
+@* The mapping.  The view
+   {\tt (x,y)} is  on the
+   {\tt Z=0} plane.
+@<map(x,y) := mapping of
+   (X,Y,Z)@>=
+   x := X * D DIV (D + Z);
+
+@  The viewer is located
+   at {\tt (0,0,-D)}.
+@<CONST + VAR @>=
+   CONST D=100;
+   VAR  X {x}, Z: INTEGER; 
+
+@
+@<map...@>=
+   y := Y * D DIV (D + Z);
+
+@
+@<CON...@>=Y {y}: INTEGER;
+
+@* Main program.
+@p PROGRAM D2view; 
+     @<CON...@>
+   BEGIN  read(X,Y,Z);
+     @<map...@>
+     write(x,y)
+   END.
+>>>
+
+\newpage
+
+
+ \OutputCode[me]\execute
+ 
+ 
+ On a Unix system containing the xdvi application, the instructions of
+ the following file can be executed with the compound command 
+ `chmod 777 execute.me ; execute.me'.
+ 
+ \bigskip
+ \ShowFile{execute.me}
+
+\write16{<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<}
+\write16{<< Please review the document <<}
+\write16{<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<}
+
+\bye

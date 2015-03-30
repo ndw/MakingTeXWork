@@ -1,0 +1,372 @@
+\chapter[\protect\TeX\ on the Macintosh]{\protect\TeX\ on the\\Macintosh}
+\RCSID$Id: ch15.tex,v 1.1 2002/08/23 14:58:46 nwalsh Exp $
+\label{chap:mac}
+
+\ifincludechapter\else\endinput\fi
+
+\bgroup % <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%
+\def\floatpagefraction{.2}
+
+\index{Macintosh!TeX implementations@\TeX\ implementations}For the 
+most part, using \TeX\ on the Macintosh is like using \TeX\ on 
+any other system.  Certainly, the \TeX\ documents that you edit are
+the same, and the output (on paper) is the same as the output from
+any other version of \TeX.
+
+However, because they are immersed in a
+consistent graphical environment, Macintosh tools have a substantially different
+appearance from their non-graphical counterparts.\footnote{I'm not going
+to argue about the relative merits of graphical and non-graphical
+environments or particular implementations of graphical environments.
+When all is said and done, the Mac {\em is\/} different.  At least today.}
+
+There are four implementations of \TeX\ available for the Macintosh.
+Of these four, one is commercial, two are shareware, and one is (mostly)
+free.  The following sections present an overview of each implementation,
+in alphabetical order.  
+
+\section{CMac\protect\TeX}
+
+The \ixx{\cmactex}{cmactex@\cmactex} package includes the most recent 
+versions of \TeX\ and
+\MF\ and all of the standard tools.  A port of \dvips\index{dvips!for Macintosh} is also included,
+as well as a \ext{DVI} previewer and a \program{\idx{PrintPS}} tool for
+printing PostScript files directly to a LaserWriter printer over AppleTalk.
+
+Each utility is a straightforward port of its \Unix\ counterpart.
+Command-line options have been replaced by standard
+Mac dialog boxes and menus where appropriate.  \TeX\ has been extended to include a
+built-in editor, although it is not necessary to use that editor if
+you have another favorite.
+
+By design, \cmactex\ is a very modular package.  This makes it easy to
+substitute different tools, or different ports of the same tools, where
+it is advantageous to do so.  For example, you can use 
+\program{\idx{MacGS}}\index{Ghostscript!for Macintosh} (a 
+Macintosh version of \program{Ghostscript}) as a
+previewer if you like.
+
+Small versions of \TeX, ini\TeX, \MF, and \program{iniMF} are provided
+in the free distribution of \cmactex.  Big versions are 
+available only in a commercial distribution purchased directly from the
+author.  At the time of this writing, 
+the commercial distribution is
+available on diskettes and via email.
+The commercial version also provides
+fully automated font generation (see ``\nameref{sec:autofont}'' in
+Chapter~\ref{chap:fonts}, {\it \nameref{chap:fonts}}) and faster versions of
+\TeX\ and \MF.
+
+The \ixx{configuration files}{configuration files!for Macintosh} used 
+by \cmactex\ resemble the environment
+variables used by implementations of \TeX\ on other systems.  You can
+set up multiple search folders for input files and fonts, for example,
+by providing a list of folder names separated by colons.
+
+Table~\ref{tab:mac:cmacdist} summarizes the \cmactex\ version 2.1
+distribution available on the CTAN archives (in
+\ctandir{systems/mac/cmactex}) as of July, 1993.  The top-level folders and
+their contents are presented, not a list of the archive files that
+form the distribution.
+
+\begin{xtable}{l|l}
+  \caption{Summary of the \protect\cmactex\ Distribution at 
+    CTAN\label{tab:mac:cmacdist}}\\
+  \bf Folder  & \bf Description \\[2pt]
+  \hline
+  \tstrut
+  \it TeX         & Small versions of \TeX \\
+  \it Metafont    & Small versions of \MF \\
+  \it view\&print & \ext{DVI} previewer and \program{PrintPS} \\
+  \it dvips5516   & Complete distribution of \dvips, version 5.516. \\
+  \it Utilities   & All of the standard \texware\ and \mfware\ utilities \\
+  \it ams         & Versions of \AMSTeX\ and \AMSLaTeX \\
+  \it ams-pk      & \AmS-fonts in \ext{PK} format \\
+  \it ams-tfm     & \ext{TFM} files for the \AmS-fonts \\
+  \it amsfonts    & \MF\ sources for version 2.0 of the \AmS-fonts \\
+  \it tfms        & \ext{TFM} files for the CMR and \LaTeX\ fonts \\
+  \it cmpk300     & The CMR fonts in \ext{PK} format\\
+  \it lpk300      & The \LaTeX\ extensions to CMR in \ext{PK} format \\[2pt]
+  \hline
+\end{xtable}
+  
+The installation instructions for \cmactex\ are easy to understand, but
+you will have to configure \cmactex\ before you try to use it.  
+Unfortunately, the default configuration files do not reflect the layout
+of folders that results directly from unpacking the archive files.
+
+\cmactex\ includes a prebuilt format file for Plain \TeX, but if you 
+want to use \LaTeX, you will have to build the format file with ini\TeX\
+first.
+
+\section{\protect\directex}
+
+\ixx{\directex}{directex@\directex}%
+\index{Macintosh!TeX MPW implementation@\TeX\ MPW implementation} 
+is a \ixx{Macintosh Programmer's Workshop (MPW)}{Macintosh!Programmer's Workshop (MPW)} based \TeX\ package.  It is distributed in archive files containing
+eight disk images.  You will have to copy each disk image onto a diskette
+(using a tool provided) before you can install \directex.
+
+Because I don't have access to a Mac with MPW installed, there is very 
+little that I can say about \directex\ at this point.
+
+\section{\protect\oztex}
+
+\ixx{\oztex}{oztex@\oztex} is a complete \TeX\ package that includes an integrated \ext{DVI}
+previewer.  \oztex\ can print \TeX\ \ext{DVI} files directly to any printer 
+selected by the \program{\idx{Chooser}}.  Because \oztex\ does not include \MF,
+you may need to get from some other source \ext{PK} files at a resolution 
+appropiate for your
+printer.  The standard \oztex\ distribution includes
+a complete set of
+\ixx{\ext{PK} files}{PK files@\ext{PK} files} for 300dpi and 360dpi printers.
+
+A default configuration file and a selection of specialized
+configuration files for different printers and environments are
+provided with \oztex.  The distinction between big and small
+implementations of \TeX\ has been replaced by configurable memory
+limits\index{configurable memory limits!for oztex@for \oztex}.  With enough 
+RAM and appropriate configuration, you
+should be able to get \oztex\ to process any \TeX\ file you
+give it.
+
+\oztex\ includes a simple text editor called \program{\idx{$\Sigma$Edit}},
+but you can replace it with any editor you choose.
+Table~\ref{tab:mac:oztexdist} summarizes the \oztex\ version 1.5
+distribution available on the CTAN archives (in
+\ctandir{systems/mac/oztex}) as of July, 1993.  The top-level folders and
+their contents are given, not a list of the archive files that
+form the distribution.
+
+\begin{xtable}{l|l}
+  \caption{Summary of the \protect\oztex\ Distribution at 
+    CTAN\label{tab:mac:oztexdist}}\\
+  \bf Folder  & \bf Contents \\[2pt]
+  \hline
+  \tstrut
+  \it Configs     & Configuration files \\
+  \it TeX-formats & Format files for Plain \TeX\ and \LaTeX\\
+  \it TeX-fonts   & \ext{TFM} files for CMR, \LaTeX, and PostScript fonts\\
+  \it Help-files  & Online help files\\ 
+  \it PS-files    & PostScript sources for \oztex's PostScript built-in driver\\
+  \it TeX-docs    & Example \TeX\ files\\
+  \it LaTeX-docs  & \LaTeX\ sources for a 26 page User's Guide to \oztex\\
+  \it $\Sigma$Edit& A simple text editor desk accessory\\
+  \it TeX-inputs  & Input files for Plain \TeX\ and \LaTeX\\
+  \it PK-files    & A set of \ext{PK} files for 300dpi and 360dpi printers\\[2pt]
+  \hline
+\end{xtable}
+
+The \oztex\ \ext{DVI} printer recognizes \verb|\special| commands for
+inserting PICT\index{PICT file format}, 
+PNTG\index{PNTG file format} (\program{MacPaint}), and 
+EPSF\index{EPS (Encapsulated PostScript) file format} images
+into your documents.  Provision is also made for including raw PostScript
+code if the selected printer is a \idx{PostScript} printer.
+
+\oztex\ is a shareware program.  If you continue to use it after a 
+reasonable trial period, you are expected to purchase it.
+
+\section{Textures}
+
+\program{\idx{Textures}} is a commercial implementation of \TeX\ 
+from \idx{Blue Sky Research}. It has a number of features that make it unique in the
+\TeX\ market. It is supported by a complete 
+user's guide and access to telephone and email product support.
+
+\Textures\ supports an interactive preview mode called 
+        {\it Lightning} \Textures\index{Lightning Textures}\index{previewing!for Macintosh Textures}.  It is 
+        this feature that really sets 
+        \Textures\ apart
+        from other implementations.  In this mode, changes to your document
+        are reflected immediately in the preview window.  In an environment
+        with sufficient resources (memory and processing speed), the result
+        is striking.  Constructing complex items like tables and mathematical
+        formulae is much easier, especially for the \TeX\
+        novice, than using the conventional edit, \TeX, preview, debug
+        cycle.  Because the log file is also visible, it's easy to see
+        when you've written erroneous \TeX\ code.
+
+        Note that {\it Lightning Textures\/} is not really a WYSIWYG
+        environment (like \program{Scientific Word}, for example) because
+        you still enter regular \TeX\ commands in a purely textual
+        fashion.  You get immediate feedback in a different window.
+
+\Textures\ is fast.  Extensive instrumentation and hand-tuning
+        of the program has produced an executable that is
+        several (maybe many) times faster than other \TeX\ executables
+        on similar hardware.
+
+A complete set of Computer Modern Roman fonts is provided 
+        in Adobe Type~1 format.  This means that any font can
+        be rendered at any size without loss of quality.
+PostScript versions of the \AmS-fonts are also available.  The
+        fonts can be purchased separately in either Macintosh or
+        Adobe \ext{PFB} formats.
+
+\Textures\ is a very integrated environment.  This can hardly be
+labelled a disadvantage considering how well it works, but it does
+mean that some extra effort is required if you want access to your
+document in a less integrated fashion.  Using another editor to
+compose your document is possible, but it prevents you from using
+{\it Lighting} \Textures.  Starting with version 1.6, the
+\Textures\ editor includes a macro programming language, so you can
+customize it with features that you find useful.  Blue Sky Research
+provides the tools you need to incorporate other fonts into
+\TeX\ or extract \TeX\ files (like \ext{DVI} files) that are normally
+hidden from view by \Textures.
+
+Figure~\ref{fig:mac:textures} shows an example of a \Textures\ session.  The
+preview quality in this image is less than optimal because the Macintosh
+that \Textures\ is running on does not have Adobe Type Manager.
+
+\epsimage{fig:mac:textures}{Editing, previewing, and typesetting 
+  in Textures}
+
+Because the Computer Modern Roman fonts are included in Adobe Type~1
+format, \MF\ is not provided in the \Textures\ package.  Recently, BSR
+made their version of \MF\ freely available.
+BSR's \MF\ 
+was designed to work with \Textures, and creates output files that are
+suitable for \Textures, but not necessarily the standard \ext{GF} and
+\ext{TFM} files you might expect.  Those files can be obtained elsewhere, of course.
+
+The \Textures\ package includes implementations of many auxiliary \TeX\
+programs including \ixx{\BibTeX}{bibtex@\BibTeX}, \program{\idx{MakeIndex}}, 
+the \program{\idx{Excalibur}}
+spellchecker (see the ``\nameref{sec:Excalibur}'' section later in
+this chapter), a \program{\idx{DVITool}}
+for importing and exporting \ext{DVI} files, and font tools for importing
+and exporting fonts. (Because \Textures\ doesn't use \ext{PK} files directly,
+the standard \mfware\ tools are not provided.)  The \Textures\ font tools
+are freely available from Blue Sky Research; see the ``\nameref{sec:bsrtools}''
+section later in this chapter.  \Textures\ also supports virtual fonts.
+
+\Textures\ includes the \idx{Eplain} and \idx{Midnight} macro
+packages in addition to Plain \TeX\ and \LaTeX.  ini\TeX\ is built into
+\Textures, so you can make additional format files as described in
+Chapter~\ref{chap:macpack}, \textit{\nameref{chap:macpack}}.  Making format files
+with \Textures\ requires a Macintosh Plus or other system with at least
+1Mb of memory.
+
+The \Textures\ previewer and printing operations understand bitmap or
+scalable (EPSF) pictures inserted into your document with
+\verb|\special| commands.  Although not visible on the previewer, raw
+PostScript can also be inserted for documents printed on PostScript
+devices.
+
+\section{Other Tools}
+
+The following sections describe Macintosh versions of other common
+tools.  Some of these programs are unique to the Mac, while others
+are ports of tools from other systems.
+
+\subsection{Alpha}
+
+\program{\idx{Alpha}} is a sophisticated shareware editor for text files.
+\program{Alpha} uses \program{\idx{Tcl}}, an interpreted C-like
+language, as a macro programming language for extending the editor.
+\LaTeX\ support, which is written in \program{Tcl}, is very complete.  
+An example of the \program{Alpha} editor is shown in 
+Figure~\ref{fig:mac:alpha}.
+
+\epsimage{fig:mac:alpha}{\protect\program{Alpha} editing the fonts chapter 
+  from this book}
+
+\subsection{BBEdit}
+
+\program{\idx{BBEdit}} is another shareware editor.  Like \program{Alpha},
+it has a wide range of features including a \LaTeX-aware editing
+mode.
+An example of the \program{BBEdit} editor is shown in 
+Figure~\ref{fig:mac:bbedit}.
+
+\epsimage{fig:mac:bbedit}{\protect\program{BBEdit} editing the fonts chapter 
+  from this book}
+
+\newpage
+\subsection{BSR Font Tools}
+\label{sec:bsrtools}
+
+The \ixx{Macintosh Programmer's Workshop (MPW)}{Macintosh!Programmer's Workshop (MPW)} is
+required to use the Blue Sky Research Font Tools.  
+These tools were written for \Textures\ users so that they could make
+other fonts, like those created with \MF, for example, usable in \Textures.  In
+practice however, they create standard Macintosh font resources, so
+the resulting fonts can be used by any Mac application.
+Table~\ref{tab:mac:bsrtools} describes the tools included in the
+\program{\idx{BSR Font Tools}} package.
+
+\begin{xtable}{l|l}
+  \caption{Font Tools in the BSR package\label{tab:mac:bsrtools}}\\
+  \bf Tool  & \bf Description \\[2pt]
+  \hline
+  \tstrut
+  \it GFtoPK    & Converts \MF\ \ext{GF} files into standard \ext{PK} format \\
+  \it PKtoFOND  & Creates Mac FOND resource from \ext{PK} and \ext{TFM} files\\
+  \it TFMtoSuit & Creates a font metrics suitcase \\
+  \it NFNTcon   & Finds NFNT resource numbering conflicts\\
+  \it TFtoPL    & Converts \ext{TFM} files into \ext{PL} files \\
+  \it PLtoTF    & Translates \ext{PL} files (back) into \ext{TFM} files\\[2pt]
+  \hline
+\end{xtable}
+
+\subsection{Excalibur}
+\label{sec:Excalibur}
+
+\program{\idx{Excalibur}} is a spellchecker designed to work
+with \LaTeX\ documents.
+An example of \program{Excalibur} is shown in 
+Figure~\ref{fig:mac:Excalibur}.
+
+\epsimage{fig:mac:Excalibur}{\protect\program{Excalibur} spellchecking 
+  the fonts chapter from this book}
+
+\subsection{Hyper\protect\BibTeX}
+
+\index{HyperBibTeX@Hyper\BibTeX}This is a hypercard stack 
+for maintaining bibliographic databases%
+\index{bibliographies!hypercard stack}%
+\index{bibliographies!for Macintosh} suitable 
+for 
+use with \ixx{\BibTeX}{bibtex@\BibTeX}.  \BibTeX\ 
+is described in Chapter~\ref{chap:bibtex}, {\it\nameref{chap:bibtex}}.
+An example of Hyper\BibTeX\ is shown in 
+Figure~\ref{fig:mac:hyperbib}.
+
+\epsimage{fig:mac:hyperbib}{The \protect\program{Hyper\BibTeX} view of 
+  a bibliographic database}
+
+\subsection{MacGS}
+
+\program{\idx{MacGS}} is a Macintosh port 
+of GNU \program{Ghostscript}\index{Ghostscript!for Macintosh}, described in
+Chapter~\ref{chap:preview}, {\it\nameref{chap:preview}}.
+
+\subsection{dvidvi}
+
+\program{\idx{dvidvi}} is a Macintosh port of the \program{dvidvi} utility for 
+rearranging pages in a \ext{DVI} file.  
+
+\subsection{MacDVIcopy}
+
+\program{\idx{MacDVIcopy}} is a port of the \program{\idx{DVICOPY}} utility,
+which transforms virtual font references in a \ext{DVI}
+file into the appropriate non-virtual fonts or commands.  This allows
+\dvidriver{}s and previewers that lack support for virtual fonts to
+preview documents that use them.
+
+\subsection{Mac\protect\BibTeX}
+
+\idx{Mac\BibTeX} is a port of the standard \BibTeX\ utility for 
+accessing bibliographic databases in a document.  \BibTeX\ is described
+in Chapter~\ref{chap:bibtex}.
+
+\subsection{MacMakeIndex}
+
+\program{\idx{MacMakeIndex}} is a port of the standard \program{MakeIndex}
+for creating sorted, multilevel indexes in a document.
+\program{MakeIndex} is described in Chapter~\ref{chap:bibtex}.
+
+\egroup % <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

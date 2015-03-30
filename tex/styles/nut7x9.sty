@@ -1,0 +1,792 @@
+% 7x9 3/16 Nutshell book style
+%    for LaTeX version 2.09
+% Copyright (C) 1993 by Norman Walsh
+% Based on `book.sty', copyright (C) 1992 by Leslie Lamport
+%
+% $Id: nut7x9.sty,v 1.1 2002/08/23 14:59:16 nwalsh Exp $
+%
+% Notes:
+%
+% defines a \partmark analagous to \chaptermark...
+
+\typeout{7x9 3/16 Nutshell Series book style <29 Nov 1993>.}
+\def\nutshellversion{1.0.0}
+
+\@ifundefined{size}{\let\size=\fontsize}{}
+
+\def\contentsname{Table of Contents}
+\def\listfigurename{List of Figures}
+\def\listtablename{List of Tables}
+\def\bibname{Bibliography}
+\def\indexname{Index}
+\def\figurename{Figure}
+\def\tablename{Table}
+\def\chaptername{Chapter}
+\def\appendixname{Appendix}
+\def\partname{Part}
+
+\def\@ptsize{0}
+\@namedef{ds@11pt}{\def\@ptsize{1}}
+\@namedef{ds@12pt}{\def\@ptsize{2}}
+
+\@twosidetrue
+\@mparswitchfalse % always put marginal notes on the right side...
+
+\newif\ifdraft\draftfalse
+\def\ds@draft{\overfullrule 5pt\drafttrue}
+
+\def\ds@twocolumn{\@twocolumntrue}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here we do some hackery that I haven't seen in anyone else's styles.
+% The problem is that I implemented the Nutshell specs by relying on
+% several other style options.  This means that {nutshell} documents
+% should also input these other style options.  But I don't want to
+% \input them because I haven't processed nut10.sty yet so the page
+% parameters aren't setup and some of them (for example pstricks.sty) 
+% may be unavailable anyway.  So, instead, I'd rather just issue a 
+% warning.  To that end, I setup dummy "setup<style>" and "ds@<style>" 
+% macros which ``do the right thing''.  \setup<style> is called at
+% the end of nut10.sty (or nut11.sty, or whatever...)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% If you use the `pstricks' style, we define a macro \setuppstricks
+% to do the actual work.  That way, we can define appropriate definitions
+% for macros that are _supposed_ to come from pstricks if you don't 
+% use it.
+%
+\def\setuppstricks{%
+  \typeout{Warning: Required style option 'pstricks' not used.}
+  \gdef\psframebox*[##1]##2{##2}%
+    {\typeout{Warning: Required style option 'pstricks' not used.}}
+  \gdef\newgray##1##2{}
+}
+\def\ds@pstricks{%
+  \gdef\setuppstricks{
+    \input{pstricks.sty}
+    \newgray{nutshellgray}{.85}
+}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Warn the user about footnpag...
+%
+\def\setupfootnpag{%
+  \typeout{Warning: Required style option 'footnpag' not used.}%
+}
+\def\ds@footnpag{%
+  \gdef\setupfootnpag{\input{footnpag.sty}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Warn the user about fancybox
+%
+\def\setupfancybox{%
+  \typeout{Warning: Required style option 'fancybox' not used.}%
+}
+\def\ds@fancybox{%
+  \gdef\setupfancybox{%
+    \input{fancybox.sty}%
+    \cornersize*{4pt}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Warn the user about fancyheadings...
+%
+\def\setupfancyheadings{%
+  \typeout{Warning: Required style option 'fancyheadings' not used.}%
+}
+\def\ds@fancyheadings{%
+  \gdef\setupfancyheadings{%
+    \input{fancyheadings.sty}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Warn the user about longtable...
+%
+\def\setuplongtable{%
+  \typeout{Warning: Required style option 'longtable' not used.}%
+}
+\def\ds@longtable{%
+  \gdef\setuplongtable{%
+    \input{longtable.sty}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make sure that the changebar style is loaded _before_ we do any
+% hackery...
+%
+\def\ds@changebar{%
+  \input{changebar.sty}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\@options
+
+\input nut7x91\@ptsize.sty\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% These lines are from the namedref.sty file...they provided a
+% \nameref{} macro analagous to \pageref for named sections and 
+% chapters.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% These macros should be redefined by the \chaptermark, \sectionmark,
+% etc. commands to hold the name of the current section and the level
+% of the current section.
+\gdef\@currentlabeltext{anonymous}
+\gdef\@currentlabellevel{0}
+
+% Redefinition of \label to keep track of current label level and text.
+% The label level isn't actually used for named references, but it does
+% have other uses...
+\def\label#1{\@bsphack\if@filesw {\let\thepage\relax
+   \def\protect{\noexpand\noexpand\noexpand}%
+   \edef\@tempa{\write\@auxout{\string
+      \newlabel{#1}{{\@currentlabel}%
+                    {\thepage}%
+                    {\@currentlabellevel}%
+                    {\@currentlabeltext}}}}%
+   \expandafter}\@tempa
+   \if@nobreak \ifvmode\nobreak\fi\fi\fi\@esphack}
+
+% Define the \nameref command to print the text of the label.  This
+% won't do the right thing for references to tables or figures so don't
+% use it for that!  
+%
+% Thanks to Hiroshi Nakashima <nakasima@lab3.kuis.kyoto-u.ac.jp> for helping
+% me fix the problem that caused \nameref to fail if the section name
+% included control sequences by introducing a second level of indirection.
+\def\@printnameref#1#2#3#4{#4}
+\def\nameref#1{\@ifundefined{r@#1}{{\reset@font\bf ??#1??}\@warning
+   {Reference to name `#1' on page \thepage \space
+    undefined}}{\expandafter\@prnameref\csname r@#1\endcsname}}
+\def\@prnameref#1{\expandafter\@printnameref#1}
+
+\def\@printpageref#1#2#3#4{#2}
+\def\pageref#1{\@ifundefined{r@#1}{{\reset@font\bf ??#1??}\@warning
+   {Reference to page `#1' on page \thepage \space
+    undefined}}{\expandafter\@prpageref\csname r@#1\endcsname}}
+\def\@prpageref#1{\expandafter\@printpageref#1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\widowpenalty   =   5000 % Decrease the likelyhood of widowed lines
+
+\raggedbottom  % The pages are short, so let them rise and fall a little bit.
+               % Otherwise, more glue has to go somewhere to make all the
+               % pages line up exactly.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hoffset=-.5in % give me a little more breathing room for marginal notes
+
+% redefine enumeration and itemize lists to have labels the way we 
+% want...
+\def\enumerate{\ifnum \@enumdepth >3 \@toodeep\else
+      \advance\@enumdepth \@ne
+      \edef\@enumctr{enum\romannumeral\the\@enumdepth}\list
+      {\csname label\@enumctr\endcsname}{\usecounter
+        {\@enumctr}\def\makelabel##1{##1\hss}}\fi}
+
+\def\itemize{\ifnum \@itemdepth >3 \@toodeep\else \advance\@itemdepth \@ne
+\edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
+\list{\csname\@itemitem\endcsname}{\def\makelabel##1{##1\hss}}\fi}
+
+%
+\def\labelenumi{\theenumi.}
+\def\theenumi{\arabic{enumi}}
+
+\def\labelenumii{(\theenumii)}
+\def\theenumii{\alph{enumii}}
+\def\p@enumii{\theenumi}
+
+\def\labelenumiii{\theenumiii.}
+\def\theenumiii{\roman{enumiii}}
+\def\p@enumiii{\theenumi(\theenumii)}
+
+\def\labelenumiv{\theenumiv.}
+\def\theenumiv{\Alph{enumiv}}
+\def\p@enumiv{\p@enumiii\theenumiii}
+
+\def\labelitemi{$\m@th\bullet$}
+\def\labelitemii{\bf --}
+\def\labelitemiii{$\m@th\ast$}
+\def\labelitemiv{$\m@th\cdot$}
+
+\def\verse{\let\\=\@centercr
+  \list{}{\itemsep\z@ \itemindent -1.5em\listparindent \itemindent
+          \rightmargin\leftmargin\advance\leftmargin 1.5em}\item[]}
+\let\endverse\endlist
+
+\def\quotation{\list{}{\listparindent 1.5em
+    \itemindent\listparindent
+    \rightmargin\leftmargin\parsep \z@ plus\p@}\item[]}
+\let\endquotation=\endlist
+
+\def\quote{\list{}{\rightmargin\leftmargin}\item[]}
+\let\endquote=\endlist
+
+\def\descriptionlabel#1{\hspace\labelsep \bf #1}
+\def\description{\list{}{\labelwidth\z@ \itemindent-\leftmargin
+       \let\makelabel\descriptionlabel}}
+
+\let\enddescription\endlist
+
+\newdimen\descriptionmargin
+\descriptionmargin=3em
+
+\def\titlepage{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+     \else \newpage \fi \thispagestyle{empty}\c@page\z@}
+
+\def\endtitlepage{\if@restonecol\twocolumn \else \newpage \fi}
+
+\arraycolsep 5pt
+
+\tabcolsep 6pt
+
+\arrayrulewidth .25pt
+\doublerulesep 2pt
+
+\tabbingsep \labelsep
+
+\skip\@mpfootins = \skip\footins
+
+\fboxrule = 0.5pt
+\fboxsep = 1pc
+
+\newcounter {part}
+\newcounter {chapter}
+\newcounter {section}[chapter]
+\newcounter {subsection}[section]
+\newcounter {subsubsection}[subsection]
+\newcounter {paragraph}[subsubsection]
+\newcounter {subparagraph}[paragraph]
+
+\def\thepart          {\Roman{part}}
+\def\thechapter       {\arabic{chapter}}
+\def\thesection       {\thechapter.\arabic{section}}
+\def\thesubsection    {\thesection.\arabic{subsection}}
+\def\thesubsubsection {\thesubsection .\arabic{subsubsection}}
+\def\theparagraph     {\thesubsubsection.\arabic{paragraph}}
+\def\thesubparagraph  {\theparagraph.\arabic{subparagraph}}
+
+\def\@chapapp{\chaptername}
+
+\def\part{\cleardoublepage
+  \pagestyle{plain}%
+  \if@twocolumn
+     \onecolumn
+     \@tempswatrue
+    \else \@tempswafalse
+  \fi
+  \secdef\@part\@spart}
+
+\def\@endpart{
+   \if@tempswa
+     \twocolumn
+   \fi}
+
+\def\@spart#1{%
+   \typeout{Warning: \part* isn't handled correctly yet!}%
+   {\centering
+   \interlinepenalty \@M
+   \Huge \bf
+   #1\par}\@endpart}
+
+\def\@pnumwidth{.25in}
+
+\def\@tocrmarg {2.55em}
+\def\@dotsep{.5}
+\setcounter{tocdepth}{2}
+
+%% Redef from latex.tex so that we don't set the page number in a box...
+%% RmS 91/09/29: added \reset@font for page number 
+\def\@dottedtocline#1#2#3#4#5{\ifnum #1>\c@tocdepth \else
+  \vskip 2\p@ plus\z@
+  {\leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
+    \parindent #2\relax\@afterindenttrue
+   \interlinepenalty\@M
+   \leavevmode
+   \@tempdima #3\relax \advance\leftskip \@tempdima \hbox{}\hskip -\leftskip
+    #4\nobreak\leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern \@dotsep
+       mu$}\hfill \nobreak
+           {\reset@font\rm #5}\par}\fi}
+
+\def\tableofcontents{\@restonecolfalse
+  \if@twocolumn\@restonecoltrue\onecolumn\fi
+  \chapter*{\contentsname
+        \@mkboth{\contentsname}{\contentsname}}%
+  \@starttoc{toc}\if@restonecol\twocolumn\fi}
+
+\def\numberline#1{#1:\space}
+
+\def\l@part#1#2{\addpenalty{-\@highpenalty}%
+   \addvspace{1pc plus\z@}% space above part line
+   \begingroup
+   \@tempdima 2em
+     \parindent \z@ \rightskip \@pnumwidth
+     \parfillskip -\@pnumwidth
+     {\it\bf\fontsize{13}{15pt}\selectfont
+     \leavevmode
+%     #1\hfil \hbox to\@pnumwidth{\hss #2}}\par
+     #1\nobreak\leaders\hbox{$\m@th\mkern\@dotsep mu.\mkern\@dotsep mu$}%
+        \hfil\nobreak{#2}}\par
+     \nobreak
+    \global\@nobreaktrue
+    \everypar{\global\@nobreakfalse\everypar{}}%
+   \endgroup}
+
+\def\l@chapter#1#2{\addpenalty{-\@highpenalty}%
+   \vskip 14pt plus\z@
+   \@tempdima 2em
+   \begingroup
+     \parindent \z@ \rightskip \@pnumwidth
+     \parfillskip -\@pnumwidth
+     \it\fontsize{12}{15pt}\selectfont
+     \leavevmode
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+%     #1\nobreak\hfil \nobreak\hbox to\@pnumwidth{\hss #2}\par
+     #1\nobreak\leaders\hbox{$\m@th\mkern\@dotsep mu.\mkern\@dotsep mu$}%
+        \hfil\nobreak{#2}\par
+     \penalty\@highpenalty
+   \endgroup}
+
+\def\l@section{\@dottedtocline{1}{.25in}{2em}}
+\def\l@subsection{\@dottedtocline{2}{.5in}{2em}}
+
+% these never turn up in the Nutshell TOC...
+\def\l@subsubsection{\@dottedtocline{3}{7.0em}{4.1em}}
+\def\l@paragraph{\@dottedtocline{4}{10em}{5em}}
+\def\l@subparagraph{\@dottedtocline{5}{12em}{6em}}
+
+\def\listoffigures{\@restonecolfalse
+  \if@twocolumn\@restonecoltrue\onecolumn\fi
+  \chapter*{\listfigurename\@mkboth{\listfigurename}%
+    {\listfigurename}}\@starttoc{lof}\if@restonecol
+   \twocolumn\fi}
+
+\def\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+
+\def\listoftables{\@restonecolfalse
+  \if@twocolumn\@restonecoltrue\onecolumn\fi
+  \chapter*{\listtablename\@mkboth{\listtablename}%
+     {\listtablename}}\@starttoc{lot}\if@restonecol
+    \twocolumn\fi}
+
+\let\l@table\l@figure
+
+\def\thebibliography#1{\chapter*{\bibname\@mkboth
+  {\bibname}{\bibname}}%
+  \addcontentsline{toc}{chapter}{\bibname}%
+  \list
+  {\@biblabel{\arabic{enumiv}}}{\settowidth\labelwidth{\@biblabel{#1}}%
+    \leftmargin\labelwidth
+    \advance\leftmargin\labelsep
+    \usecounter{enumiv}%
+    \let\p@enumiv\@empty
+    \def\theenumiv{\arabic{enumiv}}}%
+    \def\newblock{\hskip .11em plus.33em minus.07em}%
+    \sloppy\clubpenalty4000\widowpenalty4000
+    \sfcode`\.=\@m}
+
+\def\endthebibliography{%
+  \def\@noitemerr{\@warning{Empty `thebibliography' environment}}%
+  \endlist}
+
+\newif\if@restonecol
+
+\def\theindex{\@restonecoltrue\if@twocolumn\@restonecolfalse\fi
+\columnseprule \z@
+\columnsep 35\p@\twocolumn[\@makeschapterhead{\indexname}]%
+    \@mkboth{\indexname}{\indexname}%
+    \addcontentsline{toc}{chapter}{\indexname}%
+    \thispagestyle{plain}\parindent\z@
+    \parskip\z@ plus .3\p@\relax\let\item\@idxitem}
+
+\def\@idxitem{\par\hangindent 40\p@}
+
+\def\subitem{\par\hangindent 40\p@ \hspace*{20\p@}}
+
+\def\subsubitem{\par\hangindent 40\p@ \hspace*{30\p@}}
+
+\def\endtheindex{\if@restonecol\onecolumn\else\clearpage\fi}
+
+\def\indexspace{\par \vskip 18\p@ plus5\p@ minus3\p@\relax}
+
+\def\footnoterule{\kern-3\p@
+  \hrule height 1sp depth 0pt width 1in
+  \kern 3\p@\kern-1sp}
+
+\@addtoreset{footnote}{chapter}
+
+\def\thefootnote{\fnsymbol{footnote}}
+
+\long\def\@makefntext#1{\parindent 0pt\noindent
+            \hbox{$\m@th^{\@thefnmark}$}#1}
+
+\setcounter{topnumber}{5}
+\def\topfraction{.9}
+\setcounter{bottomnumber}{5}
+\def\bottomfraction{.9}
+\setcounter{totalnumber}{5}
+\def\textfraction{.1}
+\def\floatpagefraction{.9}
+\setcounter{dbltopnumber}{2}
+\def\dbltopfraction{.7}
+\def\dblfloatpagefraction{.5}
+
+\long\def\@makecaption#1#2{%
+   \vskip 10\p@
+   \setbox\@tempboxa\hbox{#1: #2}%
+   \ifdim \wd\@tempboxa >\hsize
+       #1: #2\par
+     \else
+       \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+   \fi}
+
+\newcounter{figure}[chapter]
+
+\def\fps@figure{htbp}
+\def\ftype@figure{1}
+\def\ext@figure{lof}
+\def\fnum@figure{\figurename~\thefigure}
+\@namedef{figure*}{\@dblfloat{figure}}
+\@namedef{endfigure*}{\end@dblfloat}
+
+\newcounter{table}[chapter]
+
+\def\fps@table{htbp}
+\def\ftype@table{2}
+\def\ext@table{lot}
+\def\fnum@table{\tablename~\thetable}
+\@namedef{table*}{\@dblfloat{table}}
+\@namedef{endtable*}{\end@dblfloat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Figure and Table captions are done differently in the Nutshell
+% books.  Figure captions appear below the figure and table captions
+% appear above.  The following lines make the two different sorts
+% of captions work correctly
+%
+\let\figurecaption\caption % figure caption is the default caption
+
+\def\tablecaption{\refstepcounter\@captype \@dblarg{\@tablecaption\@captype}}
+
+\long\def\@tablecaption#1[#2]#3{\par\addcontentsline{\csname
+  ext@#1\endcsname}{#1}{\protect\numberline{\csname
+  the#1\endcsname}{\ignorespaces #2}}\begingroup
+    \@parboxrestore
+    \normalsize
+    \@maketablecaption{\csname fnum@#1\endcsname}{\ignorespaces #3}\par
+  \endgroup}
+
+\def\table{\bgroup\let\caption\tablecaption\@float{table}}
+\def\endtable{\end@float\egroup}
+\def\figure{\bgroup\let\caption\figurecaption\@float{figure}}
+\def\endfigure{\end@float\egroup}
+
+\def\thefigure{\thechapter-\@arabic\c@figure}
+\def\thetable{\thechapter-\@arabic\c@table}
+
+\long\def\@makecaption#1#2{%
+   \vskip 6\p@
+   \setbox\@tempboxa\hbox{\fontfamily{garamond}\small\it #1: #2}%
+   \ifdim \wd\@tempboxa >\hsize
+       {\fontfamily{garamond}\small\it\raggedright #1: #2\par}
+     \else
+       \hbox to\hsize{\box\@tempboxa\hfil}%
+   \fi}
+
+\long\def\@maketablecaption#1#2{%
+   \vskip 1pc
+   \setbox\@tempboxa\hbox{\fontfamily{garamond}\small\it #1: #2}%
+   \ifdim \wd\@tempboxa >\hsize
+       {\fontfamily{garamond}\small\it\raggedright #1: #2\par}
+     \else
+       \hbox to\hsize{\box\@tempboxa\hfil}%
+   \fi\vskip6pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\maketitle{\begin{titlepage}%
+ \let\footnotesize\small
+ \let\footnoterule\relax
+
+ \setcounter{page}{0}%
+ \null
+ \vfil
+ \vskip 60\p@
+ \begin{center}%
+   {\LARGE \@title \par}%
+   \vskip 3em
+   {\large
+     \lineskip .75em
+     \begin{tabular}[t]{c}\@author
+     \end{tabular}\par}%
+    \vskip 1.5em
+   {\large \@date \par}%
+\end{center}\par
+\@thanks
+\vfil
+\null
+\end{titlepage}%
+\setcounter{footnote}{0}%
+\let\thanks\relax
+\gdef\@thanks{}\gdef\@author{}\gdef\@title{}\let\maketitle\relax}
+
+\mark{{}{}}
+
+\def\partmark#1{} % added for parts...
+
+%\def\ps@headings{\let\@mkboth\markboth
+% \def\@oddfoot{}\def\@evenfoot{}%       No feet.
+% \def\@evenhead{\rm \thepage\hfil \sl \leftmark}%        Left heading.
+% \def\@oddhead{{\sl \rightmark}\hfil \rm\thepage}% Right heading.
+% \def\partmark##1{\markboth {\uppercase{\ifnum \c@secnumdepth >\m@ne
+%      \@chapapp\ \thechapter. \ \fi ##1}}{}}%
+% \def\chaptermark##1{\markboth {\uppercase{\ifnum \c@secnumdepth >\m@ne
+%      \@chapapp\ \thechapter. \ \fi ##1}}{}}%
+% \def\sectionmark##1{\markright {\uppercase{\ifnum \c@secnumdepth >\z@
+%   \thesection. \ \fi ##1}}}}
+%
+%\def\ps@myheadings{\let\@mkboth\@gobbletwo
+% \def\@oddhead{{\sl\rightmark}\hfil \rm\thepage}%
+% \def\@oddfoot{}\def\@evenhead{\rm \thepage\hfil\sl\leftmark}%
+% \def\@evenfoot{}\def\chaptermark##1{}\def\sectionmark##1{}%
+% \def\subsectionmark##1{}}
+
+\def\today{\ifcase\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi
+  \space\number\day, \number\year}
+
+\@addtoreset{equation}{chapter}
+
+\def\theequation{\thechapter.\arabic{equation}}
+
+%\ps@headings
+\let\@mkboth\markboth
+\pagenumbering{arabic}
+\if@twocolumn
+ \@@input twocolum.sty\relax
+\else
+ \onecolumn
+\fi
+
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+    \hbox{}\thispagestyle{empty}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Below here are some things that are useful, but not strictly %%%%
+%%%% part of the Nutshell style.  You can slam in an \endinput if %%%%
+%%%% you'd prefer not to have them included...                    %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%% \endinput
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RCS definitions...these might be helpful to someone else writing a 
+% book, but they can be ignored if you want.  They aren't, strictly
+% speaking, related to the ORA style.
+%
+\gdef\curRCSID{}
+%\def\RCSID$#1${%
+%  \ifdraft{\tolerance=100000\hbadness=100000%
+%           \raggedright%
+%           \marginpar{\tiny Draft #1}}%
+%           \typeout{Draft #1}%
+%  \else\typeout{Production run #1}\fi%
+%}
+\def\RCSID$#1${%
+  \ifdraft%
+    \typeout{Draft #1}%
+    \gdef\curRCSID{#1}%
+  \else%
+    \typeout{Production #1}%
+  \fi%
+}
+
+\def\RCSmargid$#1: #2 #3 #4 #5 #6 #7${%
+% #1 = ``Id''
+% #2 = filename
+% #3 = vers
+% #4 = date
+% #5 = time
+% #6 = author
+% #7 = state [locker]
+  \ifdraft
+    \setbox0=\hbox to 0pt{\tolerance=100000\hbadness=100000%
+                          \parbox{4in}{%
+                            \rm\tiny #2\\ #3\\ #4}%
+                          \hss}%
+    \marginpar{\box0}%
+    \typeout{Draft Id: #2 #3 #4 #5 #6 #7}%
+  \fi
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conditional chapter definitions...I use these too, but they can be
+% ignored.  It allows me to have a driver file with chapters that can
+% be included or excluded at will.  It also allows ``stub chapters'' to
+% be formatted so that chapter references (\ref, \label) work correctly
+% even if the entire chapter isn't being formatted.
+%
+
+\newif\ifincludechapter
+\def\inputchap#1#2{%
+  \def\file@name{#2.new}
+  \immediate\openin15=\file@name\relax%
+  \ifeof15%
+    \def\file@name{#2}%
+  \else%
+    \typeout{*** Found \file@name.  Using it instead of #2.tex!}%
+  \fi%
+  \closein15\relax%
+  \ifnum#1=0\relax
+    \includechapterfalse%
+    \refstepcounter{chapter}%
+  \else
+    \ifnum#1=1\relax
+      \includechaptertrue%
+      \input{\file@name}%
+    \else
+      \ifnum#1=2\relax
+        \includechapterfalse%
+        \input{\file@name}%
+      \else
+        \typeout{Bad argument to inputchap, chapter excluded: #2}
+      \fi
+    \fi
+  \fi
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Boxed verbatim environment...relies on fancybox...
+%
+\newdimen\interiorwidth
+\interiorwidth=\textwidth
+\advance\interiorwidth -\fboxrule
+\advance\interiorwidth -\fboxrule
+\advance\interiorwidth -\fboxsep
+\advance\interiorwidth -\fboxsep
+\newbox\verbatimbox
+\newenvironment{FramedVerb}%
+  {\def\VerbatimFont{\fontshape{n}\size{9}{11pt}\selectfont\tt}%
+    \VerbatimEnvironment%
+    \beginsbox{\verbatimbox}\begin{minipage}{\interiorwidth}%
+    \begin{Verbatim}}%
+  {\end{Verbatim}\end{minipage}\endsbox%
+    \fbox{\usebox{\verbatimbox}}}
+
+\newenvironment{FramedVerbSmall}%
+  {\def\VerbatimFont{\fontshape{n}\size{7}{9pt}\selectfont\tt}%
+    \VerbatimEnvironment%
+    \beginsbox{\verbatimbox}\begin{minipage}{\interiorwidth}%
+    \begin{Verbatim}}%
+  {\end{Verbatim}\end{minipage}\endsbox%
+    \fbox{\usebox{\verbatimbox}}}
+
+\def\FramedVerbInput#1{%
+  \beginsbox{\verbatimbox}\begin{minipage}{\interiorwidth}%
+  \def\verbatim@font{\fontshape{n}\size{9}{11pt}\selectfont\tt}%
+  \verbatiminput{#1}%
+  \end{minipage}\endsbox%
+  \fbox{\usebox{\verbatimbox}}}
+
+\def\FramedVerbSmallInput#1{%
+  \beginsbox{\verbatimbox}\begin{minipage}{\interiorwidth}%
+  \def\verbatim@font{\fontshape{n}\size{7}{9pt}\selectfont\tt}%
+  \verbatiminput{#1}%
+  \end{minipage}\endsbox%
+  \fbox{\usebox{\verbatimbox}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Just a boxed environment.  Also relies on fancybox...
+%
+\newbox\boxedenvbox
+\newenvironment{Frame}%
+  {\beginsbox{\boxedenvbox}\begin{minipage}{\interiorwidth}}
+  {\end{minipage}\endsbox%
+   \fbox{\usebox{\boxedenvbox}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Numbered verbatim environment...
+%
+\newcounter{VerbatimLineNo}
+\newcounter{VerbatimLineMod}
+\def\verbatimnumbered#1{\begingroup
+  \def\verbatim@font{\fontfamily{cmtt}\fontseries{m}\fontshape{n}\size{9}{10pt}\selectfont}
+  \setcounter{VerbatimLineNo}{0}%
+  \setcounter{VerbatimLineMod}{0}%
+  \parskip=0pt
+  \def\verbatim@processline{%
+    \addtocounter{VerbatimLineNo}{1}%
+    \addtocounter{VerbatimLineMod}{1}%
+    \leavevmode
+    \ifnum\theVerbatimLineMod=5%
+    \llap{{\rm\tiny \theVerbatimLineNo}%
+        \ \hskip\@totalleftmargin}%
+      \setcounter{VerbatimLineMod}{0}%
+    \else
+      \llap{\phantom{\rm\tiny 0}\ \hskip\@totalleftmargin}%
+    \fi
+    \the\verbatim@line\par}%
+  \verbatiminput{#1}\endgroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Screen captures...assumes the screen shot is a bm2font image...
+%
+% [#1] = list of tables caption
+% #2 = screen shot
+% #3 = caption
+% #4 = label
+%
+\def\@image[#1]#2#3#4{%
+  \begin{figure}
+    \begin{center}
+      \input{#2}
+      \leavevmode\hbox{\vrule width .5pt%
+        \vbox{\hrule height .5pt%
+          \hbox{\hskip1pt\vbox{\vskip1pt%
+          \expandafter\box\csname #2box\endcsname%
+          \vskip1pt}\hskip1pt}%
+          \hrule depth .5pt}\vrule width .5pt}
+    \end{center}
+    \caption[#1]{#3}
+    \label{#4}
+  \end{figure}
+}
+
+\def\@@image#1#2#3{\@image[#2]{#1}{#2}{#3}}
+
+\def\image{%
+  \@ifnextchar[{\@image}{\@@image}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code fragments
+%
+% [#1] = list of tables caption
+% #2 = screen shot
+% #3 = caption
+% #4 = label
+%
+\def\@codefrag[#1]#2#3#4{%
+  \begin{figure}
+    \verbatiminput{figs/#2}
+    \caption[#1]{#3}
+    \label{#4}
+  \end{figure}
+}
+
+\def\@@codefrag#1#2#3{\@codefrag[#2]{#1}{#2}{#3}}
+
+\def\codefragment{%
+  \@ifnextchar[{\@codefrag}{\@@codefrag}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EPS images
+%
+
+\input{nuteps.sty}

@@ -1,0 +1,47 @@
+\begin{xtable}{ll}
+  \caption{PBMPlus Image Manipulation\label{tab:pbmplusman}}\\
+  Apply Conway's rules of Life
+& Create a blank image \\
+  Create a mask bitmap
+& Reduce/enlarge an image \\
+  Convert text into a bitmap
+& Create a UPC bitmap \\
+  Bentleyize a graymap
+& Apply edge-detection  \\
+  Apply edge-enhancement
+& Generate a histogram \\
+  Normalize contrast
+& Apply an ``oil-painting'' filter \\
+  Create a ``ramp'' 
+& Generate textural features \\
+  Perform bitwise arithmatic
+& Perform MxN convolution \\
+  Crop an image
+& Cut/Paste a rectangles \\
+  Color-reduce
+& Flip/rotate \\
+  Apply gamma-correction 
+& Build a visual index \\
+  Invert an image
+& Add a border to an image \\
+  Scale an image
+& Shear an image \\
+  Smooth an image
+& Build a tiled image \\
+  Colorize an graymap
+& Dither color images \\
+  Create fractal terrain
+& Apply Laplacian-relief filter \\
+\end{xtable}
+
+
+
+
+
+
+
+
+
+
+
+

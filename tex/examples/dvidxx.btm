@@ -1,0 +1,215 @@
+@echo off
+: -----------------------------------------------------------------------
+: DVIDXX Copyright (C) 1992,94 by Norman Walsh
+:
+: This file is free.  You can do anything you like with it with one
+: exception: if you change this file, you MUST rename it!
+:
+: Requirements: 4DOS, emTeX drivers 1.4s or higher, MAKEPK.BTM
+:
+: Usage: DVIDXX emtexDriver driverOptions
+:
+: Note: DVIDXX requires a fair amount of free environment space in order
+:       to function properly.
+:
+: Norman Walsh
+: <norm@ora.com>
+:
+: 12/09/1992: - Vers 0.5
+:             - This is a first attempt.  It works, but it doesn't have
+:               any bells and whistles.  It would be nice, for example,
+:               if it noticed that PS2PK failed for a particular font...
+: -----------------------------------------------------------------------
+:
+: This batch file is a replacement for emTeX's dvidrv program.  It offers
+: one additional feature.  In addition to using MFjob to build fonts that
+: don't exist, DVIDXX can use PS2PK to build PK files for PostScript fonts.
+: Note: You must have the AFM and PFA/B files for the PS fonts in question.
+:
+: Why did you write this as a 4DOS BTM file?  For two reasons.  First, I
+: wanted it to be interpreted rather than compiled so that it would be
+: easy to change, modify, and extend.  Second, I did it in 4DOS BTM language
+: because DOS's batch language is too primitive.  Yes, maybe I _could_ have
+: done it with a plain BAT file, but I had no desire to try.
+:
+: -----------------------------------------------------------------------
+:
+: This file relies on MAKEPK.BTM to actually build the fonts with PS2PK.
+:
+: Both MAKEPK and DVIDXX are somewhat dependant on the layout of your
+: hard disk.  Well, on the layout of mine, actually ;-)
+:
+: Here's how my HD is organized:
+:
+: C:\PSFONTS\                 Root of my PostScript fonts directory.
+:                             This is stored in the %[PSFONTS] env. variable
+: %[PSFONTS]\PFB              Where .PFB files are kept
+: %[PSFONTS]\AFM              Where .AFM files are kept
+: %[PSFONTS]\UTIL             Where MAKEPK is kept
+:
+: -----------------------------------------------------------------------
+: Make sure this is 4DOS...
+if "%@eval[2+2]" == "4"  goto start
+echo Sorry, this batch file can only be run with 4Dos.
+goto end
+: -----------------------------------------------------------------------
+: Call the driver (maybe we won't have to do anything else)
+: In a network environment, you may have to make the mfjob-file unique
+: for each user in some way...
+: -----------------------------------------------------------------------
+:start
+if not "%_dos" == "DOS" goto os2ok
+iff %_env lt 128 then
+  echo Sorry, this batch file requires at least 128 bytes of free environment
+  echo space.  Consult your 4DOS manual for information about increasing it.
+  goto end
+endiff
+:os2ok
+setlocal
+set MFJOBFN=dvidxx.mfj
+
+%1 %2$ +mfjob-file:%MFJOBFN +batch-mode
+iff not errorlevel == 8 then
+  endlocal
+  goto end
+endiff
+: -----------------------------------------------------------------------
+: Ok, we have to build some fonts...
+:
+:   NEWJOB    = name of the MFjob file that will actually be used
+:   PSJOB     = name of the batch file that will build fonts with PS2PK
+:   PSCNT     = number of PS fonts to build
+:   MFCNT     = number of MF fonts to build
+:   MFJOBLEN  = number of lines in the original MFjob file
+:   LNUM      = current line number (in original MFjob file)
+:   LINE      = text of the current line
+:   FONT      = name of font
+:   SIZE      = ptsize of current font (assumes designsize of 10pt)
+:   PSFNT     = 0/1 flag determines if the %FONT in question is PS or not
+: -----------------------------------------------------------------------
+echo Looking at MFJob file...
+set NEWJOB=%@unique[%@path[%MFJOBFN]]
+set PSJOB=%@unique[%@path[%MFJOBFN]]
+ren %NEWJOB %NEWJOB.mfj /q
+ren %PSJOB %PSJOB.btm   /q
+set NEWJOB=%NEWJOB.mfj
+set PSJOB=%PSJOB.btm
+set PSCNT=0
+set MFCNT=0
+set MFJOBLEN=%@lines[%MFJOBFN]
+set LNUM=0
+
+: Create the batch file and the new MFjob file...
+echo %% > %NEWJOB
+echo pushd %PSFONTS > %PSJOB
+
+: -----------------------------------------------------------------------
+: Loop through the entire MFjob file.  Lines that begin "{font=" are
+: analyzed further to determine what kind of font it is.  All other lines
+: are simply copied to the new MFjob file.
+: -----------------------------------------------------------------------
+
+:looptop
+
+if %LNUM gt %MFJOBLEN goto loopover
+
+: Deleting this percent stuff will save a small amount of time, but
+: since reading from the MFjob file is pretty slow, I find it reassuring...
+set PERC=%@eval[%LNUM / %MFJOBLEN * 100]
+set p=%@index[%PERC,.]
+if %p gt 0 set PERC=%@substr[%PERC,0,%p]
+echos %@CHAR[13]Working:
+echos  %[PERC]%%
+
+set LINE=%@line[%MFJOBFN,%LNUM]
+:
+: We employ a convoluted compound test because %@substr["%foo",1,5] fails
+: with a "no closing quote" error if the %@len["%foo"] < 5...
+:
+set FOUND=0
+iff %@len["%LINE"] gt 5 then
+  if (%@substr["%LINE",1,5]) == ({font) set FOUND=1
+endiff
+
+: If we found a font, %FOUND will be 1
+iff %FOUND == 1 then
+  Rem Extract the font name and the size
+  set p=%@index["%LINE",;]
+  set FONT=%@substr["%LINE",7,%@eval[%p - 7]]
+  set p=%@index["%LINE",mag=]
+  set q=%@index["%LINE",}]
+  set SIZE=%@substr["%LINE",%@eval[%p+4],%@eval[%q-%p-5]]
+  set SIZE=%@eval[%SIZE*10]
+
+  Rem This is where we test to see if it is a PS font.  I've got a really
+  Rem simple test below.  Basically, I keep all my PFB files for PS fonts
+  Rem in a single directory.  If the font in question isn't in that directory,
+  Rem I assume it is an MF font.
+  set PSFNT=0
+  gosub ispsfont
+  iff %PSFNT == 1 then
+    Echo %FONT at %[SIZE]pt will be built by PS2PK
+    Rem I keep MAKEPK in C:\PSFONTS\UTIL so that's what I write to the batch
+    Rem file.  If you keep it somewhere else, you'll have to change this.
+    echo call %[psfonts]\util\makepk %FONT %SIZE >> %PSJOB
+    set PSCNT=%@eval[%PSCNT + 1]
+  else
+    Echo %FONT at %[SIZE]pt will be built by MFjob
+    echo %LINE >> %NEWJOB
+    set MFCNT=%@eval[%MFCNT + 1]
+  endiff
+else
+  echo %LINE >> %NEWJOB
+endiff
+
+set LNUM=%@eval[%LNUM + 1]
+goto looptop
+:loopover
+
+: -----------------------------------------------------------------------
+
+: Finish up the PSJOB file and clean up the messages on the screen
+echo popd >> %PSJOB
+echos %@CHAR[13]                  %@CHAR[13]
+
+: -----------------------------------------------------------------------
+
+: Go for it!
+iff %MFCNT gt 0 then
+  echo Attempting to build %MFCNT fonts with MFjob
+  mfjob %NEWJOB
+endiff
+del %NEWJOB /q
+
+: Get back the environment space that we (may) need in MAKEPK...
+unset MFJOBLEN LNUM LINE FONT SIZE PSFNT MFCNT NEWJOB
+
+iff %PSCNT gt 0 then
+  echo Attempting to build %PSCNT fonts with PS2PK
+  call %PSJOB
+endiff
+del %PSJOB /q
+
+: -----------------------------------------------------------------------
+: Try to run the driver again...this time it should succeed!
+
+del %MFJOBFN /q
+%1 %2$ +mfjob-file:%MFJOBFN +batch-mode
+iff errorlevel == 8 then
+  echo Font building must have failed for at least one font.  Look in
+  echo the %MFJOBFN file to see which font(s) failed.
+endiff
+
+endlocal
+goto end
+
+: -----------------------------------------------------------------------
+: This really simple subroutine is how I look for PS fonts.  This routine
+: should set PSFNT=1 iff the %FONT variable names a PostScript font.
+:
+:ispsfont
+if exist %[psfonts]\pfb\%FONT.pfb set PSFNT=1
+return
+
+: -----------------------------------------------------------------------
+:end

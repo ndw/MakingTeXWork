@@ -1,0 +1,27 @@
+% Format: AMSTeX
+\documentstyle{amsppt}
+
+\parindent=0pt
+\parskip=\baselineskip
+\hoffset=.75in
+
+\topmatter
+\title \chapter{1} Unsolved Problems\endtitle
+\endtopmatter
+
+\document
+\head{1.1} Odd Perfect Numbers\endhead
+
+A number is said to be {\it perfect\/} if it
+is the sum of its divisors.  For example, $6$ is
+perfect because $1+2+3 = 6$, and $1$, $2$, and $3$
+are the only numbers that divide evenly into $6$ 
+(apart from $6$ itself).
+
+It has been shown that all even perfect numbers
+have the form $$2^{p-1}(2^{p}-1)$$ where $p$
+and $2^{p}-1$ are both prime.
+
+The existence of {\it odd\/} perfect numbers is 
+an open question.
+\enddocument

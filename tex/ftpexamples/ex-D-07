@@ -1,0 +1,64 @@
+#!/usr/local/bin/bash
+#
+#   This script file makes a new X/TeX screen font, because one wasn't
+#   found.  Parameters are:
+#
+#   name dpi bdpi mag mode destdir
+#
+#   `name' is the name of the font, such as `cmr10'.  `dpi' is
+#   the resolution the font is needed at.  `bdpi' is the base
+#   resolution, useful for figuring out the mode to make the font
+#   in.  `magnification' is a string to pass to MF as the
+#   magnification.  'destdir' is the directory in which to cache the new
+#   font.
+#
+#   Note that this file must execute Metafont, mftobdf, and then bdftosnf,
+#   and place the result in the correct location for X
+#   to find it subsequently.  
+#
+#   Of course, it needs to be set up for your site.
+#
+# TEMPDIR needs to be unique for each process because of the possibility
+# of simultaneous processes running this script.
+#
+# This temp directory has to be under /users/oos/bin (or somewhere globally
+# accessible) because this script runs PS2PK on ibis even if it is started
+# elsewhere (e.g. on a Sparc).  To do so, it uses the "ibis [cmd]" shortcut
+# and passes the temp directory.  If the TEMPDIR was /tmp/whatever then,
+# it would fail because /tmp on a Sparc isn't /tmp on ibis.
+TEMPDIR=/users/oos/bin/PStemp/temp-X-PS.$$
+
+NAME=$1
+DPI=$2
+BDPI=$3
+MAG=$4
+MODE=$5
+DESTDIR=$6
+
+BASENAME=$NAME.$MAG.$BDPI
+PTSIZE=`echo "2 k $MAG 100 / p q" | dc`
+PFADIR=/usr/local/lib/tex/fonts/ps-outlines/
+
+# Clean up on normal or abnormal exit
+trap "cd /; rm -rf $TEMPDIR" 0 1 2 15
+
+mkdir $TEMPDIR
+cd $TEMPDIR
+
+echo Making ${PTSIZE}pt ${BDPI}dpi version of $NAME.
+ps2pk -v -X$BDPI -P$PTSIZE -a$PFADIR/$NAME.afm \
+   $PFADIR/$NAME.pfa $BASENAME.pk
+
+pktobdf $BASENAME.pk | gawk -vname=$NAME.$DPI -f \
+  /usr/local/lib/tex/ps/PStoXfont.awk > $BASENAME.bdf
+bdftopcf $BASENAME.bdf > $BASENAME.pcf
+mv $BASENAME.pcf $DESTDIR
+
+mkfontdir $DESTDIR
+xset +fp $DESTDIR
+xset fp rehash
+
+exit 0
+
+
+

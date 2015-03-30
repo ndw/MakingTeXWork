@@ -1,0 +1,84 @@
+\nopagenumbers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\magnification=\magstephalf
+{\obeyspaces\global\let =\ }
+\input pictex
+
+\input tex.06.05.tex
+
+\bye
+
+\centerline{\it FIGURE 1}
+\bigskip\noindent
+You're welcome to use that. 
+
+\bigskip
+Here are a couple of passages from the preface to the \PiCTeX\ manual
+that may be of some help to you (keep in mind that the manual is
+copyrighted, so this material should be quoted if used verbatim):
+
+\medskip
+\bgroup \narrower
+\PiCTeX\ offers these advantages:  (1)~Figures 
+become an integral part of the typesetting process. You can avoid 
+having to leave the proper amount of space in your document for material
+that has to be created on some external device and later stripped into
+the finished product. 
+(2)~All of \TeX's formatting capabilities are available for annotating your
+figures.  In addition, that annotation will be done (if you so desire)
+in the same fonts as you're using in the rest of your document.
+(3)~Just as \TeX\ is machine independent, so too is \PiCTeX. It doesn't
+matter whether you're working on a PC or mainframe computer.
+(4)~Since typeset figures are embedded in the
+{\tt dvi} file along with the rest of your document, all the advantages
+of \TeX's device independent output accrue to them.  In particular,
+you can revise away to your heart's content on your local system until
+things are just the way you want them, and then you can have the final
+copy elegantly (but perhaps expensively) printed on a high resolution output 
+device.  
+(5)~\PiCTeX\ can easily be extended using \TeX's macro facilities.
+
+On the other hand, \PiCTeX\ has several limitations: (1)~\PiCTeX\ was
+expressly designed to facilitate the construction of pictures such as
+Figure~1.  It simply is not the right tool for producing illustrations 
+such as the lions that grace the title pages of the \TeX book.
+(2) Within the realm of mathematical figures, ~\PiCTeX\ doesn't 
+make 3D pictures or other complex things. Considering that \TeX\ provides
+less arithmetic capabilities than the simplest pocket calculator, that
+would be asking for too much.
+(3)~\PiCTeX\ takes a while to draw a \PiC ture.  
+Figure~1 initially took % $3{1\over 2}$~minutes on a Sun-2/120, 
+%all but 30~seconds of the effort going into producing the two curves. 
+%In subsequent drafts \PiCTeX\ replotted the curves in 40~seconds.
+12 seconds on Spark~10. In subsequent drafts
+\PiCTeX\ replotted the curves in less than 4 seconds.
+(4)~\PiC ture s take up a sizeable amount of computer memory,
+both within \TeX\ and within the software that processes the {\tt dvi} file.
+For example, Figure~1 occupies about 15~Kilobytes. A larger \PiC ture, with
+several more curves, could easily exceed the constraints of a small system.
+\par
+\egroup
+
+\bigskip
+Some additional information on \PiCTeX follows:
+\medskip
+\bgroup 
+\def\par{\leavevmode\endgraf}
+\obeylines \obeyspaces \tt %
+
+Merchandizing of the PiCTeX manual is being handled by
+TUG. Contact tug@tug.org or write to TUG at 
+
+\quad  TeX Users Group
+\quad  P.O. Box 869
+\quad  Santa Barbara, CA 93102
+
+I believe TUG is asking \$35.00 for the manual, with a \$5.00 
+discount to members. The manual is in book form, about 100 
+pages long.
+
+There is a survey article on PiCTeX in TUGboat \#9 2 pp. 193-195 
+(1988).
+\par
+\egroup
+\bye

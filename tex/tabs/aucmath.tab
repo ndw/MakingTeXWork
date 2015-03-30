@@ -1,0 +1,41 @@
+\begin{xtable}{l|l|c||l|l|c}
+  \caption{\auctex\ Math Operators in Mathematics Minor-mode\label{tbl:mathops}}\\
+         & \bf Control  &             &          & \bf Control  &  \\
+\bf Keys & \bf Sequence & \bf Symbol  & \bf Keys & \bf Sequence & \bf Symbol \\[2pt]
+\hline
+\tstrut
+  \verb|`a|   & \verb|\alpha|     & $\alpha$        & \verb|`C-f| & \verb|\rightarrow| & $\rightarrow$         \\
+  \verb|`b|   & \verb|\beta|      & $\beta$         & \verb|`C-p| & \verb|\uparrow|    & $\uparrow$            \\
+  \verb|`d|   & \verb|\delta|     & $\delta$        & \verb|`C-n| & \verb|\downarrow|  & $\downarrow$          \\
+  \verb|`e|   & \verb|\epsilon|   & $\epsilon$      & \verb|`<|   & \verb|\leq|        & $\leq$                \\
+  \verb|`f|   & \verb|\phi|       & $\phi$          & \verb|`>|   & \verb|\geq|        & $\geq$                \\
+  \verb|`g|   & \verb|\gamma|     & $\gamma$        & \verb|`~|   & \verb|\tilde|      & $\tilde{\phantom{a}}$ \\
+  \verb|`h|   & \verb|\eta|       & $\eta$          & \verb|`I|   & \verb|\infty|      & $\infty$              \\
+  \verb|`k|   & \verb|\kappa|     & $\kappa$        & \verb|`A|   & \verb|\forall|     & $\forall$             \\
+  \verb|`l|   & \verb|\lambda|    & $\lambda$       & \verb|`E|   & \verb|\exists|     & $\exists$             \\
+  \verb|`m|   & \verb|\mu|        & $\mu$           & \verb|`!|   & \verb|\not|        & $\not\phantom{=}$     \\
+  \verb|`n|   & \verb|\nu|        & $\nu$           & \verb|`i|   & \verb|\in|         & $\in$                 \\
+  \verb|`o|   & \verb|\omega|     & $\omega$        & \verb|`*|   & \verb|\times|      & $\times$              \\
+  \verb|`p|   & \verb|\pi|        & $\pi$           & \verb|`.|   & \verb|\cdot|       & $\cdot$               \\
+  \verb|`q|   & \verb|\theta|     & $\theta$        & \verb|`@{|  & \verb|\subset|     & $\subset$             \\
+  \verb|`r|   & \verb|\rho|       & $\rho$          & \verb|`@}|  & \verb|\supset|     & $\supset$             \\
+  \verb|`s|   & \verb|\sigma|     & $\sigma$        & \verb|`[|   & \verb|\subseteq|   & $\subseteq$           \\
+  \verb|`t|   & \verb|\tau|       & $\tau$          &  \verb|`]|  & \verb|\supseteq|   & $\supseteq$           \\
+  \verb|`v|   & \verb|\vee|       & $\vee$          & \verb|`\|   & \verb|\backslash|  & $\backslash$          \\
+  \verb|`u|   & \verb|\upsilon|   & $\upsilon$      & \verb|`/|   & \verb|\setminus|   & $\setminus$           \\
+  \verb|`x|   & \verb|\chi|       & $\chi$          & \verb|`+|   & \verb|\cup|        & $\cup$                \\
+  \verb|`y|   & \verb|\psi|       & $\psi$          & \verb|`-|   & \verb|\cap|        & $\cap$                \\
+  \verb|`z|   & \verb|\zeta|      & $\zeta$         & \verb|`(|   & \verb|\langle|     & $\langle$             \\
+  \verb|`D|   & \verb|\Delta|     & $\Delta$        & \verb|`)|   & \verb|\rangle|     & $\rangle$             \\
+  \verb|`G|   & \verb|\Gamma|     & $\Gamma$        & \verb|`C-e| & \verb|\exp|        & $\exp$                \\
+  \verb|`Q|   & \verb|\Theta|     & $\Theta$        & \verb|`C-s| & \verb|\sin|        & $\sin$                \\
+  \verb|`L|   & \verb|\Lambda|    & $\Lambda$       & \verb|`C-c| & \verb|\cos|        & $\cos$                \\
+  \verb|`Y|   & \verb|\Psi|       & $\Psi$          & \verb|`C-^| & \verb|\sup|        & $\sup$                \\
+  \verb|`P|   & \verb|\Pi|        & $\Pi$           & \verb|`C-_| & \verb|\inf|        & $\inf$                \\
+  \verb|`S|   & \verb|\Sigma|     & $\Sigma$        & \verb|`C-d| & \verb|\det|        & $\det$                \\
+  \verb|`U|   & \verb|\Upsilon|   & $\Upsilon$      & \verb|`C-l| & \verb|\lim|        & $\lim$                \\
+  \verb|`V|   & \verb|\Phi|       & $\Phi$          & \verb|`C-t| & \verb|\tan|        & $\tan$                \\
+  \verb|`O|   & \verb|\Omega|     & $\Omega$        & \verb|`^|   & \verb|\hat|        & $\hat{\phantom{a}}$   \\
+  \verb|`C-b| & \verb|\leftarrow| & $\leftarrow$  &   &   &  \\[2pt]
+ \hline 
+\end{xtable}

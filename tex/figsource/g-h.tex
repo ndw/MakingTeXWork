@@ -1,0 +1,39 @@
+\documentstyle{article}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\hbox{%
+  \hbox{%
+    \leavevmode
+    \catcode`_=11%
+    \font\foo=cmr17 at 150pt
+    \setbox0=\hbox{\foo g}
+    \setbox1=\hbox to \wd0{\vbox to \dp0{\vfil}\hfil}%
+    \setbox1=\vbox{\hrule\box1}%
+    \setbox3=\hbox{y}
+    \setbox2=\hbox{\vbox{\vbox to \ht0{\hbox{x}\vfill\vbox to \ht3{\hbox{y}\vss}}%
+        \vbox to \dp0{\vfill\hbox{z}}}}%
+    \setbox3=\hbox{\vbox{\vbox to \ht0{\vfill\hbox{r}}
+        \vbox to \dp0{\vfill}}}%
+    \setbox1=\hbox{\hbox to 0pt{\box1\hss}\hbox{\vrule\vbox{\hrule\box0\hrule}\vrule}}%
+    \hbox{\box3\hskip3pt\box1\hskip3pt\box2}
+    }%
+  \hbox{%
+    \leavevmode
+    \catcode`_=11%
+    \font\foo=cmr17 at 150pt
+    \setbox0=\hbox{\foo h}
+    \setbox1=\hbox to \wd0{\vbox to \dp0{\vfil}\hfil}%
+    \setbox1=\vbox{\hrule\box1}%
+    \setbox3=\hbox{y \& z}
+    \setbox2=\hbox{\vbox{\vbox to \ht0{\hbox{x}\vfill\vbox to \ht3{\hbox{y}\vss}}}}%
+    \setbox3=\hbox{\vbox{\vbox to \ht0{\vfill\hbox{r}}}}
+    \setbox1=\hbox{\hbox to 0pt{\box1\hss}\hbox{\vrule\vbox{\hrule\box0\hrule}\vrule}}%
+    \setbox0=\hbox{\foo g}
+    \hbox{\vbox{\hbox{\box3\hskip3pt\box1\hskip3pt\box2}\vbox to \dp0{\vfill}}}
+    }%
+}
+
+\end{document}

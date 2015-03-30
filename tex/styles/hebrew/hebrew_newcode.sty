@@ -1,0 +1,870 @@
+%  **** NOTE *************
+%  When creating a new version of this hebrew_newcode.sty,
+%  remember to  include the catcodes and lccodes pertaining to
+%  newcode. Also, all font names should have the extension newcode.
+
+% Emacs, assume -*-TeX-*- mode please.
+%
+% No copyright notice came with this file, so please don't add one.
+%
+% LaTeX Hebrew option by Sergio Fogel. Preliminary.
+% Corrections and additions by Rama Porrat.
+% Additions by Yael Dubinsky.
+% Bilingual toc & lof, penalties,
+% documentation and more changes by Yaniv Bargury. version 1.3  
+
+\typeout{ }
+\typeout{Hebrew option. Version 1.2}
+\typeout{<<< New version. Revised. hebcal is optional. >>>}
+\typeout{ <<<A new guide is available.  Type  latex heblatex_guide >>>}
+\typeout{ }
+
+\def\@ptscale#1{ scaled #100}         %  Added for amslatex.
+\def\@halfmag{ scaled \magstephalf}
+\def\@magscale#1{ scaled \magstep #1}
+
+\catcode`א=11\catcode`ב=11\catcode`ג=11\catcode`ד=11
+\catcode`ה=11\catcode`ו=11\catcode`ז=11\catcode`ח=11
+\catcode`ט=11\catcode`י=11\catcode`כ=11\catcode`ל=11
+\catcode`מ=11\catcode`נ=11\catcode`ס=11\catcode`ע=11
+\catcode`פ=11\catcode`צ=11\catcode`ק=11\catcode`ר=11
+\catcode`ש=11\catcode`ת=11\catcode`ך=11\catcode`ם=11
+\catcode`ן=11\catcode`ף=11\catcode`ץ=11
+
+\lccode`א=``\lccode`ב=`a\lccode`ג=`b\lccode`ד=`c
+\lccode`ה=`d\lccode`ו=`e\lccode`ז=`f\lccode`ח=`g
+\lccode`ט=`h\lccode`י=`i\lccode`כ=`k\lccode`ל=`l
+\lccode`מ=`n\lccode`נ=`p\lccode`ס=`q\lccode`ע=`r
+\lccode`פ=`t\lccode`צ=`v\lccode`ק=`w\lccode`ר=`x
+\lccode`ש=`y\lccode`ת=`z\lccode`ך=`j\lccode`ם=`m
+\lccode`ן=`o\lccode`ף=`s\lccode`ץ=`u
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               Loading Hebrew fonts.                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% Revisions by Yaniv:
+% * Scaling factor specified with \magstep<number>, instead of inline
+%   expansion of the magnification ratio. It looks nicer this way.
+% * \magstephalf fonts where scaled 1100 instead of the (correct) 1095.
+%   solved by the previous change.
+% * lines broken (probably e-mail problem) on size definitions fixed.
+% * Yael's changing of \Huge\ds to magstep4 eliminated.
+%
+\font\sixjm=Jerusalem_newcode scaled 600
+\font\sevjm=Jerusalem_newcode scaled 700
+\font\eightjm=Jerusalem_newcode scaled 800
+\font\ninejm=Jerusalem_newcode scaled 900
+\font\tenjm=Jerusalem_newcode
+\font\elvjm=Jerusalem_newcode scaled \magstephalf
+\font\twlvjm=Jerusalem_newcode scaled \magstep1
+\font\frtnjm=Jerusalem_newcode scaled \magstep2
+\font\svtnjm=Jerusalem_newcode scaled \magstep3
+\font\twtyjm=Jerusalem_newcode scaled \magstep4
+\font\twfvjm=Jerusalem_newcode scaled \magstep5
+\font\sixoj=OldJaffa_newcode scaled 600
+\font\sevoj=OldJaffa_newcode scaled 700
+\font\eightoj=OldJaffa_newcode scaled 800
+\font\nineoj=OldJaffa_newcode scaled 900
+\font\tenoj=OldJaffa_newcode
+\font\elvoj=OldJaffa_newcode scaled \magstephalf
+\font\twlvoj=OldJaffa_newcode scaled \magstep1
+\font\frtnoj=OldJaffa_newcode scaled \magstep2
+\font\svtnoj=OldJaffa_newcode scaled \magstep3
+\font\twtyoj=OldJaffa_newcode scaled \magstep4
+\font\twfvoj=OldJaffa_newcode scaled \magstep5
+\font\sixta=TelAviv_newcode scaled 600
+\font\sevta=TelAviv_newcode scaled 700
+\font\eightta=TelAviv_newcode scaled 800
+\font\nineta=TelAviv_newcode scaled 900
+\font\tenta=TelAviv_newcode
+\font\elvta=TelAviv_newcode scaled \magstephalf
+\font\twlvta=TelAviv_newcode scaled \magstep1
+\font\frtnta=TelAviv_newcode scaled \magstep2
+\font\svtnta=TelAviv_newcode scaled \magstep3
+\font\twtyta=TelAviv_newcode scaled \magstep4
+\font\twfvta=TelAviv_newcode scaled \magstep5
+\font\sixds=DeadSea_newcode scaled 600
+\font\sevds=DeadSea_newcode scaled 700
+\font\eightds=DeadSea_newcode scaled 800
+\font\nineds=DeadSea_newcode scaled 900
+\font\tends=DeadSea_newcode
+\font\elvds=DeadSea_newcode scaled \magstephalf
+\font\twlvds=DeadSea_newcode scaled \magstep1
+\font\frtnds=DeadSea_newcode scaled \magstep2
+\font\svtnds=DeadSea_newcode scaled \magstep3
+\font\twtyds=DeadSea_newcode scaled \magstep4
+\font\twfvds=DeadSea_newcode scaled \magstep5
+
+%
+\def\pjm{\tenjm}     % Added for amslatex.
+\def\pta{\tenta}
+\def\pds{\tends}
+\def\poj{\tenoj}
+
+% The Hebrew font names. They may be used just like the LaTeX \rm \bf \it \tt.
+% When in Hebrew mode \rm \bf \it \tt are defined to be
+%  \jm \ds \oj and \ta respectively. This is done in \tohebrew below.
+%
+\def\jm{\protect\pjm}
+\def\oj{\protect\poj}
+\def\ta{\protect\pta}
+\def\ds{\protect\pds}
+
+% Size definitions for the Hebrew fonts.
+% The macros \<roman number in pt>pt are called by the LaTeX
+% sizing commands (\Huge \large etc.)
+%
+\let\oldviipt\viipt
+\def\viipt{\oldviipt\def\pjm{\sevjm}\def\pta{\sevta}%
+  \def\pds{\sevds}\def\poj{\sevoj}}
+\let\oldixpt\ixpt
+\def\ixpt{\oldixpt\def\pjm{\ninejm}\def\pta{\nineta}%
+  \def\pds{\nineds}\def\poj{\nineoj}}
+\let\oldxpt\xpt
+\def\xpt{\oldxpt\def\pjm{\tenjm}\def\pta{\tenta}%
+  \def\pds{\tends}\def\poj{\tenoj}}
+\let\oldxipt\xipt
+\def\xipt{\oldxipt\def\pjm{\elvjm}\def\pta{\elvta}%
+  \def\pds{\elvds}\def\poj{\elvoj}}
+\let\oldxiipt\xiipt
+\def\xiipt{\oldxiipt\def\pjm{\twlvjm}\def\pta{\twlvta}%
+  \def\pds{\twlvds}\def\poj{\twlvoj}}
+\let\oldxivpt\xivpt
+\def\xivpt{\oldxivpt\def\pjm{\frtnjm}\def\pta{\frtnta}%
+  \def\pds{\frtnds}\def\poj{\frtnoj}}
+\let\oldxviipt\xviipt
+\def\xviipt{\oldxviipt\def\pjm{\svtnjm}\def\pta{\svtnta}%
+  \def\pds{\svtnds}\def\poj{\svtnoj}}
+\let\oldxxpt\xxpt
+\def\xxpt{\oldxxpt\def\pjm{\twtyjm}\def\pta{\twtyta}%
+  \def\pds{\twtyds}\def\poj{\twtyoj}}
+\let\oldxxvpt\xxvpt
+%
+% A little change was done for pds. Yael
+%   (little=using \ds at 20pt instead of 25pt)
+% Change reversed by Yaniv.
+%   ("mf mag=magstep(5) input deadsea" should be used instead.)
+\def\xxvpt{\oldxxvpt\def\pjm{\twfvjm}\def\pta{\twfvta}%
+  \def\pds{\twfvds}\def\poj{\twfvoj}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Switching from LR to RL mode and back               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+% \tohebrew and \toenglish are called each time the vertical direction
+% changes. The do all that is necessary beside changing the direction.
+% Currently their task is to change the definition of \rm \bf \it \tt to
+% the English or Hebrew version, and disable hyphenation in Hebrew. They
+% should not normally be called by users, use \sethebrew \unsethebrew
+% \L{} \R{} \embox{} and \hmbox{} to change language.
+%
+% Changes by Yaniv:
+% * Set \hyphenpenalty=\@MM to avoid hyphenation in Hebrew.
+%   Remove this when there is a hyphenation file for Hebrew.
+%   Keeping two kinds of hyphenation information for English and for Hebrew
+%   with the same TeX is something that remains to be solved by the great
+%   masters of TeX. (currently intractable)
+% * Set \binoppenalty=\@MM and \relpenalty=\@MM so TeX never breaks
+%   formulas within Hebrew text.
+
+\let\oldbf\bf
+
+\def\tohebrew
+{\def\rm{\jm}\def\bf{\ds}\def\it{\oj}\def\tt{\ta}%
+\hyphenpenalty=\@MM
+\binoppenalty=\@MM
+\relpenalty=\@MM
+\jm
+}
+
+\def\toenglish{\def\rm{\protect\prm}\def\bf{\oldbf}\def\it{\protect\pit}%
+\def\tt{\protect\ptt}%
+\hyphenpenalty=50 % Restore the lplain.tex penalties.
+\binoppenalty=700
+\relpenalty=500
+\rm }
+
+% \hebtrue means that the main mode is currently Hebrew RL.
+% \hebfalse means that the main mode is currently English LR.
+
+\newif\ifheb
+
+% Change the main mode to Hebrew RL or English LR (default mode).
+% This is the only place the \ifheb value changes. Inner mode changes
+% with \L{} \R{} \hmbox{} and \embox{} does not change it.
+%
+\def\sethebrew{\hebtrue\beginR\tohebrew}
+\def\unsethebrew{\hebfalse\beginL\toenglish}
+
+% Obsolete. For compatibility with older versions.
+%
+\let\hebrewtext=\sethebrew
+\let\nohebrewtext=\unsethebrew
+
+% Macros for changing direction, taken from TUGboat.
+% Usage: \L{English Text} and \R{Ktav Ivri}.
+% Numbers should also be enclosed in \L{}, as in \L{123}.
+
+\let\next=\
+\def\L{\protect\afterassignment\moreL \let\next= }
+\def\moreL{\bracetext \aftergroup\endL \beginL \toenglish}
+\def\R{\protect\afterassignment\moreR \let\next= }
+\def\moreR{\bracetext \aftergroup\endR \beginR \tohebrew}
+\def\bracetext{\ifcat\next{\else\ifcat\next}\fi
+ \errmessage{Missing left brace has been substituted}\fi \bgroup}
+\everydisplay{\ifheb\aftergroup\beginR\fi }
+
+% Take care of Hebrew indentation in every paragraph.
+%
+% Changes:
+% \noindent for Hebrew. Yaniv.
+%
+\def\hebpar{\ifheb\kern-\parindent\beginR\indent\fi}
+\let\oldeverypar\everypar
+\def\everypar#1{\oldeverypar{\hebpar#1}}
+\let\oldnoindent\noindent
+\def\noindent{\ifheb\indent\unskip\else\oldnoindent\fi}
+
+% Additions by Yaniv:
+% Useful vbox commands. All text in math formulas is best enclosed in these.
+% ex: $P=\{x|\embox{The is no } y \embox{ such that } y \embox{ divides }x\}$
+%     $P=\{x|x\hmbox{ Mehalek et } y\hmbox{ Kach She } y\hmbox{ Lo Kayam }\}$
+% \mbox{} is useless for both cases, since it typesets in LR Hebrew.
+
+\newcommand{\hmbox}[1]{\mbox{\R{#1}}}
+\newcommand{\embox}[1]{\mbox{\L{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               Counting in Hebrew                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+% \arabic \alph \Alph \roman and \Roman should work right (i.e. LR).
+% \hebr should give Hebrew numerals.
+%
+\def\@alph#1{\ifheb\ifcase#1\or א\or ב\or ג\or ד\else\@ialph{#1}\fi
+		\else
+                \ifcase#1\or a\or b\or c\or d\else\@ialph{#1}\fi
+		\fi}
+\def\@ialph#1{\ifheb\ifcase#1\or \or \or \or \or ה\or ו\or ז\or ח\or ט\or י\or
+   כ\or ל\or מ\or נ\or ס\or ע\or פ\or צ\or ק\or ר\or ש\or ת\else\@ctrerr\fi
+	      \else
+              \ifcase#1\or \or \or \or \or e\or f\or g\or h\or i\or j\or
+              k\or l\or m\or n\or o\or p\or q\or r\or s\or t\or u\or v\or w\or
+ x\or y\or
+              z\else\@ctrerr\fi
+	      \fi}
+\def\@Alph#1{\ifheb\ifcase#1\or \L{A}\or \L{B}\or \L{C}\or
+ \L{D}\else\@Ialph{#1}\fi
+	      \else
+              \ifcase#1\or A\or B\or C\or D\else\@Ialph{#1}\fi
+	      \fi}
+\def\@Ialph#1{\ifheb\ifcase#1\or \or \or \or \or \L{E}\or \L{F}\or \L{G}\or
+ \L{H}\or \L{I}\or \L{J}\or
+   \L{K}\or \L{L}\or \L{M}\or \L{N}\or \L{O}\or \L{P}\or \L{Q}\or \L{R}\or
+ \L{S}\or \L{T}\or \L{U}\or \L{V}\or \L{W}\or \L{X}\or \L{Y}\or
+   \L{Z}\else\@ctrerr\fi
+	      \else
+              \ifcase#1\or \or \or \or \or E\or F\or G\or H\or I\or J\or
+   K\or L\or M\or N\or O\or P\or Q\or R\or S\or T\or U\or V\or W\or X\or Y\or
+   Z\else\@ctrerr    \fi
+	       \fi}
+\def\arabic#1{\ifmmode\else\beginL\fi\@arabic{\@nameuse{c@#1}}\ifmmode
+\else\endL\fi}
+\def\roman#1{\ifmmode\else\beginL\fi\@roman{\@nameuse{c@#1}}\ifmmode
+\else\endL\fi}
+\def\Roman#1{\ifmmode\else\beginL\fi
+\@Roman{\@nameuse{c@#1}}\ifmmode\else\endL\fi}
+\def\alph#1{\@alph{\@nameuse{c@#1}}}
+\def\Alph#1{\@Alph{\@nameuse{c@#1}}}
+\def\hebr#1{{\tohebrew\@hebr{\@nameuse{c@#1}}}}
+
+\def\@hebr#1{\ifcase#1\or א\or ב\or ג\or ד\or ה\else\@ialph{#1}\fi}
+\def\@hebr#1{\ifcase#1\or \or \or \or \or ו\or ז\or ח\or ט\or י\or
+   כ\or ל\or מ\or נ\or ס\or ע\or פ\or צ\or ק\or ר\or ש\or
+   ת\else\@ctrerr\fi}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      \the<thing> and \labelenum<thing> things.          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% The \the<thing> and \labelenum<thing> commands generate LR text
+% (usually numbers). They are revised to work in hebrew.
+%
+% Added \thepage to the list. Yaniv
+%
+\let\oldarabic=\arabic
+\let\oldref\ref
+\let\oldcite\cite
+\def\cite#1{\L{\oldcite{#1}}}
+\def\ref#1{\L{\oldref{#1}}}
+\def\labelenumi{\ifheb\L{.\arabic{enumi}}\else\arabic{enumi}.\fi}
+\def\theenumi{\beginL{\arabic{enumi}}\endL}
+\def\labelenumii{\ifheb)\alph{enumii}( \else(\alph{enumii})\fi}
+\def\theenumii{\alph{enumii}}
+\def\p@enumii{\theenumi}
+\def\labelenumiii{\ifheb\L{.\roman{enumiii}}\else\L{\roman{enumiii}.}\fi}
+\def\theenumiii{\L{\roman{enumiii}}}
+\def\p@enumiii{\L{\theenumi(\theenumii)}}
+%\def\labelenumiv{\L{\Alph{enumiv}.}}
+%\def\theenumiv{\L{\Alph{enumiv}}}
+\def\p@enumiv{\L{\p@enumiii\theenumiii}}
+\let\oldpart\thepart
+\def\thepart{\beginL\oldpart\endL}
+\let\oldchapter\thechapter
+\def\thechapter{\ifmmode\else\beginL\fi\oldchapter\ifmmode\else\endL\fi}
+\let\oldsection\thesection
+\def\thesection{\beginL\oldsection\endL}
+\let\oldsubsection\thesubsection
+\def\thesubsection{\beginL\oldsubsection\endL}
+\let\oldsubsubsection\thesubsubsection
+\def\thesubsubsection{\beginL\oldsubsubsection\endL}
+\let\oldparagraph\theparagraph
+\def\theparagraph{\beginL\oldparagraph\endL}
+\let\oldsubparagraph\thesubparagraph
+\def\thesubparagraph{\beginL\oldsubparagraph\endL}
+\let\oldfigure\thefigure
+\def\thefigure{\beginL\oldfigure\endL}
+\let\oldtable\thetable
+\def\thetable{\beginL\oldtable\endL}
+\let\oldequation\theequation
+\def\theequation{\ifmmode\else\L{\fi\oldequation\ifmmode\else}\fi}
+\let\oldpage\thepage
+\def\thepage{\L{\oldpage}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                List environments                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% List environments in Hebrew, are ticked and indented from the right
+% instead of from the left. All the definitions that caused indentation 
+% are revised for Hebrew. LaTeX keeps track on the indentation with the
+% \leftmargin and \rightmargin values. The changes below are mostly to
+% exchange these values in Hebrew mode.
+%
+\def\descriptionlabel#1{\hspace\labelsep \bf #1}
+\def\description{\list{}{\labelwidth\z@ \itemindent-
+ \ifheb\rightmargin\else\leftmargin\fi
+ \let\makelabel\descriptionlabel}}
+\let\enddescription\endlist
+
+\def\verse{\let\\=\@centercr
+\ifheb
+ \list{}{\itemsep\z@ \itemindent -1.5em\listparindent \itemindent
+ \leftmargin\rightmargin\advance\rightmargin 1.5em}\item[]
+\else
+ \list{}{\itemsep\z@ \itemindent -1.5em\listparindent \itemindent
+        \rightmargin\leftmargin\advance\leftmargin 1.5em}\item[]
+ \fi}
+\let\endverse\endlist
+
+\def\quotation{\list{}{\listparindent 1.5em
+ \itemindent\listparindent
+  \ifheb
+    \leftmargin\rightmargin
+  \else
+   \rightmargin\leftmargin
+  \fi
+  \parsep 0pt plus 1pt}\item[]}
+\let\endquotation=\endlist
+\def\quote{\list{}{ifheb\leftmargin\rightmargin\else\rightmargin\leftmargin\fi
+}\item[]}
+\let\endquote=\endlist
+
+\def\@listi{\ifheb\rightmargin\leftmargini\leftmargin=0pt%
+	    \else\leftmargin\leftmargini
+            \fi
+ \labelwidth\leftmargini\advance\labelwidth-\labelsep
+ \topsep 4pt plus 2pt minus 1pt
+ \parsep 2pt plus 1pt minus 1pt
+ \itemsep \parsep
+	     }
+\def\@listI{\ifheb\rightmargin\leftmargini\leftmargin=0pt%
+            \else\leftmargin\leftmargini
+	    \fi
+ \labelwidth\leftmargini\advance\labelwidth-\labelsep
+ \topsep 4pt plus 2pt minus 1pt
+ \parsep 2pt plus 1pt minus 1pt
+ \itemsep \parsep
+	     }
+\def\@listii{\ifheb
+\rightmargin\leftmarginii
+\leftmargin=0pt
+\else\leftmargin\leftmarginii
+\fi
+\labelwidth\leftmarginii\advance\labelwidth-\labelsep
+\topsep 4pt plus 2pt minus 1pt
+\parsep 2pt plus 1pt minus 1pt
+\itemsep \parsep
+}
+\def\@listiii{\ifheb
+\rightmargin\leftmarginiii
+\leftmargin=0pt
+\else\leftmargin\leftmarginiii
+\fi
+\labelwidth\leftmarginiii\advance\labelwidth-\labelsep
+\topsep 2pt plus 1pt minus 1pt
+\parsep \z@ \partopsep 1pt plus 0pt minus 1pt
+\itemsep \parsep}
+\def\@listiv{\ifheb
+\rightmargin\leftmarginiv
+\leftmargin=0pt
+\else\leftmargin\leftmarginiv
+\fi
+\labelwidth\leftmarginiv\advance\labelwidth-\labelsep
+\topsep 2pt plus 1pt minus 1pt
+\parsep \z@ \partopsep 1pt plus 0pt minus 1pt
+\itemsep \parsep}
+\def\@listv{\ifheb
+\rightmargin\leftmarginv
+\leftmargin=0pt
+\else\leftmargin\leftmarginv
+\fi
+\labelwidth\leftmarginv\advance\labelwidth-\labelsep
+\topsep 2pt plus 1pt minus 1pt
+\parsep \z@ \partopsep 1pt plus 0pt minus 1pt
+\itemsep \parsep}
+\def\@listvi{\ifheb
+\rightmargin\leftmarginvi
+\leftmargin=0pt
+\else\leftmargin\leftmarginvi
+\fi
+\labelwidth\leftmarginvi\advance\labelwidth-\labelsep
+\topsep 2pt plus 1pt minus 1pt
+\parsep \z@ \partopsep 1pt plus 0pt minus 1pt
+\itemsep \parsep}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               Tables of moving stuff                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Tables of moving arguments (table of contents, list of figures,
+% list of tables, glossary) are handles here:
+%
+\def\fnum@figure{\ifheb איור \else Figure\fi \thefigure}
+\def\fnum@table{\ifheb טבלה \else Table \fi \thetable}
+\def\@chapapp{\ifheb פרק\else Chapter\fi}
+
+\def\tableofcontents{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+  \fi\chapter*{\ifheb תוכן ענינים\else Contents \fi
+  \@mkboth
+  {\ifheb תוכן ענינים \else CONTENTS\fi}
+  {\ifheb תוכן ענינים \else CONTENTS\fi}
+  }
+  \@starttoc{toc}\if@restonecol\twocolumn\fi}
+
+\def\listoffigures{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+  \fi\chapter*{\ifheb רשימת איורים \else List of Figures\fi\@mkboth
+   {\ifheb רשימת איורים \else LIST OF FIGURES\fi }
+   {\ifheb רשימת איורים \else LIST OF FIGURES\fi }
+   }\@starttoc{lof}\if@restonecol\twocolumn
+  \fi}
+
+\def\listoftables{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+  \fi\chapter*{\ifheb רשימת טבלאות\else List of Tables\fi\@mkboth
+   {\ifheb רשימת טבלאות \else LIST OF TABLES\fi }
+   {\Ifheb רשימת טבלאות \else LIST OF TABLES\fi }
+   }\@starttoc{lot}\if@restonecol\twocolumn
+  \fi}
+
+\let\l@table\l@figure
+
+
+%% the following makes problems when making a toc in hebrew,
+%% since it uses rightskip which is mode dependent
+
+\def\@dottedtocline#1#2#3#4#5{\ifnum #1>\c@tocdepth \else
+  \vskip \z@ plus .2pt
+  {\hangindent #2\relax
+    \ifheb \leftskip \else \rightskip \fi
+    \@tocrmarg \parfillskip -\ifheb \leftskip \else \rightskip \fi
+    \parindent #2\relax\@afterindenttrue
+   \interlinepenalty\@M
+   \leavevmode
+   \@tempdima #3\relax
+    #4\nobreak\leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern \@dotsep
+       mu$}\hfill \nobreak \hbox to\@pnumwidth{\hfil\rm \beginL#5\endL}\par}\fi}
+
+% The toc entry for section did not work in article style.
+% Also it does not print dots, which is funny when most of your work
+% is divided into sections.
+% revised to use \@dottedtocline as in report.sty
+% -- Yaniv
+
+\def\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
+
+% For table of contents: Page numbers have to be LR
+
+\def\l@part#1#2{\addpenalty{-\@highpenalty}
+   \addvspace{2.25em plus 1pt}  % space above part line
+   \begingroup
+   \@tempdima 3em         % width of box holding part number, used by
+     \parindent \z@ \rightskip \@pnumwidth             %% \numberline
+     \parfillskip -\@pnumwidth
+     {\large \bf          % set line in \large boldface
+     \leavevmode          % TeX command to enter horizontal mode.
+     #1\hfil \hbox to\@pnumwidth{\hss \beginL #2 \endL}}\par
+     \nobreak             % Never break after part entry
+   \endgroup}
+
+
+%\def\l@chapter#1#2{\pagebreak[3]
+%  \vskip 1.0em plus 1pt  % space above chapter line
+%   \@tempdima 1.5em       % width of box holding chapter number
+%   \begingroup
+%     \parindent \z@ \ifheb \leftskip \else \rightskip \fi \@pnumwidth
+%     \parfillskip -\@pnumwidth
+%     \bf                  % Boldface.
+%     \leavevmode          % TeX command to enter horizontal mode.
+%     #1\hfil \hbox to\@pnumwidth{\hss \beginL #2\endL}\par
+%   \endgroup}
+
+% Captions are set always RL in center mode. This allows us to
+% use bilingual captions:
+% \caption{hebrewtext \protect\\ \L{english text}
+
+\long\def\@makecaption#1#2{
+   \vskip 10pt
+   \begin{center}
+   #1: #2
+   \end{center} \par
+   }
+
+%Let @starttoc be defined outside, so that we can use it at low level
+
+\let\starttoc\@starttoc
+
+\def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
+ \refstepcounter{chapter}
+ \typeout{Chapter\space\oldarabic{chapter}.}
+ \addcontentsline{toc}{chapter}{\protect
+ \numberline{\thechapter}#1}\else
+ \addcontentsline{toc}{chapter}{#1}\fi
+ \chaptermark{#1}
+ \addtocontents{lof}{\protect\addvspace{10pt}}
+\addtocontents{lot}{\protect\addvspace{10pt}} \if@twocolumn
+\@topnewpage[\@makechapterhead{#2}]
+ \else \@makechapterhead{#2}
+ \@afterheading \fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     Footnotes                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% The Hebrew footnote rule is \hsize wide, and usual in Hebrew
+% documents.  Footnotes can be used in Hebrew or English main modes, but
+% changing mode while a footnote is pending is still unsolved.
+%
+\def\footnoterule{\ifheb
+    \kern-3pt\hrule width \hsize \kern 2.6pt
+    \else
+    \kern-3\p@
+  \hrule width 2truein \kern 2.6\p@\fi}
+
+\font\Jerfootnote=Jerusalem_newcode scaled 750 
+\let\who=\Jerfootnote  
+
+%\font\Jerhalf=Jerusalem_newcode scaled \magstephalf  
+%\font\Jerone=Jerusalem_newcode scaled \magstep1
+%\font\Jertwo=Jerusalem_newcode scaled \magstep2 
+%\font\Jerthree=Jerusalem_newcode scaled \magstep3 
+%\font\Jerfour=Jerusalem_newcode scaled \magstep4  
+%\font\Jerfive=Jerusalem_newcode scaled \magstep5  
+
+\newsavebox{\ftnum}
+
+\def\hebfootnote{
+\savebox {\ftnum}{$_{\oldarabic{footnote}}$}
+\def\thefootnote{\usebox{\ftnum}}
+		}
+
+\def\footnote{\@ifnextchar[{\@xfootnote}{\stepcounter
+   {\@mpfn}
+   \hebfootnote
+   \xdef\@thefnmark{\thempfn}  \hskip -16pt \@footnotemark\@footnotetext}}
+
+\everydisplay{\aftergroup\beginR }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%            Macros with Hebrew names                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Hebrew names for (some) LaTeX macros.
+%
+%
+
+\def\hebday{\L{\number\day}\ \R{ב\ifcase\month\or 
+ ינואר\or
+ פברואר\or  מרץ\or  אפריל
+\or  מאי \or  יוני\or  יולי\or 
+ אוגוסט\or  ספטמבר\or  אוקטובר
+\or  נובמבר\or  דצמבר \fi}\
+\L{\number\year}}
+
+\let\היום=\hebday
+\def\קפיצהקטנה{\smallskip }
+\def\קפיצהבינונית{\medskip }
+\def\קפיצהגדולה{\bigskip }
+
+
+  \def\hebcopy{\R{העתק}}
+  \def\hebincl{\R{רצ"ב}}
+  \def\hebpage{\R{עמוד}}
+  \def\hebTo{\R{עד}}
+
+\def\מקףגדול{\L{--}}
+\def\מקףענק{\L{---}}
+
+\let\makafanak=\מקףענק
+\let\makafgadol=\מקףגדול 
+
+\def\hadgesh#1{\leavevmode\setbox0=\hbox{#1}%
+\kern-.025em\copy0\kern-\wd0
+\kern.05em\copy0\kern-\wd0
+\kern-.025em\raise.0433em\box0 }
+
+\let\הדגש=\hadgesh
+
+\def\הדגשש#1{\leavevmode\setbox0=\hbox{#1}% % "Heavier" printout.
+\kern-.025em\copy0\kern-\wd0
+\kern.05em\copy0\kern-\wd0
+\kern-.025em\raise.0433em\box0\raise-.0433em\box0 }
+
+\def\פיסקה#1{\item{#1}\hangindent=-\hangindent}
+\def\פסקה#1{\item{#1}\hangindent=-\hangindent}
+
+\def\פיסקהפיסקה#1{\itemitem{#1}\hangindent=-\hangindent}
+\def\פסקהפסקה#1{\itemitem{#1}\hangindent=-\hangindent}
+
+\def\piska#1{\item{#1}\hangindent=-\hangindent}
+
+\def\piskapiska#1{\itemitem{#1}\hangindent=-\hangindent}
+                      
+\def\שורהימין#1{\line{\R{#1 \hss}}}
+\def\שורהשמאל#1{\line{\R{\hss #1}}}
+\def\מרכז#1{\line{\R{\hss #1 \hss}}}
+
+  \def\גרש{\L{`}}
+  \let\geresh=\גרש
+
+\def\סגורגרש{\L{`}}
+\let\closegeresh=\geresh
+
+\def\פתחגרש{\L{\char39}}
+\let\opengeresh=\פתחגרש
+
+\def\openquote{\L{''}}
+\def\closequote{\L{``}}
+
+\def\leftquotation{\L{''}}
+\def\rightquotation{\L{``}}
+
+\let\פתחציטוט=\openquote
+\let\סגורציטוט=\closequote
+
+%  \input hebcal_newcode.sty
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                      Two side                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% When selecting the twoside.sty option (default in book.sty), The LR
+% and RL modes need to be set properly for things on the heading and
+% footing. This is done here.
+%
+\def\hebodd{\ifheb\beginR\Jerfootnote\leftmark\hfil \L{\rm\thepage}\endR
+            \else \sl \leftmark\hfil\rm\thepage
+            \fi
+	    }
+\def\hebeven{\ifheb\beginR\L{\rm\thepage}\hfil\Jerfootnote\rightmark\endR
+             \else\rm\thepage\hfil \sl \rightmark
+             \fi
+	     }
+\def\hebupper{\ifheb\else\uppercase\fi}
+
+\mark{{}{}}
+\def\ps@headings{
+\let\@mkboth\markboth
+\def\@oddfoot{}\def\@evenfoot{}
+\def\@evenhead{\hebeven }
+\def\@oddhead{\hbox{}\hebodd }
+\def\chaptermark##1{\markboth {\hebupper{\ifnum \c@secnumdepth
+>\m@ne
+ \@chapapp\ \thechapter. \ \fi ##1}}{}}
+ \def\sectionmark##1{\markright
+{\hebupper{\ifnum \c@secnumdepth >\z@
+ \ifheb\else\thesection.\fi  \ \fi ##1}}}}
+
+\def\ps@myheadings{\let\@mkboth\@gobbletwo
+\def\@oddhead{\hbox{}\hebodd }
+\def\@oddfoot{}
+\def\@evenhead{\hebeven\hbox{}}
+\def\@evenfoot{}\def\sectionmark##1{}
+\def\subsectionmark##1{}}
+
+% The line below would make the default style be twoside.
+% Revised to be one side.
+% \ps@headings \pagenumbering{arabic} \onecolumn
+\pagenumbering{arabic} \onecolumn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                      Misc                                %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Miscellaneous stuff that Yael put here.
+%
+
+
+% The following has been inserted to correct the appearance
+% of the number in newtheorem.
+% A similar correction in the definition of @opargbegintheorem
+% might also be needed, but I did not do it yet.
+% The @opargbegintheorem appearing here has not yet been changed.
+
+\def\@begintheorem#1#2{
+\it \trivlist \item[\hskip \labelsep{\bf #1\ \beginL #2\endL}]}
+\def\@opargbegintheorem#1#2#3{\it \trivlist
+      \item[\hskip \labelsep{\bf #1\ #2\ (#3)}]}
+
+\def\undertext#1{$\underline{\hbox{#1}}$}
+
+
+\def\appendix{\par
+  \setcounter{chapter}{0}
+  \setcounter{section}{0}
+  \def\@chapapp{\ifheb piqtg\else Appendix\fi}
+  \def\thechapter{\prm{\Alph{chapter}}}}
+
+\def\thebibliography#1{\section*{\sethebrew\R{רשימת מקורות}\unsethebrew\@mkboth  
+  {\ifheb רשימת מקורות \else BIBLIOGRAPHY\fi }
+  {\ifheb רשימת מקורות \else BIBLIOGRAPHY\fi }
+  }\list
+  {\ifheb ]\else [\fi\arabic{enumi}\ifheb [\else ]\fi}
+  {\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+  \advance\leftmargin\labelsep
+  \usecounter{enumi}}
+  \def\newblock{\hskip .11em plus .33em minus .07em}
+  \sloppy\clubpenalty4000\widowpenalty4000
+  \sfcode`\.=1000\relax}
+
+\def\section{\@startsection {section}{1}{-18pt}{-3.5ex plus -1ex minus 
+ -.2ex}{2.3ex plus .2ex}{\Large\bf}}
+\def\subsection{\@startsection{subsection}{2}{-18pt}{-3.25ex plus -1ex minus 
+ -.2ex}{1.5ex plus .2ex}{\large\bf}}
+\def\subsubsection{\@startsection{subsubsection}{3}{-18pt}{-3.25ex plus
+ -1ex minus -.2ex}{1.5ex plus .2ex}{\normalsize\bf}}
+\def\paragraph{\@startsection
+ {paragraph}{4}{-18pt}{3.25ex plus 1ex minus .2ex}{-1em}{\normalsize\bf}}
+\def\subparagraph{\@startsection
+ {subparagraph}{4}{\parindent}{3.25ex plus 1ex minus 
+ .2ex}{-1em}{\normalsize\bf}}
+% reorder theorem number components. Tested inside section (not
+% subsection)
+\def\@xnthm#1#2[#3]{\expandafter\@ifdefinable\csname #1\endcsname
+{\@definecounter{#1}\@addtoreset{#1}{#3}%
+\expandafter\xdef\csname
+the#1\endcsname{\expandafter\@thmcounter{#1}\@thmcountersep\noexpand
+\csname the#3\endcsname}
+\global\@namedef{#1}{\@thm{#1}{#2}}\global\@namedef{end#1}{\@endtheorem}}}
+
+%original:
+% 
+% \def\@xnthm#1#2[#3]{\expandafter\@ifdefinable\csname #1\endcsname
+% {\@definecounter{#1}\@addtoreset{#1}{#3}%
+% \expandafter\xdef\csname 
+% the#1\endcsname{\expandafter\noexpand
+%   \csname the#3\endcsname \@thmcountersep \@thmcounter{#1}}%
+% \global\@namedef{#1}{\@thm{#1}{#2}}\global\@namedef{end#1}{\@endtheorem}}}
+% 
+
+
+\def\@makechapterhead#1{             % Heading for \chapter command
+  \vspace*{50pt}                     % Space at top of text page.
+  {  \parindent 0pt \raggedleft
+    \ifnum \c@secnumdepth >\m@ne     % IF secnumdepth > -1 THEN
+      \huge\bf  \@chapapp 
+                \hskip 10pt
+                \thechapter % Print 'Chapter' and number.
+%     \huge\bf  \@chapapp \thechapter % Print 'Chapter' and number.
+      \hskip 20pt 
+      \par 
+      \vskip 20pt \fi                  % Space between number and title.
+%  \fi
+    \Huge \bf                        % Title.
+    #1\par 
+    \nobreak                         % TeX penalty to prevent page break.
+    \vskip 40pt                      % Space between title and text.
+  } }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%         changed by Meir Pinhasov at 26.11.90                     %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\shem@definition{\ifheb הגדרה\else Definition\fi}
+\def\shem@theorem{\ifheb משפט \else Theorem\fi}
+\def\shem@lemma{\ifheb למה \else Lemma\fi}
+\def\shem@claim{\ifheb טענה\else Claim\fi}
+\def\shem@proof{\ifheb הוכחה \else Proof\fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Bilingual Table of Contents and List of Figures       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 1) Section headings are typeset with the default global direction
+% 2) Text in section headings in the reverse language should
+%    have a protection for the reflection command, as in:
+%      \protect\L{English Text}
+% 3) Table of contents and list of figures should be typeset with
+%    the \starttoc{toc} and \starttoc{lof} commands.
+% 4) The table of contents and list of figures will be typeset in
+%    main direction in effect where the above commands are placed.
+% (The changes needed for the above to work can be found in a
+%  previous section of this file)
+%
+%%%%% Bilingual table of contents and list of figures.
+% Support for printing the table of contents and list of figures
+% twice, one in Hebrew and once in English was added (required for
+% thesis submitted to the Technion). To achieve this do the following:
+%
+% 1) Use the \bxxx version of the sectioning commands in the text
+%    instead of the \xxx version (xxx is one of: chapter section
+%    subsection subsubsection caption).
+% 2) Syntax of the \bxxx command is \bxxx{Hebrew text}{English text}.
+%    Both arguments are typeset in proper direction by default (no need to
+%    change direction for the text inside). To use English text in the
+%    Hebrew text or vice versa see section 2) above.
+% 3) The section header inside the document will be typeset in the
+%    global direction in effect at the time. i.e. The {Hebrew text} will
+%    be typeset if \sethebrew is in effect and {English Text} otherwise
+% 4) The table of contents an list of figures should be included in
+%    the text with the \starttoc{toc} and \starttoc{lof} commands.
+%    These tables will be typeset in the Hebrew version if \sethebrew
+%    is in effect in the place where \starttoc is typeset, otherwise they
+%    will be typeset in English.
+% 5) LaTeX rewrites the \jobname.toc and \jobname.lof
+%    after the \starttoc is typeset and creates new ones. To typeset
+%    a table twice within the same document, either run LaTeX on your job
+%    once and then add the command \nofiles to the preamble 
+%    and run it again, or create
+%    new copies of the \jobname.toc and \jobname.lof, say \jobname.eoc and
+%    \jobname.eof and use \starttoc{eoc} and \starttoc{eof} for the second
+%    version of the tables.
+%
+%    Yaniv version 0.6.1
+
+\def\bchapter#1#2{\chapter{\protect\ifheb
+ #1 \protect\else #2 \protect\fi}}
+\def\bsection#1#2{\section{\protect\ifheb
+ #1 \protect\else #2 \protect\fi}}
+\def\bsubsection#1#2{\subsection{\protect\ifheb
+ #1 \protect\else #2 \protect\fi}}
+\def\bsubsubsection#1#2{\subsubsection{\protect\ifheb
+ #1 \protect\else #2 \protect\fi}}
+
+\def\bcaption#1#2{\caption[\protect\ifheb
+ #1 \protect\else #2 \protect\fi]{\protect\R{#1}\\ \protect\L{#2}}}

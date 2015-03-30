@@ -1,0 +1,59 @@
+\Draw   \Ragged(4)    %%%%%%%%% tree %%%%%%%%%%%
+
+\Define\DotsToLoc(1){   \MarkLoc(x)  
+   \CSeg\DoLine(x,#1)(5){
+          \MoveF(-3)\LineF(1)} }
+\PictNode(3){     \IF \EqText(,#2) \THEN \Text(--#1--) \ELSE
+  \ThreeDim(#1,#2,#3)    
+     \MarkPLoc(1)  \Line(50,0,0)   \MarkPLoc(2) \Line(0,50,0)
+     \MarkPLoc(3)  \Line(-50,0,0)  \MarkPLoc(4) \Line(0,-50,0)
+     \Move(0,0,50)  \MarkPLoc(1') 
+     \Move(50,0,0)  \MarkPLoc(2')  {\Line(0,0,-50)}
+     \Line(0,50,0)  \MarkPLoc(3')  {\Line(0,0,-50)}
+     \Line(-50,0,0) \MarkPLoc(4')  {\Line(0,0,-50)}
+     \Do(1,4){  \Do(1,4){
+        \MarkPLoc(p\Val\I) \I+1; \Move(0,0,-16.66666)
+        } \Move(16.66666,0,66.66666)  }
+     \TwoDim
+        \MoveToLL(3,4)(4',1') \DotsToLoc(1') \DotsToLoc(1)
+        \MoveToLL(2,3)(1',2') \DotsToLoc(1') 
+        \PaintQuad(p0,p1,p5,p4)      \PaintQuad(p2,p3,p7,p6)
+        \PaintQuad(p5,p6,p10,p9)     \PaintQuad(p8,p9,p13,p12)
+        \PaintQuad(p10,p11,p15,p14)
+        \MoveToLoc(1)  \CSeg[0.5]\Move(1,2) \Move(0,-5)
+        \EntryExit(0,1,0,0)  \Text(--(#1,#2,#3)--)
+     \EndTwoDim
+  \EndThreeDim      \FI   }
+
+\Define\MyEdge(2){\EdgeTo(#1,#2,0,1)} \TreeAlign(V,0,-1)(0,0,0)
+\TreeSpec(o,\OvalNode&r,\RectNode)()(\MyEdge)
+\TreeSpace(C,10,15)     \AdjTree(A,0..0,0,-201,201,0 )  
+\Tree()(
+  3,o,perspective~~projections~~eye~at~{(x,y,z)},, //
+  2,r,125,100,-100 & 0,r,75,75,-100 & 0,r,125,75,-100 //
+  0,r,125,125,-200 & 0,r,75,75,-200 //)
+
+%%%%%%%%% graph %%%%%%%%%%%
+
+\MoveToNode(2..1,2.5,-1)   \MarkLoc(1)  
+\MoveToNode(1..2,1,-1.5)   \MarkLoc(2)  
+\CSeg\Scale(1,2)   \Scale(0.16666,0.14286)
+
+\Axis(1,2)(E3,&&&&&&&)
+\Axis(1,2)(S3,0&1&2&3&4&5&6)
+    \MoveToLoc(1)
+\Table\x{ -1,2 & 0,5 & 4,-3 & -1,-4 & -2,0 }
+   \PenSize(1.5pt)  \Move(1,0)  \x(0,99){\Line}  
+\Table\x{ 3,3 & 1,-5 & -1,-2 & -3,4 }
+                    \Move(1,4)  \x(0,99){\Line}        
+
+%%%%%%%%% DraTeX+AlDraTeX logos %%%%%%%%%%%
+
+\it \TextNode(1){\Text(--#1--)}
+\MoveToNode(0..0,0,1) \Units(1pt,1pt) \Move(-60,0)
+\EntryExit(1,1,0,0)  \Node(d)(--Dra\TeX--)
+\MoveToNode(2..0,-1,1)  \Move(0,40) \EntryExit(-1,-1,0,0)
+\Node(a)(--Al~~Dra~~\TeX--)      \PenSize(0.75pt)
+\ArrowHeads(2) \CurvedEdgeAt(d,-1,-1,a,0,1)(225,1.1,70,1.3)
+
+\EndDraw

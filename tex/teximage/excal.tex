@@ -1,0 +1,19 @@
+\newbox\excalbox
+\newdimen\excalwd
+\font\excala=excala at 72.27truept
+\font\excalb=excalb at 72.27truept
+\font\excalc=excalc at 72.27truept
+\setbox\excalbox=\vbox{\hbox{%
+\excala\char0\char1\char2\char3\char4}}
+\excalwd=\wd\excalbox
+\setbox\excalbox=\hbox{\vbox{\hsize=\excalwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\excala\char0\char1\char2\char3\char4}
+\hbox{\excala\char5\char6\char7\excalb\char0\char1}
+\hbox{\excalb\char2\char3\char4\char5\char6}
+\hbox{\excalb\char7\excalc\char0\char1\char2\char3}}}
+\ifx\parbox\undefined
+    \def\setexcal{\box\excalbox}
+\else
+    \def\setexcal{\parbox{\wd\excalbox}{\box\excalbox}}
+\fi

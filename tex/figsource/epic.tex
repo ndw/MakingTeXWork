@@ -1,0 +1,41 @@
+\documentstyle[epic]{article}
+
+\pagestyle{empty}
+
+\makeatletter
+\long\def\jputfile#1#2{\openin\@datafile = #1
+\@stillmoretrue
+\loop
+\ifeof\@datafile\relax\else\read\@datafile to\@dataline\fi
+%if file nonexistent, do nothing.
+\ifeof\@datafile\@stillmorefalse
+\else\ifx\@dataline\@empty \relax
+     \else
+\expandafter\expandafter\expandafter\jput\expandafter\splittwoargs%
+\@dataline{#2}
+     \fi
+\fi
+\if@stillmore
+\repeat
+\closein\@datafile
+}
+\makeatother
+
+\begin{document}
+
+\unitlength = 1mm
+\begin{picture}(50,100)(0,0)
+\put(0,0){\tiny \grid(50,50)(5,5)[0,0]}
+\put(25,25){\circle{50}}
+\drawline(15,0)(20,5)(30,10)(50,35)
+\drawline[-50](10,5)(15,10)(25,15)(45,40)
+\thicklines
+\dottedline{1.4}(5,10)(10,15)(15,25)(40,45)
+\dashline{2}(0,15)(5,20)(10,30)(35,50)
+\thinlines
+\begin{drawjoin}
+\jputfile{epicdata}{\picsquare}
+\end{drawjoin}
+\end{picture}
+
+\end{document}

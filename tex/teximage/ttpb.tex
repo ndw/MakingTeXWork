@@ -1,0 +1,18 @@
+\newbox\ttpbbox
+\newdimen\ttpbwd
+\font\ttpba=ttpba at 72.27truept
+\font\ttpbb=ttpbb at 72.27truept
+\setbox\ttpbbox=\vbox{\hbox{%
+\ttpba\char0\char1\char2\char3\char4}}
+\ttpbwd=\wd\ttpbbox
+\setbox\ttpbbox=\hbox{\vbox{\hsize=\ttpbwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\ttpba\char0\char1\char2\char3\char4}
+\hbox{\ttpba\char5\char6\char7\ttpbb\char0\char1}
+\hbox{\ttpbb\char2\char3\char4\char5\char6}
+\hbox{\ttpbb\char7\char8\char9\char10\char11}}}
+\ifx\parbox\undefined
+    \def\setttpb{\box\ttpbbox}
+\else
+    \def\setttpb{\parbox{\wd\ttpbbox}{\box\ttpbbox}}
+\fi

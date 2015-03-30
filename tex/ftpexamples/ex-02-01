@@ -1,0 +1,6 @@
+\documentstyle[ora]{book}
+\begin{document}
+   \input{intro}
+   \input{chap1}
+   \input{chap2}
+\end{document}

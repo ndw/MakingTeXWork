@@ -1,0 +1,924 @@
+<preface>
+<prefaceinfo>
+<pubdate>$Date: 2002/09/17 11:46:03 $</pubdate>
+<releaseinfo>$Revision: 1.2 $</releaseinfo>
+</prefaceinfo>
+<title>Forword to the SourceForge Edition</title>
+
+<para>I wrote <citetitle>Making TeX Work</citetitle> in 1994. It has
+not been updated and is unquestionably out-of-date. In fact, the &TeX;
+sources are still in LaTeX 2.09.</para>
+
+<para>It is provided here for the benefit of those readers who would
+like to read it (it has been out of print for several years)
+or its &TeX; sources.</para>
+
+<para>I have no plans to update it.</para>
+
+<important>
+<para>The conversion from &TeX; to XML <emphasis>is not</emphasis>
+complete. There are lots of &TeX;isms left in the XML version. And
+tables that haven't been converted. And figures that haven't been
+converted. And probably lots of other stuff. I do plan, over time, to
+fix those errors so that the XML sources are a reasonable reflection
+of the published book.</para>
+</important>
+
+<section><title>Acknowledgments</title>
+
+<para>My thanks to Tim O'Reilly for agreeing to republish this book
+under the <link linkend="gfdl">GNU Free Documentation License</link>.
+</para>
+
+</section>
+
+</preface>
+
+<preface>
+<prefaceinfo>
+<pubdate>$Date: 2002/09/17 11:46:03 $</pubdate>
+<releaseinfo>$Revision: 1.2 $</releaseinfo>
+</prefaceinfo>
+<title>Preface</title>
+
+<para>&TeX; is a tool for creating professional quality, typeset pages of any kind.
+It is particularly good, perhaps unsurpassed, at
+typesetting mathematics<indexterm><primary>typesetting</primary><secondary>mathematics</secondary></indexterm>
+<indexterm><primary>mathematics</primary><secondary>typesetting</secondary></indexterm>; 
+as a result, it is widely used in scientific writing.  Some of its other
+features, like its ability to handle
+multiple languages<indexterm><primary>typesetting</primary><secondary>multilingual documents</secondary></indexterm>
+<indexterm><primary>international</primary><secondary>typesetting</secondary></indexterm> in the same document and the fact that the
+content of a document (chapters, sections, equations, tables, figures, etc.)
+can be separated from its form (typeface, size, spacing, indentation, etc.)
+are making &TeX; more common outside of scientific and academic circles.
+</para>
+
+<para>Designed by Donald Knuth<indexterm><primary>Knuth, Donald</primary></indexterm> in the late 1970s, more than a
+decade of refinement has gone into the program called <quote>&TeX;</quote> today.  The
+resulting system produces publication-quality output while maintaining
+portability across an extremely wide range of platforms.
+</para>
+
+<para>Remarkably, &TeX; is free.  This fact, probably as much as any other, has
+contributed to the development of a complete <quote>&TeX; system</quote> by literally
+thousands of volunteers.  &TeX;, the program, forms the core of this
+environment and is now supported by hundreds of tools.
+</para>
+
+<section id="sec.implementation"><title>Why Read This Book?</title>
+
+<para>This book is for anyone who uses &TeX;.  Novices will need at least one other
+reference, because this book does not describe the nuts and bolts of writing
+documents with &TeX; in any great detail.
+</para>
+
+<para>If you are new to &TeX;, there is much to learn.  There are many books that
+describe how to use &TeX;.  However, the focus of this book is mostly at a
+higher level.  After digesting Chapter&nbsp;<xref role="label" linkend="chap.tex"/>,
+<emphasis><xref role="label" linkend="chap.tex"/></emphasis>, you should be able to proceed through the
+rest of the book without much difficulty even if you have never seen &TeX; before.  So, if you are a system administrator interested in learning enough
+about these programs to install and test them for your users, you should be
+all set.  If you are interested in learning how to write documents with &TeX;,
+this book will be helpful, but it will not be wholly sufficient.
+</para>
+
+<para>Why do you need this book at all?  Although many individual components of the
+&TeX; system are well documented, there has never before been a complete
+reference to the whole system.  This book surveys the entire world of &TeX; software and helps you see how the various pieces are related.
+</para>
+
+<para>A functioning &TeX; system is really a large collection of programs that
+interact in subtle ways to produce a document that, when formatted by &TeX;,
+prints the output you want.  All the different interactions that take place
+ultimately result in less work for you, the writer, even though it may seem
+like more work at first.  Heck, it may <emphasis>be</emphasis> more work at first, but in
+the long run, the savings are tremendous.
+</para>
+
+<para>Many books about &TeX; refer the reader to a <quote>local guide</quote> for more
+information about previewing and printing documents and what facilities exist
+for incorporating special material into documents (like special fonts and
+pictures and figures).  In reality, very few local guides exist.
+</para>
+
+<para>The &TeX; environment is now mature and stable enough to support a more
+<quote>global guide.</quote>  That is what this book attempts to be.  It goes into detail
+about previewing and printing, about incorporating other fonts, about adding
+pictures and figures to your documents, and about many other things overlooked
+by other books.
+</para>
+
+<para>Because fonts play a ubiquitous role in typesetting, this book is also about
+&MF;, the tool that Donald Knuth<indexterm><primary>Knuth, Donald</primary></indexterm> designed for creating
+fonts.
+</para>
+
+</section>
+<section><title>Scope of This Book</title>
+
+<para>Here's how the book is laid out.
+</para>
+
+<para><emphasis role="bold">Part&nbsp;<xref role="label" linkend="part.intro"/>: <emphasis><xref role="label" linkend="part.intro"/></emphasis></emphasis>.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.tex"/>, <emphasis><xref role="label" linkend="chap.tex"/></emphasis>.  If you don't know
+anything about &TeX; at all, this chapter will help you get started.  If
+you're a system adminstrator charged with the task of installing and
+maintaining &TeX; tools, you'll get enough information to do the job.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.editing"/>, <emphasis><xref role="label" linkend="chap.editing"/></emphasis>.  An overview of some
+environments that can make working with &TeX; documents easier.  It describes
+some editors that <quote>understand</quote> &TeX;, how to integrate &TeX; into a
+<quote>programmer's editor,</quote> spellchecking, revision control, and other aspects
+of &TeX;nical editing.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.running"/>, <emphasis><xref role="label" linkend="chap.running"/></emphasis>.  The mechanics of
+running &TeX;, the program.  It discusses what things &TeX; needs to be able to
+run, how to start &TeX;, command-line options, leaving &TeX;, and recovery from
+errors.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.macpack"/>, <emphasis><xref role="label" linkend="chap.macpack"/></emphasis>.  Overview of &TeX; macro packages.  This chapter describes how to make a format file, the major
+general-purpose writing packages, some special-purpose writing packages,
+how to make slides for presentations, and how to handle color in &TeX;.
+</para>
+
+<para><emphasis role="bold">Part&nbsp;<xref role="label" linkend="part.elements"/>: <emphasis><xref role="label" linkend="part.elements"/></emphasis></emphasis>.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>, <emphasis><xref role="label" linkend="chap.fonts"/></emphasis>.  This chapter explores
+the issues that need to be addressed when using fonts.  Many of these issues
+are not particularly &TeX;-related, but &TeX; is very flexible, and it's
+important to understand the tradeoffs that must be made.  This chapter also
+examines some &TeX;-specific issues: font selection, files that &TeX; needs,
+automatic font generation, and virtual fonts.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.pictures"/>, <emphasis><xref role="label" linkend="chap.pictures"/></emphasis>.  How many ways are
+there to include pictures and figures in a &TeX; document?  Lots and lots of
+ways.  This chapter examines them all.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.foreign"/>, <emphasis><xref role="label" linkend="chap.foreign"/></emphasis>.  &TeX; is well
+qualified to do international typesetting.  This chapter looks at the issues
+that are involved: representing international symbols in your input file, what
+&TeX; produces, getting the right fonts, multiple languages in the same
+document, and macro packages and style files that solve some of these
+problems.  Some strategies for dealing with very difficult languages (like
+Japanese and Arabic) are also explored.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.printing"/>, <emphasis><xref role="label" linkend="chap.printing"/></emphasis>.  What goes in has
+to come out.  This chapter tells the what, where, why, and how of printing
+your documents.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.preview"/>, <emphasis><xref role="label" linkend="chap.preview"/></emphasis>.  Save paper; preview
+your documents before you print them.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.online"/>, <emphasis><xref role="label" linkend="chap.online"/></emphasis>.  Online documentation
+is becoming increasingly popular.  This chapter explores different ways that both
+typeset and online documentation can be produced from the same set
+of input files.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.mf"/>, <emphasis><xref role="label" linkend="chap.mf"/></emphasis>.  Sometimes it is necessary or
+desirable to create a special version of a standard &TeX; font.  Maybe you
+really need the standard 10pt font at 11.3pt.  This chapter will tell you how
+to work with existing &MF; fonts.  It <emphasis>won't</emphasis> tell you how to create your
+own fonts; that's a whole different story.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.bibtex"/>, <emphasis><xref role="label" linkend="chap.bibtex"/></emphasis>.  Maintaining a
+bibliographic database can be a great timesaver.  This chapter looks at the
+&BibTeX; program and other tools for building and using bibliographic
+databases.  It also discusses the creation of indexes and glossaries.
+</para>
+
+<para><emphasis role="bold">Part&nbsp;<xref role="label" linkend="part.tools"/>: <emphasis><xref role="label" linkend="part.tools"/></emphasis></emphasis>.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.freetex"/>, <emphasis><xref role="label" linkend="chap.freetex"/></emphasis>.  Many &TeX; environments are freely available.  This chapter describes public domain,
+free, and shareware versions of &TeX;.
+</para>
+
+<para>
+Chapter&nbsp;<xref role="label" linkend="chap.commercialtex"/>, <emphasis><xref role="label" linkend="chap.commercialtex"/></emphasis>.  A
+large, complex system like &TeX; can be overwhelming (although I hope less so
+after you read this book ;-).  One of the advantages of selecting a commercial
+implementation of &TeX; is that some form of customer support is usually
+provided.  Still other commercial implementations offer features not found in
+any free releases.  This chapter describes several commercial &TeX; releases.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.mac"/>, <emphasis><xref role="label" linkend="chap.mac"/></emphasis>.  Many issues
+discussed in this book apply equally to all platforms, including the Macintosh
+platform, but the Mac has its own special set of features.  This chapter looks
+at some versions of &TeX; and other tools designed specifically for use on the
+Mac.
+</para>
+
+<para>Chapter&nbsp;<xref role="label" linkend="chap.utils"/>, <emphasis><xref role="label" linkend="chap.utils"/></emphasis>.  This chapter lists many
+of the the utilities available in the CTAN archives and provides a brief
+description of what they do.
+</para>
+
+<para>Appendix&nbsp;<xref role="label" linkend="chap.fileext"/>, <emphasis><xref role="label" linkend="chap.fileext"/></emphasis>.  Lots of files can
+be identified by their extensions.  This appendix lists the extensions that
+are most often seen in conjunction with &TeX; and describes what the
+associated files contain.
+</para>
+
+<para>Appendix&nbsp;<xref role="label" linkend="app.fonts"/>, <emphasis><xref role="label" linkend="app.fonts"/></emphasis>.  Examples of many
+&MF; fonts available from the CTAN archives.
+</para>
+
+<para>Appendix&nbsp;<xref role="label" linkend="app.resources"/>, <emphasis><xref role="label" linkend="app.resources"/></emphasis>.  A complete
+list of the resources described in this book.  
+</para>
+
+<para>Appendix&nbsp;<xref role="label" linkend="app.examples"/>, <emphasis><xref role="label" linkend="app.examples"/></emphasis>.  This appendix
+contains examples (scripts, batch files, programs) that seemed too long to
+place in the running text.
+</para>
+
+<para><emphasis>Bibliography</emphasis>.  Where I learned what I know.  Also, where you can look
+for more information about specific topics.
+</para>
+
+</section>
+<section><title>Conventions Used in This Book</title>
+
+<para>The following typographic conventions are used in this book:
+</para>
+
+<variablelist>
+<varlistentry>
+<term><emphasis>Italic</emphasis></term>
+<listitem>
+<para> is used for filenames, directories, user commands, program names, and macro packages (except where the distinctive logo type is used).  Sometimes italics
+      are used in the traditional way for emphasis of new ideas and important
+      concepts.
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>Typewriter</literal></term>
+<listitem>
+<para> is used for program examples, FTP sites, &TeX;       control sequences, and 
+      little bits of &TeX; syntax that appear in running text (for example,
+      typewriter text in a reference to the &LaTeX; <literal>picture</literal>
+      environment is a clue that &LaTeX; literally uses the word <quote>picture</quote>
+      to identify this environment).
+</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>\bf Typewriter Bold</literal></term>
+<listitem>
+<para> is used in examples to show the user's actual
+      input at the terminal.
+</para>
+
+<para>
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>\it Typewriter Italic</literal></term>
+<listitem>
+<para> identifies text that requires a
+      context-specific substitution.  For example, <emphasis><literal>filename</literal></emphasis>
+      in an example would be replaced by some particular filename.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Footnotes</term>
+<listitem>
+<para> are used for parenthetical remarks.  Sometimes, lies are
+      spoken to simplify the discussion, and the footnotes restore the lie to
+      the truth. (And sometimes they don't ;-)
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Filename extensions, like <quote><emphasis>.tex</emphasis></quote> in <filename>book.tex</filename>, are shown
+in uppercase letters when referring to a particular type of file. For example,
+a &TeX; Font Metric or <filename role="extension">TFM</filename> file would be <filename>somefile.tfm</filename>. The
+actual extension of the file may be different (upper or lowercase, longer or
+shorter) depending on your operating environment.
+</para>
+
+<para>When the shell prompt is shown in an example, it is shown as a dollar sign,
+<markup>\$</markup>.  You should imagine that this is your system's
+prompt, which might otherwise be <literal>&lt;!-- </literal>, <literal>C&gt;</literal>, -->
+<literal>[C:\]</literal>, or a dialog box.
+</para>
+
+<para>When spaces are important in an example, the <quote>{&nbsp;}</quote> character is used
+to emphasize the spaces.  Effective,&nbsp; isn't&nbsp; it?
+</para>
+
+<para>In some places, I refer to specific keys that you should press.  When it's
+important that I mean pressing particular keys and not typing something, I
+emphasize the keys.  For instance, an example that includes <keycap>Enter</keycap> means
+that you should literally press the Enter or Return key.  The sequence
+<keycap>Ctrl-D</keycap> means that you should press and hold the <quote>Control</quote> and <quote>d</quote>
+keys simultaneously.  Control-key combinations aren't case sensitive, so you
+needn't press the shift key.
+</para>
+
+<!-- Sometimes I say things that I don't expect you to take seriously. -->
+<!-- I've put the Usenet international standard smiley face -->
+<!-- symbol\footnote{;-)!} <quote>;-)</quote> next to my little jokes if I'm afraid that -->
+<!-- they aren't very good and that you might take me seriously where I'm -->
+<!-- joking. -->
+
+</section>
+<section><title>How to Get &TeX;</title>
+
+<para>&TeX; and the other programs mentioned in this book are available from a
+number of places.  It's impossible to list all of the places where you might
+find any given tool, but there is one place where you will almost certainly
+find <emphasis>every</emphasis> tool: the Comprehensive &TeX; Archive Network (CTAN)<indexterm><primary sortas="Comprehensive tex Archive Network">Comprehensive &TeX; Archive Network|see{CTAN}</primary></indexterm>.
+</para>
+
+<para>This network is a fully-mirrored anonymous FTP hierarchy in three countries.
+Always use the FTP site<indexterm><primary>CTAN</primary><secondary>FTP access</secondary></indexterm> that is geographically closest
+to you.  The following table lists the current members of CTAN as of
+July, 1993:
+</para>
+
+<table>
+<title></title>
+<tgroup cols="4">
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="left"/>
+<colspec align="left"/>
+<thead>
+<row>
+  <entry>Geographic Location</entry>
+  <entry>Site</entry>
+  <entry>IP Address</entry>
+  <entry>Top Level Directory</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>United States</entry>
+  <entry>\tt ftp.shsu.edu</entry>
+  <entry>192.92.115.10</entry>
+  <entry>\it /tex-archive </entry>
+</row>
+<row>
+  <entry>England</entry>
+  <entry>\tt ftp.tex.ac.uk</entry>
+  <entry>131.151.79.32</entry>
+  <entry>\it /tex-archive </entry>
+</row>
+<row>
+  <entry>Germany</entry>
+  <entry>\tt ftp.uni-stuttgart.de</entry>
+  <entry>129.69.8.13</entry>
+  <entry>\it /tex-archive </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+
+<para>
+You may also access the CTAN archives by electronic mail<indexterm><primary>CTAN</primary><secondary>e-mail access</secondary></indexterm> if you do not have FTP access.  For up-to-date instructions about the
+mail server, send the single-line message <literal>help</literal> to
+<filename>fileserv@shsu.edu</filename>.
+</para>
+
+<section><title>Where Are the Files?</title>
+
+<para>Every CTAN mirror site has the same well-organized 
+directory structure<indexterm><primary>CTAN</primary><secondary>directory structure</secondary></indexterm>.  
+The top-level
+directory also contains a complete catalog of current files organized by name,
+date, and size.  The catalogs are named <filename>FILES.byname</filename>,
+<filename>FILES.bydate</filename>, and <filename>FILES.bysize</filename>, respectively, in the top level
+directory.  The top-level directory contains the following subdirectories:
+</para>
+
+<screen role="fixme"><![CDATA[
+<table>
+<title></title>
+<tgroup cols="1">
+<colspec align="left">
+<colspec align="left">
+<thead>
+<row>
+  <entry>Directory</entry>
+  <entry>Description of Contents </entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>tools</entry>
+  <entry>Archiving tools (<command>unzip</command>, <command>tar</command>, <command>compress</command>, etc.) </entry>
+</row>
+<row>
+  <entry>biblio</entry>
+  <entry>Tools for maintaining bibliographic databases </entry>
+</row>
+<row>
+  <entry>digests</entry>
+  <entry>Electronic digests (&TeX;hax, UK&TeX;, etc.)</entry>
+</row>
+<row>
+  <entry>info</entry>
+  <entry>Free documentation, many good guides </entry>
+</row>
+<row>
+  <entry>dviware</entry>
+  <entry>Printing and previewing software </entry>
+</row>
+<row>
+  <entry>fonts</entry>
+  <entry>Fonts for &TeX; </entry>
+</row>
+<row>
+  <entry>graphics</entry>
+  <entry>Software for working with pictures and figures </entry>
+</row>
+<row>
+  <entry>help</entry>
+  <entry>Online help files, etc. </entry>
+</row>
+<row>
+  <entry>indexing</entry>
+  <entry>Indexing and glossary building tools </entry>
+</row>
+<row>
+  <entry>language</entry>
+  <entry>Multi-national language support </entry>
+</row>
+<row>
+  <entry>macros</entry>
+  <entry>Macro packages and style files </entry>
+</row>
+<row>
+  <entry>misc</entry>
+  <entry>Stuff that doesn't fit in any other category </entry>
+</row>
+<row>
+  <entry>support</entry>
+  <entry>Tools for running and supporting &TeX;</entry>
+</row>
+<row>
+  <entry>systems</entry>
+  <entry>OS-specific programs and files</entry>
+</row>
+<row>
+  <entry>web</entry>
+  <entry>Sources for &TeX; programs (in &Web;) </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+]]></screen>
+
+<para>The archives at <literal>ftp.shsu.edu</literal> and <literal>ftp.tex.ac.uk</literal> also support
+<command>gopher</command><indexterm><primary>CTAN</primary><secondary>gopher access</secondary></indexterm> access to the archives.  The UK
+<command>gopher</command> supports indexed access to the archives.  A World Wide Web (hypertext) interface<indexterm><primary>CTAN</primary><secondary>hypertext access (World Wide Web)</secondary></indexterm> to the
+archives is available from:
+</para>
+
+<screen> 
+http://jasper.ora.com/ctan.html
+</screen>
+
+<para>This interface includes brief descriptions of many packages and the ability to
+perform keyword and date searches.
+</para>
+
+</section>
+<section><title>Getting Software Without FTP</title>
+
+<para>The electronic alternatives<indexterm><primary>CTAN</primary><secondary>other electronic access</secondary></indexterm> to FTP,
+described in the section <quote><xref role="label" linkend="sec.gettingexamples"/></quote> of this chapter are
+also viable alternatives for getting software from the CTAN archives.
+</para>
+
+<para>In addition, there are a number of ways to get distributions through
+nonelectronic<indexterm><primary>CTAN</primary><secondary>nonelectronic access</secondary></indexterm> channels.  The names and
+addresses of these sources are listed in Appendix&nbsp;<xref role="label" linkend="app.resources"/>,
+<emphasis><xref role="label" linkend="app.resources"/></emphasis>.
+</para>
+
+<para>
+You can get many of the popular &TeX; distributions on diskette from the
+&TeX; Users Group (TUG)<indexterm><primary sortas="TeX User's Group (TUG)">&TeX; Users Group (TUG)</primary><secondary sortas="getting TeX from">getting &TeX; from</secondary></indexterm>.  Emacs, <command>Ghostscript</command>, and other packages by the
+Free Software Foundation (FSF)<indexterm><primary>Free Software Foundation (FSF)</primary><secondary sortas="getting tex">getting &TeX;</secondary></indexterm> are available on tape directly from the FSF.  You may also find large
+bulletin board systems that support &TeX; (for example, Channel1 in Cambridge,
+MA)
+</para>
+
+</section>
+<section id="sec.gettingexamples"><title>Getting Examples From This Book</title>
+
+<para>All of the substantial code fragments and programs printed in this book are
+available online.  The examples<indexterm><primary>examples (getting)</primary></indexterm> in this book are
+all in <command>Perl</command><indexterm><primary sortas="Perl TeX examples">Perl &TeX; examples</primary></indexterm>, a language
+for easily manipulating text, files, and processes. 
+I decided to use <command>Perl</command> simply because it
+is available for every platform
+discussed in this book.  It is the only <quote>universal</quote> scripting language that
+will work under MS-DOS, OS/2, &unix;, and the Macintosh.  All of the scripts in
+this book can be converted to a different scripting language (the various
+&unix; shells or something like <command>4DOS</command>'s extended batch language for MS-DOS and
+OS/2) if you prefer.  I've tried to write the <command>Perl</command> scripts in a
+straightforward way so that any given task won't be too difficult.
+</para>
+
+<para>The examples are available electronically in a number of ways: by FTP,
+FTPMAIL, BITFTP, and UUCP. The cheapest, fastest, and easiest ways are listed
+first. If you read from the top down, the first one that works is probably the
+best. Use FTP if you are directly on the Internet. Use FTPMAIL if you are not
+on the Internet but can send and receive electronic mail to Internet sites
+(this includes CompuServe users). Use BITFTP if you send electronic mail via
+BITNET. Use UUCP if none of the above work.
+</para>
+
+<note>
+<para>
+The examples were prepared using a &unix; system. If you are running
+&unix;, you can use them without modification. If you are running on another
+platform, you may need to modify these examples to correct the end-of-line
+markers. For example, whereas under &unix; every line ends with a line feed
+character (the carriage return is implicit), under DOS every line must end
+with explicit carriage return and line feed characters.
+</para>
+</note>
+
+<section><title>FTP</title>
+
+<para>To use FTP<indexterm><primary>FTP (getting examples via)</primary></indexterm>, you need a machine with direct access
+to the Internet. A sample session is shown below.
+</para>
+
+<screen>
+\${\bf ftp ftp.uu.net} Connected to ftp.uu.net.  
+220 ftp.UU.NET FTP server (Version 6.34 Oct 22 14:32:01 1992) ready.  
+Name (ftp.uu.net:prefect): {\bf anonymous} 
+331 Guest login ok, send e-mail address as password.  
+Password:{\bf prefect@guide.com} \  \  \  {\rm\it\small (use your user name and host here)} 
+230 Guest login ok, access restrictions apply.  
+ftp>{\bf cd /published/oreilly/nutshell/maketexwork} 
+250 CWD command successful.  
+ftp>{\bf get README} 
+200 PORT command successful.  
+150 Opening ASCII mode data connection for README (xxxx bytes).  
+226 Transfer complete.  
+local: README remote: README 
+xxxx bytes received in xxx seconds (xxx Kbytes/s) 
+ftp>{\bf binary} \  \  {\rm\it\small (select binary mode for compressed files)} 
+200 Type set to I.
+{\rm\it\small  \ (Repeat get commands for the other files.}  
+{\rm\it\small  \  They are listed in the README file.)}  
+ftp>{\bf quit} 221 Goodbye.  
+\$
+</screen>
+
+</section>
+<section><title>FTPMAIL</title>
+
+<para>FTPMAIL<indexterm><primary>FTPMAIL (getting examples via)</primary></indexterm> is a mail server available to anyone
+who can send electronic mail to, and receive it from, Internet sites. This
+includes most workstations that have an email connection to the outside world
+and CompuServe<indexterm><primary>CompuServe (getting examples via)</primary></indexterm> users.  You do not need to
+be directly on the Internet.
+</para>
+
+<para>Send mail to <emphasis>ftpmail@decwrl.dec.com</emphasis>. In the message body, give the
+name of the anonymous FTP host and the FTP commands you want to run.  The
+server will run anonymous FTP for you and mail the files back to you.  To get
+a complete help file, send a message with no subject and the single word
+<literal>help</literal> in the body. The following is an example mail session that should get
+you the examples. This command sends you a listing of the files in the
+selected directory and the requested example files. The listing is useful if
+there's a later version of the examples you're interested in.
+</para>
+
+<screen>
+\${\bf mail ftpmail@decwrl.dec.com} 
+Subject: {\bf{}reply prefect@guide.com} \  \ {\rm\it\small (where you want files mailed)} 
+{\bf{}connect ftp.uu.net}
+{\bf{}chdir /published/oreilly/nutshell/maketexwork} 
+{\bf{}dir} 
+{\bf{}get README} 
+{\bf{}quit}
+</screen>
+
+<para>A signature at the end of the message is acceptable as long as it appears
+after <literal>quit</literal>.
+</para>
+
+</section>
+<section><title>BITFTP</title>
+
+<para>BITFTP<indexterm><primary>BITFTP (getting examples via)</primary></indexterm> is a mail server for BITNET users. You
+send it electronic mail messages requesting files, and it sends you back the
+files by electronic mail. BITFTP currently serves only users who send it mail
+from nodes that are directly on BITNET, EARN, or NetNorth. BITFTP is a public
+service of Princeton University.
+</para>
+
+<para>To use BITFTP, send mail containing your FTP commands to <emphasis>BITFTP@PUCC</emphasis>. For a complete help file, send <literal>HELP</literal> as the message body.
+</para>
+
+<para>The following is the message body you should send to BITFTP:
+</para>
+
+<screen> 
+FTP ftp.uu.net 
+NETDATA USER anonymous 
+PASS<emphasis>your Internet e-mail address</emphasis>      {\rm\it\small (not your BITNET address)} 
+CD /published/oreilly/nutshell/maketexwork 
+DIR 
+GET README 
+QUIT
+</screen>
+
+<para>Questions about BITFTP can be directed to <emphasis>MAINT@PUCC</emphasis> on BITNET.
+</para>
+
+</section>
+<section><title>UUCP</title>
+
+<para>UUCP<indexterm><primary>UUCP (getting examples via)</primary></indexterm> is standard on virtually all &unix; systems
+and is available for IBM-compatible PCs and Apple Macintoshes. The examples
+are available by UUCP via modem from UUNET; UUNET's connect-time charges
+apply. You can get the examples from UUNET whether you have an account or
+not. If you or your company has an account with UUNET, you will have a system
+with a direct UUCP connection to UUNET. Find that system, and type (as one
+line):
+</para>
+
+<screen>
+\$ <emphasis role="bold">uucp uunet&backslash;!&nbsp;/published/oreilly/nutshell/maketexwork/README &backslash;</emphasis> 
+<emphasis> \  \ yourhost</emphasis>&backslash;!&nbsp;/<emphasis>yourname</emphasis>/
+</screen>
+
+<para>The README file should appear some time later (up to a day or more) in the
+directory <emphasis>/usr/spool/uucppublic/yourname</emphasis>. If you don't have an account,
+but would like one so that you can get electronic mail, contact UUNET at
+703-204-8000.
+</para>
+
+<para>If you don't have a UUNET account, you can set up a UUCP connection to UUNET
+in the United States using the phone number 1-900-468-7727. As of this
+writing, the cost is 50 cents per minute. The charges will appear on your next
+telephone bill. The login name is <emphasis>uucp</emphasis> with no password. Your entry may vary
+depending on your UUCP configuration.
+</para>
+
+</section>
+<section><title>Gopher</title>
+
+<para>If you are on the Internet, you can use the
+<command>gopher</command><indexterm><primary>gopher (getting examples via)</primary></indexterm> facility to learn about
+online access to examples through the O'Reilly Online Information Resource.
+Access <emphasis>gopher.ora.com</emphasis> as appropriate from your site.
+</para>
+
+</section>
+</section>
+</section>
+<section><title>Versions of &TeX;</title>
+
+<para>The most recent versions of &TeX;<indexterm><primary sortas="tex">&TeX;</primary><secondary>versions</secondary></indexterm> and
+&MF;<indexterm><primary sortas="metafont">&MF;</primary><secondary>versions</secondary></indexterm> are version 3.1415 and version 2.71,
+respectively.  Version 3 of &TeX; introduced several new features designed to
+improve support for non-English languages (including the use of 8-bit input
+and some refinements to hyphenation control).  If you use an older version of
+&TeX;, you should upgrade.
+</para>
+
+<para>Donald Knuth<indexterm><primary>Knuth, Donald</primary></indexterm> has specified that &TeX;'s version number
+converges to $&pi;$, therefore version 3.1415 is only the fourth minor revision
+after version 3.  The next minor revision will be version 3.14159.  Similarly,
+&MF;'s version number converges to $e$ (2.7182818284$&hellip;$).
+</para>
+
+</section>
+<section><title>Implementations and Platforms</title>
+
+<para>The interface that &TeX; presents to the writer is very consistent.  Most of
+the examples described in this book are applicable to every single
+implementation<indexterm><primary sortas="tex">&TeX;</primary><secondary>implementations</secondary></indexterm><indexterm><primary sortas="tex">&TeX;</primary><secondary>platforms</secondary></indexterm>
+of &TeX;.  However, &TeX; is not a closed system.  It is possible to step
+outside of &TeX; to incorporate special elements into your document or take
+advantage of the special features of a particular environment.  These
+extensions can dramatically restrict the portability of your documents.
+</para>
+
+<para>Many of the topics covered in this book offer alternatives in those areas that
+are less portable.  Therefore, it is natural to ask what implementations
+are really covered.
+</para>
+
+<para>Before outlining which implementations are covered, let me suggest that this
+book will be useful even if you are using an implementation not <quote>officially</quote>
+covered here.  The reality of the situation is this: many, many tools have
+been ported with &TeX;.  Many of the tools mentioned in this book are
+available on platforms that are not specifically discussed.  
+Time and equipment constraints prevented 
+Amiga<indexterm><primary sortas="amiga tex implementations">Amiga &TeX; implementations</primary></indexterm>, 
+Atari<indexterm><primary sortas="atari tex implementations">Atari &TeX; implementations</primary></indexterm>, 
+NeXT<indexterm><primary sortas="next tex implementations">NeXT &TeX; implementations</primary></indexterm>, 
+VMS<indexterm><primary sortas="vms tex implementations">VMS &TeX; implementations</primary></indexterm>, and
+Windows NT<indexterm><primary sortas="windows nt tex implementations">Windows NT &TeX;</primary></indexterm> 
+implementations of &TeX; from being specifically addressed in this 
+edition of the book.
+</para>
+
+<section><title>UNIX</title>
+
+<para>&unix;<indexterm><primary sortas="unix tex implementations">&unix; &TeX; implementations</primary></indexterm> is probably
+the most common &TeX; platform.  The emphasis in this book is on &unix; workstations running X11, producing output for PostScript and HP LaserJet
+printers.
+</para>
+
+<para><command>Linux</command><indexterm><primary sortas="linux tex implementations">Linux &TeX; implementations</primary></indexterm> and other personal computer implementations of &unix; are
+not addressed specifically; however, with the successful port of X11 to
+<command>Linux</command>, I'm confident that every &unix; tool here can be, or has
+been, ported to <command>Linux</command> (and probably other PC &unix; environments).
+</para>
+
+<para>The only implementation of the &TeX; program for &unix; considered in any
+detail is the free implementation distributed in <emphasis>web2c</emphasis>.  This
+distribution is described in the section called <quote><xref role="label" linkend="free.web"/></quote> in
+Chapter&nbsp;<xref role="label" linkend="chap.freetex"/>, <emphasis><xref role="label" linkend="chap.freetex"/></emphasis>.  Most of the other
+&unix; tools discussed here are also free.
+</para>
+
+</section>
+<section><title>MS-DOS</title>
+
+<para>With very few exceptions, the tools in this book are available under
+MS-DOS<indexterm><primary>MS-DOS</primary></indexterm>.
+Because PCs are very popular, a lot of effort has gone into porting &unix; tools to MS-DOS.  Some packages, however, require a 386SX (or more powerful)
+processor.  For the most part, I focus on PCs running MS-DOS only; however,
+Microsoft Windows<indexterm><primary sortas="microsoft windows">Microsoft Windows</primary><secondary sortas="tex implementations">&TeX; implementations</secondary></indexterm> 
+and DesqView<indexterm><primary sortas="desqview">DesqView</primary><secondary sortas="tex implementations">&TeX; implementations</secondary></indexterm>
+are not entirely ignored.
+</para>
+
+<para>There are quite a few options when it comes to selecting an implementation of
+the &TeX; program under MS-DOS.  Several free implementations are discussed
+<!-- (&emTeX;<indexterm><primary sortas="emTeX">&emTeX;</primary><secondary sortas="tex implementations">&TeX; implementations</secondary></indexterm>, -->
+<!-- &sbTeX;<indexterm><primary sortas="sbTeX">&sbTeX;</primary></indexterm>, &gTeX;<indexterm><primary sortas="gTeX">g&TeX;</primary></indexterm>)  -->
+as well as some commercial implementations.
+<!-- , like &utex;<indexterm><primary sortas="microtex">&utex;</primary></indexterm> -->
+<!-- &TurboTeX;<indexterm><primary sortas="TurboTeX">&TurboTeX;</primary></indexterm>, and &PCTeX;<indexterm><primary sortas="PCTeX">&PCTeX;</primary></indexterm>.   -->
+For more
+information about these implementations, consult Chapter&nbsp;<xref role="label" linkend="chap.freetex"/>,
+<emphasis><xref role="label" linkend="chap.freetex"/></emphasis>,
+and Chapter&nbsp;<xref role="label" linkend="chap.commercialtex"/>, <emphasis><xref role="label" linkend="chap.commercialtex"/></emphasis>.
+</para>
+
+</section>
+<section><title>OS/2</title>
+
+<para>In this book, OS/2 is treated primarily as a superset of MS-DOS.  When
+possible, I look at OS/2-specific versions of each utility, but rely on MS-DOS
+as a fall-back.
+</para>
+
+<para>Extensions to em&TeX; for 
+OS/2<indexterm><primary>OS/2</primary><secondary sortas="tex implementations">&TeX; implementations</secondary></indexterm> 
+are explored, as are editing environments such as <command>epm<indexterm><primary>epm</primary></indexterm></command>.
+The multi-threaded nature of OS/2 allows more complete porting of &unix; tools.  When better ports are available for OS/2, they are discussed.
+</para>
+
+</section>
+<section><title>Macintosh</title>
+
+<para>The Macintosh<indexterm><primary>Macintosh</primary><secondary sortas="TeX implementations">&TeX; implementations</secondary></indexterm> is very different from the systems described above.
+Chapter&nbsp;<xref role="label" linkend="chap.mac"/>, <emphasis><xref role="label" linkend="chap.mac"/></emphasis>, discusses the Macintosh
+environment in detail.
+</para>
+
+<para>There are four implementations of &TeX; for the Macintosh. Three are freely
+available, and one is commercial: &cmactex;<indexterm><primary sortas="cmactex">&cmactex;</primary></indexterm> is free,
+&oztex;<indexterm><primary sortas="oztex">&oztex;</primary></indexterm> and &directex;<indexterm><primary sortas="directex">&directex;</primary></indexterm> are 
+shareware, and <command>Textures</command><indexterm><primary>Textures</primary></indexterm> is a commercial package 
+from Blue Sky Research<indexterm><primary>Blue Sky Research</primary></indexterm>.
+</para>
+
+</section>
+</section>
+<section><title>We'd Like to Hear From You</title>
+
+<para>We have tested and verified all of the information in this book to the best of
+our ability, but you may find that features have changed (or even that we have
+made mistakes!).  Please let us know about any errors you find, as well as
+your suggestions for future editions, by writing:
+</para>
+
+<address>
+O'Reilly &amp; Associates, Inc.
+103 Morris Street, Suite A
+Sebastopol, CA 95472
+1-800-998-9938 (in the US or Canada)
+1-707-829-0515 (international/local)
+1-707-829-0104 (FAX)
+</address>
+
+<para>You can also send us messages electronically.  To be put on the
+mailing list or request a catalog, send email to:
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+  <entry><emphasis>nuts@ora.com</emphasis></entry>
+  <entry>(via the Internet)</entry>
+</row>
+<row>
+  <entry><emphasis>uunet!ora!nuts</emphasis></entry>
+  <entry>(via UUCP)</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>To ask technical questions or comment on the book, send email to:
+</para>
+
+<para><emphasis>bookquestions@ora.com</emphasis> (via the Internet)
+</para>
+
+</section>
+<section><title>Acknowledgments</title>
+
+<para>This book would not exist if I had not received support and encouragement from
+my friends and colleagues, near and far.  I owe the deepest debt of gratitude
+to my wife, Deborah, for patience, understanding, and support as I progressed
+through what is easily the most all-consuming task I have ever undertaken.
+</para>
+
+<para>The earliest draft of this book came about because my advisor at
+the University of Massachusetts, Eliot Moss, allowed me to tinker with the
+&TeX; installation in the Object Systems Lab and was always able to suggest
+ways to make it better.  My friends and colleages at UMass, Amer Diwan, Darko
+Stefanovi\'c, Dave Yates, Eric Brown, Erich Nahum, Jody Daniels, Joe McCarthy,
+Ken Magnani, Rick Hudson, and Tony Hosking, asked all the hard questions and
+didn't seem to mind when I used them as guinea pigs for my latest idea.
+</para>
+
+<para>I'm indebted also to 
+Eberhard Mattes, 
+Geoffrey Tobin,
+George D. Greenwade, 
+Peter Schmitt, 
+Sebastian Rahtz, and
+Tomas Rokicki, 
+who provided
+technical review comments on the materials presented here.  
+Jim Breen and Ken Lunde
+offered invaluable feedback on Chapter 7.
+</para>
+
+<para>And I'd like to thank a lot of people at O'Reilly for their help and
+enthusiasm; in particular, my editor, Debby Russell, offered advice, helpful
+criticism, and support beyond the call of duty (Debby keyed most of the index
+for this book as production deadlines drew near and other arrangements fell
+through); Chris Tong organized the raw entries into a usable index; Lenny
+Muellner, Donna Woonteiler, and Sheryl Avruch allowed me to work on the book
+when it wasn't technically my job; Stephen Spainhour copyedited it into
+English with the help of Leslie Chalmers and Kismet McDonough (Stephen offered
+helpful suggestions along the way, too); Jennifer Niederst helped me get the
+design right; and Chris Reilly created the figures and screen dumps.  I
+enjoyed working with everyone at O'Reilly so much that I left UMass and joined
+the production department myself ;-).
+</para>
+
+<para>Several companies provided review copies of their software while I was writing
+this book.  I would like to thank ArborText, Blue Sky Research, Borland
+International, The Kinch Computer Company, LaserGo, Personal &TeX;, TCI
+Software Research, and &YY;, for their generosity.
+</para>
+
+<para>Finally, I'd like to thank the entire Internet &TeX; community.  Countless
+thousands of questions and answers on the Net refined my understanding of how
+&TeX; works and what it can do.
+</para>
+</section>
+</preface>

@@ -1,0 +1,19 @@
+\newbox\meextbox
+\newdimen\meextwd
+\font\meexta=meexta at 72.27truept
+\font\meextb=meextb at 72.27truept
+\font\meextc=meextc at 72.27truept
+\setbox\meextbox=\vbox{\hbox{%
+\meexta\char0\char1\char2\char3\char4}}
+\meextwd=\wd\meextbox
+\setbox\meextbox=\hbox{\vbox{\hsize=\meextwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\meexta\char0\char1\char2\char3\char4}
+\hbox{\meexta\char5\meextb\char0\char1\char2\char3}
+\hbox{\meextb\char4\char5\char6\char7\char8}
+\hbox{\meextb\char9\char10\meextc\char0\char1\char2}}}
+\ifx\parbox\undefined
+    \def\setmeext{\box\meextbox}
+\else
+    \def\setmeext{\parbox{\wd\meextbox}{\box\meextbox}}
+\fi

@@ -1,0 +1,1455 @@
+<chapter id="chap.macpack">
+<chapterinfo>
+<pubdate>$Date: 2002/08/23 14:31:13 $</pubdate>
+<releaseinfo>$Revision: 1.1 $</releaseinfo>
+</chapterinfo>
+<title>Macro Packages</title>
+
+<para>Everyone who uses &TeX; uses a macro  package<indexterm><primary>macro packages</primary></indexterm><indexterm><primary>format files</primary><secondary>for  macro packages</secondary></indexterm> (also called a <quote>format</quote>).
+A macro package extends &TeX; to provide functionality that is
+suited to a particular task or set of tasks.
+</para>
+
+<para>This chapter provides a summary of &TeX; macro packages.  General-purpose
+packages designed to typeset a wide range of documents---articles, books,
+letters, and reports---are examined first.  The general-purpose packages
+described are Plain &TeX;, Extended Plain &TeX;, &LaTeXe;, &LaTeX;, &AMSTeX;,
+&AMSLaTeX;, Lollipop, and &TeXinfo;.  After surveying the general-purpose
+packages, several special-purpose packages designed to handle
+specific tasks---typesetting transparencies, music, chemistry or physics
+diagrams, etc.---are described.  The special-purpose packages surveyed
+are &SliTeX;, &FoilTeX;, Seminar, &MusicTeX;, ChemStruct, and Chem&TeX;.
+</para>
+
+<para>There are a lot of overlapping features and similar commands in the
+general-purpose packages.  To understand why this is the case,
+consider how a new macro package comes into existence.  An ambitious person,
+who is very familiar with &TeX;, decides that there are some things she would like to
+express in her documents that are difficult to express with existing formats.
+Perhaps, for example, no existing format produces documents that match the
+precise specifications required for publishing in her field, or perhaps she
+has in mind a whole new document structuring paradigm.  A more mundane
+possibility is simply that she has been customizing an existing format for
+some time and now feels it has enough unique features to be useful to
+others.
+</para>
+
+<para>In any event, a new format is born.  Now, if this format is designed
+for a very specific task, writing multiple-choice mathematics exams, for
+example, it might not have very many general-purpose writing features.
+On the other hand, if it is designed for writing longer, more general
+documents (e.g., history textbooks or papers to appear in a particular journal)
+then there are a number of features that it is likely to include; provisions
+for numbered lists, cross references, tables of contents, indexes,
+and quotations are all examples of features common to many documents.
+</para>
+
+<para>To support these common features,
+many macro packages have similar control sequences.  This stems from the 
+fact that they are all built on top of a common set 
+of primitives<indexterm><primary sortas="primitives (tex)">primitives (&TeX;)</primary></indexterm>  and
+that macro package authors tend to copy some features of
+other packages into their own.
+</para>
+
+<para>You may find that you'd like to use the features of several
+different packages in the same document.  Unfortunately, there is no
+provision for using multiple formats to process a single document.
+The features required to process most documents are shared by
+all of the general-purpose formats, however.  You are more likely to need
+multiple macro packages if you want to use a special format to
+construct a diagram or figure and incorporate it
+into a document.  Chapter&nbsp;<xref role="label" linkend="chap.pictures"/>,
+<emphasis><xref role="label" linkend="chap.pictures"/></emphasis>, describes several ways to take
+<quote>electronic snippets</quote> of one document and insert them into another,
+which is one possible solution to this problem.
+</para>
+
+<para>If you're beginning to feel a little lost,
+<!-- <quote>in a maze of twisty macro packages, all alike</quote>,  -->
+have no fear.  Most general-purpose formats are
+sufficient for most documents.  And there's no reason why every
+document you write has to be done with the same format.  Many people
+find &LaTeX; and Plain &TeX; sufficient, but if you're writing an
+article for a particular journal and someone has written a format
+specifically for that journal's documents, by all
+means use it.  It is more likely, however, that someone has written a
+style file<indexterm><primary>style files</primary></indexterm> which 
+tailors &LaTeX; to the requirements of the
+journal.
+</para>
+
+<para>In addition to describing some common macro packages in this chapter, I'll
+describe how to build format files for them.
+If the packages that you want to use have already been
+installed at your site, you can ignore the installation sections.
+</para>
+
+<para>The packages that you find most convenient will
+depend on the tasks you perform and how well each package suits your
+work style.  The list of packages in this chapter is not meant to be
+all-inclusive, nor is it my intention to suggest which packages are best.
+Use the ones <emphasis>you</emphasis> like, for whatever reasons.
+</para>
+
+<para>I can hear some of you already, <quote>I don't really need a macro package,</quote> you
+say, <quote>I can roll my own with just &TeX;.</quote>  
+</para>
+
+<para>And you are absolutely correct.
+</para>
+
+<para>I don't recommend it, however.  It's akin to using your compiler without
+any of the built-in functions.  Most &TeX; primitives offer little
+support by themselves for writing documents.
+</para>
+
+<sidebar><title>A New Perspective</title>
+<para>&LaTeXe;<indexterm><primary sortas="latexe">&LaTeXe;</primary></indexterm> (and its successor, which will be &LaTeX3;<indexterm><primary sortas="latex3">&LaTeX3;</primary></indexterm>) seek to address
+many of the problems mentioned above by defining a core &LaTeX; format with extension packages to provide custom features.
+</para>
+
+<para>The &LaTeXe; system provides a single 
+format <indexterm><primary>format files</primary><secondary sortas="latexe core">&LaTeXe; core</secondary></indexterm> file that supports
+&LaTeX;<indexterm><primary sortas="latex">&LaTeX;</primary></indexterm>, &AMSTeX;<indexterm><primary sortas="AMSTeX">&AMSTeX;</primary></indexterm>, and &SliTeX;<indexterm><primary sortas="SliTeX">&SliTeX;</primary></indexterm>.  For 
+the time being, &LaTeXe; is described
+separately in this chapter along with the other formats.  
+Be aware, however, that &LaTeXe; is now the standard &LaTeX;<footnote>
+<para>At the time of this writing, it's actually still in test-release, but it 
+may be available as a standard release by the time you read this.</para>
+</footnote>and you should migrate to it as soon as possible.</para>
+</sidebar>
+
+<section id="macpack.sec.latexvslatexe"><title>Installation: Making Format Files</title>
+
+<para>A format file<indexterm><primary>format files</primary><secondary>making</secondary></indexterm><indexterm><primary>macro packages</primary><secondary>making format files</secondary></indexterm>, as 
+described in Chapter&nbsp;<xref role="label" linkend="chap.running"/>,
+<emphasis><xref role="label" linkend="chap.running"/></emphasis>, is a special <quote>compiled</quote> version of a
+macro package.  The ini&TeX;<indexterm><primary sortas="initex">ini&TeX;</primary></indexterm> program interprets all of the control
+sequences in a macro package and writes the corresponding memory image
+into a file.
+Loading a format file is much faster than loading individual macro
+packages in your document because &TeX; does not have to interpret any 
+of the control sequences while it is also processing text.
+</para>
+
+<para>In general, all format files should be stored in the same
+directory.<footnote><para>On Macintosh systems and other environments that don't
+have directories, format files are typically stored in their own folders (or
+other metaphorically appropriate place ;-).</para></footnote>  If you install &TeX; in a
+directory called <filename>tex</filename>, then formats typically go in a directory
+called <filename>formats</filename><indexterm><primary>formats directory</primary></indexterm> in 
+the <filename>tex</filename> directory<indexterm><primary>tex directory</primary></indexterm>.  This is not
+universally the case because you need separate format directories for big and
+small &TeX;s.<footnote><para>The distinction between big and small &TeX; is
+described in the section called <quote><xref role="label" linkend="run.sec.formatfiles"/></quote> in
+Chapter&nbsp;<xref role="label" linkend="chap.running"/>.</para></footnote>
+</para>
+
+<para>Usually, an environment variable<indexterm><primary>environment  variables</primary></indexterm><indexterm><primary>variables</primary><secondary>environment</secondary></indexterm> indicates 
+where the format files are
+located.  Environment variables are a common way of customizing your
+interaction with programs.  They are usually set in 
+your <filename>AUTOEXEC.BAT</filename> file<indexterm><primary sortas="AUTOEXECBAT files">AUTOEXEC.BAT files</primary></indexterm> for 
+MS-DOS, <filename>CONFIG.SYS</filename><indexterm><primary sortas="CONFIGSYS files">CONFIG.SYS files</primary></indexterm> for 
+OS/2, or the <emphasis>rc</emphasis>-file
+for a shell (i.e., <filename>.cshrc</filename><indexterm><primary sortas="cshrc file">.cshrc file</primary></indexterm>, 
+<filename>.kshrc</filename><indexterm><primary sortas="kshrc files">.kshrc files</primary></indexterm>) on &unix; systems.  
+Any good reference book for your operating system
+or shell will describe how to use environment variables.
+</para>
+
+<para>A common name for the environment variable that indicates where &TeX; formats
+are located is <envar>TEXFORMATS</envar>.  
+Implementations that
+provide big and small &TeX;s need another variable to
+indicate the directory that contains formats for big &TeX;.
+</para>
+
+<para>Ini&TeX; is not always a separate program.  Some implementations of &TeX; combine the functionality of &TeX; and ini&TeX; into a single program and
+use a special switch at runtime to determine which function to perform.
+In this chapter, all of the examples use the program name <filename>initex</filename>
+to identify ini&TeX;.  If you use an implementation that doesn't
+provide a separate ini&TeX; program, you should use the &TeX; program
+with the ini&TeX; switch<indexterm><primary sortas="initex">ini&TeX;</primary><secondary>switch</secondary></indexterm> instead.  For example, for
+em&TeX;, use <filename>tex /i</filename> instead of <filename>initex</filename> when you
+build a format.
+</para>
+
+<para>Like &TeX;, ini&TeX; needs to be able to find input files<indexterm><primary sortas="initex">ini&TeX;</primary><secondary>using environment variables</secondary></indexterm>.  Usually, this is accomplished by searching the
+directories listed in the <envar>TEXINPUTS</envar> environment variable.  Place the
+input files that ini&TeX; needs in a directory on the <envar>TEXINPUTS</envar> path
+before running ini&TeX; unless otherwise directed.  The <envar>TEXINPUTS</envar>
+environment variable is discussed in the <quote><xref role="label" linkend="sec.userfiles"/></quote> section
+of Chapter&nbsp;<xref role="label" linkend="chap.running"/>.
+</para>
+
+<section><title>Hyphenation Patterns</title>
+
+<para>In order for &TeX; to correctly hyphenate words, every format file must
+contain a set of hyphenation patterns<indexterm><primary>hyphenation</primary><secondary>patterns</secondary></indexterm>.  The 
+patterns are part
+of an algorithmic solution to the problem of breaking a word into 
+syllables for hyphenation.
+</para>
+
+<para>The details of the hyphenation algorithm (given in Appendix H of
+<emphasis>The &TeX;book</emphasis>&nbsp;<xref linkend="kn:texbook"/>) are too complex to describe
+here, but two aspects of this solution deserve particular emphasis.
+First, using patterns means that a dictionary of hyphenated words is
+not necessary.<footnote><para>{A small set of exceptions is maintained because
+the algorithm isn't perfect.}</para></footnote>  This saves a lot of space and time.  Second, 
+by loading different sets of patterns, &TeX; can achieve equal success at
+hyphenating any language---even English ;-).  There are actually 
+at least two sets of hyphenation patterns for English, one for British 
+English and one for American English.
+Chapter&nbsp;<xref role="label" linkend="chap.foreign"/>, <emphasis><xref role="label" linkend="chap.foreign"/></emphasis>, describes
+how to load multiple sets of hyphenation patterns for typesetting
+multilingual documents<indexterm><primary>hyphenation</primary><secondary>language-specific</secondary></indexterm>.
+</para>
+
+</section>
+</section>
+<section><title>General-purpose Formats</title>
+
+<para>This section describes several macro 
+packages <indexterm><primary>macro packages</primary><secondary>general-purpose</secondary></indexterm> that are designed for
+formatting standard documents like articles or books.
+In order to provide some form of comparative measure, each macro
+package is used to create the same document, a one-page report that looks like
+Figure&nbsp;<xref role="label" linkend="fig.sampresults"/>.  I constructed this example to
+demonstrate a few common elements in a document: several sizes of
+headings, a paragraph of text, inline and displayed mathematics, and a
+few fonts.  There are lots of other things that aren't shown (tables,
+figures, footnotes, etc.), and these elements vary as much as any other
+in the different macro packages.
+</para>
+
+<figure id="fig.sampresults">
+<title>Sample page</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-ltx.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<!-- Included in each section is a sample of the commands required to -->
+<!-- produce this report. -->
+<!-- Some macro packages, like &AMSTeX;, are designed to produce documents -->
+<!-- that match particular specifications.  If the result is substantially -->
+<!-- different from Figure&nbsp;<xref role="label" linkend="fig.sampresults"/>, the document produced is -->
+<!-- also shown. -->
+<para>Observant readers will notice that the examples are shown in the Computer
+Modern fonts while the rest of this book uses different fonts.<footnote><para>{Really
+observant readers may have noticed that it's a version of Garamond ;-)}</para></footnote>
+There are a number of reasons why the example is shown in Computer Modern.
+For one thing, all of the formats discussed here use the Computer Modern fonts
+by default.  Using a different set of fonts would only add more
+complexity to each example.  A more subtle problem is that I do not have
+appropriate mathematics fonts for Garamond.  There are a number of complex
+issues involving the use of fonts in &TeX;.  They are discussed in
+Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>, <emphasis><xref role="label" linkend="chap.fonts"/></emphasis>.
+</para>
+
+<section><title>Plain &TeX;</title>
+
+<para>Plain &TeX;<indexterm><primary sortas="Plain tex">Plain &TeX;</primary></indexterm> is the format <indexterm><primary>macro packages</primary><secondary sortas="Plain tex">Plain &TeX;</secondary></indexterm> 
+written by Donald Knuth<indexterm><primary>Knuth, Donald</primary></indexterm> during the development
+of &TeX;.  It is described fully in <emphasis>The {&TeX;}book</emphasis>&nbsp;<xref linkend="kn:texbook"/>.
+</para>
+
+<para>Plain &TeX; ties together 
+the &TeX; primitives <indexterm><primary sortas="primitives (tex)">primitives (&TeX;)</primary></indexterm> in a way that makes
+it practical to work in &TeX;.  If you do not have a computer programming
+background, you may find Plain &TeX; a little bit intimidating.  It
+is definitely a <quote>roll your own</quote> environment.  Although it demonstrably
+contains all of the functionality required to write everything from
+letters to books, there is very little <quote>user-friendly</quote> packaging
+around the internals of &TeX;.
+</para>
+
+<para>Aside from user interface considerations, which are highly subjective,
+Plain &TeX; lacks some functionality when compared to other formats.
+There is no provision in Plain &TeX; for automatically numbered
+sections, labelled figures, tables of contents, indexes, or bibliographies.
+Any of these functions can be constructed in Plain &TeX; if you are
+willing to invest the time and energy required to write your own
+macros, but they are not built into Plain &TeX;.
+</para>
+
+<para>If you enjoy writing your own macros or plan to produce
+novel types of documents, a firm grasp of Plain &TeX; will allow you
+to write anything in &TeX;.  A firm grasp of Plain &TeX; also makes it easier
+to understand and modify other formats (like &LaTeX;) that are built
+on top of Plain &TeX;.
+</para>
+
+<para>In addition, Plain &TeX; is the only format that is always distributed with
+&TeX;.  The other formats discussed in this chapter are freely
+available but do not come with &TeX;.
+</para>
+
+<para>The Plain &TeX; input that produces the report in
+Figure&nbsp;<xref role="label" linkend="fig.sampresults"/> is shown in Example&nbsp;<xref role="label" linkend="ex.sampplaintex"/>.
+</para>
+
+<figure id="ex.sampplaintex">
+<title>Plain &TeX; Input</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-ptx"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<section><title>Building the Plain &TeX; format</title>
+
+<para>To build Plain &TeX;<indexterm><primary sortas="Plain tex">Plain &TeX;</primary><secondary>building</secondary></indexterm>, you 
+need only two files: <filename>plain.tex</filename><indexterm><primary sortas="plaintex files">plain.tex files</primary><secondary sortas="for Plain tex">for Plain &TeX;</secondary></indexterm> and
+<filename>hyphen.tex</filename><indexterm><primary sortas="hyphentex files">hyphen.tex files</primary><secondary sortas="for Plain tex">for Plain &TeX;</secondary></indexterm>.  These 
+files are distributed with &TeX; so they
+should be available as soon as you have installed &TeX;.  
+The <filename>hyphen.tex</filename> file is language-dependent.  Readers who frequently
+work with non-English text should read Chapter&nbsp;<xref role="label" linkend="chap.foreign"/>
+for more information about obtaining
+non-English hyphenation patterns.
+</para>
+
+<para>The command:
+</para>
+
+<screen>
+\$ <emphasis role="bold">initex plain \dump</emphasis>
+</screen>
+
+<para>will create the Plain &TeX; format.
+Move the resulting 
+files, <filename>plain.fmt</filename><indexterm><primary sortas="plainfmt files">plain.fmt files</primary></indexterm> and
+<filename>plain.log</filename><indexterm><primary sortas="plainlog files">plain.log files</primary></indexterm>, into 
+your &TeX; formats directory.
+</para>
+
+</section>
+</section>
+<section><title>Extended Plain &TeX;</title>
+
+<para>Extended Plain &TeX;<indexterm><primary sortas="Extended Plain tex">Extended Plain &TeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="Extended Plain tex">Extended Plain &TeX;</secondary></indexterm> extends Plain &TeX; in a number of
+useful ways without forcing you to use any particular <quote>style</quote> of
+output.
+The argument is this: although Plain &TeX; really doesn't provide all of the
+features that you need (tables of contents, cross references, citations,
+enumerated lists, convenient access to verbatim input, etc), many of these
+features don't have any direct impact on the appearance of your document.
+Unfortunately, other general-purpose macro packages like &LaTeX;, which do
+provide these features, tend to force you to accept their notion of what the
+typeset page should look like.<footnote><para>{Of course, that's not strictly true.
+You can change the page layout of &LaTeX; (and most other packages) to be
+almost anything, but it does require learning a lot about the macro package.
+If you are already familiar with Plain &TeX; (or some other Plain &TeX;-derived
+package), you probably have a set of macros that produce documents in the
+style you like.  Why reinvent the wheel?</para></footnote></para>
+
+<para>Extended Plain &TeX; is an attempt to solve that problem.
+It provides many behind-the-scenes features without providing any general
+page layout commands (like <markup>\chapter</markup> or <markup>\section</markup>),
+which means
+that these features can be used inside Plain &TeX; without much difficulty 
+and without
+changing the layout of typeset pages.
+</para>
+
+<section><title>Building the Extended Plain &TeX; format</title>
+
+<para>To build the Extended Plain &TeX; format<indexterm><primary sortas="Extended Plain tex">Extended Plain &TeX;</primary><secondary>building</secondary></indexterm>, you need the <filename>plain.tex</filename><indexterm><primary sortas="plaintex files">plain.tex files</primary><secondary sortas="for Extended Plain tex">for Extended Plain &TeX;</secondary></indexterm>
+and <filename>hyphen.tex</filename> files <indexterm><primary sortas="hyphentxt files">hyphen.txt files</primary><secondary sortas="for Extended Plain tex">for Extended Plain &TeX;</secondary></indexterm>  required to build the Plain format as well as
+the <filename>eplain.tex</filename> file <indexterm><primary sortas="eplaintex files">eplain.tex files</primary><secondary sortas="for Extended Plain tex">for Extended Plain &TeX;</secondary></indexterm>  distributed with Extended Plain
+&TeX;.<footnote><para>{Extended Plain &TeX; is available in the
+<filename>macros/eplain</filename> directory in the CTAN archives.}</para></footnote>  Make
+and install the Plain &TeX; format first, then change to the directory that
+contains the Extended Plain &TeX; distribution.
+</para>
+
+<para>The command:
+</para>
+
+<screen>
+$ <emphasis role="bold">initex \&amp;plain eplain \dump</emphasis>
+</screen>
+
+<para>will create the Extended Plain &TeX; format.  Move the resulting
+files, <filename>eplain.fmt</filename> <indexterm><primary sortas="eplainfmt files">eplain.fmt files</primary><secondary sortas="for Extended Plain tex">for Extended Plain &TeX;</secondary></indexterm>  and <filename>eplain.log</filename><indexterm><primary sortas="eplainlog files">eplain.log files</primary><secondary sortas="for Extended Plain tex">for Extended Plain &TeX;</secondary></indexterm>, into your &TeX; formats
+directory.
+</para>
+
+</section>
+</section>
+<section><title>&LaTeXe; Versus &LaTeX;</title>
+
+<para>The tremendous popularity of &LaTeX;<indexterm><primary sortas="latex">&LaTeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="latex">&LaTeX;</secondary></indexterm> in the &TeX; community has had an
+unfortunate side effect: because it is a very familiar and flexible
+format, many people have used it as the basis for extensions of one sort
+or another.  This has resulted in a wide range of (slightly) incompatible
+formats and a lot of frustration.  
+</para>
+
+<para>This situation is being rectified by a new release of &LaTeX;, currently called
+&LaTeXe;<indexterm><primary sortas="latexe">&LaTeXe;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="latexe">&LaTeXe;</secondary></indexterm>.  The new 
+release replaces the existing dialects of &LaTeX; (&LaTeX; with and without NFSS, &SliTeX;, &AMSLaTeX;, etc.) with a single core system
+and a set of extension packages.  &LaTeXe; includes a compatibility mode
+which will allow it to continue to format existing documents without change
+(provided that they do not rely on local modifications to the &LaTeX; format, of course).  Local modifications can also be incorporated into
+the &LaTeXe; system as extension packages, making &LaTeXe; a complete
+replacement for all existing versions of &LaTeX; and packages closely
+derived from &LaTeX;.
+</para>
+
+<para>The most significant and least compatible difference between &LaTeX; and &LaTeXe;<indexterm><primary sortas="latex">&LaTeX;</primary><secondary sortas="differences from latexe">differences from &LaTeXe;</secondary></indexterm><indexterm><primary sortas="latexe">&LaTeXe;</primary><secondary sortas="differences from latex">differences from &LaTeX;</secondary></indexterm> is the font selection scheme.
+<!-- Should this occur here or just in section five? Section starting now. -->
+There are many control sequences for selecting fonts in &LaTeX;.  Some
+control the typeface (<markup>\rm</markup>, <markup>\tt</markup>, <markup>\sc</markup>, etc.);
+some the size (<markup>\small</markup>, <markup>\normalsize</markup>, <markup>\large</markup>, etc.);
+and some the appearance (<markup>\it</markup>, <markup>\bf</markup>, <markup>\em</markup>, etc.).
+  
+Under the Old Font Selection Scheme (OFSS)<indexterm><primary>Old Font Selection Scheme (OFSS)</primary></indexterm>, the control sequences for
+selecting a font completely override any font selection already in place.
+Consider, for example, the control sequences <markup>\it</markup> and <markup>\bf</markup>,
+which switch to italic and boldface.  Using <markup>\bf\it</markup> produces italic
+text, and <markup>\it\bf</markup> produces boldface text, and <emphasis>neither</emphasis> produces
+boldfaced-italic text (which is probably what you wanted).
+</para>
+
+<para>Under the New Font Selection Scheme<indexterm><primary>New Font Selection Scheme</primary></indexterm><indexterm><primary>fonts</primary><secondary>NFSS</secondary></indexterm>, typeface 
+(called <emphasis>family</emphasis>
+in NFSS parlance), appearance (called <emphasis>series</emphasis> and <emphasis>shape</emphasis>), and
+size are viewed as orthogonal components in font selection.  Because these
+parameters are independent, selecting an italic appearance with the \it
+control sequence switches to italic in the current typeface and size.  Under
+the NFSS, \bf\cs{it} <emphasis>does</emphasis> select boldface-italic in both the current
+typeface and size (if it is available).</para>
+<!-- Queried section ends here. -->
+
+<para>&LaTeXe; supports only the NFSS, 
+version 2 (called NFSS2)<indexterm><primary>New Font Selection Scheme</primary><secondary>version 1 (NFSS)</secondary></indexterm><indexterm><primary>fonts</primary><secondary>NFSS2</secondary></indexterm>.  For 
+more than a year, the NFSS (initially
+version 1, and more recently version 2) has been available as an
+extension for &LaTeX; 2.09.  However, in light of stable test releases of
+&LaTeXe;, the NFSS2 package for &LaTeX; 2.09 has been withdrawn.  The
+discussion of NFSS in this book applies equally well to &LaTeX; 2.09 with
+NFSS2, but it is described in terms of &LaTeXe; in an effort to be more
+applicable in the future.
+The NFSS is discussed in more detail in Chapter&nbsp;<xref role="label" linkend="chap.fonts"/>.
+</para>
+
+</section>
+<section id="sec.latexe"><title>&LaTeXe;</title>
+
+<para>Leslie Lamport<indexterm><primary>Lamport, Leslie</primary></indexterm>'s &LaTeX; format 
+is probably the most commonly used &TeX; format.  It is described in <emphasis>&LaTeX;: A Document Preparation
+System</emphasis>&nbsp;<xref linkend="ll:latexbook"/> and many other &TeX; books.  &LaTeXe;<indexterm><primary sortas="latexe">&LaTeXe;</primary></indexterm> is 
+the new
+standard &LaTeX;.  It is described in <emphasis>{The &LaTeX; Companion}</emphasis>&nbsp;<xref linkend="latexcompanion"/>.  The next edition of <emphasis>&LaTeX;: A Document
+Preparation System</emphasis>&nbsp;<xref linkend="ll:latexbook"/>
+will also describe &LaTeXe;.
+</para>
+
+<sidebar>
+<para>At the time of this writing, &LaTeXe; is available only in a test release, but
+by the time you read this, it is likely to be available as the new standard
+&LaTeX;.  It is described first in this chapter to emphasize that you
+should begin using &LaTeXe; as soon as possible.  Once &LaTeXe; is out of
+testing, it will become &LaTeX;, and support for older versions will not be
+provided (at least not by the &LaTeX; developers).  &LaTeXe; includes a
+compatibility mode<indexterm><primary sortas="latex">&LaTeX;</primary><secondary>compatibility mode</secondary></indexterm> for 
+old &LaTeX; documents so the transition should be
+relatively painless.</para>
+</sidebar>
+
+<para>The central theme of &LaTeX; is <quote>structured document preparation.</quote>  An
+ideal &LaTeX; document is described entirely in terms of its structure:
+chapters, sections, paragraphs, numbered lists, bulleted items, tables,
+figures, and all the other elements of a document are
+identified descriptively.  For example, you enclose figures in a figure
+<emphasis>environment</emphasis> identified by the control sequences 
+<markup>\begin{figure}</markup> and <markup>\end{figure}</markup>.
+</para>
+
+<para>When you are ready to print your document, select an appropriate document
+class<indexterm><primary sortas="class document in latex">class document in &LaTeX;</primary></indexterm>, and &LaTeX; formats 
+your document according to the rules of the
+selected style.  In the case of the ideal document, it might first be printed
+in a magazine or newsletter using the article class.  Later, when it is
+incorporated into a book, selecting the book class is <emphasis>all</emphasis> that is
+required to produce appropriate output; the document itself is unchanged.
+</para>
+
+<para>&LaTeX; is written on top of Plain &TeX;.  This means that almost any control
+sequence <indexterm><primary>control sequences</primary><secondary sortas="in latex">in &LaTeX;</secondary></indexterm> or 
+macro that you learn about in Plain &TeX; can also be used in
+&LaTeX;.  Of course, &LaTeX; insulates you from many Plain &TeX; commands by
+wrapping a much more user-friendly interface around them.
+</para>
+
+<para>The &LaTeXe; input that produces the sample page in
+Figure&nbsp;<xref role="label" linkend="fig.sampresults"/> is shown in Example&nbsp;<xref role="label" linkend="fig.samplatex2e"/>.
+The only difference between this document and an old &LaTeX; document is
+the use of the \documentclass declaration instead of the
+\documentstyle declaration.<footnote><para>{&LaTeXe; will process
+documents that use <literal>&backslash; documentstyle</literal> in &LaTeX; 2.09
+compatibility mode.}</para></footnote>  For more complex documents, other minor
+changes may also be necessary.
+</para>
+
+<figure id="fig.samplatex2e">
+<title>&LaTeXe; Input</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-l2e.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<section id="sec.buildlatexe"><title>Building the &LaTeXe; format</title>
+
+<para>The &LaTeXe; distribution is available from the directory
+<filename>macros/latex2e/core</filename> in the CTAN 
+archives<indexterm><primary sortas="latex">&LaTeX;</primary><secondary>building</secondary></indexterm>.
+</para>
+
+<para>The following steps will build the &LaTeXe; format. For more complete
+installation instructions, read the file <filename>install.l2e</filename> in the 
+&LaTeXe; distribution.
+</para>
+
+<orderedlist>
+  <listitem>
+<para> Place the &LaTeXe; distribution in a temporary directory and make that
+    directory the current directory.  After the installation is complete, you
+    will need to move only selected files into the standard places.
+</para>
+</listitem>
+<listitem>
+<para> Restrict to only the current directory the directories that &TeX;   searches for input files
+</para>
+
+<para>  This can usually be accomplished by setting the environment variable
+  <literal>TEXINPUTS</literal><footnote><para>{Under &emTeX;, this variable is called
+  <literal>TEXINPUT</literal>.  On the Macintosh, file searching is frequently
+  controlled by a configuration file or dialog box.}</para></footnote>  to a single period or
+  the absolute path name of the current directory.
+</para>
+</listitem>
+<listitem>
+<para> Copy the <filename>hyphen.tex</filename> file <indexterm><primary>hyphen.tex files</primary><secondary sortas="for latexe">for &LaTeXe;</secondary></indexterm> from the Plain &TeX; distribution
+  into the current directory.
+</para>
+</listitem>
+<listitem>
+<para> Issue the command:
+</para>
+
+<screen>
+\$ <emphasis role="bold">initex unpack2e.ins</emphasis>
+</screen>
+
+<para>  This will unpack all of the distribution files.
+</para>
+</listitem>
+<listitem>
+<para> Build the format file by issuing the command:
+</para>
+
+<screen>
+\$ <emphasis role="bold">initex latex2e.ltx</emphasis>
+</screen>
+
+<para>   Move the resulting 
+   files <filename>latex2e.fmt</filename> <indexterm><primary>latex2e.fmt files</primary></indexterm> and <filename>latex2e.log</filename><indexterm><primary sortas="latex2elog files">latex2e.log files</primary></indexterm> into 
+   the &TeX; formats directory.
+</para>
+</listitem>
+<listitem>
+<para> In addition to the files needed to build the format, unpacking
+    the &LaTeXe; distribution creates many files that are needed for 
+    formatting documents.
+    These files must be placed in a location where &TeX; will find them.
+    However, in order to maintain a functioning &LaTeX; 2.09 system,
+    you must not place the new files in the same input directory as the
+    existing files.<footnote><para>{Strictly speaking, this is only true for files
+    that have the extension <filename>.sty</filename> because the old version of 
+    &LaTeX; will not attempt to use the other files.}</para></footnote></para>
+
+<para>    Create a new directory (or folder) for the new files.  On the
+    &unix; system that I use, where existing input files are stored in a
+    directory called <filename>/usr/local/lib/tex/inputs</filename>, I created
+    <filename>/usr/local/lib/tex/latex2e</filename> to store the new files.  You will
+    have to add the new directory to the <emphasis>front</emphasis> of the list of
+    directories that &TeX; searches for input files whenever you format a
+    document with &LaTeXe;.
+</para>
+
+<para>    Move the files that the installation script produces into the new
+    directory.  Move the files <filename>docstrip.tex</filename>,
+    <filename>latexbug.tex</filename>, <filename>sfontdef.ltx</filename>, <filename>slides.ltx</filename>,
+    <filename>testpage.tex</filename>, and all of the files that end in <filename>.cfg</filename>,
+    <filename>.cls</filename>, <filename>.clo</filename>, <filename>.def</filename>, <filename>.fd</filename>, and
+    <filename>.sty</filename>.  You should also move the files <filename>gglo.ist</filename> and
+    <filename>gind.ist</filename> someplace where <command>MakeIndex</command> can find them.
+    (<command>MakeIndex</command> is described in Chapter&nbsp;<xref role="label" linkend="chap.bibtex"/>,
+    <emphasis><xref role="label" linkend="chap.bibtex"/></emphasis>.)
+</para>
+
+<para>    One of the aspects of the test releases that continues to change
+    is the exact list of files that must be moved.  Consult the 
+    <filename>install.l2e</filename> file in the distribution for the exact
+    list.  The list above is from the test version of January 28, 1994.
+</para>
+</listitem>
+</orderedlist>
+
+</section>
+</section>
+<section id="sec.latex"><title>&LaTeX;</title>
+
+<para>This section briefly covers &LaTeX; version 2.09.  This version of
+&LaTeX;<indexterm><primary sortas="latex">&LaTeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="latex">&LaTeX;</secondary></indexterm> is still very 
+widely used but it is being phased out.
+</para>
+
+<para>The &LaTeX; input to produce the sample page in Figure&nbsp;<xref role="label" linkend="fig.sampresults"/>
+is shown in Example&nbsp;<xref role="label" linkend="fig.samplatex"/>.  
+</para>
+
+<figure id="fig.samplatex">
+<title>&LaTeX; Input File</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-ltx.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<para>Support for the NFSS in &LaTeX; 2.09 has been withdrawn.  If you need
+to build a format with support for NFSS, consult the <quote><xref role="label" linkend="sec.latexe"/></quote>
+section of this chapter.
+</para>
+
+<section id="sec.buildlatexofss"><title>Building the &LaTeX; format with the OFSS</title>
+
+<para>The &LaTeX; <indexterm><primary sortas="latex">&LaTeX;</primary><secondary>building</secondary></indexterm><indexterm><primary>Old Font Selection Scheme (OFSS)</primary></indexterm>distribution<footnote><para>{&LaTeX; is available in the
+<filename>macros/latex/distribs/latex</filename> directory in the CTAN archives.}</para></footnote>
+includes three subdirectories, <filename>sty</filename>, <filename>doc</filename>, and
+<filename>general</filename>.  All of the &LaTeX; files required to
+build the format file 
+<!-- (<filename>lplain.tex</filename>, <filename>lhyphen.tex</filename>, <filename>lfonts.tex</filename>,  -->
+<!-- and <filename>latex.tex</filename>)  -->
+are in the <filename>general</filename> subdirectory.  You will also need the
+<filename>hyphen.tex</filename> file <indexterm><primary>hyphen.tex files</primary><secondary sortas="for latex">for &LaTeX;</secondary></indexterm> required 
+to build the Plain format.
+</para>
+
+<para>In the <filename>general</filename> subdirectory, the command:
+</para>
+
+<screen>
+\$ <emphasis role="bold">initex lplain</emphasis>
+</screen>
+
+<para>will create the &LaTeX; format.  Move the resulting files,
+<filename>lplain.fmt</filename> <indexterm><primary sortas="lplainfmt files">lplain.fmt files</primary><secondary sortas="for latex">for &LaTeX;</secondary></indexterm> and 
+<filename>lplain.log</filename><indexterm><primary sortas="lplainlog files">lplain.log files</primary><secondary sortas="for latex">for &LaTeX;</secondary></indexterm>, to the &TeX; formats
+directory.  In order to complete the installation, copy the files from the
+<filename>sty</filename> directory in the &LaTeX; distribution into a directory where
+&TeX; searches for input files.
+</para>
+
+</section>
+</section>
+<section id="sec.texincolor"><title>&AMSTeX;</title>
+
+<para>When the American Mathematical Society<indexterm><primary>American Mathematical Society</primary></indexterm> selected &TeX; as a document 
+preparation system, they
+decided to extend it in a number of ways to make the creation of papers
+and journals easier.  They had two goals: to make it easier for authors
+to write mathematical papers in &TeX; and to make the resulting papers
+conform to a particular set of style specifications.
+&AMSTeX;<indexterm><primary sortas="AMSTeX">&AMSTeX;</primary></indexterm> is described completely 
+in <emphasis>The Joy of &TeX;</emphasis>&nbsp;<xref linkend="ms:joyoftex"/>.
+</para>
+
+<para>&AMSTeX; provides many commands that resemble &LaTeX; environments.  These
+have the form
+<markup>\<replaceable>environment</replaceable></markup> &hellip;
+<markup>\end<replaceable>environment</replaceable></markup>.
+In addition, &AMSTeX; provides the notion of a document
+style to control style-related formatting issues.
+</para>
+
+<para>Another important contribution made by the &ams; when creating &AMSTeX; was the construction of a large number of new 
+fonts<indexterm><primary sortas="AMSTeX">&AMSTeX;</primary><secondary>fonts</secondary></indexterm><indexterm><primary>fonts</primary><secondary sortas="AMSTeX">&AMSTeX;</secondary></indexterm>.  
+The &ams; provides
+fonts with many more mathematical symbols than the fonts that come with
+&TeX;.  These fonts are available as a separate package and can be used
+with any &TeX; macro package, not just &AMSTeX;.
+</para>
+
+<para>The &AMSTeX; input required to produce the document in
+Figure&nbsp;<xref role="label" linkend="fig.amsresults"/> is shown in Example&nbsp;<xref role="label" linkend="ex.sampamstex"/>.  The
+result of formatting this document does not appear exactly like
+Figure&nbsp;<xref role="label" linkend="fig.sampresults"/> because &AMSTeX; uses the style conventions of
+the &ams;.
+</para>
+
+<figure id="ex.sampamstex">
+<title>&AMSTeX; Input File</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-amt" format="linespecific"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<figure id="fig.amsresults">
+<title>AMS sample page</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-amt.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<section><title>Building the &AMSTeX; format</title>
+
+<para>In order to build the &AMSTeX; format, you need 
+the <filename>plain.tex</filename> <indexterm><primary sortas="plaintex files">plain.tex files</primary><secondary sortas="for AMSTeX">for &AMSTeX;</secondary></indexterm> and 
+<filename>hyphen.tex</filename> files <indexterm><primary sortas="hyphentex files">hyphen.tex files</primary><secondary sortas="for AMSTeX">for &AMSTeX;</secondary></indexterm> from 
+Plain &TeX; and the <filename>amstex.ini</filename> <indexterm><primary sortas="amstexini files">amstex.ini files</primary></indexterm> and
+<filename>amstex.tex</filename> <indexterm><primary sortas="amstextex files">amstex.tex files</primary></indexterm> files 
+from the &AMSTeX; distribution<indexterm><primary sortas="AMSTeX">&AMSTeX;</primary><secondary>building</secondary></indexterm>.
+</para>
+
+<para>The command:
+</para>
+
+<screen>
+\$ <emphasis role="bold">initex amstex.ini</emphasis>
+</screen>
+
+<para>will create the &AMSTeX; format.  Move the resulting files,
+<filename>amstex.fmt</filename> <indexterm><primary sortas="amstexfmt files">amstex.fmt files</primary></indexterm> and 
+<filename>amstex.log</filename><indexterm><primary sortas="amstexlog files">amstex.log files</primary></indexterm>, into 
+your &TeX; formats
+directory.
+</para>
+
+</section>
+</section>
+<section><title>&AMSLaTeX;</title>
+
+<para>&AMSLaTeX;<indexterm><primary sortas="AMSLaTeX">&AMSLaTeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="AMSTeX">&AMSTeX;</secondary></indexterm>, like &AMSTeX;, 
+provides many features to make typesetting 
+mathematics convenient while meeting the standards of the 
+American Mathematical Society<indexterm><primary>American Mathematical Society</primary></indexterm> for 
+publication.  However, &AMSTeX; lacks many of 
+the features that are present in &LaTeX;, like automatically numbered 
+sections and tools for creating tables of contents and indexes.
+</para>
+
+<para>When &LaTeX; gained popularity, many authors requested permission to
+submit articles to the &ams; in &LaTeX;.
+In 1987, the &ams; began a project to combine the features of &AMSTeX; with the features of &LaTeX;.  The result is &AMSLaTeX;.
+</para>
+
+<para>&AMSLaTeX; provides all of the functionality of &LaTeX; because it is an
+extension of &LaTeX;. It also provides the functionality of &AMSTeX; in
+&LaTeX; syntax and access to additional mathematical constructs and math 
+symbols not present in &LaTeX;.  .
+</para>
+
+<para>The input required to produce Figure&nbsp;<xref role="label" linkend="fig.sampresults"/> is not shown
+because they do not differ significantly from the &LaTeX; sample.
+Because the sample document doesn't use any of &AMSLaTeX;'s additional
+features, it is exactly the same as the &LaTeX; document.
+</para>
+
+<section><title>Building the &AMSLaTeX; format</title>
+
+<para>The &AMSLaTeX; macros are embodied entirely in style files for &LaTeX;.  It is
+not necessary to build a special format file<indexterm><primary sortas="AMSLaTeX">&AMSLaTeX;</primary><secondary>building</secondary></indexterm>.
+However, the &AMSLaTeX; macros require the New Font Selection
+Scheme (NFSS).  Consult the section on &LaTeX;, above, for instructions on
+building the &LaTeX; format with NFSS.
+</para>
+
+</section>
+</section>
+<section><title>Lollipop</title>
+
+<para>It can be argued that &LaTeX; has the following deficiency: although there
+are many different style options available, it is not easy for a novice
+user to change a style option.  Changing the internals of most &LaTeX; style
+options requires a deep understanding of &TeX;.
+</para>
+
+<para>The Lollipop<indexterm><primary>Lollipop</primary></indexterm><indexterm><primary>macro packages</primary><secondary>Lollipop</secondary></indexterm> format 
+is very different from the other formats.
+The central thrust of Lollipop is that it should be easy to change
+and customize document styles.
+All Lollipop documents are built from five different generic
+constructs: headings, lists, text blocks, page grids, and external
+items.
+</para>
+
+<para>The Lollipop input required to produce a document like the sample page
+in Figure&nbsp;<xref role="label" linkend="fig.sampresults"/> is shown in Example&nbsp;<xref role="label" linkend="ex.samplollipop"/>.
+</para>
+
+<figure id="ex.samplollipop">
+<title>Lollipop Input File</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-lol" format="linespecific"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<section><title>Building the Lollipop format</title>
+
+<para>To make <indexterm><primary>Lollipop</primary><secondary>building</secondary></indexterm>the Lollipop 
+format, you need the Lollipop distribution and the file
+<filename>hyphen.tex</filename> from the Plain &TeX; distribution.
+</para>
+
+<para>This command will create the Lollipop format:
+</para>
+
+<screen>
+\$ <emphasis role="bold">initex lollipop \dump</emphasis>
+</screen>
+
+<para>It should be performed
+in the directory where you installed the Lollipop distribution so
+that all of the Lollipop files can be located.  
+Move the resulting 
+files <filename>lollipop.fmt</filename><indexterm><primary sortas="lollipopfmt files">lollipop.fmt files</primary></indexterm> and
+<filename>lollipop.log</filename><indexterm><primary sortas="lollipoplog files">lollipop.log files</primary></indexterm> into 
+your &TeX; formats directory.
+</para>
+
+</section>
+</section>
+<section><title>&TeXinfo;</title>
+
+<para>The &TeXinfo; format is a general-purpose format, but it was designed to
+support a particular application: to produce both online documentation and
+professional quality typeset documentation from the same source file.  It is
+discussed in more detail in Chapter&nbsp;<xref role="label" linkend="chap.online"/>,
+<emphasis><xref role="label" linkend="chap.online"/></emphasis>.
+</para>
+
+<para>The input file shown in Example&nbsp;<xref role="label" linkend="ex.infinp"/> produces the typeset output
+shown in Figure&nbsp;<xref role="label" linkend="fig.infex"/>.  The input file for this example is
+complicated by the fact that it contains mathematics.  None of &TeX;'s
+sophisticated mechanisms for handling mathematics are applicable to plain
+ASCII online documentation.  The online documentation produced by the
+example in Example&nbsp;<xref role="label" linkend="ex.infinp"/> is shown in Figure&nbsp;<xref role="label" linkend="fig.infinf"/>.
+</para>
+
+<para>The &TeXinfo;<indexterm><primary sortas="texinfo">&TeXinfo;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="texinfo">&TeXinfo;</secondary></indexterm> format 
+is the official documentation format of the Free Software Foundation (FSF)<indexterm><primary>Free Software Foundation (FSF)</primary></indexterm>.  Although less commonly used, a &LaTeX; variant
+called &LaTeX;info<indexterm><primary sortas="latex{}info">&LaTeX;info</primary></indexterm> is also available.
+</para>
+
+<figure id="ex.infinp">
+<title>&TeX;info Input</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-inf" format="linespecific"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<figure id="fig.infex">
+<title>&TeX;info sample page</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="perf-inf.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<figure id="fig.infinf">
+<title>Online documentation produced by MakeInfo</title>
+<programlisting><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="perf-inf.inf"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</figure>
+
+</section>
+<section><title>Other Formats</title>
+
+<para>There are a number of other macro packages available for &TeX;.  Some of them
+are summarized below.  The fact that they are not discussed more fully here
+(or listed below, for that matter) is not intended to reflect on the quality
+of the format.  The formats discussed above are examples of the ways in which
+&TeX; can be extended.  All of the formats below extend &TeX; in a way similar
+to one of the formats already mentioned.  For any particular application, one
+of these macro packages might be a better choice than the formats discussed 
+above.
+</para>
+
+<variablelist>
+<varlistentry>
+<term>EDMAC</term>
+<listitem>
+<para>    Provides support for typesetting critical editions of texts
+    in a format similar to the Oxford Classical Texts with marginal line
+    numbers and multiple series of footnotes and endnotes keyed by line
+    number.  EDMAC<indexterm><primary>EDMAC</primary></indexterm><indexterm><primary>macro packages</primary><secondary>EDMAC</secondary></indexterm> is 
+    available from the CTAN archives in the directory
+    <filename role="ctan" class="directory">macros/plain/contrib/edmac</filename>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>&INRSTeX;</term>
+<listitem>
+<para>    Provides support for multilingual documents in French<indexterm><primary>French</primary></indexterm> and 
+    English.  &INRSTeX;<indexterm><primary sortas="INRSTeX">&INRSTeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary> INRSTeX</secondary></indexterm> is 
+    available from the CTAN archives in the directory
+    <filename role="ctan" class="directory">macros/inrstex</filename>.
+</para>
+
+<para>
+  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>&LamSTeX;</term>
+<listitem>
+<para>    Extends &AMSTeX; with &LaTeX;-like features and improved
+    support for commutative diagrams.  &LamSTeX;<indexterm><primary sortas="LamSTeX">&LamSTeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="LamSTeX">&LamSTeX;</secondary></indexterm> is available from the CTAN
+    archives in <filename role="ctan" class="directory">macros/lamstex</filename>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>&REVTeX;</term>
+<listitem>
+<para>    Extends &LaTeX; to provide support for typesetting articles
+    for journals of the American Physical Society<indexterm><primary>American Physical Society</primary></indexterm>, 
+    the Optical Society of America<indexterm><primary>Optical Society of America</primary></indexterm>, and the American Institute for Physics<indexterm><primary>American Institute for Physics</primary></indexterm>.  &REVTeX;<indexterm><primary sortas="REVTeX">&REVTeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="REVTeX">&REVTeX;</secondary></indexterm> is available in
+    the directory <filename role="ctan" class="directory">macros/latex/contrib/revtex</filename> of the CTAN archives. 
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>&TeX;sis</term>
+<listitem>
+<para>    Provides facilities for typesetting articles, papers, and
+    theses.  It is particularly tuned for physics 
+    papers.  &TeX;sis<indexterm><primary sortas="tex{}sis">&TeX;sis</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="tex{}sis">&TeX;sis</secondary></indexterm> also
+    provides support for other kinds of documents, such as letters and memos.
+    It is based upon Plain &TeX;.  &TeX;sis is available from the CTAN
+    archives in the directory <filename role="ctan" class="directory">macros/texsis</filename>.
+</para>
+
+<para>    In addition to &REVTeX; and &TeX;sis, there are several other packages in
+    the <filename>macros</filename> directory on CTAN that were designed for
+    typesetting documents about 
+    physics: PHYSE<indexterm><primary>PHYSE</primary></indexterm><indexterm><primary>macro packages</primary><secondary>PHYSE</secondary></indexterm>, 
+    PHYZZX<indexterm><primary>PHYZZX</primary></indexterm><indexterm><primary>macro packages</primary><secondary>PHYZZX</secondary></indexterm>, 
+    and PSIZZLE<indexterm><primary>PSIZZLE</primary></indexterm><indexterm><primary>PSIZZLE</primary></indexterm>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>&TeX;/Mathematica</term>
+<listitem>
+<para>    Supports interactive use of Mathematica<indexterm><primary>Mathematica</primary></indexterm> on &unix;     workstations running GNU emacs.  Mathematica explorations can be annotated
+    with &TeX;/&LaTeX;, and Mathematica graphics can be incorporated
+    into documents.  &TeX;/Mathematica<indexterm><primary sortas="tex/Mathematica">&TeX;/Mathematica</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="tex/Mathematica">&TeX;/Mathematica</secondary></indexterm> is available from the CTAN archives in
+    the directory <filename role="ctan" class="directory">macros/mathematica</filename>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Script&TeX;</term>
+<listitem>
+<para>    Supports typesetting screenplays in &TeX;.
+    Script&TeX;<indexterm><primary sortas="Scripttex">Script&TeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="Scripttex">Script&TeX;</secondary></indexterm> is 
+    available from the CTAN archives in the directory
+    <filename role="ctan" class="directory">macros/scripttex</filename>.
+</para>
+
+<para>  </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Ver&TeX;</term>
+<listitem>
+<para>    Supports typesetting articles for economic journals.
+    Ver&TeX;<indexterm><primary sortas="Vertex">Ver&TeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="Vertex">Ver&TeX;</secondary></indexterm> is available 
+    from the CTAN archives in the directory
+    <filename role="ctan" class="directory">macros/plain/contrib/vertex</filename>.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<!-- </section>
+<section><title>&INRSTeX;</title>
+ -->
+<!-- The &INRSTeX; style is an extension of Plain &TeX; by Michael Ferguson. -->
+<!-- It is described completely in <xref linkend="mf:inrstexref"/>. -->
+<!-- The &INRSTeX; reference is a good, free overview of &TeX;. -->
+<!-- It was designed to typeset English and French. -->
+<!-- It has some apparent dependencies on ML&TeX; and DVIALW (for graphics, -->
+<!-- at least). -->
+
+</section>
+</section>
+<section><title>Special-purpose Formats</title>
+
+<para>In addition to the general-purpose packages <indexterm><primary>macro packages</primary><secondary>special-purpose</secondary></indexterm> discussed above,
+there are dozens, if not hundreds, of extensions to &TeX; that are
+designed for very specific tasks.  Many of the extensions are
+&LaTeX; style files; they provide styles for many academic journals,
+university theses, resum\'es, diagrams of various sorts, PostScript
+interfaces, linguistics, multinational language support, &unix;  
+<quote>man</quote> pages, program listings, and countless other tasks.
+</para>
+
+<para>To give you a feel for the range of tasks that &TeX; can perform, I've
+selected a few packages to highlight the latitude of customization that is
+possible.  Figure&nbsp;<xref role="label" linkend="fig.caffeine"/> shows the chemical structure of caffeine
+(a molecule dear to my heart) rendered with 
+the Chem&TeX;<indexterm><primary sortas="Chemtex">Chem&TeX;</primary></indexterm><indexterm><primary>macro packages</primary><secondary sortas="Chemtex">Chem&TeX;</secondary></indexterm> package.
+The source is shown in Example&nbsp;<xref role="label" linkend="fig.caffeine-source"/>. Another chemistry
+package, ChemStruct<indexterm><primary>ChemStruct</primary></indexterm><indexterm><primary>macro packages</primary><secondary>ChemStruct</secondary></indexterm>, was 
+used to draw Figure&nbsp;<xref role="label" linkend="fig.lithium"/>.
+Its source is shown in Example&nbsp;<xref role="label" linkend="fig.lithium-source"/>.  Taking &TeX; in
+another direction, the Music&TeX;<indexterm><primary sortas="Musictex">Music&TeX;</primary></indexterm><indexterm><primary sortas="Musictex">Music&TeX;</primary></indexterm> package 
+was used to typeset the first two
+bars of Mozart's K545 sonata in C-major in Figure&nbsp;<xref role="label" linkend="fig.mozart"/>.  The
+Music&TeX; input is shown in Example&nbsp;<xref role="label" linkend="fig.mozart-source"/>.  
+Several more examples are presented in Chapter&nbsp;<xref role="label" linkend="chap.foreign"/> where
+formats for typesetting non-English languages are described.
+</para>
+
+<!-- Finally, a short -->
+<!-- sample of arabic, typeset with Arab&TeX;, is shown in Figure&nbsp;<xref role="label" linkend="fig.arab"/> -->
+<!-- (the source is in Example&nbsp;<xref role="label" linkend="ex.arabsrc"/>). -->
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+<figure id="fig.caffeine">
+<title>Caffeine by Chem&TeX;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="caffeine.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<figure id="fig.caffeine-source">
+<title>The Chem&TeX; Source for Caffeine</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="caffeine.tex" format="linespecific"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+<figure id="fig.lithium">
+<title>A lithium cation rendered
+by <command>ChemStruct</command></title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="lithium.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<figure id="fig.lithium-source">
+<title>The ChemStruct Source for the Lithium Cation</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="lithium.tex" format="linespecific"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+<figure id="fig.mozart">
+<title>A little Mozart&hellip;</title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mozart.eps"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<figure id="fig.mozart-source">
+<title>The &MusicTeX; Source for Figure <xref linkend="fig.mozart"/></title>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mozart.tex" format="linespecific"/>
+</imageobject>
+</mediaobject>
+</figure>
+
+<para>Another popular special-purpose application of &TeX; is the production
+of transparencies<indexterm><primary>transparencies</primary></indexterm>, also 
+called foils<indexterm><primary>foils</primary></indexterm> or slides<indexterm><primary>slides</primary></indexterm>.  There are a few
+different options for this application.
+</para>
+
+<section><title>&SliTeX;</title>
+
+<para>&SliTeX; is part of the standard &LaTeX; distribution.  Input to &SliTeX; consists of a main file and a slides file.  Individual slides
+are composed in a <literal>slide</literal> environment.
+</para>
+
+<para>&SliTeX;<indexterm><primary sortas="SliTeX">&SliTeX;</primary></indexterm><indexterm><primary sortas="latex">&LaTeX;</primary><secondary>slide packages</secondary></indexterm> has 
+provisions for black-and-white slides, color slides,
+and overlays.  Unlike the other slide-making formats, which rely on
+\special printer commands<footnote><para>{The $\$<literal>special</literal>
+mechanism is a way of passing arbitrary information through &TeX; to the
+&dvidriver; that will ultimately print the document.}</para></footnote> to incorporate color, 
+&SliTeX; produces separate output pages for each color.  For example, if you
+use red to highlight words on an otherwise black-and-white slide,
+&SliTeX; will produce two output pages for the slide: one with all the
+black text (excluding the words in red) and one with just the red
+words.  Both of these pages will be printed in black.  You must
+construct the colored slide by copying the pages onto colored
+transparencies and overlaying them.  Producing slides with overlays
+in the same color is accomplished with a special
+<quote>invisible</quote> color.  This method of producing colored transparencies
+has been made obsolete by modern color printers.  Of course, nothing
+prevents you from using the \special extensions of your
+&dvidriver; in &SliTeX; to produce colored transparencies directly on
+a color printer.  
+</para>
+
+<para>&SliTeX; has always been a separate macro package, distinct from and not
+100\% compatible with &LaTeX;.  With the introduction of &LaTeXe;, &SliTeX; is simply an extension package to the &LaTeXe; core format.  Support
+for a separate &SliTeX; format is being phased out.
+</para>
+
+</section>
+<section><title>&FoilTeX;</title>
+
+<para>&FoilTeX;<indexterm><primary sortas="FoilTeX">&FoilTeX;</primary></indexterm> is an extension of &LaTeX; for producing slides.  The primary
+advantage of &FoilTeX; over &SliTeX; is that it is completely compatible
+with &LaTeX;.<footnote><para>{With the caveat that it still uses the Old Font
+Selection Scheme.}</para></footnote>   Note, however, that the defaults in many cases 
+are not precisely the same as &LaTeX; because of the radically different
+goal of &FoilTeX;.
+</para>
+
+<para>&FoilTeX; provides support for running headers and footers, modified
+theorem environments for better mathematics in slides, support for
+AMS and PostScript fonts, and colors.
+</para>
+
+<para>
+Color slides in &FoilTeX; are handled by &dvidriver; \special
+commands (most commonly <command>dvips</command> \specials).  However,
+&FoilTeX; includes a number of new and extended features for better
+handling of color.  See the section <quote><xref role="label" linkend="sec.texincolor"/></quote> later
+in this chapter for a detailed discussion of using color in &TeX;.
+</para>
+
+</section>
+<section><title>Seminar</title>
+
+<para>The Seminar<indexterm><primary>Seminar</primary></indexterm> style is another alternative for producing slides
+and notes.  Like &FoilTeX;, the Seminar style is designed to work
+on top of &LaTeX;.  (Seminar also works with &AMSLaTeX;.) \ The Seminar
+style is designed to produce output for a PostScript printer.  It 
+isn't strictly necessary to produce PostScript output, but if you do not,
+many of Seminar's features will be unavailable to you.
+</para>
+
+<para>Seminar provides for a mixture of portrait and landscape styles and
+can support color using either a color-separation technique (similar
+to &SliTeX;'s method) or direct use of PostScript color.  In either
+case, the &PSTricks;<indexterm><primary sortas="PSTricks">&PSTricks;</primary></indexterm> macro package is required.  (Consult the
+section <quote><xref role="label" linkend="sec.pictures.pstricks"/></quote> in Chapter&nbsp;<xref role="label" linkend="chap.pictures"/>,
+<emphasis><xref role="label" linkend="chap.pictures"/></emphasis>, for more information.)
+</para>
+
+<para>The Seminar style has support for a number of interesting options (including
+two-up printing of slides), automatic resizing by changing a magnification
+parameter, instructions for converting your &SliTeX; slides, and several
+extensive demonstration files.  Also included are explicit instructions for
+placing Encapsulated PostScript drawings in your slides.
+</para>
+
+</section>
+</section>
+<section><title>&TeX; in Color</title>
+
+<para>With color printers<indexterm><primary sortas="tex">&TeX;</primary><secondary>color options</secondary></indexterm><indexterm><primary>colors</primary><secondary sortas="in tex">in &TeX;</secondary></indexterm> and 
+copiers becoming more common, the
+application of color, especially in transparencies, is more important
+than ever.  Unfortunately, &TeX; knows <emphasis>nothing</emphasis> about color.
+</para>
+
+<para>A little reflection about the design of &TeX; will make it clear
+why this is the case. &TeX; produces device-independent output.
+Even when color printers are as common as <quote>regular</quote> printers, if that
+ever becomes the case, it will always be true that color is an inherently
+device-dependent attribute.  It does not make sense for &TeX; to
+understand color.  However, this does not prevent &TeX; from using color.   
+</para>
+
+<para>At the lowest level, all that is required to use color in &TeX; is some
+way of telling the printer <quote>start printing in &lt;<emphasis>color</emphasis>&gt; here.</quote>
+This is easily accomplished with a \special command.  In the
+discussion that follows, the <command>dvips</command> \special commands are used
+as concrete examples, but conceptually, any color printer can be
+used in this way.
+</para>
+
+<section><title>Setting Up Color</title>
+
+<para>Color <indexterm><primary>colors</primary><secondary sortas="in tex">in &TeX;</secondary></indexterm> support 
+at the &dvidriver; level is provided by \special
+commands, but these are not typically convenient to enter directly
+into your document.  Frequently, these commands are specified in
+terms of percentages of red, green, and blue 
+(RGB color) <indexterm><primary>colors</primary><secondary>RGB</secondary></indexterm> or 
+cyan, magenta, yellow, and black (CMYK color)<indexterm><primary>colors</primary><secondary>CMYK</secondary></indexterm>.
+</para>
+
+<para>Higher-level support is provided by a collection of color control sequences.
+These sequences are loaded either by inputting the  file
+<filename>colordvi.tex</filename><indexterm><primary>colordvi files</primary><secondary sortas="for Plain tex">for Plain &TeX;</secondary></indexterm> (in 
+Plain &TeX;, for example)  or using the
+<filename>colordvi</filename><indexterm><primary>colordvi files</primary><secondary sortas="in latex">in &LaTeX;</secondary></indexterm> style 
+file (in &LaTeX;).
+</para>
+
+<para><command>dvips</command> defines the colors in terms of <quote>crayon names.</quote>  If you
+need very precise control of the colors, you can adjust the precise mix
+of CMYK values in the file <filename>colordvi.tex</filename> after comparing the 
+output of your printer with a standard scale (typically, the PANTONE
+scale).  The following color names are standard in <command>dvips</command>.
+</para>
+
+<simplelist type="horiz" columns="4">
+<member>Apricot</member>
+<member>Emerald</member>
+<member>OliveGreen</member>
+<member>RubineRed</member>
+<member>Aquamarine</member>
+<member>ForestGreen</member>
+<member>Orange</member>
+<member>Salmon</member>
+<member>Bittersweet</member>
+<member>Fuchsia</member>
+<member>OrangeRed</member>
+<member>SeaGreen</member>
+<member>Black</member>
+<member>Goldenrod</member>
+<member>Orchid</member>
+<member>Sepia</member>
+<member>Blue</member>
+<member>Gray</member>
+<member>Peach</member>
+<member>SkyBlue</member>
+<member>BlueGreen</member>
+<member>Green</member>
+<member>Periwinkle</member>
+<member>SpringGreen</member>
+<member>BlueViolet</member>
+<member>GreenYellow</member>
+<member>PineGreen</member>
+<member>Tan</member>
+<member>BrickRed</member>
+<member>JungleGreen</member>
+<member>Plum</member>
+<member>TealBlue</member>
+<member>Brown</member>
+<member>Lavender</member>
+<member>ProcessBlue</member>
+<member>Thistle</member>
+<member>BurntOrange</member>
+<member>LimeGreen</member>
+<member>Purple</member>
+<member>Turquoise</member>
+<member>CadetBlue</member>
+<member>Magenta</member>
+<member>RawSienna</member>
+<member>Violet</member>
+<member>CarnationPink</member>
+<member>Mahogany</member>
+<member>Red</member>
+<member>VioletRed</member>
+<member>Cerulean</member>
+<member>Maroon</member>
+<member>RedOrange</member>
+<member>White</member>
+<member>CornflowerBlue</member>
+<member>Melon</member>
+<member>RedViolet</member>
+<member>WildStrawberry</member>
+<member>Cyan</member>
+<member>MidnightBlue</member>
+<member>Rhodamine</member>
+<member>Yellow</member>
+<member>Dandelion</member>
+<member>Mulberry</member>
+<member>RoyalBlue</member>
+<member>YellowGreen</member>
+<member>DarkOrchid</member>
+<member>NavyBlue</member>
+<member>RoyalPurple</member>
+<member>YellowOrange</member>
+</simplelist>
+</section>
+
+<section><title>Using Color</title>
+
+<para>After <command>dvips</command> has loaded <filename>colordvi</filename>, typesetting text
+in color is simply a matter of using the appropriate color control
+sequence<indexterm><primary>colors</primary><secondary>control sequences</secondary></indexterm><indexterm><primary>control sequences</primary><secondary>color</secondary></indexterm>.  For example, to typeset something in red, use the 
+\Red control sequence in your document, like this:
+</para>
+
+<screen>
+\Red{something in red}
+</screen>
+
+<para>Alternatively, you can change the default text color with the 
+\text\texttt{<emphasis>color</emphasis>} control sequences.  To make default
+color for all text blue, enter:
+</para>
+
+<screen>
+\textBlue
+</screen>
+
+<para>To change the background color, use the \background
+macro.  For example, to make the current and all future pages yellow,
+enter:
+</para>
+
+<screen>
+\background{Yellow}
+</screen>
+
+<para>You can enter a precise color by specifying it in terms of its CMYK
+components.  The \Color and \textColor macros
+exist for this purpose.  To typeset some text in a color that is
+25\% cyan, 35\% magenta, 40\% yellow, and 10\% black,<footnote><para>{I made
+these numbers up.  I take no responsibility for the artistic merits
+(or lack thereof) of the resulting color.}</para></footnote> enter:
+</para>
+
+<screen>
+\Color{.25 .35 .4 .1}{some text}
+</screen>
+
+</section>
+<section><title>Now I've Got Color, but I Need Black and White!</title>
+
+<para>If you have reason to print a colored &TeX; document on a black and white
+printer, you don't have to tear out all of the color commands.  <command>dvips</command>
+includes a <filename>blackdvi</filename> file <indexterm><primary>blackdvi files</primary></indexterm>(analogous 
+to <filename>colordvi</filename><indexterm><primary>colordvi files</primary></indexterm>---an
+input file or style file depending on your macro package), which translates
+all color commands into black and white.
+</para>
+
+<para>Alternatively, <quote>good</quote> implementations of PostScript in a black and white
+printer should translate all colors into shades of grey.  This can be
+an inexpensive way to preview a color document.
+Most screen previewers simply ignore color commands so they print in
+black and white even if the document is colored.
+</para>
+
+</section>
+<section><title>Color Under &LaTeXe;</title>
+
+<para>At the time of this writing, 
+the &LaTeXe;<indexterm><primary sortas="latexe">&LaTeXe;</primary><secondary>colors</secondary></indexterm><indexterm><primary>colors</primary><secondary sortas="latexe">&LaTeXe;</secondary></indexterm> team has 
+not officially adopted a
+standard for using color.  However, it is likely to follow a slightly
+different model than the one described above.  The final design should provide
+color selection commands that are device-independent at the &dvidriver; level (in other words, the color commands will not insert device-specific
+commands, like snippets of PostScript, into the <filename role="extension">DVI</filename> files).
+</para>
+
+</section>
+<section><title>Color Is Subtle</title>
+
+<para>Color commands implemented as \special commands may introduce
+occasional problems.  For example, if &TeX; introduces a page break in
+a paragraph that you have typeset in yellow 
+(<literal>\Yellow{This is a long paragraph...}</literal>), 
+the resulting output may print the page footer
+(and even the header) in yellow, although that was not intended.
+</para>
+
+<para>Circumventing these problems may require careful use of color commands
+in front of text that you want to appear black.  For example, in Plain 
+&TeX; the difficulty described above can be avoided by specifying that
+the page number should be printed this way:
+</para>
+
+<screen>
+\footline{\Black{\hss\tenrm\folio\hss}}
+</screen>
+
+<para>This definition guarantees that the page number will be set in black,
+and because it is a local color change, colored text can flow across the
+page around it.
+</para>
+
+<para>You may want to make sure that other typographic elements are printed in the
+current global color (which may vary).  <command>dvips</command> provides a 
+local color macro called \globalColor for that purpose.  Every
+time the text color is changed globally (with a 
+\text\texttt{<emphasis>Color</emphasis>} command), 
+\globalColor is redefined to print text in that color.
+</para>
+
+</section>
+<section><title>Further Reading</title>
+
+<para>Read the documentation for your &dvidriver; carefully with respect to
+color.  Because it is device-dependent, there is a lot of room for
+interpretation, and it may not always be obvious why some things appear
+the way they do.  And &dvidriver;s are free to implement color in any
+way they choose.
+</para>
+
+</section>
+</section>
+</chapter>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: xml
+sgml-parent-document: "book.xml"
+ispell-skip-sgml: t
+End:
+-->

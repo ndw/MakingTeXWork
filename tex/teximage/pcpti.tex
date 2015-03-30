@@ -1,0 +1,18 @@
+\newbox\pcptibox
+\newdimen\pcptiwd
+\font\pcptia=pcptia at 72.27truept
+\font\pcptib=pcptib at 72.27truept
+\setbox\pcptibox=\vbox{\hbox{%
+\pcptia\char0\char1\char2\char3\char4}}
+\pcptiwd=\wd\pcptibox
+\setbox\pcptibox=\hbox{\vbox{\hsize=\pcptiwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\pcptia\char0\char1\char2\char3\char4}
+\hbox{\pcptia\char5\char6\char7\char8\char9}
+\hbox{\pcptia\char10\pcptib\char0\char1\char2\char3}
+\hbox{\pcptib\char4\char5\char6\char7\char8}}}
+\ifx\parbox\undefined
+    \def\setpcpti{\box\pcptibox}
+\else
+    \def\setpcpti{\parbox{\wd\pcptibox}{\box\pcptibox}}
+\fi

@@ -1,0 +1,19 @@
+\newbox\mewbox
+\newdimen\mewwd
+\font\mewa=mewa at 72.27truept
+\font\mewb=mewb at 72.27truept
+\font\mewc=mewc at 72.27truept
+\setbox\mewbox=\vbox{\hbox{%
+\mewa\char0\char1\char2\char3\char4}}
+\mewwd=\wd\mewbox
+\setbox\mewbox=\hbox{\vbox{\hsize=\mewwd
+\parskip=0pt\offinterlineskip\parindent0pt
+\hbox{\mewa\char0\char1\char2\char3\char4}
+\hbox{\mewa\char5\mewb\char0\char1\char2\char3}
+\hbox{\mewb\char4\char5\mewc\char0\char1\char2}
+\hbox{\mewc\char3\char4\char5\char6\char7}}}
+\ifx\parbox\undefined
+    \def\setmew{\box\mewbox}
+\else
+    \def\setmew{\parbox{\wd\mewbox}{\box\mewbox}}
+\fi

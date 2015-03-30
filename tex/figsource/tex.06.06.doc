@@ -1,0 +1,11 @@
+% Format: amstex
+\documentstyle{amsppt}
+
+\input xypic.tex
+
+\NoPageNumbers
+\nologo
+
+\input tex.06.06.tex
+
+\bye

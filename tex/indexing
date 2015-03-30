@@ -1,0 +1,33 @@
+There are three macros for indexing:
+
+  \idx{word or phrase}  inserts "word or phrase" into the text
+                        and the index.
+
+  \ixx{word or phrase}{index entry}  inserts "word or phrase" into the
+                                     text and "index entry" into the index.
+
+  \index{index entry}   inserts "index entry" into the index.
+
+
+
+
+If you use \index, make sure it touches the word you're indexing:
+
+  e.g. this is how to index fred\index{fred's entry} if you need to.
+
+
+
+
+Multiple levels of indexing are seperated by exclamation points:
+
+  
+  "Fonts!PostScript!AFM Files"  creates the index   Fonts
+                                                      PostScript
+						         AFM Files   999
+
+
+To index a range of pages, put
+
+  "index entry|("  at the beginning, and
+  "index entry|)"  at the end.
+

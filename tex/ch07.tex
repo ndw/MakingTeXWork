@@ -1,0 +1,826 @@
+\chapter[International Considerations]{International\\Considerations} 
+\RCSID$Id: ch07.tex,v 1.1 2002/08/23 14:58:46 nwalsh Exp $
+\label{chap:foreign}
+
+\bgroup % <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%
+
+\font\jfcG=wjisc6
+\font\jfcb=wjiscb
+\font\jfbI=wjisb8
+\def\pmj{{\tt pmJ}{\jfcG\char252\jfcb\char220\jfbI\char236}}
+
+\font\dcr=dcr10
+\def\guillemet{{\dcr\char"13\relax}}
+
+Although the standard \TeX\ macro packages and the Computer Modern fonts were
+designed to typeset documents written primarily in English, \TeX\ enjoys
+widespread international 
+use\index{international!typesetting}\index{typesetting!multilingual documents}\index{international!considerations for tex@considerations for \TeX}.  
+
+From a technical standpoint, languages can be divided into two categories:
+those that are ``like English'' (meaning that they use a relatively small
+number of characters and are typeset horizontally, left to right) and those
+that are not.  German, French, and Russian are all ``like English'' in this
+sense.  Hebrew, Chinese, and 
+Japanese are not (Hebrew\index{Hebrew} is 
+typeset right to left,
+and Chinese\index{Chinese} and 
+Japanese\index{Japanese} use 
+thousands of characters).\footnote{Chinese and
+Japanese are also typeset vertically.  At present, \TeX\ does not support
+vertical typesetting, although there is at least one effort underway to provide
+that feature.  See the section called ``\nameref{sec:asciijtex}'' for
+more information on vertical typesetting.}
+
+This chapter explores some of the issues that arise when \TeX\ is used to
+typeset languages other than English.  For simplicity, we'll look at languages
+like English first, and then describe some 
+environments for typesetting much more complex languages.
+
+\section{Typesetting in Any Language}
+
+In order to typeset\index{typesetting!steps} any 
+language with \TeX, three things have to happen:
+
+\begin{enumerate}
+\item \TeX\ has to read the input file and perform the correct mapping from
+the input file's character set to its internal representation of each
+character.  The character
+set used in the input file will vary depending upon the language. For instance,
+if you're
+writing a document in French\index{French}, it 
+is as natural to use ``\'e'' in your
+input file as it is to use any other letter.
+
+\item \TeX\ has to typeset the document according to the rules of the
+language being used.  Naturally, this means that there must be some
+way of declaring what language is being used, and appropriate macros
+have to exist to embody the rules of that language.  Users familiar only
+with English may not recognize the importance of language-specific
+rules because English has so few rules.  Other languages have many.
+In German\index{German}, for 
+example, if the consonants ``ck'' in a word are broken
+by a hyphen, the ``c'' becomes a ``k'' (``k-k'').  
+In French\index{French}, small
+amounts of extra
+space are placed around various punctuation marks.
+
+A good reference manual for internationalization is
+\textit{Software Internationalization and Localization: An 
+Introduction}~\cite{eu:international}.
+
+\item The \ext{DVI} file that results from typesetting the document must
+be printed correctly.  In other words, all of the accented characters and
+symbols used by the language must be available (or constructed) for
+previewing and printing.
+\end{enumerate}
+
+Early attempts to write documents in languages other than English were
+hampered by several limitations in the \TeX\ program.  In particular, fonts
+were limited to 128 characters, and only a single set of hyphenation patterns
+could be loaded (effectively preventing multilingual documents from being
+hyphenated correctly).  These technical problems were corrected in \TeX\
+version 3.x (first released in 1990).  The remaining difficulties---mostly
+a lack of standardization and the need to develop relevant language-specific
+macros---are being addressed by the TUG\index{TeX User's Group (TUG)@\TeX\ Users Group (TUG)} \idx{Technical Working Group on Multiple Language Coordination (TWGMLC)}.
+
+\subsection{Reading Input Files}
+
+The first point to consider when typesetting is that every input file
+is written in some character set.  For example, because this book is
+written in English and I work in the United States, the source code
+for this book is written in 7-bit ASCII\index{ASCII character set}.  If 
+this book were written in
+another language, a different character set, perhaps ISO Latin1, would
+be more appropriate.
+
+When \TeX\ reads your input file, characters like ``\'e'' and
+``\guillemet'' have to be translated into a form that \TeX\ can use.
+For example, ``\'e'' should be translated into \verb|\'e| and, if the
+DC fonts are in use, ``\guillemet'' should be translated into
+character 19; otherwise, if the \idx{DC fonts} are not in use,
+``\guillemet'' should be translated into \verb|$<<$| which will give
+the approximate result.  The DC fonts are discussed in the section
+called ``\nameref{sec:for:printing},'' later in this chapter.
+
+It is always possible to access characters from another symbol set by
+using a control sequence\index{control sequences!using to access other languages}.  Table~\ref{tab:accentedchar} shows the 
+standard \TeX\ control sequences for accessing accented characters and
+characters from other alphabets.\footnote{The accent macros are
+shown with a lower case e; naturally, any letter that needs to
+be accented can be used in place of the e.}
+
+\begin{xtable}{l|l||l|l}
+  \caption{Standard Control Sequences
+     for Symbols from Other Character Sets\label{tab:accentedchar}}\\
+  \bf Control       &             & \bf Control       & \\
+  \bf Sequence      & \bf Symbol  & \bf Sequence      & \bf Symbol \\[2pt]
+  \hline
+  \tstrut
+  \verb|\`e|    &  \`e    & \verb|\oe| &  \oe  \\
+  \verb|\'e|    &  \'e    & \verb|\ae| &  \ae  \\
+  \verb|\"e|    &  \"e    & \verb|\o|  &  \o   \\
+  \verb|\u{e}|  &  \u{e}  & \verb|\aa| &  \aa  \\
+  \verb|\.e|    &  \.e    & \verb|\l|  &  \l   \\
+  \verb|\t{ee}| &  \t{ee} & \verb|\OE| &  \OE  \\
+  \verb|\d{e}|  &  \d{e}  & \verb|\AE| &  \AE  \\
+  \verb|\H{e}|  &  {\fontfamily{cmr}\selectfont\H{e}}  & \verb|\O|  &  \O   \\
+  \verb|\^e|    &  \^e    & \verb|\AA| &  \char'302  \\
+  \verb|\v{e}|  &  \v{e}  & \verb|\L|  &  \L   \\
+  \verb|\=e|    &  \=e    & \verb|?`|  &  ?`   \\
+  \verb|\~e|    &  \~e    & \verb|!`|  &  !`   \\
+  \verb|\c{e}|  &  \c{e}  & \verb|\ss| &  \ss  \\
+  \verb|\b{e}|  &  \b{e}  &            &       \\[2pt]
+  \hline
+\end{xtable}                     
+
+Table~\ref{tab:newaccentedchar} shows
+new control sequences proposed by the TWGMLC for characters not available
+in standard \TeX\ and \LaTeX\ distributions.\footnote{These characters are 
+available in the DC fonts and were not previously available in standard \TeX.}
+
+\begin{xtable}{ll|c|l}
+  \caption{New Control Sequences Proposed by 
+    TWGMLC\label{tab:newaccentedchar}}\\
+  \multicolumn{2}{l|}{\bf Control Sequences} & \bf Symbols & \bf Description\\[2pt]
+  \hline
+  \tstrut
+  \verb|,,| & \verb|``|   & \dcr\char18\ \ \ \char16 & 
+    German quotations ({\dcr\char18}G\"ansef\"u\ss{}chen{\dcr\char16})\\
+  \verb|<<| & \verb|>>|   & \dcr\char19\ \ \ \char20 &
+    French quotations (guillemets) \\
+  \verb|\dh| & \verb|\DH| & \dcr\char240\ \ \ \char208 &
+    Icelandic eth \\
+  \verb|\dj| & \verb|\DJ| & \dcr\char158\ \ \ \char208 &
+    Serbocroation dj \\
+  \verb|\ng| & \verb|\NG| & \dcr\char173\ \ \ \char141 &
+    Sami ng \\
+  \verb|\th| & \verb|\TH| & \dcr\char254\ \ \ \char222 &
+    Icelandic thorn \\
+  \verb|\k e| &   & \dcr\char166 & Polish ogonek subscript \\
+  \verb|\r u| &   & \dcr\char183 & Czech circle accent \\
+  \verb|\v{d}| & \verb|\V{D}| & \dcr\char164\ \ \ \char132 &
+    Czech d and D with ha\v{c}ek \\
+  \verb|\v{l}| & \verb|\V{l}| & \dcr\char169\ \ \ \char137 &
+    Slovakian l and L with ha\v{c}ek \\
+  \verb|\v{t}| & \verb|\V{T}| & \dcr\char180\ \ \ \char148 &
+    Czech t and T with ha\v{c}ek \\[2pt]
+  \hline
+\end{xtable}
+
+The only technical problem associated with using language-specific
+character sets in your input files is that you must have some way of telling
+\TeX\ to perform the appropriate substitutions.  One method is to use a
+special style file like
+\filename{isolatin1}.\footnote{\filename{isolatin1.sty} is available from
+the CTAN archives in \ctandir{macros/latex/contrib/misc/}.}
+This style uses 
+``active characters'' to map the ISO Latin1 input
+character set to \TeX's representation.  It could be adapted to other
+character sets as well.  Another possibility is to rely on system-dependent
+extensions to \TeX.  For example, \emTeX\ provides extensive support
+for ``code pages,'' which address this problem.
+
+The only other problem created by using different input character sets is one
+of compatibility.  If you write files using the ISO Latin1 character set and
+send
+them to someone who uses a different character set, the 
+file will appear to be incorrect.\footnote{If you use electronic mail 
+to send files that use any 
+characters other than the printable subset of 7-bit ASCII (space through
+tilde),
+you are bound to run into problems.  You can combat
+this problem by using a wrapper (like uuencoding or MIME messages) when you
+send the mail, but those tools are outside the scope of this book.  Ask your
+system administrator for more assistance with sending binary mail.}  
+
+\subsubsection{Appearances can be deceiving}
+
+A document stored on disk is really just a file containing a series of
+characters, each represented by a unique numerical value.  For
+an editor to display a document, each numerical value must
+be translated into a visual representation of the character.  Frequently
+this translation is performed by the operating system or computer hardware.
+In an analogous way, each numeric value must be translated into a printable
+character when the document is typeset.
+
+Figure~\ref{fig:charmap} shows how this translation is performed for
+display by the operating system and for printing by \TeX\ (using the
+\filename{isolatin1} style, for example).  This figure shows the disparity
+that occurs if the two translation tables are not the same.
+
+\epsimage{fig:charmap}{Character mapping example}
+
+How can this arise?  Well, suppose, for example, that a colleague is
+writing a document in French\index{French}.  He 
+has a \TeX{}nical problem that he
+would like me to investigate.  I agree to take a look, and he sends the
+file to me.  My colleage is using the ISO Latin1 character set in his
+input file because it contains many symbols that are convenient for
+writing French (including the guillemets).  I receive the file and
+edit it on my PC.  The file that I see displayed looks like gibberish.
+That's because I'm using the IBM OEM encoding on my PC, which
+is sufficient for English.  All of the special characters in the
+ISO Latin1 character set appear incorrect.  Bewildered, I \TeX\ and
+preview the document to see what it's supposed to look like.  To my
+surprise, the previewed document looks fine.
+
+In this case, I can correct the problem by changing the ``code page'' used
+on my PC or by translating the input file with a program like 
+\ixx{GNU \program{recode}}{GNU recode}.\footnote{\program{recode} is available from
+\texttt{prep.ai.mit.edu} and other places where GNU software is archived.}
+
+\subsection{Changing the Rules}
+
+In order to select languages, the TWGMLC has proposed a set of
+language switching macros.  These are shown in
+Table~\ref{tab:langswitch}.\footnote{These are ``low-level'' macros.
+A higher-level interface will be provided for each language.  See the
+section called ``\nameref{sec:babel}'' later in this chapter for more
+information.}
+
+%\input{fg-lang.tab}
+
+Selecting a language has three effects:
+
+\begin{itemize}
+  \item It establishes the correct hyphenation 
+  environment\index{hyphenation!language-specific}.
+
+        Language-specific hyphenation patterns are loaded, if necessary,
+        and correct values for the minimum length of a hyphenated
+        word fragment are set.
+
+        At the time of this writing, hyphenation patterns are already
+        available, or under development, for Armenian, Bulgarian,
+        Cambodian, Catalan, Croation, Czech, Danish, Dutch, English
+        (U.K. and U.S.), Esperanto, Estonian, Finnish, French, German,
+        Greek (both modern and ancient), Hungarian, Icelandic,
+        Italian, Kirundi, Latin, Lithuanian, Norwegian, Polish,
+        Portuguese, Russian, Slovak, Swahili, Swedish, Yiddish, and
+        Yoruba.
+
+  \item It loads the correct fonts and special characters.
+
+        Even languages which use the same alphabet may have different
+        fonts\index{fonts!language-specific}\index{special characters!language-specific}\index{characters!special!language-specific}
+        in order to provide specific features of the language.
+        For example, the ``fi'' \ixx{ligature}{ligatures} makes 
+        sense only when typesetting
+        English, and the \cs{th} and \cs{TH} macros 
+        make sense only when typesetting languages that need 
+        ``{\dcr\char254}'' and ``{\dcr\char222}.''
+
+       
+\vfill
+\newpage
+{
+\tabcolsep=3pt\fontsize{9}{10pt}\selectfont\def\b{\ttbackslash\tt\small}
+\begin{xtable}{c|l||c|l||c|l||c|l}
+  \caption{Language Switch Macros Proposed by TUG\label{tab:langswitch}}\\
+ \bf\tiny Macro &      & \bf\tiny Macro &         & \bf\tiny Macro &          & \bf\tiny Macro & \\
+ \bf\tiny Switch & \bf Language & \bf\tiny Switch & \bf Language & \bf\tiny Switch & \bf Language & \bf\tiny Switch & \bf Language \\[2pt]
+\hline
+\tstrut
+  \b AB & Abkhazian    & \b FY & Frisian     & \b MG & Malagasy     & \b SB & Sorbian    \\
+  \b OM & Afan Oromo   & \b GL & Galician    & \b ML & Malayalam    & \b ES & Spanish    \\
+  \b FF & Afar         & \b KA & Georgian    & \b MS & Malay        & \b SU & Sudanese   \\
+  \b AF & Afrikaans    & \b DE & German      & \b MT & Maltese      & \b SW & Swahili    \\
+  \b SQ & Albanian     & \b EL & Greek       & \b MI & Maori        & \b SV & Swedish    \\
+  \b AM & Amharic      & \b KL & Greenlandic & \b MR & Marathi      & \b TL & Tagalog    \\
+  \b AR & Arabic       & \b GN & Guarani     & \b MO & Moldavian    & \b TG & Tajik      \\
+  \b HY & Armenian     & \b GU & Gujarati    & \b NA & Nauru        & \b TA & Tamil      \\
+  \b AS & Assamese     & \b HA & Hausa       & \b NE & Nepali       & \b TT & Tatar      \\
+  \b AY & Aymara       & \b HE & Hebrew      & \b NO & Norwegian    & \b TE & Telugu     \\
+  \b AZ & Azerbaijani  & \b HI & Hindi       & \b OC & Occitan      & \b TY & Thai       \\
+  \b BA & Bashkir      & \b HU & Hungarian   & \b OR & Oriya        & \b BO & Tibetan    \\
+  \b EU & Basque       & \b IS & Icelandic   & \b PS & Pashto       & \b TI & Tigrinya   \\
+  \b BN & Bengali      & \b ID & Indonesian  & \b FA & Persian      & \b TO & Tonda      \\
+  \b DZ & Bhutani      & \b IA & Interlingua & \b PL & Polish       & \b TS & Tsonga     \\
+  \b BH & Bihari       & \b IE & Interlingue & \b PT & Portuguese   & \b TR & Turkish    \\
+  \b BI & Bislama      & \b IU & Inuktitut   & \b PA & Punjabi      & \b TK & Turkmen    \\
+  \b BR & Breton       & \b IK & Inupiak     & \b QU & Quechua      & \b TW & Twi        \\
+  \b BG & Bulgarian    & \b GA & Irish       & \b RM & Rhaeto-Roman & \b GB & U.K. English \\
+  \b MY & Burmese      & \b IT & Italian     & \b RO & Romanian     & \b US & U.S. English \\
+  \b BE & Byelorussian & \b JA & Japanese    & \b RU & Russian      & \b UG & Uigur      \\
+  \b KM & Cambodian    & \b JW & Javanese    & \b SE & Sami         & \b UK & Ukrainian  \\
+  \b CA & Catalan      & \b KN & Kannada     & \b SM & Samoan       & \b UR & Urdu       \\
+  \b ZH & Chinese      & \b KS & Kashmiri    & \b SG & Sangho       & \b UZ & Uzbek      \\
+  \b CO & Corsican     & \b KK & Kazakh      & \b GD & Scots Gaelic & \b VI & Vietnamese \\
+  \b HR & Croatian     & \b RW & Kinyarwanda & \b SR & Serbian      & \b VO & Volapuk    \\
+  \b CS & Czech        & \b KY & Kirghiz     & \b ST & Sesotho      & \b CY & Welsh      \\
+  \b DA & Danish       & \b RN & Kirundi     & \b TN & Setswana     & \b WO & Wolof      \\
+  \b NL & Dutch        & \b KO & Korean      & \b SN & Shona        & \b XH & Xhosa      \\
+  \b EO & Esperanto    & \b KU & Kurdish     & \b SD & Sindhi       & \b YI & Yiddish    \\
+  \b ET & Estonian     & \b LO & Laothian    & \b SI & Singhalese   & \b YO & Yoruba     \\
+  \b FO & Faroese      & \b LV & Latvian     & \b SS & Siswati      & \b ZA & Zhuang     \\
+  \b FJ & Fiji         & \b LN & Lingala     & \b SK & Slovak       & \b ZU & Zulu       \\
+  \b FI & Finnish      & \b LT & Lithuanian  & \b SL & Slovenian    &     &            \\
+  \b FR & French       & \b MK & Macedonian  & \b SO & Somali       &     &            \\[2pt]
+  \hline
+\end{xtable}
+}
+\newpage
+
+  \item It defines special primitive operations, if appropriate.  
+
+        For example, right-to-left typesetting primitives are
+        necessary only for languages like Hebrew\index{Hebrew} which are typeset right-to-left.
+\end{itemize}
+
+\subsection{Printing the Result}
+\label{sec:for:printing}
+
+The Computer Modern Fonts\index{Computer Modern fonts!language extensions}
+are insufficient for typesetting languages
+other than English.  In order to overcome this difficulty, the \TeX\
+User's Group has extended the Computer Modern encoding vector and
+established a new standard.
+
+The new standard fonts are known variously as 
+the \idx{Cork fonts}\index{fonts!Cork}, the
+\idx{DC fonts}\index{fonts!DC}, and 
+the \idx{EC fonts}\index{fonts!EC}.  These are all synonymous.  The new
+standard was created following discussions at the \TeX\ User's Group
+meeting in Cork, Ireland in 1990, hence the name Cork.  The
+\ixx{\MF\ fonts}{metafont fonts@\MF\ fonts}\index{fonts!metafont@\MF}, which embody this 
+encoding, will eventually become the EC
+fonts.  The current versions, available now, are still being refined
+(in the sense that some of the letter forms are being refined; the
+encoding will not change).  These are called the DC
+fonts.
+
+There is a distinction between the standard encoding vector and
+the \MF\ fonts that replace Computer Modern.  Therefore, I will
+refer to the standard encoding as the ``\idx{Cork Encoding}'' and to the
+\MF\ fonts as the ``DC fonts''.\footnote{Because the ``EC fonts'' don't
+exist yet, I won't mention them again.}
+
+At the time of this writing, the DC fonts are not a complete superset
+of Computer Modern because the DC Math fonts have not yet been released.
+(The \ixx{DC fonts}{DC fonts!Math fonts}\index{fonts!DC Math} will contain 
+the upper-case Greek\index{Greek} alphabet, which
+is currently missing from the DC fonts.)
+When the DC Math fonts are released, the DC fonts will be a complete
+superset of Computer Modern.  The only apparent difference will be
+that the accents on the DC fonts are not at exactly the
+same height as the accented characters constructed with the \cs{accent}
+primitive using Computer Modern.\footnote{Actually, the issue of accents is 
+a difficult one.  Different languages which have the same letters do not 
+always place accents at the same height.  This is yet another problem that
+will have to be resolved.}
+
+The Cork Encoding is shown in Table~\ref{tab:font:corkencoding} in
+Appendix~\ref{app:fonts}, {\it \nameref{app:fonts}}.  There are 255 symbols in
+this vector with one blank for special purposes.  Unlike the Computer Modern
+fonts, which have different encoding vectors in some typefaces (Computer Modern
+Roman is not the same as Computer Modern Typewriter, for example), all of the
+DC fonts have the same encoding vector.
+
+% \input{fg-cork.tab}
+
+Several people have commented that the Cork Encoding suffers from a
+``design error'' because it places characters in positions 0-31, which
+are frequently inaccessible in other applications, and because it places a
+nonstandard character at position 32, where a space usually occurs.
+This is not a design error.  Bear in mind that the DC fonts are
+designed to be \TeX\ output fonts.  Font creators, working in other
+environments (for example, TrueType or PostScript) are free to divide
+the Cork Encoding into two separate font files and provide a virtual
+font for \TeX\ that establishes the correct encoding.  The motivation
+for putting as many symbols as possible in a single font is that \TeX\
+cannot \ixx{kern}{kerning} across fonts.
+
+This is not meant to imply that the DC fonts should always be 
+virtual\index{fonts!virtual}\index{virtual fonts}\index{fonts!real}.
+In fact, the DC fonts should be the ``real'' fonts upon which virtual
+fonts are based.  
+A virtual Computer Modern font based upon the real
+DC fonts is infinitely preferable to a virtual DC font built on Computer Modern
+because:
+
+\begin{itemize}
+  \item You need a ``real'' font to make virtual fonts, and the Computer
+        Modern fonts don't contain enough {\em real\/} characters.
+  \item Expressing accented characters in \MF\ is much better than
+        building accents inside a virtual font.  The virtual font
+        has less information to work with (it has only boxes).
+  \item Different languages use accents at different heights.  A simple
+        ``patch'' to the \MF\ code for a real font with accents is
+        far superior to introducing another set of virtual fonts
+        for every language.
+\end{itemize}
+
+From a purely practical point of view, the correct way to deal with 
+these and related problems is to use the babel style files.  
+
+\section{The Babel Styles}
+\label{sec:babel}
+
+The \idx{babel styles}\index{style files!babel} are a 
+collection of style files for \LaTeX\ that
+provide features for typesetting in many languages.
+The babel styles are
+compatible with Plain \TeX\ and all versions of \LaTeX. (In particular,
+they are being adopted as the standard multilingual styles in \LaTeXe\
+and will be the standard in \LaTeX3 when it is released.)
+
+To date, babel styles exist for 
+Catalan,        Croatian,       Cyrillic,       Czech,
+Danish,         Dutch,          English,        Esperanto,
+Finnish,        French,         Galician,       German,
+Italian,        Hungarian,      Norwegian,      Polish,
+Portuguese,      Romanian,       Russian,        Slovak,
+Slovenian,      Spanish,        Swedish,  and   Turkish,
+as well as several dialects (American as a dialect of English,
+for example).
+
+Example~\ref{ex:usinglangs} shows the skeletal
+structure of a document using the English and French styles.  Within the
+document, the \cs{selectlanguage} control sequence is used
+to switch
+between languages.\footnote{Another control sequence,
+\texttt{\ttbackslash iflanguage}, is provided so that you can write macros
+which are sensitive to the language in use when they are expanded.}  
+The language that is in effect by default
+is determined when the format file is created.
+
+\newpage
+\begin{example}{ex:usinglangs}{A Sample Multilingual Document 
+    Using English and French}
+\documentstyle[english,francais]{article}
+\begin{document}
+This is a document which uses both English and 
+French. \selectlanguage{french} Mais, je ne parle plus 
+fran\c{c}ais. \selectlanguage{english}  So I won't try 
+to make this example very long.
+\end{document}
+\end{example}
+
+Selecting a language automatically has the following effects:
+
+\begin{itemize}
+
+\item It selects \ixx{hyphenation patterns}{hyphenation!patterns} for 
+      the language.   This means
+      that paragraphs of text will be hyphenated according to the
+      conventions of the language in use.\footnote{Paragraphs that
+      contain multiple languages will be hyphenated according to the
+      rules of the language in effect when the paragraph ends.}
+      Switching hyphenation patterns is possible only if the format
+      file being used by \TeX\ contains hyphenation rules for
+      language\index{hyphenation!language-specific}.
+
+\item It automatically translates the names of all the document elements
+      into the selected language.  For example, if you insert
+      the \cs{tableofcontents} when French\index{French}  is the selected
+      language, the table of contents will be called the
+      ``Table des mati\`eres'' instead of ``Table of Contents.''
+
+\item It alters the format of the date produced by the \cs{today} macro
+      to fit the conventions of the selected language.
+      In American, \cs{today} is ``January 30, 1994''; in 
+      English it is ``30th January 1994''; and in French it is
+      ``30 janvier 1994.''\index{dates (language-specific)}
+
+\item It defines particular typing shortcuts to make writing the selected
+      language more convenient for the typist.  For example, 
+      the French\index{French}
+      style makes several punctuation characters into macros so that extra
+      space is automatically inserted before them according to French
+      typographic conventions\index{typing shortcuts (language-specific)}.
+\end{itemize}
+
+\subsection{Building Multilingual Babel Formats}
+\label{sec:babelfmt}
+
+Building a \ixx{multilingual format file}{multilingual format files} is 
+very much like building a
+format\index{format files!multilingual} for 
+a single language.  The only difference is that instead of loading 
+a single set of hyphenation patterns (generally from a file called
+\filename{hyphen.tex}), you will need hyphenation patterns for each language 
+that you want
+to use.  These can be obtained from the CTAN archives in the directory
+\ctandir{tex-archive/language/hyphenation}.
+
+If you have a file called \filename{hyphen.tex} on your system, rename it.
+This file is distributed as part of the standard \TeX\ distribution and
+contains American English hyphenation patterns, so \filename{ushyphen.tex}
+is an appropriate name.
+
+Next, create a file called \filename{language.dat} that contains one line
+for each language you want to use.  Each line should list the language
+name and the file containing hyphenation patterns for that language.
+For example, an appropriate \filename{language.dat} file for the format 
+used to typeset Example~\ref{ex:usinglangs} might contain these lines:
+
+\begin{ttindent}
+english ehyphen.tex
+francais fr8hyph.tex
+\end{ttindent}
+
+Now, proceed to construct the format file using \ixx{ini\TeX}{initex@ini\TeX} according to the 
+instructions distributed with the format or by following the suggestions
+in Chapter~\ref{chap:macpack}, \textit{\nameref{chap:macpack}}.  When
+ini\TeX\ complains that it cannot find \filename{hyphen.tex}, provide the
+alternate name \filename{babel.hyphen}.  This will use \filename{language.dat} to
+load the appropriate hyphenation patterns and associate them with the
+languages you specified.
+
+\begin{note}{NOTE}
+The first language that you list in \filename{language.dat} will be the
+default language for the format file that you create.
+\end{note}
+
+\section{\protect\TeX\ Pitfalls}
+
+\TeX\ 3.x, the \idx{Cork Encoding}, and language-specific macro files are not 
+``magic bullets'' that can solve all of the problems that arise in typesetting
+multilingual documents or writing macros that are useful in all language
+contexts.
+Some of the deficiencies are really insoluble without changing the \TeX\
+program in ways that are not allowed by Knuth.  Two such problems are
+mentioned here:
+
+\begin{itemize}
+  \item The \cs{uppercase} and \cs{lowercase} primitives are 
+        problematic.  
+
+        There is a strict one-to-one mapping between
+        lowercase and uppercase letters in \TeX.  Unfortunately, accented
+        letters may require different mappings.  Consider these examples:
+
+        \begin{tabular}{lll}
+          \verb|\"I with two dots| & \"I with two dots & What you typed \\
+          \verb|\"i with two dots| & \"i with two dots & Result of \cs{lowercase} \\
+          \verb|\"\i\ with two dots| & \"\i\ with two dots & Correct lowercase
+        \end{tabular}
+
+        Because no information about the accent is known, the result
+        of passing your text to the \cs{lowercase} primitive is not
+        correct.
+
+        This problem can be minimized by using an input character set
+        which contains the accented letters that you need.  This allows
+        you to establish the appropriate one-to-one relationships.
+
+        Some of the characters chosen for the Cork encoding were 
+        driven by this weakness as well.  The only reason that
+        ``{\dcr\char"DF}'' is a glyph is so that it can be the
+        \cs{uppercase} character for ``{\dcr\char"FF}.''
+
+  \item \TeX\ doesn't distinguish between a dash used in a compound word
+        (for example, ``wish-fulfillment'') and a dash used for hyphenation.
+
+        This distinction isn't necessary in English because English doesn't
+        have any end-of-word \idx{ligatures}.  Imagine a language
+        where ``sh'' should become ``x'' at the end of a 
+        word.\footnote{This is a concocted example; to my knowledge, 
+        it doesn't actually appear 
+        in any language.}  A compound word like
+        ``push-ready'' should be typeset ``pux-ready'' whereas a
+        word like ``pushover'' should remain ``push-over'' if it is
+        hyphenated across a line break.
+\end{itemize}
+
+\section{Very Complex Languages}
+
+The following sections describe \TeX\ packages (collections of macros,
+fonts, and other files) that allow you to typeset languages very
+different from English.  
+
+\subsection{Japanese}
+
+Typesetting Japanese\index{Japanese} 
+involves solving several problems.  The first is
+the task of entering Japanese text with an editor.  There are many editors on
+many platforms that can handle Japanese input.  Although there are also
+established ways to romanize Japanese text so that it can be displayed on
+terminals that do not provide support for Japanese input, these are bound to
+be inconvenient for anyone seriously writing in Japanese.  If you are in a
+position to edit Japanese text, you are probably already aware of several 
+good editors.
+
+The second problem is that typesetting Japanese with \TeX\ requires many,
+many fonts.  The fact that a single font can hold no more than 256 symbols
+means that dozens (perhaps hundreds) of fonts are required to represent
+all of the myriad symbols used in everyday Japanese writing.  There are
+some hard-coded limits on the number of fonts that a single \TeX\
+document can use, and it is possible to bump into them pretty quickly
+when typesetting a language like Japanese.
+
+Another problem is printing the output.  Assembling a collection of fonts
+that contain high-quality glyphs for all of the necessary characters is a
+time consuming and potentially expensive task.  At present, the 
+freely-available fonts are of relatively low quality.
+
+A complete discussion of these issues, and many others can be found in
+\textit{Understanding Japanese Information Processing}~\cite{kl:japinfoproc}.
+
+\subsubsection{ASCII Nihongo \protect\TeX}
+\label{sec:asciijtex}
+
+ASCII Nihongo \TeX\index{ASCII  Nihongo tex (jtex)@ASCII  Nihongo \TeX\ (\jtex)}\index{Japanese!ASCII Nihongo tex (jtex)@ASCII Nihongo \TeX\ (\jtex)} (also 
+known as \ixx{\jtex}{jtex@\jtex}) is a complete, Japanized version of
+\TeX.  Instead of trying to shoehorn Japanese into traditional \TeX\ programs,
+all of the programs have been modified to accept files containing standard
+Japanese text (two bytes per character).  This section describes the 
+\idx{ASCII Corporation}'s version of \jtex.  See the section called
+``\nameref{sec:nttjtex}'' for information about NTT's version of \jtex.  You
+can get the ASCII version of \jtex\ from \verb|ftp.ascii.co.jp| (133.152.1.1).
+
+ASCII Nihongo \TeX\ is based on \TeX\ 2.9 and can read input files coded with
+JIS, Shift-JIS, EUC, and KUTEN.  The \ext{DVI} files produced by ASCII \jtex\
+are not standard \ext{DVI} files.  In order to support the large character 
+set for Japanese writing, the \ext{DVI} files use commands that are not 
+output by standard \TeX, so many drivers do not support them.
+You cannot process \ext{DVI} files produced by ASCII \jtex\ with
+most standard \dvidriver{}s.
+
+Release notes with version 1.7 of \jtex\ indicate that it will be the last
+public release of \jtex.  Another product, called p\TeX\ (for Publishing \TeX)
+may be released at some time in the future.  One advantage of p\TeX\ will be
+the ability to typeset vertically.
+
+The primary disadvantage of the \jtex\ system is that there are no 
+freely-available fonts for it.  The authors assume that you will be using fonts
+resident in your printer.  You may be able to purchase Japanese fonts from
+some font vendors, although I've seen no detailed instructions for using them
+with \jtex.  Other, albeit more minor, disadvantages are the need to build and
+maintain an entire parallel \TeX\ distribution and the fact that standard
+\ext{DVI} drivers cannot process \jtex\ \ext{DVI} files.
+
+\subsubsection{NTT \jtex}
+\label{sec:nttjtex}
+
+\jtex\index{NTT jtex@NTT \jtex}\index{Japanese!NTT jtex@NTT \jtex} is a 
+complete, Japanized version of \TeX.  Instead of trying to
+shoehorn Japanese into traditional \TeX\ programs, all of the programs have
+been modified to accept files containing standard Japanese text (two bytes per
+character).  This section describes NTT's version of 
+\jtex.  See the section called ``\nameref{sec:asciijtex}'' for information
+about ASCII Corporation's version of \jtex.
+You can get the NTT version of \jtex\ from \verb|ftp.math.metro-u.ac.jp|
+(133.86.76.25)
+
+NTT \jtex\ is based on \TeX\ 3.14 and can read input files coded with JIS,
+Shift-JIS, and EUC.  In addition to support for commercial Japanese fonts, NTT
+\jtex\ includes a set of fonts generated from 24x24 dot bitmaps (JIS C-6234).
+Unlike ASCII \jtex, NTT produces standard \ext{DVI} files.
+
+\subsubsection{Poor Man's Japanese \protect\TeX}
+
+\ixx{Poor Man's Japanese \TeX\ (\,\pmj)}{Poor Man's Japanese tex (pmj)@Poor Man's Japanese \TeX\ (\pmj)}\index{Japanese!Poor Man's Japanese tex@Poor Man's Japanese \TeX} is a freely-available Japanese typesetting system
+that sits on top of standard \TeX.  The Japanese sections of the
+input file must use the Shift-JIS encoding; a conversion program is supplied
+to convert JIS encoded input files into Shift-JIS.  If you use another
+encoding, such as EUC\index{EUC encoding}, you 
+will have to find some way to convert it into
+Shift-JIS before you can use \pmj.
+
+\pmj\ solves the font problem in a clever way: \MF\ outlines for
+Japanese characters are mechanically produced from freely-available
+bitmaps.  This results in relatively low quality characters, but at
+least they're free!
+
+The Paulownia Court, the opening passage from the 800-year-old novel
+\textit{The Tale of the Genji}, is shown in Figure~\ref{fig:pmj}.  This sample
+was typeset by \pmj.
+
+\epsbox[pgenji.eps]{fig:pmj}{Poor Man's Japanese}
+
+\newpage
+The \pmj\ documentation lists the following advantages and disadvantages:
+
+\pmj\ Advantages
+
+\begin{itemize}
+  \item It is available now.
+  \item It is free.
+  \item It works with standard \TeX.
+  \item It is device independent, but has relatively poor quality fonts.  The
+    relative lack of quality is magnified by higher resolution output devices,
+    unfortunately.
+  \item It uses a set of free fonts mechanically produced from bitmaps.
+\end{itemize}
+
+\pmj\ Disadvantages
+
+\begin{itemize}
+\item It is somewhat crude and unlikely to be improved upon to any great extent.
+\item It uses low quality fonts.
+\item It requires a large number of fonts and as a result, lots of disk space.
+\item It provides no access to slanted, bold, or other Japanese type-styles.
+\item It cannot typeset vertically. 
+\item It may take days to build the required fonts.
+\end{itemize}
+
+\subsubsection{\jemtex}
+
+\ixx{\jemtex}{jemtex@Jem\TeX}\index{Japanese!jemtex@Jem\TeX} is a 
+lot like \pmj; it uses fonts constructed from a collection of
+24x24 dot bitmaps.  The \jemtex\ font maker includes a number of options for
+tailoring the appearance of the characters.
+
+A sample of Japanese typeset with \jemtex\ is shown in 
+Figure~\ref{fig:jemtex}.
+
+\epsbox[jgenji.eps]{fig:jemtex}{\protect\jemtex\ sample}
+
+\jemtex\ takes a very different approach to processing Japanese text.
+Instead of providing \TeX\ macros to interpret two-byte Japanese symbols
+in the input file, \jemtex\ provides a preprocessor which translates
+the Japanese input into equivalent \TeX\ input. The preprocessor understands
+EUC\index{EUC encoding} and Shift-JIS input files.  
+
+Using a preprocessor has
+several advantages:
+
+\begin{itemize}
+  \item \TeX\ can process the files very quickly.  Because the input files
+        are not edited by hand, they are designed to be processed quickly
+        by \TeX\ rather than by human eyes.
+  \item Only the fonts that are actually used must be loaded.  A system
+        like \pmj\ must load all of the Japanese fonts because it does not
+        know which ones will actually be used.  \jemtex\ knows exactly
+        which fonts are required for each document.
+  \item The preprocessor can handle subtle spacing issues automatically.
+  \item The preprocessor can provide discretionary hyphens for \TeX, thereby
+        allowing \TeX\ to hyphenate Japanese correctly.
+\end{itemize}
+
+\subsection{Chinese}
+
+The general problems that apply to Japanese typesetting also apply to Chinese.
+
+\subsubsection{Poor Man's Chinese \protect\TeX}
+
+\ixx{Poor Man's Chinese \TeX\ (\pmc)}{Poor Man's Chinese tex (pmc)@Poor Man's Chinese \TeX\ (\pmc)}%
+\index{Chinese}%
+\index{Chinese!Poor Man's Chinese tex (pmc)@Poor Man's Chinese \TeX\ (\pmc)}%
+\index{pmc (Poor Man's Chinese tex)@\pmc\ (Poor Man's Chinese \TeX)}
+is closely related to \pmj.  The Chinese input
+files should be encoded with 8-bit GB encoding (GB 2312-80).  If you use
+another encoding, you will have to convert it into the 8-bit GB encoding
+before you can use \pmc.
+
+The \pmc\ package uses the same technique as \pmj\ to construct Chinese
+fonts.  The relative advantages and disadvantages of \pmj\ apply equally
+to \pmc.
+
+Two sets of Chinese characters are available: traditional and simplified.
+%% the sample text is apparently more than risque so I've removed it!
+%A sample of Chinese created with \pmc\ using the traditional Chinese
+%characters is shown in Figure~\ref{fig:pmct}.  A similar example, using
+%the simplified characters, is shown in Figure~\ref{fig:pmcs}.
+%
+%\epsbox[tchinese.eps]{fig:pmct}{Poor Man's Chinese with traditional characters}
+%
+%\epsbox[schinese.eps]{fig:pmcs}{Poor Man's Chinese with simplified characters}
+
+%\def\floatpagefraction{.3}
+\subsection{Arabic}
+
+Typesetting in Arabic\index{Arabic} can 
+be accomplished with the \ixx{\arabTeX}{arabTeX@\arabTeX} package.
+\arabTeX\ includes a complete set of fonts and macros for producing
+documents in Persian, Arabic, and related scripts.  An example of
+Arabic is shown in Figure~\ref{fig:flang:arab} on 
+page~\pageref{fig:flang:arab}.
+
+\epsbox[arab.eps]{fig:flang:arab}{Arabic text typeset with Arab\protect\TeX}
+
+\newpage
+\subsection{Hebrew}
+
+Typesetting left-to-right Hebrew\index{Hebrew} (or occasional Hebrew words in an English
+document) is relatively easy.  The required fonts and \TeX\ macros are
+available from \path|noa.huji.ac.il| and on the CTAN archives in 
+\ctandir{language/hebrew}.\footnote{At the time of this writing, the material
+at \path|noa.huji.ac.il| is more up-to-date than the material in the CTAN
+archives.}
+
+Typesetting right-to-left Hebrew is more complicated.  First, you will
+need an editor that handles right-to-left text entry, preferably one that
+displays Hebrew text.  
+
+After you have constructed a document that uses right-to-left Hebrew,
+you will need a special version of \TeX, called \ixx{\XeT}{XeT@\XeT}, to process it.  
+\XeT\ is a version of \TeX\ that understands right-to-left typesetting.
+
+Early versions of \XeT, called \ixx{\TeX-\XeT}{TeX-XeT@\TeX-\XeT}, produced 
+nonstandard \ext{DVI} files called \ixx{\ext{IVD} files}{IVD files@\ext{IVD} files}.  If you 
+use \TeX-\XeT, a special program called
+\ixx{\program{ivd2dvi}}{ivd2dvi} must be used to translate the \ext{IVD} files into
+\ext{DVI} files before they can be printed.  More recently, \XeT\ has been
+reimplemented to produce standard \ext{DVI} files.  The new version is called
+\ixx{\TeX\hbox{-{}-}\XeT}{tex--XeT@\TeX\hbox{-{}-}\XeT}.\footnote{Yes, the only difference between the names really
+is the number of hyphens!}  They are functionally identical.
+You can get \Unix\ and PC versions of \XeT\ from \path|noa.huji.ac.il|.
+An example of Hebrew is shown in Figure~\ref{fig:hebrew} on page~\pageref{fig:hebrew}.
+
+\epsbox[hebrew-sample.eps]{fig:hebrew}{Hebrew}
+
+\egroup % <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
